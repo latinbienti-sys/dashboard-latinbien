@@ -529,7 +529,7 @@ html = f'''<!DOCTYPE html>
         <div class="table-card">
             <h3>📆 Ciclo de Pago — Análisis por Día</h3>
             <div id="cicloMañana" onclick="mostrarManana()" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border:2px solid #43a047;border-radius:12px;padding:16px;margin-bottom:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;cursor:pointer;transition:transform 0.15s;hover:transform:scale(1.01)">
-                <div><div style="font-size:12px;color:#2e7d32;font-weight:600">📅 MAÑANA — DÍA <span id="mananaDia">25</span></div><div style="font-size:22px;font-weight:800;color:#1b5e20" id="mananaTotal">$0</div><div style="font-size:11px;color:#555">Total a percibir — haz clic para ver clientes</div></div>
+                <div><div style="font-size:12px;color:#2e7d32;font-weight:600" id="mananaLabel">📅 MAÑANA — DÍA <span id="mananaDia">25</span></div><div style="font-size:22px;font-weight:800;color:#1b5e20" id="mananaTotal">$0</div><div style="font-size:11px;color:#555">Total a percibir — haz clic para ver clientes</div></div>
                 <div><div style="font-size:12px;color:#2e7d32;font-weight:600">👥 Clientes</div><div style="font-size:22px;font-weight:800;color:#1b5e20" id="mananaClientes">0</div><div style="font-size:11px;color:#555">que deben pagar</div></div>
                 <div><div style="font-size:12px;color:#c62828;font-weight:600">⚠️ Vencido</div><div style="font-size:22px;font-weight:800;color:#c62828" id="mananaVencido">$0</div><div style="font-size:11px;color:#555">arrastrado</div></div>
                 <div><div style="font-size:12px;color:#1565c0;font-weight:600">✅ Histórico Cobrado</div><div style="font-size:22px;font-weight:800;color:#1565c0" id="mananaPagado">$0</div><div style="font-size:11px;color:#555">en este día</div></div>
@@ -1358,19 +1358,43 @@ function renderCiclo(rango) {{
 
 function renderManana() {{
     var hoy = new Date().getDate();
-    var manana = hoy + 1;
     var pp = DATA.payment_plan;
     if (!pp || !pp.ciclo_analysis) return;
+    
+    // Buscar el PRÓXIMO día de pago disponible después de hoy
+    // Primero busca desde mañana hasta el día 25 del mes actual
+    var candidatos = [];
     var rango = null;
-    if (manana >= 3 && manana <= 18) rango = '03-18';
-    else if (manana >= 10 && manana <= 25) rango = '10-25';
-    else if (manana > 25 || manana < 3) rango = '03-18';
-    if (!rango) return;
-    var dias = pp.ciclo_analysis[rango];
-    if (!dias) return;
-    var diaData = dias[String(manana)];
-    if (!diaData) {{
-        document.getElementById('mananaDia').textContent = manana;
+    
+    // Generar lista de días candidatos: desde mañana hasta 25
+    for (var d = hoy + 1; d <= 25; d++) {{
+        if ((d >= 3 && d <= 18) || (d >= 10 && d <= 25)) candidatos.push(d);
+    }}
+    // Si no hay candidatos este mes, buscar al inicio del próximo ciclo (días 3-18)
+    if (candidatos.length === 0) {{
+        for (var d = 3; d <= 18; d++) candidatos.push(d);
+    }}
+    
+    var found = false;
+    var diaData = null;
+    var diaEncontrado = null;
+    
+    for (var i = 0; i < candidatos.length && !found; i++) {{
+        var d = candidatos[i];
+        if (d >= 3 && d <= 18) rango = '03-18';
+        else if (d >= 10 && d <= 25) rango = '10-25';
+        var dias = pp.ciclo_analysis[rango];
+        if (dias) {{
+            diaData = dias[String(d)];
+            if (diaData && (diaData.draft.cantidad > 0 || diaData.vencido.cantidad > 0)) {{
+                found = true;
+                diaEncontrado = d;
+            }}
+        }}
+    }}
+    
+    if (!found) {{
+        document.getElementById('mananaDia').textContent = '-';
         document.getElementById('mananaTotal').textContent = '$0';
         document.getElementById('mananaClientes').textContent = '0';
         document.getElementById('mananaVencido').textContent = '$0';
@@ -1378,7 +1402,10 @@ function renderManana() {{
         document.getElementById('mananaClientesSection').style.display = 'none';
         return;
     }}
-    document.getElementById('mananaDia').textContent = manana;
+    
+    var label = (diaEncontrado === hoy + 1) ? '📅 MAÑANA — DÍA' : '📅 PRÓXIMO PAGO — DÍA';
+    document.getElementById('mananaLabel').textContent = label;
+    document.getElementById('mananaDia').textContent = diaEncontrado;
     document.getElementById('mananaTotal').textContent = fmtMoney(diaData.draft.monto);
     document.getElementById('mananaClientes').textContent = (diaData.clientes||[]).length;
     document.getElementById('mananaVencido').textContent = fmtMoney(diaData.vencido.monto);
@@ -1425,13 +1452,35 @@ function renderManana() {{
 
 function mostrarManana() {{
     var hoy = new Date().getDate();
-    var manana = hoy + 1;
-    // Buscar la fila del día de mañana en la tabla ya renderizada
+    var pp = DATA.payment_plan;
+    if (!pp || !pp.ciclo_analysis) return;
+    // Buscar el mismo día que renderManana encontró
+    var candidatos = [];
+    for (var d = hoy + 1; d <= 25; d++) {{
+        if ((d >= 3 && d <= 18) || (d >= 10 && d <= 25)) candidatos.push(d);
+    }}
+    if (candidatos.length === 0) {{
+        for (var d = 3; d <= 18; d++) candidatos.push(d);
+    }}
+    var encontrado = null;
+    var rango = null;
+    for (var i = 0; i < candidatos.length && encontrado === null; i++) {{
+        var d = candidatos[i];
+        if (d >= 3 && d <= 18) rango = '03-18';
+        else rango = '10-25';
+        var dias = pp.ciclo_analysis[rango];
+        if (dias) {{
+            var dd = dias[String(d)];
+            if (dd && (dd.draft.cantidad > 0 || dd.vencido.cantidad > 0)) encontrado = d;
+        }}
+    }}
+    if (encontrado === null) return;
+    // Buscar la fila en la tabla y hacer clic
     var tbody = document.getElementById('tablaCiclo');
     if (tbody) {{
         var trs = tbody.querySelectorAll('tr');
         for (var i = 0; i < trs.length; i++) {{
-            if (trs[i].dataset.dia == manana) {{
+            if (parseInt(trs[i].dataset.dia) === encontrado) {{
                 trs[i].click();
                 trs[i].scrollIntoView({{behavior:'smooth', block:'center'}});
                 break;
