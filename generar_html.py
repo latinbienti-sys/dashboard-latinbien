@@ -534,6 +534,25 @@ html = f'''<!DOCTYPE html>
                 <div><div style="font-size:12px;color:#c62828;font-weight:600">⚠️ Vencido</div><div style="font-size:22px;font-weight:800;color:#c62828" id="mananaVencido">$0</div><div style="font-size:11px;color:#555">arrastrado</div></div>
                 <div><div style="font-size:12px;color:#1565c0;font-weight:600">✅ Histórico Cobrado</div><div style="font-size:22px;font-weight:800;color:#1565c0" id="mananaPagado">$0</div><div style="font-size:11px;color:#555">en este día</div></div>
             </div>
+            <!-- RESUMEN POR CICLO -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+                <div id="cicloResumen0318" style="background:white;border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border-left:4px solid #213C83">
+                    <div style="font-size:13px;font-weight:700;color:#213C83;margin-bottom:8px">📊 Ciclo 03 – 18</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+                        <div><div style="font-size:10px;color:#888">Debido</div><div style="font-size:16px;font-weight:700;color:#10b981" id="res0318Debido">$0</div></div>
+                        <div><div style="font-size:10px;color:#888">Vencido</div><div style="font-size:16px;font-weight:700;color:#ef4444" id="res0318Vencido">$0</div></div>
+                        <div><div style="font-size:10px;color:#888">Pagado</div><div style="font-size:16px;font-weight:700;color:#213C83" id="res0318Pagado">$0</div></div>
+                    </div>
+                </div>
+                <div id="cicloResumen1025" style="background:white;border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border-left:4px solid #e07d00">
+                    <div style="font-size:13px;font-weight:700;color:#e07d00;margin-bottom:8px">📊 Ciclo 10 – 25</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+                        <div><div style="font-size:10px;color:#888">Debido</div><div style="font-size:16px;font-weight:700;color:#10b981" id="res1025Debido">$0</div></div>
+                        <div><div style="font-size:10px;color:#888">Vencido</div><div style="font-size:16px;font-weight:700;color:#ef4444" id="res1025Vencido">$0</div></div>
+                        <div><div style="font-size:10px;color:#888">Pagado</div><div style="font-size:16px;font-weight:700;color:#e07d00" id="res1025Pagado">$0</div></div>
+                    </div>
+                </div>
+            </div>
             <!-- Lista de clientes de mañana -->
             <div id="mananaClientesSection" style="margin-bottom:16px;display:none">
                 <h4 style="font-size:14px;font-weight:700;color:var(--primary);margin:0 0 8px 0">📋 Clientes que pagan mañana <span id="mananaClientesSubtotal" style="font-size:12px;color:#666;font-weight:400"></span></h4>
@@ -1289,6 +1308,7 @@ try {{
             }}).join('');
         }}
         renderCiclo('10-25');
+        renderCicloResumen();
         renderManana();
         // Pequeño delay para asegurar que el DOM del ciclo esté listo
         setTimeout(mostrarManana, 50);
@@ -1354,6 +1374,30 @@ function renderCiclo(rango) {{
     // Mostrar clientes del primer día o del día de hoy
     var diaInicial = claves.includes(String(hoy)) ? String(hoy) : claves[0];
     mostrarClientesDia(rango, parseInt(diaInicial));
+}}
+
+function renderCicloResumen() {{
+    var pp = DATA.payment_plan;
+    if (!pp || !pp.ciclo_analysis) return;
+    var rangos = ['03-18', '10-25'];
+    rangos.forEach(function(r) {{
+        var dias = pp.ciclo_analysis[r];
+        if (!dias) return;
+        var totalDebido = 0, totalVencido = 0, totalPagado = 0;
+        Object.keys(dias).forEach(function(d) {{
+            var dd = dias[d];
+            totalDebido += dd.draft.monto;
+            totalVencido += dd.vencido.monto;
+            totalPagado += dd.paid.monto;
+        }});
+        var prefix = 'res' + r.replace('-', '');
+        var elDebido = document.getElementById(prefix + 'Debido');
+        var elVencido = document.getElementById(prefix + 'Vencido');
+        var elPagado = document.getElementById(prefix + 'Pagado');
+        if (elDebido) elDebido.textContent = fmtMoney(totalDebido);
+        if (elVencido) elVencido.textContent = fmtMoney(totalVencido);
+        if (elPagado) elPagado.textContent = fmtMoney(totalPagado);
+    }});
 }}
 
 function renderManana() {{
