@@ -15,8 +15,7 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk"
-      },
-      "prebuildCommand": ""
+      }
     },
     "production": {}
   },
