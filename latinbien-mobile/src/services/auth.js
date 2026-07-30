@@ -117,6 +117,10 @@ export async function checkSession() {
 export async function login(login, password) {
   const result = await api.login(login, password);
   if (result?.uid) {
+    // Guardar session_id del body JSON (Odoo lo incluye en session_info)
+    if (result.session_id) {
+      await api.setSessionCookie(result.session_id);
+    }
     const user = {
       uid: result.uid,
       name: result.name || login,
@@ -134,6 +138,7 @@ export async function logout() {
   try {
     await api.logout();
   } catch (_) {}
+  await api.setSessionCookie(null);
   await persistUser(null);
 }
 

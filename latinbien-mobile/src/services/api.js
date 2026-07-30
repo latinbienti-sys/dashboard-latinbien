@@ -22,6 +22,13 @@ export async function loadSessionCookie() {
   } catch (_) {}
 }
 
+export async function setSessionCookie(value) {
+  _sessionCookie = value ? `session_id=${value}` : null;
+  try {
+    await AsyncStorage.setItem(COOKIE_KEY, _sessionCookie || '');
+  } catch (_) {}
+}
+
 /**
  * Llamada JSON-RPC usando XMLHttpRequest para acceso completo a headers
  */
@@ -41,24 +48,12 @@ function jsonRpc(endpoint, params = {}) {
       xhr.setRequestHeader('Cookie', _sessionCookie);
     }
 
-    xhr.onreadystatechange = async function () {
+    xhr.onreadystatechange = function () {
       if (xhr.readyState !== 4) return;
 
       if (xhr.status < 200 || xhr.status >= 300) {
         reject(new Error(`Error de conexión (${xhr.status})`));
         return;
-      }
-
-      // Capturar Set-Cookie del response headers
-      const rawHeaders = xhr.getAllResponseHeaders();
-      const setCookieMatch = rawHeaders.match(/set-cookie:\s*([^\r\n]+)/i);
-      if (setCookieMatch) {
-        const cookieVal = setCookieMatch[1];
-        const sessionMatch = cookieVal.match(/session_id=[^;]+/);
-        if (sessionMatch) {
-          _sessionCookie = sessionMatch[0];
-          try { await AsyncStorage.setItem(COOKIE_KEY, _sessionCookie); } catch (_) {}
-        }
       }
 
       try {
