@@ -367,6 +367,7 @@ html = f'''<!DOCTYPE html>
         <button class="tab-btn" onclick="switchTab('temporal')">⏱ Temporal VIP</button>
         <button class="tab-btn" onclick="switchTab('tabla')">📋 Listado</button>
         <button class="tab-btn" onclick="switchTab('pagos')">💳 Plan de Pagos</button>
+        <button class="tab-btn" onclick="switchTab('factjulio')">📋 Fact. Julio</button>
     </div>
 
     <!-- TAB 1: RESUMEN -->
@@ -612,6 +613,35 @@ html = f'''<!DOCTYPE html>
                         <tbody id="tablaClientesDia"></tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 7: FACTURACIÓN JULIO -->
+    <div class="tab-content" id="tab-factjulio">
+        <div class="kpi-row">
+            <div class="kpi-card success"><div class="number money" id="fjTotalFacturado">—</div><div class="label">Total Facturado Julio</div></div>
+            <div class="kpi-card accent"><div class="number" id="fjTotalFacturas">—</div><div class="label">Facturas Emitidas</div></div>
+            <div class="kpi-card"><div class="number" id="fjTotalClientes">—</div><div class="label">Clientes</div></div>
+        </div>
+        <div class="table-card">
+            <h3>📋 Facturación Mensual — Julio 2026</h3>
+            <div style="margin:8px 0;font-size:13px;color:#666">Detalle por factura: producto, gasto administrativo y costo</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Factura</th>
+                            <th class="text-right">Total Facturado</th>
+                            <th class="text-right">Precio Producto</th>
+                            <th class="text-right">Gasto Admin.</th>
+                            <th class="text-right">Costo</th>
+                            <th class="text-right">Margen</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaFactJulio"></tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -1269,7 +1299,7 @@ function renderTable() {{
 function switchTab(tab) {{
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos'}};
+    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio'}};
     const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes(tabMap[tab]));
     if (btn) btn.classList.add('active');
     document.getElementById('tab-'+tab).classList.add('active');
@@ -1314,6 +1344,33 @@ try {{
         setTimeout(mostrarManana, 50);
     }}
 }} catch(e) {{ console.error('Payment plan error:', e); }}
+
+// ================================================================
+//  FACTURACIÓN JULIO 2026
+// ================================================================
+try {{
+    var fj = DATA.facturacion_julio;
+    if (fj) {{
+        document.getElementById('fjTotalFacturado').textContent = fmtMoney(fj.total_facturado);
+        document.getElementById('fjTotalFacturas').textContent = fj.total_facturas.toLocaleString();
+        document.getElementById('fjTotalClientes').textContent = fj.total_clientes.toLocaleString();
+        var tbody = document.getElementById('tablaFactJulio');
+        if (tbody) {{
+            tbody.innerHTML = fj.facturas.map(function(f) {{
+                var margenCls = f.margen >= 0 ? 'style=\"color:#10b981\"' : 'style=\"color:#ef4444\"';
+                return '<tr>' +
+                    '<td><strong>' + f.cliente + '</strong></td>' +
+                    '<td style=\"font-size:11px;color:#666\">' + f.factura + '</td>' +
+                    '<td class=\"text-right\">' + fmtMoney(f.total) + '</td>' +
+                    '<td class=\"text-right\">' + fmtMoney(f.precio_producto) + '</td>' +
+                    '<td class=\"text-right\">' + fmtMoney(f.gasto_admin) + '</td>' +
+                    '<td class=\"text-right\">' + fmtMoney(f.costo) + '</td>' +
+                    '<td class=\"text-right\" ' + margenCls + '>' + fmtMoney(f.margen) + '</td>' +
+                    '</tr>';
+            }}).join('');
+        }}
+    }}
+}} catch(e) {{ console.error('Facturacion Julio error:', e); }}
 
 function renderCiclo(rango) {{
     document.querySelectorAll('.ciclo-btn').forEach(b => b.classList.toggle('active', b.dataset.rango === rango));

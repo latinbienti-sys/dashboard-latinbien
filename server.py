@@ -201,6 +201,9 @@ def fetch_data():
     # Plan de pagos
     payment_plan = fetch_payment_plan(sess)
     
+    # Facturación Julio
+    facturacion_julio = fetch_facturacion_julio(sess)
+    
     return {
         'status_summary': dict(status_counter.most_common()),
         'total_rows': all_ids,
@@ -224,6 +227,7 @@ def fetch_data():
                  'first': c['first_date'], 'last': c['last_date']}
                 for c in vip_clients],
         'payment_plan': payment_plan,
+        'facturacion_julio': facturacion_julio,
     }
 
 # ── Plan de Pagos (Cuotas Fraccionadas) ──────────────────────────
@@ -417,6 +421,115 @@ def fetch_payment_plan(sess):
         'total_cuotas': len(all_lines),
         'ciclo_analysis': ciclo_analysis,
     }
+
+def fetch_facturacion_julio(sess):
+    """Obtiene facturacion de Julio 2026 con detalle de producto, gasto admin y costo."""
+    domain = [
+        ['move_type', '=', 'out_invoice'],
+        ['invoice_date', '>=', '2026-07-01'],
+        ['invoice_date', '<=', '2026-07-31'],
+    ]
+    ids = json_execute(sess, 'account.move', 'search', [domain])
+    if not ids:
+        return {'facturas': [], 'total_facturado': 0, 'total_facturas': 0, 'total_clientes': 0}
+    
+    # Leer facturas
+    batch_size = 200
+    all_invs = []
+    for i in range(0, len(ids), batch_size):
+        batch = ids[i:i+batch_size]
+        recs = json_execute(sess, 'account.move', 'read', [batch, ['id', 'name', 'partner_id', 'invoice_date', 'amount_total', 'invoice_line_ids']])
+        all_invs.extend(recs)
+    
+    # Recolectar IDs de lineas y productos
+    all_line_ids = set()
+    all_prod_ids = set()
+    for inv in all_invs:
+        lines = inv.get('invoice_line_ids', [])
+        for l in lines:
+            lid = l[0] if isinstance(l, list) else l
+            all_line_ids.add(lid)
+    
+    # Leer lineas de factura
+    line_map = {}  # line_id -> line data
+    if all_line_ids:
+        line_list = list(all_line_ids)
+        for i in range(0, len(line_list), 500):
+            batch = line_list[i:i+500]
+            lrecs = json_execute(sess, 'account.move.line', 'read', [batch, ['id', 'product_id', 'name', 'quantity', 'price_unit', 'price_subtotal']])
+            if lrecs:
+                for lr in lrecs:
+                    line_map[lr['id']] = lr
+                    pid = lr.get('product_id')
+                    if pid and isinstance(pid, list) and len(pid) > 1:
+                        all_prod_ids.add(pid[0])
+    
+    # Leer costos de productos (standard_price)
+    prod_cost = {}  # product_id -> standard_price
+    if all_prod_ids:
+        prod_list = list(all_prod_ids)
+        for i in range(0, len(prod_list), 200):
+            batch = prod_list[i:i+200]
+            precs = json_execute(sess, 'product.product', 'read', [batch, ['id', 'standard_price']])
+            if precs:
+                for pr in precs:
+                    prod_cost[pr['id']] = float(pr.get('standard_price') or 0)
+    
+    # Construir facturas con detalle
+    facturas = []
+    total_facturado = 0.0
+    clientes_set = set()
+    
+    for inv in all_invs:
+        inv_id = inv['id']
+        partner = inv.get('partner_id')
+        partner_name = partner[1] if isinstance(partner, list) and len(partner) > 1 else 'Desconocido'
+        clientes_set.add(partner_name)
+        total = float(inv.get('amount_total') or 0)
+        total_facturado += total
+        
+        # Clasificar lineas
+        precio_producto = 0.0
+        gasto_admin = 0.0
+        costo_producto = 0.0
+        
+        line_ids = inv.get('invoice_line_ids', [])
+        for l in line_ids:
+            lid = l[0] if isinstance(l, list) else l
+            ldata = line_map.get(lid, {})
+            lname = str(ldata.get('name', '') or '')
+            is_admin = 'gasto administrativo' in lname.lower() or 'gestion de cobranza' in lname.lower()
+            pu = float(ldata.get('price_subtotal') or 0)
+            
+            if is_admin:
+                gasto_admin += pu
+            else:
+                precio_producto += pu
+                # Costo del producto
+                pid = ldata.get('product_id')
+                if pid and isinstance(pid, list) and len(pid) > 1:
+                    costo_producto += prod_cost.get(pid[0], 0) * float(ldata.get('quantity') or 1)
+        
+        facturas.append({
+            'cliente': partner_name,
+            'factura': inv.get('name', ''),
+            'fecha': inv.get('invoice_date', ''),
+            'total': round(total, 2),
+            'precio_producto': round(precio_producto, 2),
+            'gasto_admin': round(gasto_admin, 2),
+            'costo': round(costo_producto, 2),
+            'margen': round(precio_producto - costo_producto, 2),
+        })
+    
+    facturas.sort(key=lambda x: -x['total'])
+    
+    return {
+        'facturas': facturas,
+        'total_facturado': round(total_facturado, 2),
+        'total_facturas': len(facturas),
+        'total_clientes': len(clientes_set),
+    }
+
 def build_html(data):
     script_path = os.path.join(os.path.dirname(__file__), 'generar_html.py')
     with open(script_path, 'r', encoding='utf-8') as f:
