@@ -6,6 +6,9 @@ analisis_temporal_vip.csv
 # Generated images
 *.png
 
+# Exception: needed by EAS Build for adaptive icon / splashscreen
+!latinbien-mobile/android/app/src/main/res/drawable*/splashscreen_logo.png
+
 # Python bytecode
 __pycache__/
 *.pyc
