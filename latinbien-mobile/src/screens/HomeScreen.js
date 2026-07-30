@@ -15,7 +15,7 @@ import {
   Platform,
 } from 'react-native';
 import { COLORS } from '../utils/constants';
-import { getFeaturedProducts, getCategories, getCreditLines } from '../services/api';
+import { getFeaturedProducts, getCategories, getCreditLines, getSessionInfo } from '../services/api';
 import { isAuthenticated } from '../services/auth';
 import { formatPrice } from '../utils/storage';
 import ProductCard from '../components/ProductCard';
@@ -32,6 +32,13 @@ export default function HomeScreen({ navigation, onAddToCart }) {
   const addDebug = (msg) => setDebugLog(prev => [...prev.slice(-9), msg]);
 
   const loadData = useCallback(async () => {
+    // Verificar sesión primero
+    try {
+      const info = await getSessionInfo();
+      addDebug(`Sesión: OK (uid=${info?.uid}, session_id=${info?.session_id ? 'SÍ' : 'NO'})`);
+    } catch (e) {
+      addDebug(`Sesión: ERROR - ${e.message}`);
+    }
     addDebug('Cargando productos...');
     try {
       const prods = await getFeaturedProducts(10);

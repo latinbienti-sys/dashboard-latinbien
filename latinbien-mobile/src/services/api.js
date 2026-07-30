@@ -1,36 +1,19 @@
 // ============================================================
 // LatinBien Mobile — API Service (Odoo 16 JSON-RPC)
-// Usa XMLHttpRequest para tener control total de cookies
+// Usa XMLHttpRequest con withCredentials=true para que OkHttp
+// maneje las cookies automáticamente (como un navegador)
 // ============================================================
 
 import { BASE_URL } from '../utils/constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let _partnerId = null;
-let _sessionCookie = null;
-
-const COOKIE_KEY = 'odoo_session_cookie';
 
 export function setPartnerId(id) {
   _partnerId = id;
 }
 
-export async function loadSessionCookie() {
-  try {
-    const stored = await AsyncStorage.getItem(COOKIE_KEY);
-    if (stored) _sessionCookie = stored;
-  } catch (_) {}
-}
-
-export async function setSessionCookie(value) {
-  _sessionCookie = value ? `session_id=${value}` : null;
-  try {
-    await AsyncStorage.setItem(COOKIE_KEY, _sessionCookie || '');
-  } catch (_) {}
-}
-
 /**
- * Llamada JSON-RPC usando XMLHttpRequest para acceso completo a headers
+ * Llamada JSON-RPC — withCredentials=true para cookies automáticas
  */
 function jsonRpc(endpoint, params = {}) {
   return new Promise((resolve, reject) => {
@@ -41,12 +24,7 @@ function jsonRpc(endpoint, params = {}) {
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.withCredentials = false; // Nosotros manejamos las cookies manualmente
-
-    // Enviar cookie de sesión si la tenemos
-    if (_sessionCookie) {
-      xhr.setRequestHeader('Cookie', _sessionCookie);
-    }
+    xhr.withCredentials = true; // OkHttp maneja cookies automáticamente
 
     xhr.onreadystatechange = function () {
       if (xhr.readyState !== 4) return;

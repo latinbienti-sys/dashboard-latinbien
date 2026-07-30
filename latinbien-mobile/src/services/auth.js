@@ -74,7 +74,6 @@ export async function initAuth() {
         api.setPartnerId(_currentUser.partner_id);
       }
     }
-    await api.loadSessionCookie();
   } catch (_) {
     _currentUser = null;
   }
@@ -117,9 +116,14 @@ export async function checkSession() {
 export async function login(login, password) {
   const result = await api.login(login, password);
   if (result?.uid) {
-    // Guardar session_id del body JSON (Odoo lo incluye en session_info)
-    if (result.session_id) {
-      await api.setSessionCookie(result.session_id);
+    // Verificar sesión inmediatamente después del login
+    try {
+      const info = await api.getSessionInfo();
+      if (info?.session_id) {
+        console.log('Sesión activa, session_id:', info.session_id);
+      }
+    } catch (e) {
+      console.warn('Error verificando sesión:', e.message);
     }
     const user = {
       uid: result.uid,
@@ -138,7 +142,6 @@ export async function logout() {
   try {
     await api.logout();
   } catch (_) {}
-  await api.setSessionCookie(null);
   await persistUser(null);
 }
 
