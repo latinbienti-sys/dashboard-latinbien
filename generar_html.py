@@ -292,6 +292,12 @@ html = f'''<!DOCTYPE html>
         .badge-bronze {{ background: #ffe8d6; color: #8b4513; }}
         .badge-blue {{ background: #dbeafe; color: #1e40af; }}
         .badge-gray {{ background: #f3f4f6; color: #6b7280; }}
+        .clickable {{ cursor: pointer; }}
+        .clickable:hover {{ background: #f0f4ff !important; }}
+        .sub-table {{ background: #f8faff; }}
+        .sub-table-inner {{ width: 100%; border-collapse: collapse; margin: 4px 0; }}
+        .sub-table-inner thead th {{ background: #eef3fa; padding: 5px 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3px; color: #555; border-bottom: 1px solid #dce3ef; }}
+        .sub-table-inner tbody td {{ padding: 4px 10px; font-size: 11px; border-bottom: 1px solid #e8ecf5; }}
         .badge-green {{ background: #d1fae5; color: #065f46; }}
         .badge-red {{ background: #fde8e8; color: #dc2626; }}
 
@@ -620,22 +626,66 @@ html = f'''<!DOCTYPE html>
     <!-- TAB 7: FACTURACIÓN JULIO -->
     <div class="tab-content" id="tab-factjulio">
         <div class="kpi-row">
-            <div class="kpi-card success"><div class="number money" id="fjTotalFacturado">—</div><div class="label">Total Facturado Julio</div></div>
-            <div class="kpi-card accent"><div class="number" id="fjTotalFacturas">—</div><div class="label">Facturas Emitidas</div></div>
+            <div class="kpi-card success"><div class="number money" id="fjTotalFacturado">—</div><div class="label">Total Facturado</div></div>
+            <div class="kpi-card accent"><div class="number money" id="fjTotalProductos">—</div><div class="label">Total Productos</div></div>
+            <div class="kpi-card warning"><div class="number money" id="fjTotalAdmin">—</div><div class="label">Gasto Admin.</div></div>
+            <div class="kpi-card danger"><div class="number money" id="fjTotalCosto">—</div><div class="label">Costo Total</div></div>
+            <div class="kpi-card success"><div class="number money" id="fjTotalMargen">—</div><div class="label">Margen Bruto</div></div>
+            <div class="kpi-card"><div class="number" id="fjTotalFacturas">—</div><div class="label">Facturas</div></div>
             <div class="kpi-card"><div class="number" id="fjTotalClientes">—</div><div class="label">Clientes</div></div>
         </div>
-        <div class="table-card">
-            <h3>📋 Facturación Mensual — Julio 2026</h3>
-            <div style="margin:8px 0;font-size:13px;color:#666">Detalle por factura: producto, gasto administrativo y costo</div>
+
+        <!-- EJECUTIVOS -->
+        <div class="results-section">
+            <h3>👔 Desglose por Ejecutivo de Ventas</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ejecutivo</th>
+                            <th class="text-right">Facturas</th>
+                            <th class="text-right">Total Facturado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaEjecutivos"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TOP PRODUCTOS -->
+        <div class="results-section">
+            <h3>🏆 Productos Más Vendidos</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Producto</th>
+                            <th class="text-right">Cantidad</th>
+                            <th class="text-right">Veces</th>
+                            <th class="text-right">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaTopProductos"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- DETALLE POR FACTURA -->
+        <div class="results-section">
+            <h3>📋 Detalle por Factura</h3>
+            <div style="margin:8px 0;font-size:13px;color:#666">Cada factura desglosada: producto, gasto administrativo, costo y margen</div>
             <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
                             <th>Cliente</th>
                             <th>Factura</th>
-                            <th class="text-right">Total Facturado</th>
-                            <th class="text-right">Precio Producto</th>
-                            <th class="text-right">Gasto Admin.</th>
+                            <th>Ejecutivo</th>
+                            <th class="text-right">Total</th>
+                            <th class="text-right">Producto</th>
+                            <th class="text-right">Gasto Admin</th>
                             <th class="text-right">Costo</th>
                             <th class="text-right">Margen</th>
                         </tr>
@@ -1311,6 +1361,13 @@ function switchTab(tab) {{
     }}, 100);
 }}
 
+function toggleSubTable(el) {{
+    var next = el.nextElementSibling;
+    if (next && next.classList.contains('sub-table')) {{
+        next.style.display = next.style.display === 'none' ? '' : 'none';
+    }}
+}}
+
 // ================================================================
 //  PLAN DE PAGOS
 // ================================================================
@@ -1351,22 +1408,82 @@ try {{
 try {{
     var fj = DATA.facturacion_julio;
     if (fj) {{
+        // KPIs
         document.getElementById('fjTotalFacturado').textContent = fmtMoney(fj.total_facturado);
+        document.getElementById('fjTotalProductos').textContent = fmtMoney(fj.total_productos);
+        document.getElementById('fjTotalAdmin').textContent = fmtMoney(fj.total_admin);
+        document.getElementById('fjTotalCosto').textContent = fmtMoney(fj.total_costo);
+        document.getElementById('fjTotalMargen').textContent = fmtMoney(fj.total_margen);
         document.getElementById('fjTotalFacturas').textContent = fj.total_facturas.toLocaleString();
         document.getElementById('fjTotalClientes').textContent = fj.total_clientes.toLocaleString();
+        
+        // Ejecutivos
+        var tEje = document.getElementById('tablaEjecutivos');
+        if (tEje && fj.ejecutivos) {{
+            tEje.innerHTML = fj.ejecutivos.map(function(e) {{
+                return '<tr class="clickable" onclick="toggleSubTable(this)">' +
+                    '<td><strong>' + e.nombre + '</strong></td>' +
+                    '<td class="text-right">' + e.cantidad.toLocaleString() + '</td>' +
+                    '<td class="text-right">' + fmtMoney(e.total) + '</td>' +
+                    '<td style="font-size:11px;color:#888">▼ Ver facturas</td>' +
+                    '</tr>' +
+                    '<tr class="sub-table" style="display:none"><td colspan="4">' +
+                    '<table class="sub-table-inner"><thead><tr>' +
+                    '<th>Factura</th><th>Cliente</th><th class="text-right">Total</th>' +
+                    '</tr></thead><tbody>' +
+                    (e.facturas || []).map(function(f) {{
+                        return '<tr><td>' + f.name + '</td><td>' + f.cliente + '</td><td class="text-right">' + fmtMoney(f.total) + '</td></tr>';
+                    }}).join('') +
+                    '</tbody></table></td></tr>';
+            }}).join('');
+        }}
+        
+        // Top productos
+        var tProd = document.getElementById('tablaTopProductos');
+        if (tProd && fj.top_productos) {{
+            tProd.innerHTML = fj.top_productos.map(function(p, idx) {{
+                return '<tr class="clickable" onclick="toggleSubTable(this)">' +
+                    '<td>' + (idx+1) + '</td>' +
+                    '<td><strong>' + p.nombre + '</strong></td>' +
+                    '<td class="text-right">' + p.qty.toLocaleString() + '</td>' +
+                    '<td class="text-right">' + p.veces.toLocaleString() + '</td>' +
+                    '<td class="text-right">' + fmtMoney(p.subtotal) + '</td>' +
+                    '</tr>' +
+                    '<tr class="sub-table" style="display:none"><td colspan="5">' +
+                    '<table class="sub-table-inner"><thead><tr>' +
+                    '<th>Factura</th><th>Cliente</th><th class="text-right">Cant.</th><th class="text-right">Subtotal</th>' +
+                    '</tr></thead><tbody>' +
+                    (p.lineas || []).map(function(l) {{
+                        return '<tr><td>' + l.factura + '</td><td>' + l.cliente + '</td><td class="text-right">' + l.qty.toLocaleString() + '</td><td class="text-right">' + fmtMoney(l.subtotal) + '</td></tr>';
+                    }}).join('') +
+                    '</tbody></table></td></tr>';
+            }}).join('');
+        }}
+        
+        // Facturas
         var tbody = document.getElementById('tablaFactJulio');
         if (tbody) {{
             tbody.innerHTML = fj.facturas.map(function(f) {{
-                var margenCls = f.margen >= 0 ? 'style=\"color:#10b981\"' : 'style=\"color:#ef4444\"';
-                return '<tr>' +
+                var margenCls = f.margen >= 0 ? 'style="color:#10b981"' : 'style="color:#ef4444"';
+                return '<tr class="clickable" onclick="toggleSubTable(this)">' +
                     '<td><strong>' + f.cliente + '</strong></td>' +
-                    '<td style=\"font-size:11px;color:#666\">' + f.factura + '</td>' +
-                    '<td class=\"text-right\">' + fmtMoney(f.total) + '</td>' +
-                    '<td class=\"text-right\">' + fmtMoney(f.precio_producto) + '</td>' +
-                    '<td class=\"text-right\">' + fmtMoney(f.gasto_admin) + '</td>' +
-                    '<td class=\"text-right\">' + fmtMoney(f.costo) + '</td>' +
-                    '<td class=\"text-right\" ' + margenCls + '>' + fmtMoney(f.margen) + '</td>' +
-                    '</tr>';
+                    '<td style="font-size:11px;color:#666">' + f.factura + '</td>' +
+                    '<td style="font-size:12px">' + f.ejecutivo + '</td>' +
+                    '<td class="text-right">' + fmtMoney(f.total) + '</td>' +
+                    '<td class="text-right">' + fmtMoney(f.precio_producto) + '</td>' +
+                    '<td class="text-right">' + fmtMoney(f.gasto_admin) + '</td>' +
+                    '<td class="text-right">' + fmtMoney(f.costo) + '</td>' +
+                    '<td class="text-right" ' + margenCls + '>' + fmtMoney(f.margen) + '</td>' +
+                    '</tr>' +
+                    '<tr class="sub-table" style="display:none"><td colspan="8">' +
+                    '<table class="sub-table-inner"><thead><tr>' +
+                    '<th>Producto</th><th>Tipo</th><th class="text-right">Cant.</th><th class="text-right">Subtotal</th>' +
+                    '</tr></thead><tbody>' +
+                    (f.lineas || []).map(function(l) {{
+                        var tipoCls = l.tipo==='GASTO ADMIN' ? 'style="color:#f59e0b"' : '';
+                        return '<tr><td>' + l.producto + '</td><td ' + tipoCls + '>' + l.tipo + '</td><td class="text-right">' + l.cantidad.toLocaleString() + '</td><td class="text-right">' + fmtMoney(l.subtotal) + '</td></tr>';
+                    }}).join('') +
+                    '</tbody></table></td></tr>';
             }}).join('');
         }}
     }}
