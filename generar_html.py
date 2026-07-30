@@ -636,6 +636,23 @@ html = f'''<!DOCTYPE html>
             <div class="kpi-card" style="background:#fef9e7"><div class="number money" id="fjTotalNoSuma">—</div><div class="label">No Sumado (Aprob.)</div></div>
         </div>
 
+        <!-- EQUIPOS DE VENTAS -->
+        <div class="results-section">
+            <h3>👥 Equipos de Ventas</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Equipo</th>
+                            <th class="text-right">Líneas</th>
+                            <th class="text-right">Total Sumado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaEquipos"></tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- EJECUTIVOS -->
         <div class="results-section">
             <h3>👔 Desglose por Ejecutivo de Ventas</h3>
@@ -1422,6 +1439,18 @@ try {{
         var noSumaEl = document.getElementById('fjTotalNoSuma');
         if (noSumaEl) noSumaEl.textContent = fmtMoney(fj.total_no_suma);
         
+        // Equipos
+        var tEq = document.getElementById('tablaEquipos');
+        if (tEq && fj.equipos) {{
+            tEq.innerHTML = fj.equipos.map(function(e) {{
+                return '<tr>' +
+                    '<td><strong>' + e.nombre + '</strong></td>' +
+                    '<td class="text-right">' + e.lineas.toLocaleString() + '</td>' +
+                    '<td class="text-right">' + fmtMoney(e.total_suma) + '</td>' +
+                    '</tr>';
+            }}).join('');
+        }}
+        
         // Ejecutivos
         var tEje = document.getElementById('tablaEjecutivos');
         if (tEje && fj.ejecutivos) {{
@@ -1493,11 +1522,11 @@ try {{
                     '</tr>' +
                     '<tr class="sub-table" style="display:none"><td colspan="10">' +
                     '<table class="sub-table-inner"><thead><tr>' +
-                    '<th>Producto</th><th>Tipo</th><th class="text-right">Cant.</th><th class="text-right">Subtotal</th>' +
+                    '<th>Producto</th><th>Tipo</th><th class="text-right">Cant.</th><th class="text-right">Subtotal</th><th>Categoría</th><th>Equipo</th>' +
                     '</tr></thead><tbody>' +
                     (f.lineas || []).map(function(l) {{
                         var tipoCls = l.tipo==='GASTO ADMIN' ? 'style="color:#f59e0b"' : '';
-                        return '<tr><td>' + l.producto + '</td><td ' + tipoCls + '>' + l.tipo + '</td><td class="text-right">' + l.cantidad.toLocaleString() + '</td><td class="text-right">' + fmtMoney(l.subtotal) + '</td></tr>';
+                        return '<tr><td>' + l.producto + '</td><td ' + tipoCls + '>' + l.tipo + '</td><td class="text-right">' + l.cantidad.toLocaleString() + '</td><td class="text-right">' + fmtMoney(l.subtotal) + '</td><td style="font-size:11px">' + (l.categoria || '') + '</td><td style="font-size:11px">' + (l.equipo || '') + '</td></tr>';
                     }}).join('') +
                     '</tbody></table></td></tr>';
             }}).join('');

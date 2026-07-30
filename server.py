@@ -423,64 +423,87 @@ def fetch_payment_plan(sess):
     }
 
 def fetch_facturacion_julio(sess):
-    """Obtiene facturacion de Julio 2026 con desglose completo:
-    - Total facturado, gasto admin, costo, margen
-    - Por ejecutivo de ventas
-    - Top productos mas vendidos
-    - Detalle por factura (cliente, producto, admin, costo)
+    """Facturacion mensual desde account.invoice.report + account.move.
+    - account.move: status operativo y de compra (para filtro suma)
+    - account.invoice.report: lineas con team_id, vendedor, producto, categoria
     """
-    domain = [
+    # 1. Obtener facturas con status desde account.move
+    inv_domain = [
         ['move_type', '=', 'out_invoice'],
         ['invoice_date', '>=', '2026-07-01'],
         ['invoice_date', '<=', '2026-07-31'],
     ]
-    ids = json_execute(sess, 'account.move', 'search', [domain])
-    if not ids:
+    inv_ids = json_execute(sess, 'account.move', 'search', [inv_domain])
+    if not inv_ids:
         return {
             'facturas': [], 'ejecutivos': [], 'top_productos': [],
             'total_facturado': 0, 'total_facturas': 0, 'total_clientes': 0,
             'total_admin': 0, 'total_costo': 0, 'total_margen': 0,
         }
     
-    # Leer facturas con invoice_user_id y lineas
-    all_invs = []
-    batch_size = 200
-    for i in range(0, len(ids), batch_size):
-        batch = ids[i:i+batch_size]
-        recs = json_execute(sess, 'account.move', 'read', [batch, [
-            'id', 'name', 'partner_id', 'invoice_date',
-            'amount_total', 'amount_untaxed',
-            'invoice_user_id', 'x_status_operativos', 'x_status_compra', 'invoice_line_ids',
-        ]])
-        all_invs.extend(recs)
+    invs = json_execute(sess, 'account.move', 'read', [inv_ids, [
+        'id', 'name', 'partner_id', 'invoice_date',
+        'amount_total', 'amount_untaxed',
+        'invoice_user_id', 'x_status_operativos', 'x_status_compra',
+    ]])
     
-    # Recolectar lineas
-    all_line_ids = set()
-    for inv in all_invs:
-        for l in inv.get('invoice_line_ids', []):
-            lid = l[0] if isinstance(l, list) else l
-            all_line_ids.add(lid)
+    # Mapa de move_id -> datos de status
+    STATUS_SOMA = {'6', '8', '10', '12'}
+    ST_LABELS = {'6': 'Entregado', '8': 'Cancelación Total', '4': 'Aprobado', '10': 'Congelado', '12': 'Congelado'}
+    CP_LABELS = {'1': 'Cotización', '4': 'Entrega Realizada', 'False': 'Sin asignar'}
     
-    # Leer datos de lineas
-    line_map = {}
-    list_ids = list(all_line_ids)
-    for i in range(0, len(list_ids), 500):
-        batch = list_ids[i:i+500]
-        lrecs = json_execute(sess, 'account.move.line', 'read', [batch, [
-            'id', 'product_id', 'name', 'quantity', 'price_unit', 'price_subtotal',
-        ]])
-        if lrecs:
-            for lr in lrecs:
-                line_map[lr['id']] = lr
+    inv_map = {}  # move_id -> {status, compra_status, summable, ejecutivo, total, cliente, factura_nombre}
+    for inv in invs:
+        iid = inv['id']
+        raw_st = inv.get('x_status_operativos')
+        st_str = str(raw_st) if raw_st is not None else ''
+        raw_cp = inv.get('x_status_compra')
+        cp_str = str(raw_cp) if raw_cp is not None else ''
+        
+        partner = inv.get('partner_id')
+        partner_name = partner[1] if isinstance(partner, list) and len(partner) > 1 else 'Desconocido'
+        eid = inv.get('invoice_user_id')
+        ej_name = eid[1] if isinstance(eid, list) and len(eid) > 1 else 'Sin asignar'
+        
+        inv_map[iid] = {
+            'name': inv.get('name', ''),
+            'partner_name': partner_name,
+            'invoice_date': inv.get('invoice_date', ''),
+            'ejecutivo': ej_name,
+            'total': float(inv.get('amount_total') or 0),
+            'status': ST_LABELS.get(st_str, st_str),
+            'compra_status': CP_LABELS.get(cp_str, cp_str),
+            'summable': st_str in STATUS_SOMA,
+        }
     
-    # Recolectar productos para costos
+    # 2. Obtener lineas desde account.invoice.report
+    rep_domain = [
+        ['invoice_date', '>=', '2026-07-01'],
+        ['invoice_date', '<=', '2026-07-31'],
+        ['move_type', '=', 'out_invoice'],
+        ['state', 'not in', ['draft', 'cancel']],
+    ]
+    rep_ids = json_execute(sess, 'account.invoice.report', 'search', [rep_domain])
+    
+    lineas = []
+    if rep_ids:
+        for i in range(0, len(rep_ids), 500):
+            batch = rep_ids[i:i+500]
+            recs = json_execute(sess, 'account.invoice.report', 'read', [batch, [
+                'id', 'move_id', 'invoice_date', 'partner_id', 'product_id',
+                'product_categ_id', 'team_id', 'invoice_user_id',
+                'price_total', 'price_subtotal', 'quantity', 'payment_state',
+            ]])
+            if recs:
+                lineas.extend(recs)
+    
+    # 3. Recolectar productos para costos
     all_prod_ids = set()
-    for lr in line_map.values():
+    for lr in lineas:
         pid = lr.get('product_id')
         if pid and isinstance(pid, list) and len(pid) > 1:
             all_prod_ids.add(pid[0])
     
-    # Leer costos (standard_price)
     prod_cost = {}
     if all_prod_ids:
         prod_list = list(all_prod_ids)
@@ -491,63 +514,63 @@ def fetch_facturacion_julio(sess):
                 for pr in precs:
                     prod_cost[pr['id']] = float(pr.get('standard_price') or 0)
     
-    # ============================================================
-    # CONSTRUIR DATOS
-    # ============================================================
+    # 4. Construir datos
     facturas = []
-    ejecutivos = {}  # nombre -> {cantidad, total, facturas: [{name, total, cliente}]}
-    productos = {}    # nombre -> {qty, subtotal, veces, lineas: [{factura, cliente, qty}]}
-    STATUS_SOMA = {'6', '8', '10', '12'}  # Entregado + Cancelación Total + Congelados → se suman
-    status_labels = {'6': 'Entregado', '8': 'Cancelación Total', '4': 'Aprobado', '10': 'Congelado', '12': 'Congelado'}
+    ejecutivos = {}
+    productos = {}
+    equipos = {}  # team_id -> {nombre, cantidad, total_suma, lineas}
+    categorias = {}  # product_categ -> {nombre, cantidad, total_suma, lineas}
     total_facturado = 0.0
     total_admin = 0.0
     total_costo = 0.0
     clientes_set = set()
     
-    for inv in all_invs:
-        inv_id = inv['id']
-        partner = inv.get('partner_id')
-        partner_name = partner[1] if isinstance(partner, list) and len(partner) > 1 else 'Desconocido'
+    # Agrupar lineas por move_id
+    lineas_por_factura = {}
+    for lr in lineas:
+        mid = lr.get('move_id')
+        if not mid or not isinstance(mid, list):
+            continue
+        mid = mid[0]
+        if mid not in lineas_por_factura:
+            lineas_por_factura[mid] = []
+        lineas_por_factura[mid].append(lr)
+    
+    # Procesar cada factura
+    for mid, inv_data in inv_map.items():
+        inv_name = inv_data['name']
+        partner_name = inv_data['partner_name']
+        total = inv_data['total']
+        summable = inv_data['summable']
+        ej_name = inv_data['ejecutivo']
         clientes_set.add(partner_name)
-        total = float(inv.get('amount_total') or 0)
-        
-        # Status operativo
-        raw_st = inv.get('x_status_operativos')
-        st_str = str(raw_st) if raw_st is not None else ''
-        st_label = status_labels.get(st_str, st_str)
-        summable = st_str in STATUS_SOMA
-        
-        # Status de compra
-        raw_cp = inv.get('x_status_compra')
-        cp_str = str(raw_cp) if raw_cp is not None else ''
-        cp_labels = {'1': 'Cotización', '4': 'Entrega Realizada', 'False': 'Sin asignar'}
-        cp_label = cp_labels.get(cp_str, cp_str)
         
         if summable:
             total_facturado += total
         
-        # Ejecutivo
-        eid = inv.get('invoice_user_id')
-        ej_name = eid[1] if isinstance(eid, list) and len(eid) > 1 else 'Sin asignar'
-        
-        # Clasificar lineas
+        lineas_factura = lineas_por_factura.get(mid, [])
         precio_producto = 0.0
         gasto_admin = 0.0
         costo_producto = 0.0
         lineas_detalle = []
         
-        for l in inv.get('invoice_line_ids', []):
-            lid = l[0] if isinstance(l, list) else l
-            ldata = line_map.get(lid, {})
-            if not ldata:
-                continue
-            lname = str(ldata.get('name', '') or '')
-            is_admin = 'gasto administrativo' in lname.lower() or 'gestion de cobranza' in lname.lower()
-            pu = float(ldata.get('price_subtotal') or 0)
-            qty = float(ldata.get('quantity') or 1)
+        for lr in lineas_factura:
+            pid = lr.get('product_id')
+            pname = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Producto'
+            pu = float(lr.get('price_subtotal') or 0)
+            pt = float(lr.get('price_total') or 0)
+            qty = float(lr.get('quantity') or 1)
             
-            pid = ldata.get('product_id')
-            pname = pid[1] if isinstance(pid, list) and len(pid) > 1 else lname
+            # Categoria
+            cat = lr.get('product_categ_id')
+            cat_name = cat[1] if isinstance(cat, list) and len(cat) > 1 else 'General'
+            
+            # Team
+            team = lr.get('team_id')
+            team_name = team[1] if isinstance(team, list) and len(team) > 1 else 'Sin equipo'
+            
+            # Ver si es gasto admin (por nombre de producto o categoría)
+            is_admin = 'gasto administrativo' in pname.lower() or 'gestion de cobranza' in pname.lower()
             
             if is_admin:
                 gasto_admin += pu
@@ -555,42 +578,53 @@ def fetch_facturacion_julio(sess):
                     total_admin += pu
             else:
                 precio_producto += pu
-                # Costo
-                if pid and isinstance(pid, list) and len(pid) > 1:
-                    cost_unit = prod_cost.get(pid[0], 0)
-                    costo_producto += cost_unit * qty
-                    if summable:
-                        total_costo += cost_unit * qty
+                cost_unit = prod_cost.get(pid[0], 0) if pid and isinstance(pid, list) and len(pid) > 1 else 0
+                costo_linea = cost_unit * qty
+                costo_producto += costo_linea
+                if summable:
+                    total_costo += costo_linea
                 
-                # Acumular producto (siempre, para visualizar)
+                # Acumular producto
                 if pname not in productos:
-                    productos[pname] = {'qty': 0, 'subtotal': 0.0, 'subtotal_suma': 0.0, 'veces': 0, 'lineas': []}
+                    productos[pname] = {'qty': 0, 'subtotal': 0.0, 'subtotal_suma': 0.0, 'veces': 0, 'categoria': cat_name}
                 productos[pname]['qty'] += qty
                 productos[pname]['subtotal'] += pu
                 if summable:
                     productos[pname]['subtotal_suma'] += pu
                 productos[pname]['veces'] += 1
-                productos[pname]['lineas'].append({
-                    'factura': inv.get('name', ''),
-                    'cliente': partner_name,
-                    'qty': qty,
-                    'subtotal': pu,
-                })
+            
+            # Acumular equipo
+            if team_name not in equipos:
+                equipos[team_name] = {'cantidad': 0, 'total_suma': 0.0, 'lineas_count': 0}
+            equipos[team_name]['lineas_count'] += 1
+            if summable:
+                equipos[team_name]['cantidad'] += qty
+                equipos[team_name]['total_suma'] += pu
+            
+            # Acumular categoria
+            if cat_name not in categorias:
+                categorias[cat_name] = {'cantidad': 0, 'total_suma': 0.0, 'lineas_count': 0}
+            categorias[cat_name]['lineas_count'] += 1
+            if summable:
+                categorias[cat_name]['cantidad'] += qty
+                categorias[cat_name]['total_suma'] += pu
             
             lineas_detalle.append({
                 'producto': pname,
                 'tipo': 'GASTO ADMIN' if is_admin else 'PRODUCTO',
                 'cantidad': qty,
                 'subtotal': round(pu, 2),
+                'categoria': cat_name,
+                'equipo': team_name,
             })
         
         facturas.append({
             'cliente': partner_name,
-            'factura': inv.get('name', ''),
-            'fecha': inv.get('invoice_date', ''),
+            'factura': inv_name,
+            'fecha': inv_data['invoice_date'],
             'ejecutivo': ej_name,
-            'status': st_label,
-            'compra_status': cp_label,
+            'status': inv_data['status'],
+            'compra_status': inv_data['compra_status'],
             'summable': summable,
             'total': round(total, 2),
             'precio_producto': round(precio_producto, 2),
@@ -600,7 +634,7 @@ def fetch_facturacion_julio(sess):
             'lineas': lineas_detalle,
         })
         
-        # Acumular ejecutivo (total solo si summable, cantidad siempre)
+        # Acumular ejecutivo
         if ej_name not in ejecutivos:
             ejecutivos[ej_name] = {'cantidad': 0, 'cantidad_suma': 0, 'total': 0.0, 'facturas': []}
         ejecutivos[ej_name]['cantidad'] += 1
@@ -608,44 +642,47 @@ def fetch_facturacion_julio(sess):
             ejecutivos[ej_name]['cantidad_suma'] += 1
             ejecutivos[ej_name]['total'] += total
         ejecutivos[ej_name]['facturas'].append({
-            'name': inv.get('name', ''),
+            'name': inv_name,
             'cliente': partner_name,
             'total': round(total, 2),
             'summable': summable,
-            'compra_status': cp_label,
+            'compra_status': inv_data['compra_status'],
         })
     
     facturas.sort(key=lambda x: -x['total'])
     
-    # Ejecutivos ordenados por total sumado
     ej_list = [
-        {
-            'nombre': k, 'cantidad': v['cantidad'],
-            'cantidad_suma': v['cantidad_suma'],
-            'total': round(v['total'], 2),
-            'facturas': v['facturas'],
-        }
+        {'nombre': k, 'cantidad': v['cantidad'], 'cantidad_suma': v['cantidad_suma'],
+         'total': round(v['total'], 2), 'facturas': v['facturas']}
         for k, v in sorted(ejecutivos.items(), key=lambda x: -x[1]['total'])
     ]
     
-    # Top productos (ordenados por subtotal sumado, con subtotal total para visual)
     top_prod = sorted(productos.items(), key=lambda x: -x[1]['subtotal_suma'])
     prod_list = [
-        {
-            'nombre': k,
-            'qty': v['qty'],
-            'subtotal': round(v['subtotal'], 2),
-            'subtotal_suma': round(v['subtotal_suma'], 2),
-            'veces': v['veces'],
-            'lineas': v['lineas'][:10],
-        }
+        {'nombre': k, 'qty': v['qty'], 'subtotal': round(v['subtotal'], 2),
+         'subtotal_suma': round(v['subtotal_suma'], 2), 'veces': v['veces'],
+         'categoria': v['categoria'], 'lineas': []}
         for k, v in top_prod
+    ]
+    
+    # Equipos ordenados
+    eq_list = [
+        {'nombre': k, 'lineas': v['lineas_count'], 'total_suma': round(v['total_suma'], 2)}
+        for k, v in sorted(equipos.items(), key=lambda x: -x[1]['total_suma'])
+    ]
+    
+    # Categorias ordenadas
+    cat_list = [
+        {'nombre': k, 'lineas': v['lineas_count'], 'total_suma': round(v['total_suma'], 2)}
+        for k, v in sorted(categorias.items(), key=lambda x: -x[1]['total_suma'])
     ]
     
     return {
         'facturas': facturas,
         'ejecutivos': ej_list,
         'top_productos': prod_list,
+        'equipos': eq_list,
+        'categorias': cat_list,
         'total_facturado': round(total_facturado, 2),
         'total_facturas': len(facturas),
         'total_clientes': len(clientes_set),
