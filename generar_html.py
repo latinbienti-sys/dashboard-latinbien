@@ -633,6 +633,7 @@ html = f'''<!DOCTYPE html>
             <div class="kpi-card success"><div class="number money" id="fjTotalMargen">—</div><div class="label">Margen Bruto</div></div>
             <div class="kpi-card"><div class="number" id="fjTotalFacturas">—</div><div class="label">Facturas</div></div>
             <div class="kpi-card"><div class="number" id="fjTotalClientes">—</div><div class="label">Clientes</div></div>
+            <div class="kpi-card" style="background:#fef9e7"><div class="number money" id="fjTotalNoSuma">—</div><div class="label">No Sumado (Aprob.)</div></div>
         </div>
 
         <!-- EJECUTIVOS -->
@@ -682,6 +683,7 @@ html = f'''<!DOCTYPE html>
                         <tr>
                             <th>Cliente</th>
                             <th>Factura</th>
+                            <th>Status</th>
                             <th>Ejecutivo</th>
                             <th class="text-right">Total</th>
                             <th class="text-right">Producto</th>
@@ -1416,23 +1418,27 @@ try {{
         document.getElementById('fjTotalMargen').textContent = fmtMoney(fj.total_margen);
         document.getElementById('fjTotalFacturas').textContent = fj.total_facturas.toLocaleString();
         document.getElementById('fjTotalClientes').textContent = fj.total_clientes.toLocaleString();
+        var noSumaEl = document.getElementById('fjTotalNoSuma');
+        if (noSumaEl) noSumaEl.textContent = fmtMoney(fj.total_no_suma);
         
         // Ejecutivos
         var tEje = document.getElementById('tablaEjecutivos');
         if (tEje && fj.ejecutivos) {{
             tEje.innerHTML = fj.ejecutivos.map(function(e) {{
+                var incl = e.cantidad_suma + '/' + e.cantidad + ' fact.';
                 return '<tr class="clickable" onclick="toggleSubTable(this)">' +
                     '<td><strong>' + e.nombre + '</strong></td>' +
                     '<td class="text-right">' + e.cantidad.toLocaleString() + '</td>' +
                     '<td class="text-right">' + fmtMoney(e.total) + '</td>' +
-                    '<td style="font-size:11px;color:#888">▼ Ver facturas</td>' +
+                    '<td style="font-size:11px;color:#888">▼ ' + incl + '</td>' +
                     '</tr>' +
                     '<tr class="sub-table" style="display:none"><td colspan="4">' +
                     '<table class="sub-table-inner"><thead><tr>' +
-                    '<th>Factura</th><th>Cliente</th><th class="text-right">Total</th>' +
+                    '<th>Factura</th><th>Cliente</th><th class="text-right">Total</th><th>Status</th>' +
                     '</tr></thead><tbody>' +
                     (e.facturas || []).map(function(f) {{
-                        return '<tr><td>' + f.name + '</td><td>' + f.cliente + '</td><td class="text-right">' + fmtMoney(f.total) + '</td></tr>';
+                        var stStyle = f.summable ? '' : 'style="color:#f59e0b;font-size:10px"';
+                        return '<tr><td>' + f.name + '</td><td>' + f.cliente + '</td><td class="text-right">' + fmtMoney(f.total) + '</td><td ' + stStyle + '>' + (f.summable ? '✅' : '⚠️ No suma') + '</td></tr>';
                     }}).join('') +
                     '</tbody></table></td></tr>';
             }}).join('');
@@ -1442,6 +1448,7 @@ try {{
         var tProd = document.getElementById('tablaTopProductos');
         if (tProd && fj.top_productos) {{
             tProd.innerHTML = fj.top_productos.map(function(p, idx) {{
+                var sumadoStr = p.subtotal_suma > 0 ? fmtMoney(p.subtotal_suma) : '—';
                 return '<tr class="clickable" onclick="toggleSubTable(this)">' +
                     '<td>' + (idx+1) + '</td>' +
                     '<td><strong>' + p.nombre + '</strong></td>' +
@@ -1465,9 +1472,13 @@ try {{
         if (tbody) {{
             tbody.innerHTML = fj.facturas.map(function(f) {{
                 var margenCls = f.margen >= 0 ? 'style="color:#10b981"' : 'style="color:#ef4444"';
+                var stBadge = f.summable
+                    ? '<span class="badge badge-green" style="background:#d1fae5;color:#065f46">' + f.status + '</span>'
+                    : '<span class="badge badge-yellow" style="background:#fef3c7;color:#92400e">⚠️ ' + f.status + '</span>';
                 return '<tr class="clickable" onclick="toggleSubTable(this)">' +
                     '<td><strong>' + f.cliente + '</strong></td>' +
                     '<td style="font-size:11px;color:#666">' + f.factura + '</td>' +
+                    '<td>' + stBadge + '</td>' +
                     '<td style="font-size:12px">' + f.ejecutivo + '</td>' +
                     '<td class="text-right">' + fmtMoney(f.total) + '</td>' +
                     '<td class="text-right">' + fmtMoney(f.precio_producto) + '</td>' +
@@ -1475,7 +1486,7 @@ try {{
                     '<td class="text-right">' + fmtMoney(f.costo) + '</td>' +
                     '<td class="text-right" ' + margenCls + '>' + fmtMoney(f.margen) + '</td>' +
                     '</tr>' +
-                    '<tr class="sub-table" style="display:none"><td colspan="8">' +
+                    '<tr class="sub-table" style="display:none"><td colspan="9">' +
                     '<table class="sub-table-inner"><thead><tr>' +
                     '<th>Producto</th><th>Tipo</th><th class="text-right">Cant.</th><th class="text-right">Subtotal</th>' +
                     '</tr></thead><tbody>' +

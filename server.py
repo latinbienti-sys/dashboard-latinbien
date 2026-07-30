@@ -450,7 +450,7 @@ def fetch_facturacion_julio(sess):
         recs = json_execute(sess, 'account.move', 'read', [batch, [
             'id', 'name', 'partner_id', 'invoice_date',
             'amount_total', 'amount_untaxed',
-            'invoice_user_id', 'invoice_line_ids',
+            'invoice_user_id', 'x_status_operativos', 'invoice_line_ids',
         ]])
         all_invs.extend(recs)
     
@@ -497,6 +497,8 @@ def fetch_facturacion_julio(sess):
     facturas = []
     ejecutivos = {}  # nombre -> {cantidad, total, facturas: [{name, total, cliente}]}
     productos = {}    # nombre -> {qty, subtotal, veces, lineas: [{factura, cliente, qty}]}
+    STATUS_SOMA = {'6', '8'}  # Entregado + Cancelación Total → se suman
+    status_labels = {'6': 'Entregado', '8': 'Cancelación Total', '4': 'Aprobado'}
     total_facturado = 0.0
     total_admin = 0.0
     total_costo = 0.0
@@ -508,7 +510,15 @@ def fetch_facturacion_julio(sess):
         partner_name = partner[1] if isinstance(partner, list) and len(partner) > 1 else 'Desconocido'
         clientes_set.add(partner_name)
         total = float(inv.get('amount_total') or 0)
-        total_facturado += total
+        
+        # Status operativo
+        raw_st = inv.get('x_status_operativos')
+        st_str = str(raw_st) if raw_st is not None else ''
+        st_label = status_labels.get(st_str, st_str)
+        summable = st_str in STATUS_SOMA
+        
+        if summable:
+            total_facturado += total
         
         # Ejecutivo
         eid = inv.get('invoice_user_id')
@@ -535,25 +545,31 @@ def fetch_facturacion_julio(sess):
             
             if is_admin:
                 gasto_admin += pu
+                if summable:
+                    total_admin += pu
             else:
                 precio_producto += pu
                 # Costo
                 if pid and isinstance(pid, list) and len(pid) > 1:
                     cost_unit = prod_cost.get(pid[0], 0)
                     costo_producto += cost_unit * qty
-                    
-                    # Acumular producto
-                    if pname not in productos:
-                        productos[pname] = {'qty': 0, 'subtotal': 0.0, 'veces': 0, 'lineas': []}
-                    productos[pname]['qty'] += qty
-                    productos[pname]['subtotal'] += pu
-                    productos[pname]['veces'] += 1
-                    productos[pname]['lineas'].append({
-                        'factura': inv.get('name', ''),
-                        'cliente': partner_name,
-                        'qty': qty,
-                        'subtotal': pu,
-                    })
+                    if summable:
+                        total_costo += cost_unit * qty
+                
+                # Acumular producto (siempre, para visualizar)
+                if pname not in productos:
+                    productos[pname] = {'qty': 0, 'subtotal': 0.0, 'subtotal_suma': 0.0, 'veces': 0, 'lineas': []}
+                productos[pname]['qty'] += qty
+                productos[pname]['subtotal'] += pu
+                if summable:
+                    productos[pname]['subtotal_suma'] += pu
+                productos[pname]['veces'] += 1
+                productos[pname]['lineas'].append({
+                    'factura': inv.get('name', ''),
+                    'cliente': partner_name,
+                    'qty': qty,
+                    'subtotal': pu,
+                })
             
             lineas_detalle.append({
                 'producto': pname,
@@ -567,6 +583,8 @@ def fetch_facturacion_julio(sess):
             'factura': inv.get('name', ''),
             'fecha': inv.get('invoice_date', ''),
             'ejecutivo': ej_name,
+            'status': st_label,
+            'summable': summable,
             'total': round(total, 2),
             'precio_producto': round(precio_producto, 2),
             'gasto_admin': round(gasto_admin, 2),
@@ -575,37 +593,43 @@ def fetch_facturacion_julio(sess):
             'lineas': lineas_detalle,
         })
         
-        # Acumular ejecutivo
+        # Acumular ejecutivo (total solo si summable, cantidad siempre)
         if ej_name not in ejecutivos:
-            ejecutivos[ej_name] = {'cantidad': 0, 'total': 0.0, 'facturas': []}
+            ejecutivos[ej_name] = {'cantidad': 0, 'cantidad_suma': 0, 'total': 0.0, 'facturas': []}
         ejecutivos[ej_name]['cantidad'] += 1
-        ejecutivos[ej_name]['total'] += total
+        if summable:
+            ejecutivos[ej_name]['cantidad_suma'] += 1
+            ejecutivos[ej_name]['total'] += total
         ejecutivos[ej_name]['facturas'].append({
             'name': inv.get('name', ''),
             'cliente': partner_name,
             'total': round(total, 2),
+            'summable': summable,
         })
-        
-        total_admin += gasto_admin
-        total_costo += costo_producto
     
     facturas.sort(key=lambda x: -x['total'])
     
-    # Ejecutivos ordenados por total
+    # Ejecutivos ordenados por total sumado
     ej_list = [
-        {'nombre': k, 'cantidad': v['cantidad'], 'total': round(v['total'], 2), 'facturas': v['facturas']}
+        {
+            'nombre': k, 'cantidad': v['cantidad'],
+            'cantidad_suma': v['cantidad_suma'],
+            'total': round(v['total'], 2),
+            'facturas': v['facturas'],
+        }
         for k, v in sorted(ejecutivos.items(), key=lambda x: -x[1]['total'])
     ]
     
-    # Top productos ordenados por subtotal
-    top_prod = sorted(productos.items(), key=lambda x: -x[1]['subtotal'])
+    # Top productos (ordenados por subtotal sumado, con subtotal total para visual)
+    top_prod = sorted(productos.items(), key=lambda x: -x[1]['subtotal_suma'])
     prod_list = [
         {
             'nombre': k,
             'qty': v['qty'],
             'subtotal': round(v['subtotal'], 2),
+            'subtotal_suma': round(v['subtotal_suma'], 2),
             'veces': v['veces'],
-            'lineas': v['lineas'][:10],  # max 10 referencias
+            'lineas': v['lineas'][:10],
         }
         for k, v in top_prod
     ]
@@ -621,6 +645,9 @@ def fetch_facturacion_julio(sess):
         'total_costo': round(total_costo, 2),
         'total_margen': round(total_facturado - total_admin - total_costo, 2),
         'total_productos': round(total_facturado - total_admin, 2),
+        'total_no_suma': round(
+            sum(f['total'] for f in facturas if not f['summable']), 2
+        ),
     }
 
 def build_html(data):
