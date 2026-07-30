@@ -450,7 +450,7 @@ def fetch_facturacion_julio(sess):
         recs = json_execute(sess, 'account.move', 'read', [batch, [
             'id', 'name', 'partner_id', 'invoice_date',
             'amount_total', 'amount_untaxed',
-            'invoice_user_id', 'x_status_operativos', 'invoice_line_ids',
+            'invoice_user_id', 'x_status_operativos', 'x_status_compra', 'invoice_line_ids',
         ]])
         all_invs.extend(recs)
     
@@ -497,8 +497,8 @@ def fetch_facturacion_julio(sess):
     facturas = []
     ejecutivos = {}  # nombre -> {cantidad, total, facturas: [{name, total, cliente}]}
     productos = {}    # nombre -> {qty, subtotal, veces, lineas: [{factura, cliente, qty}]}
-    STATUS_SOMA = {'6', '8'}  # Entregado + Cancelación Total → se suman
-    status_labels = {'6': 'Entregado', '8': 'Cancelación Total', '4': 'Aprobado'}
+    STATUS_SOMA = {'6', '8', '10', '12'}  # Entregado + Cancelación Total + Congelados → se suman
+    status_labels = {'6': 'Entregado', '8': 'Cancelación Total', '4': 'Aprobado', '10': 'Congelado', '12': 'Congelado'}
     total_facturado = 0.0
     total_admin = 0.0
     total_costo = 0.0
@@ -516,6 +516,12 @@ def fetch_facturacion_julio(sess):
         st_str = str(raw_st) if raw_st is not None else ''
         st_label = status_labels.get(st_str, st_str)
         summable = st_str in STATUS_SOMA
+        
+        # Status de compra
+        raw_cp = inv.get('x_status_compra')
+        cp_str = str(raw_cp) if raw_cp is not None else ''
+        cp_labels = {'1': 'Cotización', '4': 'Entrega Realizada', 'False': 'Sin asignar'}
+        cp_label = cp_labels.get(cp_str, cp_str)
         
         if summable:
             total_facturado += total
@@ -584,6 +590,7 @@ def fetch_facturacion_julio(sess):
             'fecha': inv.get('invoice_date', ''),
             'ejecutivo': ej_name,
             'status': st_label,
+            'compra_status': cp_label,
             'summable': summable,
             'total': round(total, 2),
             'precio_producto': round(precio_producto, 2),
@@ -605,6 +612,7 @@ def fetch_facturacion_julio(sess):
             'cliente': partner_name,
             'total': round(total, 2),
             'summable': summable,
+            'compra_status': cp_label,
         })
     
     facturas.sort(key=lambda x: -x['total'])

@@ -683,7 +683,8 @@ html = f'''<!DOCTYPE html>
                         <tr>
                             <th>Cliente</th>
                             <th>Factura</th>
-                            <th>Status</th>
+                            <th>Status Op.</th>
+                            <th>Compra</th>
                             <th>Ejecutivo</th>
                             <th class="text-right">Total</th>
                             <th class="text-right">Producto</th>
@@ -1434,11 +1435,11 @@ try {{
                     '</tr>' +
                     '<tr class="sub-table" style="display:none"><td colspan="4">' +
                     '<table class="sub-table-inner"><thead><tr>' +
-                    '<th>Factura</th><th>Cliente</th><th class="text-right">Total</th><th>Status</th>' +
+                    '<th>Factura</th><th>Cliente</th><th class="text-right">Total</th><th>Status Op.</th><th>Compra</th>' +
                     '</tr></thead><tbody>' +
                     (e.facturas || []).map(function(f) {{
                         var stStyle = f.summable ? '' : 'style="color:#f59e0b;font-size:10px"';
-                        return '<tr><td>' + f.name + '</td><td>' + f.cliente + '</td><td class="text-right">' + fmtMoney(f.total) + '</td><td ' + stStyle + '>' + (f.summable ? '✅' : '⚠️ No suma') + '</td></tr>';
+                        return '<tr><td>' + f.name + '</td><td>' + f.cliente + '</td><td class="text-right">' + fmtMoney(f.total) + '</td><td ' + stStyle + '>' + (f.summable ? '✅' : '⚠️ No suma') + '</td><td>' + (f.compra_status || '') + '</td></tr>';
                     }}).join('') +
                     '</tbody></table></td></tr>';
             }}).join('');
@@ -1475,10 +1476,14 @@ try {{
                 var stBadge = f.summable
                     ? '<span class="badge badge-green" style="background:#d1fae5;color:#065f46">' + f.status + '</span>'
                     : '<span class="badge badge-yellow" style="background:#fef3c7;color:#92400e">⚠️ ' + f.status + '</span>';
+                var cpBadge = f.compra_status === 'Entrega Realizada'
+                    ? '<span class="badge" style="background:#dbeafe;color:#1e40af">' + f.compra_status + '</span>'
+                    : '<span class="badge" style="background:#f3f4f6;color:#6b7280">' + f.compra_status + '</span>';
                 return '<tr class="clickable" onclick="toggleSubTable(this)">' +
                     '<td><strong>' + f.cliente + '</strong></td>' +
                     '<td style="font-size:11px;color:#666">' + f.factura + '</td>' +
                     '<td>' + stBadge + '</td>' +
+                    '<td>' + cpBadge + '</td>' +
                     '<td style="font-size:12px">' + f.ejecutivo + '</td>' +
                     '<td class="text-right">' + fmtMoney(f.total) + '</td>' +
                     '<td class="text-right">' + fmtMoney(f.precio_producto) + '</td>' +
@@ -1486,7 +1491,7 @@ try {{
                     '<td class="text-right">' + fmtMoney(f.costo) + '</td>' +
                     '<td class="text-right" ' + margenCls + '>' + fmtMoney(f.margen) + '</td>' +
                     '</tr>' +
-                    '<tr class="sub-table" style="display:none"><td colspan="9">' +
+                    '<tr class="sub-table" style="display:none"><td colspan="10">' +
                     '<table class="sub-table-inner"><thead><tr>' +
                     '<th>Producto</th><th>Tipo</th><th class="text-right">Cant.</th><th class="text-right">Subtotal</th>' +
                     '</tr></thead><tbody>' +
