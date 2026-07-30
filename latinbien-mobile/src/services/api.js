@@ -25,18 +25,19 @@ export async function loadSessionCookie() {
 }
 
 /**
- * Enviar llamada JSON-RPC a Odoo con manejo de cookies
+ * Enviar llamada JSON-RPC a Odoo con manejo manual de cookies
+ * Usa el endpoint genérico sin modelo en la URL
  */
-async function jsonRpc(endpoint, method, params = {}) {
+async function jsonRpc(endpoint, params = {}) {
   const url = `${BASE_URL}${endpoint}`;
-  const body = JSON.stringify({ jsonrpc: '2.0', method, params, id: Date.now() });
+  const body = JSON.stringify({ jsonrpc: '2.0', method: 'call', params, id: Date.now() });
 
   const headers = {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
   };
 
-  // Si tenemos cookie de sesión guardada, enviarla manualmente
+  // Enviar cookie de sesión manualmente
   if (_sessionCookie) {
     headers['Cookie'] = _sessionCookie;
   }
@@ -44,7 +45,7 @@ async function jsonRpc(endpoint, method, params = {}) {
   const response = await fetch(url, {
     method: 'POST',
     headers,
-    credentials: 'omit', // No confiar en cookies automáticas
+    credentials: 'omit',
     body,
   });
 
@@ -52,8 +53,7 @@ async function jsonRpc(endpoint, method, params = {}) {
     throw new Error(`Error de conexión (${response.status})`);
   }
 
-  // Capturar Set-Cookie de la respuesta
-  // En React Native, iteramos TODOS los headers para encontrar set-cookie
+  // Capturar Set-Cookie de la respuesta (para login)
   let cookieStr = '';
   response.headers.forEach((value, key) => {
     if (key.toLowerCase() === 'set-cookie') {
@@ -82,11 +82,11 @@ async function jsonRpc(endpoint, method, params = {}) {
 // ============================================================
 
 export function getSessionInfo() {
-  return jsonRpc('/web/session/get_session_info', 'call');
+  return jsonRpc('/web/session/get_session_info');
 }
 
 export function login(login, password) {
-  return jsonRpc('/web/session/authenticate', 'call', {
+  return jsonRpc('/web/session/authenticate', {
     db: 'erp_production',
     login,
     password,
@@ -94,73 +94,57 @@ export function login(login, password) {
 }
 
 export function logout() {
-  return jsonRpc('/web/session/destroy', 'call');
+  return jsonRpc('/web/session/destroy');
 }
 
 // ============================================================
-// CATÁLOGO
+// CATÁLOGO — usando search_read (endpoint plano, más compatible)
 // ============================================================
 
 export function getFeaturedProducts(limit = 20) {
-  return jsonRpc('/web/dataset/call_kw/product.template', 'call', {
+  return jsonRpc('/web/dataset/search_read', {
     model: 'product.template',
-    method: 'search_read',
-    args: [],
-    kwargs: {
-      domain: [['sale_ok', '=', true], ['published_on_website', '=', true]],
-      fields: ['id', 'name', 'list_price', 'default_code', 'image_256', 'website_url', 'categ_id'],
-      limit,
-      order: 'write_date desc',
-    },
+    domain: [['sale_ok', '=', true], ['published_on_website', '=', true]],
+    fields: ['id', 'name', 'list_price', 'default_code', 'image_256', 'website_url', 'categ_id'],
+    limit,
+    order: 'write_date desc',
   });
 }
 
 export function searchProducts(query, limit = 20) {
-  return jsonRpc('/web/dataset/call_kw/product.template', 'call', {
+  return jsonRpc('/web/dataset/search_read', {
     model: 'product.template',
-    method: 'search_read',
-    args: [],
-    kwargs: {
-      domain: [
-        ['sale_ok', '=', true],
-        ['published_on_website', '=', true],
-        '|',
-        ['name', 'ilike', query],
-        ['default_code', 'ilike', query],
-      ],
-      fields: ['id', 'name', 'list_price', 'default_code', 'image_256', 'website_url', 'categ_id'],
-      limit,
-    },
+    domain: [
+      ['sale_ok', '=', true],
+      ['published_on_website', '=', true],
+      '|',
+      ['name', 'ilike', query],
+      ['default_code', 'ilike', query],
+    ],
+    fields: ['id', 'name', 'list_price', 'default_code', 'image_256', 'website_url', 'categ_id'],
+    limit,
   });
 }
 
 export function getCategories() {
-  return jsonRpc('/web/dataset/call_kw/product.public.category', 'call', {
+  return jsonRpc('/web/dataset/search_read', {
     model: 'product.public.category',
-    method: 'search_read',
-    args: [],
-    kwargs: {
-      domain: [['website_published', '=', true]],
-      fields: ['id', 'name', 'parent_id', 'child_id'],
-      order: 'sequence asc',
-    },
+    domain: [['website_published', '=', true]],
+    fields: ['id', 'name', 'parent_id', 'child_id'],
+    order: 'sequence asc',
   });
 }
 
 export function getProductsByCategory(categoryId, limit = 50) {
-  return jsonRpc('/web/dataset/call_kw/product.template', 'call', {
+  return jsonRpc('/web/dataset/search_read', {
     model: 'product.template',
-    method: 'search_read',
-    args: [],
-    kwargs: {
-      domain: [
-        ['sale_ok', '=', true],
-        ['published_on_website', '=', true],
-        ['public_categ_ids', 'in', [categoryId]],
-      ],
-      fields: ['id', 'name', 'list_price', 'default_code', 'image_256', 'website_url', 'categ_id'],
-      limit,
-    },
+    domain: [
+      ['sale_ok', '=', true],
+      ['published_on_website', '=', true],
+      ['public_categ_ids', 'in', [categoryId]],
+    ],
+    fields: ['id', 'name', 'list_price', 'default_code', 'image_256', 'website_url', 'categ_id'],
+    limit,
   });
 }
 
@@ -170,44 +154,32 @@ export function getProductsByCategory(categoryId, limit = 50) {
 
 export function getPartnerInfo() {
   if (!_partnerId) throw new Error('No hay sesión activa');
-  return jsonRpc('/web/dataset/call_kw/res.partner', 'call', {
+  return jsonRpc('/web/dataset/search_read', {
     model: 'res.partner',
-    method: 'search_read',
-    args: [],
-    kwargs: {
-      domain: [['id', '=', _partnerId]],
-      fields: ['id', 'name', 'email', 'phone', 'mobile', 'vat', 'credit_limit', 'total_due'],
-      limit: 1,
-    },
+    domain: [['id', '=', _partnerId]],
+    fields: ['id', 'name', 'email', 'phone', 'mobile', 'vat', 'credit_limit', 'total_due'],
+    limit: 1,
   });
 }
 
 export function getMyOrders(limit = 20) {
   if (!_partnerId) throw new Error('No hay sesión activa');
-  return jsonRpc('/web/dataset/call_kw.sale.order', 'call', {
+  return jsonRpc('/web/dataset/search_read', {
     model: 'sale.order',
-    method: 'search_read',
-    args: [],
-    kwargs: {
-      domain: [['partner_id', '=', _partnerId]],
-      fields: ['id', 'name', 'date_order', 'amount_total', 'state', 'payment_term_id'],
-      limit,
-      order: 'date_order desc',
-    },
+    domain: [['partner_id', '=', _partnerId]],
+    fields: ['id', 'name', 'date_order', 'amount_total', 'state', 'payment_term_id'],
+    limit,
+    order: 'date_order desc',
   });
 }
 
 export function getCreditLines() {
   if (!_partnerId) throw new Error('No hay sesión activa');
-  return jsonRpc('/web/dataset/call_kw.account.credit.line', 'call', {
+  return jsonRpc('/web/dataset/search_read', {
     model: 'account.credit.line',
-    method: 'search_read',
-    args: [],
-    kwargs: {
-      domain: [['partner_id', '=', _partnerId]],
-      fields: ['id', 'name', 'credit_limit', 'available_credit', 'state', 'date'],
-      order: 'date desc',
-    },
+    domain: [['partner_id', '=', _partnerId]],
+    fields: ['id', 'name', 'credit_limit', 'available_credit', 'state', 'date'],
+    order: 'date desc',
   });
 }
 
