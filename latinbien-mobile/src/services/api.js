@@ -1,5 +1,6 @@
 // ============================================================
 // LatinBien Mobile — API Service (Odoo 16 JSON-RPC)
+// Usa XMLHttpRequest para tener control total de cookies
 // ============================================================
 
 import { BASE_URL } from '../utils/constants';
@@ -14,9 +15,6 @@ export function setPartnerId(id) {
   _partnerId = id;
 }
 
-/**
- * Inicializar cookie de sesión desde storage
- */
 export async function loadSessionCookie() {
   try {
     const stored = await AsyncStorage.getItem(COOKIE_KEY);
@@ -25,56 +23,60 @@ export async function loadSessionCookie() {
 }
 
 /**
- * Enviar llamada JSON-RPC a Odoo con manejo manual de cookies
- * Usa el endpoint genérico sin modelo en la URL
+ * Llamada JSON-RPC usando XMLHttpRequest para acceso completo a headers
  */
-async function jsonRpc(endpoint, params = {}) {
-  const url = `${BASE_URL}${endpoint}`;
-  const body = JSON.stringify({ jsonrpc: '2.0', method: 'call', params, id: Date.now() });
+function jsonRpc(endpoint, params = {}) {
+  return new Promise((resolve, reject) => {
+    const url = `${BASE_URL}${endpoint}`;
+    const body = JSON.stringify({ jsonrpc: '2.0', method: 'call', params, id: Date.now() });
 
-  const headers = {
-    'Content-Type': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest',
-  };
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.withCredentials = false; // Nosotros manejamos las cookies manualmente
 
-  // Enviar cookie de sesión manualmente
-  if (_sessionCookie) {
-    headers['Cookie'] = _sessionCookie;
-  }
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers,
-    credentials: 'omit',
-    body,
-  });
-
-  if (!response.ok) {
-    throw new Error(`Error de conexión (${response.status})`);
-  }
-
-  // Capturar Set-Cookie de la respuesta (para login)
-  let cookieStr = '';
-  response.headers.forEach((value, key) => {
-    if (key.toLowerCase() === 'set-cookie') {
-      cookieStr = value;
+    // Enviar cookie de sesión si la tenemos
+    if (_sessionCookie) {
+      xhr.setRequestHeader('Cookie', _sessionCookie);
     }
+
+    xhr.onreadystatechange = async function () {
+      if (xhr.readyState !== 4) return;
+
+      if (xhr.status < 200 || xhr.status >= 300) {
+        reject(new Error(`Error de conexión (${xhr.status})`));
+        return;
+      }
+
+      // Capturar Set-Cookie del response headers
+      const rawHeaders = xhr.getAllResponseHeaders();
+      const setCookieMatch = rawHeaders.match(/set-cookie:\s*([^\r\n]+)/i);
+      if (setCookieMatch) {
+        const cookieVal = setCookieMatch[1];
+        const sessionMatch = cookieVal.match(/session_id=[^;]+/);
+        if (sessionMatch) {
+          _sessionCookie = sessionMatch[0];
+          try { await AsyncStorage.setItem(COOKIE_KEY, _sessionCookie); } catch (_) {}
+        }
+      }
+
+      try {
+        const data = JSON.parse(xhr.responseText);
+        if (data.error) {
+          const msg = data.error.data?.message || data.error.message || 'Error del servidor';
+          reject(new Error(msg.replace(/^Odoo Server Error\s*/i, '').trim()));
+        } else {
+          resolve(data.result);
+        }
+      } catch (e) {
+        reject(new Error('Respuesta inválida del servidor'));
+      }
+    };
+
+    xhr.onerror = () => reject(new Error('Error de red'));
+    xhr.send(body);
   });
-
-  if (cookieStr && cookieStr.includes('session_id')) {
-    const match = cookieStr.match(/session_id=[^;]+/);
-    if (match) {
-      _sessionCookie = match[0];
-      try { await AsyncStorage.setItem(COOKIE_KEY, _sessionCookie); } catch (_) {}
-    }
-  }
-
-  const data = await response.json();
-  if (data.error) {
-    const msg = data.error.data?.message || data.error.message || 'Error del servidor';
-    throw new Error(msg.replace(/^Odoo Server Error\s*/i, '').trim());
-  }
-  return data.result;
 }
 
 // ============================================================
@@ -98,7 +100,7 @@ export function logout() {
 }
 
 // ============================================================
-// CATÁLOGO — usando search_read (endpoint plano, más compatible)
+// CATÁLOGO
 // ============================================================
 
 export function getFeaturedProducts(limit = 20) {
