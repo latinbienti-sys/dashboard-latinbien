@@ -74,8 +74,6 @@ export async function initAuth() {
         api.setPartnerId(_currentUser.partner_id);
       }
     }
-    // Cargar cookie de sesión guardada
-    await api.loadSessionCookie();
   } catch (_) {
     _currentUser = null;
   }
@@ -135,7 +133,6 @@ export async function logout() {
   try {
     await api.logout();
   } catch (_) {}
-  await api.setSessionCookie(null);
   await persistUser(null);
 }
 

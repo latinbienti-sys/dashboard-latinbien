@@ -3,13 +3,8 @@
 // ============================================================
 
 import { BASE_URL } from '../utils/constants';
-import { Platform } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let _partnerId = null;
-let _sessionCookie = null;
-
-const SESSION_COOKIE_KEY = 'latinbien_session_cookie';
 
 /**
  * Establecer el partner_id del usuario logueado
@@ -19,29 +14,7 @@ export function setPartnerId(id) {
 }
 
 /**
- * Guardar la cookie de sesión de Odoo
- */
-export async function setSessionCookie(cookie) {
-  _sessionCookie = cookie;
-  try {
-    await AsyncStorage.setItem(SESSION_COOKIE_KEY, cookie || '');
-  } catch (_) {}
-}
-
-/**
- * Recuperar la cookie de sesión guardada
- */
-export async function loadSessionCookie() {
-  try {
-    const stored = await AsyncStorage.getItem(SESSION_COOKIE_KEY);
-    if (stored) {
-      _sessionCookie = stored;
-    }
-  } catch (_) {}
-}
-
-/**
- * Llamada JSON-RPC a Odoo con manejo manual de cookies
+ * Llamada JSON-RPC a Odoo
  */
 async function jsonRpc(endpoint, method, params = {}) {
   const url = `${BASE_URL}${endpoint}`;
@@ -52,20 +25,13 @@ async function jsonRpc(endpoint, method, params = {}) {
     id: Date.now(),
   });
 
-  const headers = {
-    'Content-Type': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest',
-  };
-
-  // Enviar cookie de sesión manualmente si la tenemos
-  if (_sessionCookie) {
-    headers['Cookie'] = _sessionCookie;
-  }
-
   const response = await fetch(url, {
     method: 'POST',
-    headers,
-    credentials: 'omit',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+    credentials: 'include',
     body,
   });
 
@@ -73,22 +39,8 @@ async function jsonRpc(endpoint, method, params = {}) {
     throw new Error(`Error de conexión (${response.status})`);
   }
 
-  // Capturar Set-Cookie de la respuesta (para login)
-  const setCookie = response.headers.get('set-cookie');
-  if (setCookie && setCookie.includes('session_id')) {
-    // Extraer solo el par session_id=valor
-    const match = setCookie.match(/session_id=[^;]+/);
-    if (match) {
-      await setSessionCookie(match[0]);
-    }
-  }
-
   const data = await response.json();
   if (data.error) {
-    // Si el error es sesión expirada, limpiar cookie
-    if (data.error?.data?.name === 'odoo.http.SessionExpiredException') {
-      await setSessionCookie(null);
-    }
     const msg = data.error.data?.message || data.error.message || 'Error del servidor';
     throw new Error(msg.replace(/^Odoo Server Error\s*/i, '').trim());
   }
