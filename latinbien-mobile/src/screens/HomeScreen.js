@@ -12,6 +12,7 @@ import {
   RefreshControl,
   Linking,
   Alert,
+  Platform,
 } from 'react-native';
 import { COLORS } from '../utils/constants';
 import { getFeaturedProducts, getCategories, getCreditLines } from '../services/api';
@@ -26,33 +27,41 @@ export default function HomeScreen({ navigation, onAddToCart }) {
   const [creditLine, setCreditLine] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [debugLog, setDebugLog] = useState([]);
+
+  const addDebug = (msg) => setDebugLog(prev => [...prev.slice(-9), msg]);
 
   const loadData = useCallback(async () => {
-    // Cargar productos
+    addDebug('Cargando productos...');
     try {
       const prods = await getFeaturedProducts(10);
+      addDebug(`Productos: ${prods?.length || 0} registros`);
+      if (prods?.length > 0) addDebug(`1er: ${prods[0].name}`);
       setProducts(prods || []);
     } catch (e) {
-      Alert.alert('Error productos', e.message);
+      addDebug(`ERROR productos: ${e.message}`);
       setProducts([]);
     }
-    // Cargar categorías
+    addDebug('Cargando categorías...');
     try {
       const cats = await getCategories();
+      addDebug(`Categorías: ${cats?.length || 0} registros`);
       setCategories(cats || []);
     } catch (e) {
-      Alert.alert('Error categorías', e.message);
+      addDebug(`ERROR categorías: ${e.message}`);
       setCategories([]);
     }
-    // Cargar líneas de crédito
     if (isAuthenticated()) {
+      addDebug('Cargando crédito...');
       try {
         const lines = await getCreditLines();
+        addDebug(`Crédito: ${lines?.length || 0} líneas`);
         if (lines?.length > 0) setCreditLine(lines[0]);
       } catch (e) {
-        Alert.alert('Error contratos', e.message);
+        addDebug(`ERROR crédito: ${e.message}`);
       }
     }
+    addDebug('Carga completa');
   }, []);
 
   useEffect(() => {
@@ -74,6 +83,17 @@ export default function HomeScreen({ navigation, onAddToCart }) {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.accent]} />
       }
     >
+      {/* Debug panel */}
+      {debugLog.length > 0 && (
+        <View style={styles.debugBox}>
+          <Text style={styles.debugTitle}>🔍 Debug API</Text>
+          {debugLog.map((m, i) => (
+            <Text key={i} style={[styles.debugLine, m.includes('ERROR') && { color: '#ef4444', fontWeight: '700' }]}>
+              {m}
+            </Text>
+          ))}
+        </View>
+      )}
       {/* Banner */}
       <View style={styles.banner}>
         <Text style={styles.bannerTitle}>🏆 ¡Bienvenido a LatinBien!</Text>
@@ -151,6 +171,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.gray50,
+  },
+  debugBox: {
+    backgroundColor: '#1a1a2e',
+    borderRadius: 8,
+    padding: 10,
+    margin: 16,
+    marginBottom: 0,
+  },
+  debugTitle: {
+    fontSize: 11,
+    color: '#888',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    marginBottom: 6,
+  },
+  debugLine: {
+    fontSize: 11,
+    color: '#0f0',
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    lineHeight: 16,
   },
   banner: {
     backgroundColor: COLORS.primary,
