@@ -3,40 +3,70 @@
 // ============================================================
 
 import { BASE_URL } from '../utils/constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let _partnerId = null;
+let _sessionCookie = null;
 
-/**
- * Establecer el partner_id del usuario logueado
- */
+const COOKIE_KEY = 'odoo_session_cookie';
+
 export function setPartnerId(id) {
   _partnerId = id;
 }
 
 /**
- * Llamada JSON-RPC a Odoo
+ * Inicializar cookie de sesión desde storage
+ */
+export async function loadSessionCookie() {
+  try {
+    const stored = await AsyncStorage.getItem(COOKIE_KEY);
+    if (stored) _sessionCookie = stored;
+  } catch (_) {}
+}
+
+/**
+ * Enviar llamada JSON-RPC a Odoo con manejo de cookies
  */
 async function jsonRpc(endpoint, method, params = {}) {
   const url = `${BASE_URL}${endpoint}`;
-  const body = JSON.stringify({
-    jsonrpc: '2.0',
-    method,
-    params,
-    id: Date.now(),
-  });
+  const body = JSON.stringify({ jsonrpc: '2.0', method, params, id: Date.now() });
+
+  const headers = {
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+  };
+
+  // Si tenemos cookie de sesión guardada, enviarla manualmente
+  if (_sessionCookie) {
+    headers['Cookie'] = _sessionCookie;
+  }
 
   const response = await fetch(url, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest',
-    },
-    credentials: 'include',
+    headers,
+    credentials: 'omit', // No confiar en cookies automáticas
     body,
   });
 
   if (!response.ok) {
     throw new Error(`Error de conexión (${response.status})`);
+  }
+
+  // Capturar Set-Cookie de la respuesta
+  // En React Native, iteramos TODOS los headers para encontrar set-cookie
+  let cookieStr = '';
+  response.headers.forEach((value, key) => {
+    if (key.toLowerCase() === 'set-cookie') {
+      cookieStr = value;
+    }
+  });
+
+  if (cookieStr && cookieStr.includes('session_id')) {
+    const match = cookieStr.match(/session_id=[^;]+/);
+    if (match) {
+      _sessionCookie = match[0];
+      try { await AsyncStorage.setItem(COOKIE_KEY, _sessionCookie); } catch (_) {}
+    }
   }
 
   const data = await response.json();

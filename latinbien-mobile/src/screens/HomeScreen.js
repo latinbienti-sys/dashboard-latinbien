@@ -11,6 +11,7 @@ import {
   StyleSheet,
   RefreshControl,
   Linking,
+  Alert,
 } from 'react-native';
 import { COLORS } from '../utils/constants';
 import { getFeaturedProducts, getCategories, getCreditLines } from '../services/api';
@@ -27,26 +28,30 @@ export default function HomeScreen({ navigation, onAddToCart }) {
   const [refreshing, setRefreshing] = useState(false);
 
   const loadData = useCallback(async () => {
-    // Cargar productos (separado de categorías para que si una falla no afecte a la otra)
+    // Cargar productos
     try {
       const prods = await getFeaturedProducts(10);
       setProducts(prods || []);
-    } catch (_) {
+    } catch (e) {
+      Alert.alert('Error productos', e.message);
       setProducts([]);
     }
-    // Cargar categorías (puede fallar si el modelo no existe)
+    // Cargar categorías
     try {
       const cats = await getCategories();
       setCategories(cats || []);
-    } catch (_) {
+    } catch (e) {
+      Alert.alert('Error categorías', e.message);
       setCategories([]);
     }
-    // Cargar líneas de crédito (solo si autenticado)
+    // Cargar líneas de crédito
     if (isAuthenticated()) {
       try {
         const lines = await getCreditLines();
         if (lines?.length > 0) setCreditLine(lines[0]);
-      } catch (_) {}
+      } catch (e) {
+        Alert.alert('Error contratos', e.message);
+      }
     }
   }, []);
 

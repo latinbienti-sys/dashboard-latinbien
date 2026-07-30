@@ -74,6 +74,7 @@ export async function initAuth() {
         api.setPartnerId(_currentUser.partner_id);
       }
     }
+    await api.loadSessionCookie();
   } catch (_) {
     _currentUser = null;
   }
