@@ -1464,10 +1464,11 @@ try {{
                     '</tr>' +
                     '<tr class="sub-table" style="display:none"><td colspan="4">' +
                     '<table class="sub-table-inner"><thead><tr>' +
-                    '<th>Factura</th><th>Cliente</th><th class="text-right">Total</th><th>Compra</th>' +
+                    '<th>Factura</th><th>Cliente</th><th class="text-right">Total</th><th>Status Op.</th><th>Compra</th>' +
                     '</tr></thead><tbody>' +
                     (e.facturas || []).map(function(f) {{
-                        return '<tr><td>' + f.name + '</td><td>' + f.cliente + '</td><td class="text-right">' + fmtMoney(f.total) + '</td><td>' + (f.compra_status || '') + '</td></tr>';
+                        var stCls = f.status === 'Entregado' ? 'status-entregado' : (f.status === 'Cancelación Total' ? 'status-cancelado' : (f.status === 'Congelado' ? 'status-congelado' : 'status-aprobado'));
+                        return '<tr><td>' + f.name + '</td><td>' + f.cliente + '</td><td class="text-right">' + fmtMoney(f.total) + '</td><td><span class="' + stCls + '">' + (f.status || '') + '</span></td><td>' + (f.compra_status || '') + '</td></tr>';
                     }}).join('') +
                     '</tbody></table></td></tr>';
             }}).join('');

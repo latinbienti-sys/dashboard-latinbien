@@ -428,96 +428,90 @@ def fetch_payment_plan(sess):
     }
 
 def fetch_facturacion_julio(sess):
-    """Facturacion mensual desde account.invoice.report + account.move.
-    - account.move: status operativo y de compra (para filtro suma)
-    - account.invoice.report: lineas con team_id, vendedor, producto, categoria
+    """Facturacion mensual desde sale.order (favorito FACTURACION MENSUAL de Odoo).
+    - sale.order: unidad por orden de venta, ejecutivo = user_id (vendedor)
+    - sale.order.line: productos, cantidades, subtotales y costo (purchase_price)
+    Filtro igual al favorito: x_status_compra = '4', commitment_date en julio 2026.
     """
-    # 1. Obtener facturas con status desde account.move
-    inv_domain = [
-        ['move_type', '=', 'out_invoice'],
-        ['invoice_date', '>=', '2026-07-01'],
-        ['invoice_date', '<=', '2026-07-31'],
+    ST_LABELS = {'6': 'Entregado', '8': 'Cancelación Total', '4': 'Aprobado',
+                 '10': 'Congelado', '12': 'Congelado', '0': 'Sin asignar'}
+    CP_LABELS = {'1': 'Cotización', '4': 'Entrega Realizada', 'False': 'Sin asignar'}
+    
+    # 1. Buscar órdenes de venta del favorito FACTURACION MENSUAL (julio 2026)
+    so_domain = [
+        ['x_status_compra', '=', '4'],
+        ['commitment_date', '>=', '2026-07-01'],
+        ['commitment_date', '<=', '2026-07-31 23:59:59'],
     ]
-    inv_ids = json_execute(sess, 'account.move', 'search', [inv_domain])
-    if not inv_ids:
+    so_ids = json_execute(sess, 'sale.order', 'search', [so_domain])
+    if not so_ids:
         return {
             'facturas': [], 'ejecutivos': [], 'top_productos': [],
             'total_facturado': 0, 'total_facturas': 0, 'total_clientes': 0,
             'total_admin': 0, 'total_costo': 0, 'total_margen': 0,
         }
     
-    invs = json_execute(sess, 'account.move', 'read', [inv_ids, [
-        'id', 'name', 'partner_id', 'invoice_date',
-        'amount_total', 'amount_untaxed',
-        'invoice_user_id', 'x_status_operativos', 'x_status_compra',
-    ]])
+    # 2. Leer órdenes en lotes
+    ordenes = []
+    for i in range(0, len(so_ids), 300):
+        batch = so_ids[i:i+300]
+        recs = json_execute(sess, 'sale.order', 'read', [batch, [
+            'id', 'name', 'partner_id', 'commitment_date',
+            'amount_total', 'amount_untaxed',
+            'user_id', 'team_id', 'x_status_operativos', 'x_status_compra',
+            'order_line',
+        ]])
+        if recs:
+            ordenes.extend(recs)
     
-    # Mapa de move_id -> datos de status
-    ST_LABELS = {'6': 'Entregado', '8': 'Cancelación Total', '4': 'Aprobado', '10': 'Congelado', '12': 'Congelado'}
-    CP_LABELS = {'1': 'Cotización', '4': 'Entrega Realizada', 'False': 'Sin asignar'}
-    
-    inv_map = {}  # move_id -> {status, compra_status, ejecutivo, total, cliente, factura_nombre}
-    for inv in invs:
-        iid = inv['id']
-        raw_st = inv.get('x_status_operativos')
-        st_str = str(raw_st) if raw_st is not None else ''
-        raw_cp = inv.get('x_status_compra')
-        cp_str = str(raw_cp) if raw_cp is not None else ''
-        
-        partner = inv.get('partner_id')
-        partner_name = partner[1] if isinstance(partner, list) and len(partner) > 1 else 'Desconocido'
-        eid = inv.get('invoice_user_id')
-        ej_name = eid[1] if isinstance(eid, list) and len(eid) > 1 else 'Sin asignar'
-        
-        inv_map[iid] = {
-            'name': inv.get('name', ''),
-            'partner_name': partner_name,
-            'invoice_date': inv.get('invoice_date', ''),
-            'ejecutivo': ej_name,
-            'total': float(inv.get('amount_total') or 0),
-            'status': ST_LABELS.get(st_str, st_str),
-            'compra_status': CP_LABELS.get(cp_str, cp_str),
-        }
-    
-    # 2. Obtener lineas desde account.invoice.report
-    rep_domain = [
-        ['invoice_date', '>=', '2026-07-01'],
-        ['invoice_date', '<=', '2026-07-31'],
-        ['move_type', '=', 'out_invoice'],
-        ['state', 'not in', ['draft', 'cancel']],
-    ]
-    rep_ids = json_execute(sess, 'account.invoice.report', 'search', [rep_domain])
+    # 3. Recolectar líneas de orden y productos para costos
+    line_ids = []
+    for so in ordenes:
+        for lid in (so.get('order_line') or []):
+            line_ids.append(lid)
     
     lineas = []
-    if rep_ids:
-        for i in range(0, len(rep_ids), 500):
-            batch = rep_ids[i:i+500]
-            recs = json_execute(sess, 'account.invoice.report', 'read', [batch, [
-                'id', 'move_id', 'invoice_date', 'partner_id', 'product_id',
-                'product_categ_id', 'team_id', 'invoice_user_id',
-                'price_total', 'price_subtotal', 'quantity', 'payment_state',
+    if line_ids:
+        for i in range(0, len(line_ids), 300):
+            batch = line_ids[i:i+300]
+            recs = json_execute(sess, 'sale.order.line', 'read', [batch, [
+                'id', 'product_id', 'product_uom_qty', 'price_subtotal',
+                'price_total', 'purchase_price',
             ]])
             if recs:
                 lineas.extend(recs)
     
-    # 3. Recolectar productos para costos
+    # Mapa de líneas por orden
+    lineas_por_orden = {}
+    for lr in lineas:
+        lid = lr['id']
+        # necesitamos mapear linea -> orden
+        for so in ordenes:
+            if lid in (so.get('order_line') or []):
+                if so['id'] not in lineas_por_orden:
+                    lineas_por_orden[so['id']] = []
+                lineas_por_orden[so['id']].append(lr)
+                break
+    
+    # 4. Recolectar categorías de productos
     all_prod_ids = set()
     for lr in lineas:
         pid = lr.get('product_id')
         if pid and isinstance(pid, list) and len(pid) > 1:
             all_prod_ids.add(pid[0])
     
-    prod_cost = {}
+    prod_categ = {}
     if all_prod_ids:
         prod_list = list(all_prod_ids)
         for i in range(0, len(prod_list), 200):
             batch = prod_list[i:i+200]
-            precs = json_execute(sess, 'product.product', 'read', [batch, ['id', 'standard_price']])
+            precs = json_execute(sess, 'product.product', 'read', [batch, ['id', 'categ_id']])
             if precs:
                 for pr in precs:
-                    prod_cost[pr['id']] = float(pr.get('standard_price') or 0)
+                    cat = pr.get('categ_id')
+                    prod_categ[pr['id']] = cat[1] if isinstance(cat, list) and len(cat) > 1 else 'General'
     
-    # 4. Construir datos — TODAS las facturas se muestran y se suman
+    # 5. Construir datos — TODAS las órdenes se muestran y se suman
     facturas = []
     ejecutivos = {}
     productos = {}
@@ -528,44 +522,42 @@ def fetch_facturacion_julio(sess):
     total_costo = 0.0
     clientes_set = set()
     
-    # Agrupar lineas por move_id
-    lineas_por_factura = {}
-    for lr in lineas:
-        mid = lr.get('move_id')
-        if not mid or not isinstance(mid, list):
-            continue
-        mid = mid[0]
-        if mid not in lineas_por_factura:
-            lineas_por_factura[mid] = []
-        lineas_por_factura[mid].append(lr)
-    
-    # Procesar cada factura
-    for mid, inv_data in inv_map.items():
-        inv_name = inv_data['name']
-        partner_name = inv_data['partner_name']
-        total = inv_data['total']
-        ej_name = inv_data['ejecutivo']
+    for so in ordenes:
+        so_id = so['id']
+        inv_name = so.get('name', '')
+        partner = so.get('partner_id')
+        partner_name = partner[1] if isinstance(partner, list) and len(partner) > 1 else 'Desconocido'
+        fecha = str(so.get('commitment_date') or '')[:10]
+        
+        uid = so.get('user_id')
+        ej_name = uid[1] if isinstance(uid, list) and len(uid) > 1 else 'Sin asignar'
+        
+        team = so.get('team_id')
+        team_name = team[1] if isinstance(team, list) and len(team) > 1 else 'Sin equipo'
+        
+        raw_st = so.get('x_status_operativos')
+        st_str = str(raw_st) if raw_st is not None else ''
+        raw_cp = so.get('x_status_compra')
+        cp_str = str(raw_cp) if raw_cp is not None else ''
+        
+        total = float(so.get('amount_total') or 0)
         clientes_set.add(partner_name)
         total_facturado += total
         
-        lineas_factura = lineas_por_factura.get(mid, [])
+        lineas_orden = lineas_por_orden.get(so_id, [])
         precio_producto = 0.0
         gasto_admin = 0.0
         costo_producto = 0.0
         lineas_detalle = []
         
-        for lr in lineas_factura:
+        for lr in lineas_orden:
             pid = lr.get('product_id')
             pname = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Producto'
             pu = float(lr.get('price_subtotal') or 0)
-            pt = float(lr.get('price_total') or 0)
-            qty = float(lr.get('quantity') or 1)
+            qty = float(lr.get('product_uom_qty') or 1)
+            cost_unit = float(lr.get('purchase_price') or 0)
             
-            cat = lr.get('product_categ_id')
-            cat_name = cat[1] if isinstance(cat, list) and len(cat) > 1 else 'General'
-            
-            team = lr.get('team_id')
-            team_name = team[1] if isinstance(team, list) and len(team) > 1 else 'Sin equipo'
+            cat_name = prod_categ.get(pid[0], 'General') if pid and isinstance(pid, list) and len(pid) > 1 else 'General'
             
             is_admin = 'gasto administrativo' in pname.lower() or 'gestion de cobranza' in pname.lower()
             
@@ -574,7 +566,6 @@ def fetch_facturacion_julio(sess):
                 total_admin += pu
             else:
                 precio_producto += pu
-                cost_unit = prod_cost.get(pid[0], 0) if pid and isinstance(pid, list) and len(pid) > 1 else 0
                 costo_linea = cost_unit * qty
                 costo_producto += costo_linea
                 total_costo += costo_linea
@@ -609,10 +600,10 @@ def fetch_facturacion_julio(sess):
         facturas.append({
             'cliente': partner_name,
             'factura': inv_name,
-            'fecha': inv_data['invoice_date'],
+            'fecha': fecha,
             'ejecutivo': ej_name,
-            'status': inv_data['status'],
-            'compra_status': inv_data['compra_status'],
+            'status': ST_LABELS.get(st_str, st_str),
+            'compra_status': CP_LABELS.get(cp_str, cp_str),
             'total': round(total, 2),
             'precio_producto': round(precio_producto, 2),
             'gasto_admin': round(gasto_admin, 2),
@@ -629,7 +620,8 @@ def fetch_facturacion_julio(sess):
             'name': inv_name,
             'cliente': partner_name,
             'total': round(total, 2),
-            'compra_status': inv_data['compra_status'],
+            'status': ST_LABELS.get(st_str, st_str),
+            'compra_status': CP_LABELS.get(cp_str, cp_str),
         })
     
     facturas.sort(key=lambda x: -x['total'])
