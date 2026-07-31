@@ -639,23 +639,6 @@ html = f'''<!DOCTYPE html>
             <div class="kpi-card"><div class="number" id="fjTotalClientes">—</div><div class="label">Clientes</div></div>
         </div>
 
-        <!-- EQUIPOS DE VENTAS -->
-        <div class="results-section">
-            <h3>👥 Equipos de Ventas</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Equipo</th>
-                            <th class="text-right">Líneas</th>
-                            <th class="text-right">Total Sumado</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaEquipos"></tbody>
-                </table>
-            </div>
-        </div>
-
         <!-- EJECUTIVOS -->
         <div class="results-section">
             <h3>👔 Desglose por Ejecutivo de Ventas</h3>
@@ -1449,18 +1432,6 @@ try {{
         document.getElementById('fjTotalMargen').textContent = fmtMoney(fj.total_margen);
         document.getElementById('fjTotalFacturas').textContent = fj.total_facturas.toLocaleString();
         document.getElementById('fjTotalClientes').textContent = fj.total_clientes.toLocaleString();
-        
-        // Equipos
-        var tEq = document.getElementById('tablaEquipos');
-        if (tEq && fj.equipos) {{
-            tEq.innerHTML = fj.equipos.map(function(e) {{
-                return '<tr>' +
-                    '<td><strong>' + e.nombre + '</strong></td>' +
-                    '<td class="text-right">' + e.lineas.toLocaleString() + '</td>' +
-                    '<td class="text-right">' + fmtMoney(e.total_suma) + '</td>' +
-                    '</tr>';
-            }}).join('');
-        }}
         
         // Ejecutivos
         var tEje = document.getElementById('tablaEjecutivos');
