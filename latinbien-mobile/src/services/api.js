@@ -79,7 +79,7 @@ export function logout() {
 export function getFeaturedProducts(limit = 20) {
   return jsonRpc('/web/dataset/search_read', {
     model: 'product.template',
-    domain: [['sale_ok', '=', true], ['published_on_website', '=', true]],
+    domain: [['sale_ok', '=', true]],
     fields: ['id', 'name', 'list_price', 'default_code', 'image_256', 'website_url', 'categ_id'],
     limit,
     order: 'write_date desc',
@@ -91,7 +91,6 @@ export function searchProducts(query, limit = 20) {
     model: 'product.template',
     domain: [
       ['sale_ok', '=', true],
-      ['published_on_website', '=', true],
       '|',
       ['name', 'ilike', query],
       ['default_code', 'ilike', query],
@@ -104,8 +103,8 @@ export function searchProducts(query, limit = 20) {
 export function getCategories() {
   return jsonRpc('/web/dataset/search_read', {
     model: 'product.public.category',
-    domain: [['website_published', '=', true]],
-    fields: ['id', 'name', 'parent_id', 'child_id'],
+    domain: [],
+    fields: ['id', 'name'],
     order: 'sequence asc',
   });
 }
@@ -115,7 +114,6 @@ export function getProductsByCategory(categoryId, limit = 50) {
     model: 'product.template',
     domain: [
       ['sale_ok', '=', true],
-      ['published_on_website', '=', true],
       ['public_categ_ids', 'in', [categoryId]],
     ],
     fields: ['id', 'name', 'list_price', 'default_code', 'image_256', 'website_url', 'categ_id'],

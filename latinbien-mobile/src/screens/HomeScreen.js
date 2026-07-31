@@ -65,7 +65,7 @@ export default function HomeScreen({ navigation, onAddToCart }) {
         addDebug(`Crédito: ${lines?.length || 0} líneas`);
         if (lines?.length > 0) setCreditLine(lines[0]);
       } catch (e) {
-        addDebug(`ERROR crédito: ${e.message}`);
+        addDebug('Crédito: no disponible');
       }
     }
     addDebug('Carga completa');
