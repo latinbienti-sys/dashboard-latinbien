@@ -17,8 +17,8 @@ ODOO_DB = 'erp_production'
 ODOO_USER = os.environ.get('ODOO_USER', 'latinbienti@latinbien.com')
 ODOO_PASS = os.environ.get('ODOO_PASS', 'z+cakaSe2805*')
 
-# Statuses que incluimos (Entregado, Aprobado, Cancelación Total)
-TARGET_STATUSES = ['6', '4']
+# Statuses que incluimos (Entregado, Aprobado, Cancelación Total, Congelados)
+TARGET_STATUSES = ['6', '4', '8', '10', '12']
 
 # ── Cliente Odoo ────────────────────────────────────────────────
 def odoo_connect():
@@ -98,6 +98,8 @@ def fetch_data():
             '6': 'CVG - ENTREGADO',
             '4': 'SAV - APROBADO - ESPERA ENTREGA',
             '8': 'CANCELACION TOTAL',
+            '10': 'CONGELADO',
+            '12': 'CONGELADO',
         }.get(str(r['x_status_operativos']), str(r['x_status_operativos']))
         status_counter[status_key] += 1
         
@@ -216,6 +218,8 @@ def fetch_data():
             'Entregado': status_counter.get('6. CVG - ENTREGADO', 0),
             'Aprobado': status_counter.get('4. SAV - APROBADO - ESPERA ENTREGA', 0),
             'Cancelacion Total': status_counter.get('8. CANCELACION TOTAL', 0),
+            'Congelado': status_counter.get('10. CONGELADO', 0) +
+                         status_counter.get('12. CONGELADO', 0),
         },
         'clients': client_list,
         'invoices': invoices,  # Para filtro por fecha preciso
@@ -314,7 +318,8 @@ def fetch_payment_plan(sess):
         if d['invoice_id']: inv_ids.add(d['invoice_id'])
     
     partner_map = {}
-    status_labels = {'6': 'Entregado', '4': 'Aprobado'}
+    status_labels = {'6': 'Entregado', '4': 'Aprobado',
+                     '8': 'Cancelación Total', '10': 'Congelado', '12': 'Congelado'}
     
     if inv_ids:
         inv_list = list(inv_ids)
@@ -448,11 +453,10 @@ def fetch_facturacion_julio(sess):
     ]])
     
     # Mapa de move_id -> datos de status
-    STATUS_SOMA = {'6', '8', '10', '12'}
     ST_LABELS = {'6': 'Entregado', '8': 'Cancelación Total', '4': 'Aprobado', '10': 'Congelado', '12': 'Congelado'}
     CP_LABELS = {'1': 'Cotización', '4': 'Entrega Realizada', 'False': 'Sin asignar'}
     
-    inv_map = {}  # move_id -> {status, compra_status, summable, ejecutivo, total, cliente, factura_nombre}
+    inv_map = {}  # move_id -> {status, compra_status, ejecutivo, total, cliente, factura_nombre}
     for inv in invs:
         iid = inv['id']
         raw_st = inv.get('x_status_operativos')
@@ -473,7 +477,6 @@ def fetch_facturacion_julio(sess):
             'total': float(inv.get('amount_total') or 0),
             'status': ST_LABELS.get(st_str, st_str),
             'compra_status': CP_LABELS.get(cp_str, cp_str),
-            'summable': st_str in STATUS_SOMA,
         }
     
     # 2. Obtener lineas desde account.invoice.report
@@ -514,12 +517,12 @@ def fetch_facturacion_julio(sess):
                 for pr in precs:
                     prod_cost[pr['id']] = float(pr.get('standard_price') or 0)
     
-    # 4. Construir datos
+    # 4. Construir datos — TODAS las facturas se muestran y se suman
     facturas = []
     ejecutivos = {}
     productos = {}
-    equipos = {}  # team_id -> {nombre, cantidad, total_suma, lineas}
-    categorias = {}  # product_categ -> {nombre, cantidad, total_suma, lineas}
+    equipos = {}
+    categorias = {}
     total_facturado = 0.0
     total_admin = 0.0
     total_costo = 0.0
@@ -541,12 +544,9 @@ def fetch_facturacion_julio(sess):
         inv_name = inv_data['name']
         partner_name = inv_data['partner_name']
         total = inv_data['total']
-        summable = inv_data['summable']
         ej_name = inv_data['ejecutivo']
         clientes_set.add(partner_name)
-        
-        if summable:
-            total_facturado += total
+        total_facturado += total
         
         lineas_factura = lineas_por_factura.get(mid, [])
         precio_producto = 0.0
@@ -561,53 +561,41 @@ def fetch_facturacion_julio(sess):
             pt = float(lr.get('price_total') or 0)
             qty = float(lr.get('quantity') or 1)
             
-            # Categoria
             cat = lr.get('product_categ_id')
             cat_name = cat[1] if isinstance(cat, list) and len(cat) > 1 else 'General'
             
-            # Team
             team = lr.get('team_id')
             team_name = team[1] if isinstance(team, list) and len(team) > 1 else 'Sin equipo'
             
-            # Ver si es gasto admin (por nombre de producto o categoría)
             is_admin = 'gasto administrativo' in pname.lower() or 'gestion de cobranza' in pname.lower()
             
             if is_admin:
                 gasto_admin += pu
-                if summable:
-                    total_admin += pu
+                total_admin += pu
             else:
                 precio_producto += pu
                 cost_unit = prod_cost.get(pid[0], 0) if pid and isinstance(pid, list) and len(pid) > 1 else 0
                 costo_linea = cost_unit * qty
                 costo_producto += costo_linea
-                if summable:
-                    total_costo += costo_linea
+                total_costo += costo_linea
                 
-                # Acumular producto
                 if pname not in productos:
-                    productos[pname] = {'qty': 0, 'subtotal': 0.0, 'subtotal_suma': 0.0, 'veces': 0, 'categoria': cat_name}
+                    productos[pname] = {'qty': 0, 'subtotal': 0.0, 'veces': 0, 'categoria': cat_name}
                 productos[pname]['qty'] += qty
                 productos[pname]['subtotal'] += pu
-                if summable:
-                    productos[pname]['subtotal_suma'] += pu
                 productos[pname]['veces'] += 1
             
-            # Acumular equipo
             if team_name not in equipos:
                 equipos[team_name] = {'cantidad': 0, 'total_suma': 0.0, 'lineas_count': 0}
             equipos[team_name]['lineas_count'] += 1
-            if summable:
-                equipos[team_name]['cantidad'] += qty
-                equipos[team_name]['total_suma'] += pu
+            equipos[team_name]['cantidad'] += qty
+            equipos[team_name]['total_suma'] += pu
             
-            # Acumular categoria
             if cat_name not in categorias:
                 categorias[cat_name] = {'cantidad': 0, 'total_suma': 0.0, 'lineas_count': 0}
             categorias[cat_name]['lineas_count'] += 1
-            if summable:
-                categorias[cat_name]['cantidad'] += qty
-                categorias[cat_name]['total_suma'] += pu
+            categorias[cat_name]['cantidad'] += qty
+            categorias[cat_name]['total_suma'] += pu
             
             lineas_detalle.append({
                 'producto': pname,
@@ -625,7 +613,6 @@ def fetch_facturacion_julio(sess):
             'ejecutivo': ej_name,
             'status': inv_data['status'],
             'compra_status': inv_data['compra_status'],
-            'summable': summable,
             'total': round(total, 2),
             'precio_producto': round(precio_producto, 2),
             'gasto_admin': round(gasto_admin, 2),
@@ -634,34 +621,29 @@ def fetch_facturacion_julio(sess):
             'lineas': lineas_detalle,
         })
         
-        # Acumular ejecutivo
         if ej_name not in ejecutivos:
-            ejecutivos[ej_name] = {'cantidad': 0, 'cantidad_suma': 0, 'total': 0.0, 'facturas': []}
+            ejecutivos[ej_name] = {'cantidad': 0, 'total': 0.0, 'facturas': []}
         ejecutivos[ej_name]['cantidad'] += 1
-        if summable:
-            ejecutivos[ej_name]['cantidad_suma'] += 1
-            ejecutivos[ej_name]['total'] += total
+        ejecutivos[ej_name]['total'] += total
         ejecutivos[ej_name]['facturas'].append({
             'name': inv_name,
             'cliente': partner_name,
             'total': round(total, 2),
-            'summable': summable,
             'compra_status': inv_data['compra_status'],
         })
     
     facturas.sort(key=lambda x: -x['total'])
     
     ej_list = [
-        {'nombre': k, 'cantidad': v['cantidad'], 'cantidad_suma': v['cantidad_suma'],
+        {'nombre': k, 'cantidad': v['cantidad'],
          'total': round(v['total'], 2), 'facturas': v['facturas']}
         for k, v in sorted(ejecutivos.items(), key=lambda x: -x[1]['total'])
     ]
     
-    top_prod = sorted(productos.items(), key=lambda x: -x[1]['subtotal_suma'])
+    top_prod = sorted(productos.items(), key=lambda x: -x[1]['subtotal'])
     prod_list = [
         {'nombre': k, 'qty': v['qty'], 'subtotal': round(v['subtotal'], 2),
-         'subtotal_suma': round(v['subtotal_suma'], 2), 'veces': v['veces'],
-         'categoria': v['categoria'], 'lineas': []}
+         'veces': v['veces'], 'categoria': v['categoria'], 'lineas': []}
         for k, v in top_prod
     ]
     
@@ -690,9 +672,6 @@ def fetch_facturacion_julio(sess):
         'total_costo': round(total_costo, 2),
         'total_margen': round(total_facturado - total_admin - total_costo, 2),
         'total_productos': round(total_facturado - total_admin, 2),
-        'total_no_suma': round(
-            sum(f['total'] for f in facturas if not f['summable']), 2
-        ),
     }
 
 def build_html(data):

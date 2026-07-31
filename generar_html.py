@@ -138,6 +138,8 @@ data_js = {
         'Entregado': status_counter.get('6. CVG - ENTREGADO', 0),
         'Aprobado': status_counter.get('4. SAV - APROBADO - ESPERA ENTREGA', 0),
         'Cancelacion Total': status_counter.get('8. CANCELACION TOTAL', 0),
+        'Congelado': status_counter.get('10. CONGELADO', 0) +
+                     status_counter.get('12. CONGELADO', 0),
     },
     'clients': client_list,
     'segment_stats': {s: dict(v) for s, v in sorted(seg_stats.items(), key=lambda x: -x[1]['contratos'])},
@@ -221,6 +223,8 @@ html = f'''<!DOCTYPE html>
         .header-filter .filtro-info {{ font-size: 10px; color: var(--accent); font-weight: 600; }}
         .status-entregado {{ display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; background:#d1fae5; color:#065f46; white-space:nowrap; }}
         .status-aprobado {{ display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; background:#dbeafe; color:#1e40af; white-space:nowrap; }}
+        .status-cancelado {{ display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; background:#fee2e2; color:#991b1b; white-space:nowrap; }}
+        .status-congelado {{ display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; background:#fef3c7; color:#92400e; white-space:nowrap; }}
 
         .kpi-row {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 22px; }}
         .kpi-card {{ background: var(--white); border-radius: 14px; padding: 16px 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); text-align: center; border-top: 4px solid var(--primary-light); transition: transform 0.2s; }}
@@ -633,7 +637,6 @@ html = f'''<!DOCTYPE html>
             <div class="kpi-card success"><div class="number money" id="fjTotalMargen">—</div><div class="label">Margen Bruto</div></div>
             <div class="kpi-card"><div class="number" id="fjTotalFacturas">—</div><div class="label">Facturas</div></div>
             <div class="kpi-card"><div class="number" id="fjTotalClientes">—</div><div class="label">Clientes</div></div>
-            <div class="kpi-card" style="background:#fef9e7"><div class="number money" id="fjTotalNoSuma">—</div><div class="label">No Sumado (Aprob.)</div></div>
         </div>
 
         <!-- EQUIPOS DE VENTAS -->
@@ -984,12 +987,12 @@ safeChart('chartDist', {{
 
 // Status pie
 const sc = DATA.status_counts;
-const scTotal = sc.Entregado + sc.Aprobado + sc['Cancelacion Total'];
+const scTotal = sc.Entregado + sc.Aprobado + sc['Cancelacion Total'] + sc.Congelado;
 safeChart('chartStatus', {{
     type:'doughnut',
     data:{{
-        labels:['Entregado ('+sc.Entregado+')', 'Cancelación Total ('+sc['Cancelacion Total']+')', 'Aprobado ('+sc.Aprobado+')'],
-        datasets:[{{data:[sc.Entregado, sc['Cancelacion Total'], sc.Aprobado], backgroundColor:['#10b981','#ef4444','#3b82f6'], borderColor:'#fff', borderWidth:3}}]
+        labels:['Entregado ('+sc.Entregado+')', 'Cancelación Total ('+sc['Cancelacion Total']+')', 'Congelado ('+sc.Congelado+')', 'Aprobado ('+sc.Aprobado+')'],
+        datasets:[{{data:[sc.Entregado, sc['Cancelacion Total'], sc.Congelado, sc.Aprobado], backgroundColor:['#10b981','#ef4444','#f59e0b','#3b82f6'], borderColor:'#fff', borderWidth:3}}]
     }},
     options:{{
         responsive:true, maintainAspectRatio:false,
@@ -1406,8 +1409,8 @@ try {{
             tbody.innerHTML = vencidos.slice(0,50).map(function(v) {{
                 var statuses = v.statuses || [];
                 var statusHtml = statuses.map(function(s) {{
-                    var cls = s === 'Entregado' ? 'status-entregado' : 'status-aprobado';
-                    return '<span class=\"' + cls + '\">' + s + '</span>';
+                    var cls = s === 'Entregado' ? 'status-entregado' : (s === 'Cancelación Total' ? 'status-cancelado' : (s === 'Congelado' ? 'status-congelado' : 'status-aprobado'));
+                    return '<span class="' + cls + '">' + s + '</span>';
                 }}).join(' ');
                 var factStr = v.facturas.slice(0,3).join(', ');
                 if (v.facturas.length > 3) factStr += '...';
@@ -1436,8 +1439,6 @@ try {{
         document.getElementById('fjTotalMargen').textContent = fmtMoney(fj.total_margen);
         document.getElementById('fjTotalFacturas').textContent = fj.total_facturas.toLocaleString();
         document.getElementById('fjTotalClientes').textContent = fj.total_clientes.toLocaleString();
-        var noSumaEl = document.getElementById('fjTotalNoSuma');
-        if (noSumaEl) noSumaEl.textContent = fmtMoney(fj.total_no_suma);
         
         // Equipos
         var tEq = document.getElementById('tablaEquipos');
@@ -1455,20 +1456,18 @@ try {{
         var tEje = document.getElementById('tablaEjecutivos');
         if (tEje && fj.ejecutivos) {{
             tEje.innerHTML = fj.ejecutivos.map(function(e) {{
-                var incl = e.cantidad_suma + '/' + e.cantidad + ' fact.';
                 return '<tr class="clickable" onclick="toggleSubTable(this)">' +
                     '<td><strong>' + e.nombre + '</strong></td>' +
                     '<td class="text-right">' + e.cantidad.toLocaleString() + '</td>' +
                     '<td class="text-right">' + fmtMoney(e.total) + '</td>' +
-                    '<td style="font-size:11px;color:#888">▼ ' + incl + '</td>' +
+                    '<td style="font-size:11px;color:#888">▼ Ver facturas</td>' +
                     '</tr>' +
                     '<tr class="sub-table" style="display:none"><td colspan="4">' +
                     '<table class="sub-table-inner"><thead><tr>' +
-                    '<th>Factura</th><th>Cliente</th><th class="text-right">Total</th><th>Status Op.</th><th>Compra</th>' +
+                    '<th>Factura</th><th>Cliente</th><th class="text-right">Total</th><th>Compra</th>' +
                     '</tr></thead><tbody>' +
                     (e.facturas || []).map(function(f) {{
-                        var stStyle = f.summable ? '' : 'style="color:#f59e0b;font-size:10px"';
-                        return '<tr><td>' + f.name + '</td><td>' + f.cliente + '</td><td class="text-right">' + fmtMoney(f.total) + '</td><td ' + stStyle + '>' + (f.summable ? '✅' : '⚠️ No suma') + '</td><td>' + (f.compra_status || '') + '</td></tr>';
+                        return '<tr><td>' + f.name + '</td><td>' + f.cliente + '</td><td class="text-right">' + fmtMoney(f.total) + '</td><td>' + (f.compra_status || '') + '</td></tr>';
                     }}).join('') +
                     '</tbody></table></td></tr>';
             }}).join('');
@@ -1502,12 +1501,8 @@ try {{
         if (tbody) {{
             tbody.innerHTML = fj.facturas.map(function(f) {{
                 var margenCls = f.margen >= 0 ? 'style="color:#10b981"' : 'style="color:#ef4444"';
-                var stBadge = f.summable
-                    ? '<span class="badge badge-green" style="background:#d1fae5;color:#065f46">' + f.status + '</span>'
-                    : '<span class="badge badge-yellow" style="background:#fef3c7;color:#92400e">⚠️ ' + f.status + '</span>';
-                var cpBadge = f.compra_status === 'Entrega Realizada'
-                    ? '<span class="badge" style="background:#dbeafe;color:#1e40af">' + f.compra_status + '</span>'
-                    : '<span class="badge" style="background:#f3f4f6;color:#6b7280">' + f.compra_status + '</span>';
+                var stBadge = '<span class="badge" style="background:#e8ecf5;color:#374151">' + f.status + '</span>';
+                var cpBadge = '<span class="badge" style="background:#dbeafe;color:#1e40af">' + f.compra_status + '</span>';
                 return '<tr class="clickable" onclick="toggleSubTable(this)">' +
                     '<td><strong>' + f.cliente + '</strong></td>' +
                     '<td style="font-size:11px;color:#666">' + f.factura + '</td>' +
@@ -1688,8 +1683,8 @@ function renderManana() {{
             totalGeneral += total;
             var statuses = c.statuses || [];
             var statusHtml = statuses.map(function(s) {{
-                var cls = s === 'Entregado' ? 'status-entregado' : 'status-aprobado';
-                return '<span class=\"' + cls + '\">' + s + '</span>';
+                var cls = s === 'Entregado' ? 'status-entregado' : (s === 'Cancelación Total' ? 'status-cancelado' : (s === 'Congelado' ? 'status-congelado' : 'status-aprobado'));
+                return '<span class="' + cls + '">' + s + '</span>';
             }}).join(' ');
             return '<tr>' +
                 '<td><strong>' + c.cliente + '</strong></td>' +
@@ -1775,8 +1770,8 @@ function mostrarClientesDia(rango, dia) {{
     tbody.innerHTML = cl.map(function(c) {{
         var statuses = c.statuses || [];
         var statusHtml = statuses.map(function(s) {{
-            var cls = s === 'Entregado' ? 'status-entregado' : 'status-aprobado';
-            return '<span class=\"' + cls + '\">' + s + '</span>';
+            var cls = s === 'Entregado' ? 'status-entregado' : (s === 'Cancelación Total' ? 'status-cancelado' : (s === 'Congelado' ? 'status-congelado' : 'status-aprobado'));
+            return '<span class="' + cls + '">' + s + '</span>';
         }}).join(' ');
         return '<tr>' +
             '<td><strong>' + c.cliente + '</strong></td>' +
