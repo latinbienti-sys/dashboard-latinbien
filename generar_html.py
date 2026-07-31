@@ -1477,7 +1477,6 @@ try {{
         var tProd = document.getElementById('tablaTopProductos');
         if (tProd && fj.top_productos) {{
             tProd.innerHTML = fj.top_productos.map(function(p, idx) {{
-                var sumadoStr = p.subtotal_suma > 0 ? fmtMoney(p.subtotal_suma) : '—';
                 return '<tr class="clickable" onclick="toggleSubTable(this)">' +
                     '<td>' + (idx+1) + '</td>' +
                     '<td><strong>' + p.nombre + '</strong></td>' +
