@@ -432,6 +432,10 @@ def fetch_facturacion_julio(sess):
     - sale.order: unidad por orden de venta, ejecutivo = user_id (vendedor)
     - sale.order.line: productos, cantidades, subtotales y costo (purchase_price)
     Filtro igual al favorito: x_status_compra = '4', commitment_date en julio 2026.
+    Nota: el favorito agrupa commitment_date:month en la zona horaria del usuario
+    (America/Caracas, UTC-4 sin DST). Julio local => UTC >= 07-01 04:00:00 y
+    UTC < 08-01 04:00:00, para excluir órdenes que son 1-jul en UTC pero
+    todavía 30-jun en hora local (ej: LB-ORDEN-03869 de LUIS = 8 Entregado + 3 Cancelación).
     """
     ST_LABELS = {'6': 'Entregado', '8': 'Cancelación Total', '4': 'Aprobado',
                  '10': 'Congelado', '12': 'Congelado', '0': 'Sin asignar'}
@@ -440,8 +444,8 @@ def fetch_facturacion_julio(sess):
     # 1. Buscar órdenes de venta del favorito FACTURACION MENSUAL (julio 2026)
     so_domain = [
         ['x_status_compra', '=', '4'],
-        ['commitment_date', '>=', '2026-07-01'],
-        ['commitment_date', '<=', '2026-07-31 23:59:59'],
+        ['commitment_date', '>=', '2026-07-01 04:00:00'],
+        ['commitment_date', '<', '2026-08-01 04:00:00'],
     ]
     so_ids = json_execute(sess, 'sale.order', 'search', [so_domain])
     if not so_ids:
