@@ -677,6 +677,10 @@ html = f'''<!DOCTYPE html>
         <!-- TOP PRODUCTOS -->
         <div class="results-section">
             <h3>🏆 Productos Más Vendidos</h3>
+            <div class="chart-card full-width" style="margin-bottom:16px">
+                <h3>📊 Ventas por Producto — Julio 2026</h3>
+                <div class="chart-container" style="height:420px"><canvas id="chartTopProductos"></canvas></div>
+            </div>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -1495,6 +1499,34 @@ try {{
                     '</tbody></table></td></tr>';
             }}).join('');
         }}
+        
+        // Chart: Top productos vendidos (top 15 por subtotal)
+        try {{
+            var tpCanvas = document.getElementById('chartTopProductos');
+            var topProds = (fj.top_productos || []).slice(0, 15);
+            if (tpCanvas && topProds.length) {{
+                safeChart('chartTopProductos', {{
+                    type: 'bar',
+                    data: {{
+                        labels: topProds.map(function(p) {{ return p.nombre.length > 42 ? p.nombre.substring(0,40)+'...' : p.nombre; }}).reverse(),
+                        datasets: [{{ data: topProds.map(function(p) {{ return p.subtotal; }}).reverse(), backgroundColor: (['#213C83','#2a4a96','#3458a8','#3D6194','#4a72a8','#5a82b8','#6a92c8','#7aa2d4','#8ab2e0','#9ac2ec','#aad0f0','#b8daf4','#c4e2f8','#d0eafc','#dcf0ff']).slice(0, topProds.length).reverse(), borderWidth: 0, borderRadius: 4 }}]
+                    }},
+                    options: {{
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {{
+                            legend: {{ display: false }},
+                            tooltip: {{ callbacks: {{ label: function(ctx) {{ return '  ' + fmtMoney(ctx.parsed.x); }} }} }}
+                        }},
+                        scales: {{
+                            x: {{ ticks: {{ callback: function(v) {{ return fmtMoney(v); }} }}, grid: {{ color: 'rgba(0,0,0,0.05)' }} }},
+                            y: {{ ticks: {{ font: {{ size: 11 }} }}, grid: {{ display: false }} }}
+                        }}
+                    }}
+                }});
+            }}
+        }} catch(e) {{ console.error('Top productos chart error:', e); }}
         
         // Facturas
         var tbody = document.getElementById('tablaFactJulio');
