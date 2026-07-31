@@ -677,9 +677,15 @@ html = f'''<!DOCTYPE html>
         <!-- TOP PRODUCTOS -->
         <div class="results-section">
             <h3>🏆 Productos Más Vendidos</h3>
-            <div class="chart-card full-width" style="margin-bottom:16px">
-                <h3>📊 Ventas por Producto — Julio 2026</h3>
-                <div class="chart-container" style="height:420px"><canvas id="chartTopProductos"></canvas></div>
+            <div class="charts-row">
+                <div class="chart-card">
+                    <h3>📦 Cantidad Vendida — Julio 2026</h3>
+                    <div class="chart-container"><canvas id="chartTopProductosQty"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <h3>💰 Facturación por Producto — Julio 2026</h3>
+                    <div class="chart-container"><canvas id="chartTopProductos"></canvas></div>
+                </div>
             </div>
             <div class="table-wrapper">
                 <table>
@@ -1500,16 +1506,45 @@ try {{
             }}).join('');
         }}
         
-        // Chart: Top productos vendidos (top 15 por subtotal)
+        // Charts: Top productos — Cantidad vendida y Facturación (top 15)
         try {{
-            var tpCanvas = document.getElementById('chartTopProductos');
             var topProds = (fj.top_productos || []).slice(0, 15);
+            var colores = (['#213C83','#2a4a96','#3458a8','#3D6194','#4a72a8','#5a82b8','#6a92c8','#7aa2d4','#8ab2e0','#9ac2ec','#aad0f0','#b8daf4','#c4e2f8','#d0eafc','#dcf0ff']);
+            var shortName = function(p) {{ return p.nombre.length > 42 ? p.nombre.substring(0,40)+'...' : p.nombre; }};
+
+            // Gráfica 1: Cantidad vendida
+            var qtyCanvas = document.getElementById('chartTopProductosQty');
+            if (qtyCanvas && topProds.length) {{
+                safeChart('chartTopProductosQty', {{
+                    type: 'bar',
+                    data: {{
+                        labels: topProds.map(shortName).reverse(),
+                        datasets: [{{ label: 'Cantidad', data: topProds.map(function(p) {{ return p.qty; }}).reverse(), backgroundColor: colores.slice(0, topProds.length).reverse(), borderWidth: 0, borderRadius: 4 }}]
+                    }},
+                    options: {{
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {{
+                            legend: {{ display: false }},
+                            tooltip: {{ callbacks: {{ label: function(ctx) {{ return '  ' + ctx.parsed.x + ' unidades'; }} }} }}
+                        }},
+                        scales: {{
+                            x: {{ beginAtZero: true, grid: {{ color: 'rgba(0,0,0,0.05)' }} }},
+                            y: {{ ticks: {{ font: {{ size: 11 }} }}, grid: {{ display: false }} }}
+                        }}
+                    }}
+                }});
+            }}
+
+            // Gráfica 2: Facturación (subtotal)
+            var tpCanvas = document.getElementById('chartTopProductos');
             if (tpCanvas && topProds.length) {{
                 safeChart('chartTopProductos', {{
                     type: 'bar',
                     data: {{
-                        labels: topProds.map(function(p) {{ return p.nombre.length > 42 ? p.nombre.substring(0,40)+'...' : p.nombre; }}).reverse(),
-                        datasets: [{{ data: topProds.map(function(p) {{ return p.subtotal; }}).reverse(), backgroundColor: (['#213C83','#2a4a96','#3458a8','#3D6194','#4a72a8','#5a82b8','#6a92c8','#7aa2d4','#8ab2e0','#9ac2ec','#aad0f0','#b8daf4','#c4e2f8','#d0eafc','#dcf0ff']).slice(0, topProds.length).reverse(), borderWidth: 0, borderRadius: 4 }}]
+                        labels: topProds.map(shortName).reverse(),
+                        datasets: [{{ data: topProds.map(function(p) {{ return p.subtotal; }}).reverse(), backgroundColor: colores.slice(0, topProds.length).reverse(), borderWidth: 0, borderRadius: 4 }}]
                     }},
                     options: {{
                         indexAxis: 'y',
