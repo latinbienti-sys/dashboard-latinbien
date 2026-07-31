@@ -1508,55 +1508,55 @@ try {{
         
         // Charts: Top productos — Cantidad vendida y Facturación (top 15)
         try {{
-            var topProds = (fj.top_productos || []).slice(0, 15);
             var colores = (['#213C83','#2a4a96','#3458a8','#3D6194','#4a72a8','#5a82b8','#6a92c8','#7aa2d4','#8ab2e0','#9ac2ec','#aad0f0','#b8daf4','#c4e2f8','#d0eafc','#dcf0ff']);
-            var shortName = function(p) {{ return p.nombre.length > 42 ? p.nombre.substring(0,40)+'...' : p.nombre; }};
+            var shortName = function(p) {{ return p.nombre.length > 34 ? p.nombre.substring(0,32)+'...' : p.nombre; }};
+            var topAll = (fj.top_productos || []).slice(0, 15);
 
-            // Gráfica 1: Cantidad vendida
+            // Gráfica 1: Cantidad vendida (de mayor a menor)
+            var topQty = topAll.slice().sort(function(a,b) {{ return b.qty - a.qty; }});
             var qtyCanvas = document.getElementById('chartTopProductosQty');
-            if (qtyCanvas && topProds.length) {{
+            if (qtyCanvas && topQty.length) {{
                 safeChart('chartTopProductosQty', {{
                     type: 'bar',
                     data: {{
-                        labels: topProds.map(shortName).reverse(),
-                        datasets: [{{ label: 'Cantidad', data: topProds.map(function(p) {{ return p.qty; }}).reverse(), backgroundColor: colores.slice(0, topProds.length).reverse(), borderWidth: 0, borderRadius: 4 }}]
+                        labels: topQty.map(shortName),
+                        datasets: [{{ label: 'Cantidad', data: topQty.map(function(p) {{ return p.qty; }}), backgroundColor: colores.slice(0, topQty.length), borderWidth: 0, borderRadius: 4 }}]
                     }},
                     options: {{
-                        indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {{
                             legend: {{ display: false }},
-                            tooltip: {{ callbacks: {{ label: function(ctx) {{ return '  ' + ctx.parsed.x + ' unidades'; }} }} }}
+                            tooltip: {{ callbacks: {{ label: function(ctx) {{ return '  ' + ctx.parsed.y + ' unidades'; }} }} }}
                         }},
                         scales: {{
-                            x: {{ beginAtZero: true, grid: {{ color: 'rgba(0,0,0,0.05)' }} }},
-                            y: {{ ticks: {{ font: {{ size: 11 }} }}, grid: {{ display: false }} }}
+                            y: {{ beginAtZero: true, ticks: {{ stepSize: 1 }}, grid: {{ color: 'rgba(0,0,0,0.05)' }} }},
+                            x: {{ ticks: {{ font: {{ size: 10 }}, maxRotation: 45, minRotation: 0 }}, grid: {{ display: false }} }}
                         }}
                     }}
                 }});
             }}
 
-            // Gráfica 2: Facturación (subtotal)
+            // Gráfica 2: Facturación (subtotal, de mayor a menor)
+            var topSub = topAll.slice().sort(function(a,b) {{ return b.subtotal - a.subtotal; }});
             var tpCanvas = document.getElementById('chartTopProductos');
-            if (tpCanvas && topProds.length) {{
+            if (tpCanvas && topSub.length) {{
                 safeChart('chartTopProductos', {{
                     type: 'bar',
                     data: {{
-                        labels: topProds.map(shortName).reverse(),
-                        datasets: [{{ data: topProds.map(function(p) {{ return p.subtotal; }}).reverse(), backgroundColor: colores.slice(0, topProds.length).reverse(), borderWidth: 0, borderRadius: 4 }}]
+                        labels: topSub.map(shortName),
+                        datasets: [{{ data: topSub.map(function(p) {{ return p.subtotal; }}), backgroundColor: colores.slice(0, topSub.length), borderWidth: 0, borderRadius: 4 }}]
                     }},
                     options: {{
-                        indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {{
                             legend: {{ display: false }},
-                            tooltip: {{ callbacks: {{ label: function(ctx) {{ return '  ' + fmtMoney(ctx.parsed.x); }} }} }}
+                            tooltip: {{ callbacks: {{ label: function(ctx) {{ return '  ' + fmtMoney(ctx.parsed.y); }} }} }}
                         }},
                         scales: {{
-                            x: {{ ticks: {{ callback: function(v) {{ return fmtMoney(v); }} }}, grid: {{ color: 'rgba(0,0,0,0.05)' }} }},
-                            y: {{ ticks: {{ font: {{ size: 11 }} }}, grid: {{ display: false }} }}
+                            y: {{ ticks: {{ callback: function(v) {{ return fmtMoney(v); }} }}, grid: {{ color: 'rgba(0,0,0,0.05)' }} }},
+                            x: {{ ticks: {{ font: {{ size: 10 }}, maxRotation: 45, minRotation: 0 }}, grid: {{ display: false }} }}
                         }}
                     }}
                 }});
