@@ -15,14 +15,20 @@ import {
 import { COLORS } from '../utils/constants';
 import { getProductImageUrl } from '../services/api';
 import { formatPrice } from '../utils/storage';
+import { getReferencePlan } from '../utils/plans';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
 
-export default function ProductCard({ product, onAddToCart }) {
+export default function ProductCard({ product, onAddToCart, onPress }) {
   const imgUrl = getProductImageUrl(product.id);
+  const plan = product.list_price ? getReferencePlan(product.list_price) : null;
 
   const handlePress = () => {
+    if (onPress) {
+      onPress(product);
+      return;
+    }
     const url = product.website_url || `https://latinbien.com/shop/product/${product.id}`;
     Linking.openURL(url);
   };
@@ -40,6 +46,16 @@ export default function ProductCard({ product, onAddToCart }) {
           {product.name}
         </Text>
         <Text style={styles.price}>{formatPrice(product.list_price)}</Text>
+        {plan && (
+          <View style={styles.planBox}>
+            <Text style={styles.planCuota}>
+              desde <Text style={styles.planCuotaStrong}>${plan.cuota.toFixed(2)}</Text>/quincena
+            </Text>
+            <Text style={styles.planMeta}>
+              Inicial 20% • 20 cuotas
+            </Text>
+          </View>
+        )}
         {product.default_code && (
           <Text style={styles.sku}>Cód: {product.default_code}</Text>
         )}
@@ -89,6 +105,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: COLORS.accent,
+  },
+  planBox: {
+    marginTop: 6,
+    backgroundColor: COLORS.primaryUltra,
+    borderRadius: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 4,
+  },
+  planCuota: {
+    fontSize: 11,
+    color: COLORS.primary,
+  },
+  planCuotaStrong: {
+    fontWeight: '700',
+  },
+  planMeta: {
+    fontSize: 10,
+    color: COLORS.gray500,
+    marginTop: 1,
   },
   sku: {
     fontSize: 11,

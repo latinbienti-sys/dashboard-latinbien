@@ -21,7 +21,7 @@ import {
 } from '../services/api';
 import ProductCard from '../components/ProductCard';
 
-export default function CatalogScreen({ route, onAddToCart }) {
+export default function CatalogScreen({ route, navigation, onAddToCart }) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [activeCat, setActiveCat] = useState(0);
@@ -73,7 +73,11 @@ export default function CatalogScreen({ route, onAddToCart }) {
 
   const renderItem = ({ item }) => (
     <View style={{ width: '48%' }}>
-      <ProductCard product={item} onAddToCart={onAddToCart} />
+      <ProductCard
+        product={item}
+        onAddToCart={onAddToCart}
+        onPress={(prod) => navigation?.navigate('ProductDetail', { product: prod })}
+      />
     </View>
   );
 

@@ -167,7 +167,12 @@ export default function HomeScreen({ navigation, onAddToCart }) {
       </View>
       <View style={styles.productGrid}>
         {products.map((p) => (
-          <ProductCard key={p.id} product={p} onAddToCart={onAddToCart} />
+          <ProductCard
+            key={p.id}
+            product={p}
+            onAddToCart={onAddToCart}
+            onPress={(prod) => navigation?.navigate('ProductDetail', { product: prod })}
+          />
         ))}
       </View>
     </ScrollView>

@@ -163,3 +163,18 @@ export function getCreditLines() {
 export function getProductImageUrl(productId) {
   return `${BASE_URL}/web/image/product.template/${productId}/image_256`;
 }
+
+// ============================================================
+// PLANES DE PAGO (endpoint real del sitio)
+// ============================================================
+
+/**
+ * Obtiene datos de precio y cuota administrativa de un producto.
+ * Endpoint real: /product/search/plans  (recibe product_id = template id)
+ * Devuelve { id, name, description, list_price, cuota_administrativa }
+ */
+export function getProductPlans(productId) {
+  return jsonRpc('/product/search/plans', {
+    product_id: parseInt(productId, 10),
+  });
+}

@@ -21,6 +21,7 @@ import ClubScreen from '../screens/ClubScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import OrdersScreen from '../screens/OrdersScreen';
 import PaymentScreen from '../screens/PaymentScreen';
+import ProductDetailScreen from '../screens/ProductDetailScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -244,6 +245,11 @@ export default function AppNavigator() {
           name="Payment"
           component={PaymentScreen}
           options={{ title: 'Reportar Pago' }}
+        />
+        <Stack.Screen
+          name="ProductDetail"
+          component={ProductDetailScreen}
+          options={{ title: 'Detalle del Producto' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
