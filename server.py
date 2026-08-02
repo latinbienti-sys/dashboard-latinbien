@@ -452,7 +452,9 @@ def fetch_facturacion_julio(sess):
         return {
             'facturas': [], 'ejecutivos': [], 'top_productos': [],
             'total_facturado': 0, 'total_facturas': 0, 'total_clientes': 0,
-            'total_admin': 0, 'total_costo': 0, 'total_margen': 0,
+            'total_admin': 0, 'total_admin_total': 0,
+            'total_costo': 0, 'total_margen': 0, 'total_productos': 0,
+            'colaboradores': [],
         }
     
     # 2. Leer órdenes en lotes
@@ -479,8 +481,8 @@ def fetch_facturacion_julio(sess):
         for i in range(0, len(line_ids), 300):
             batch = line_ids[i:i+300]
             recs = json_execute(sess, 'sale.order.line', 'read', [batch, [
-                'id', 'product_id', 'product_uom_qty', 'price_subtotal',
-                'price_total', 'purchase_price',
+                'id', 'product_id', 'product_uom_qty', 'price_unit',
+                'price_subtotal', 'price_total', 'discount', 'purchase_price',
             ]])
             if recs:
                 lineas.extend(recs)
@@ -523,7 +525,9 @@ def fetch_facturacion_julio(sess):
     categorias = {}
     total_facturado = 0.0
     total_admin = 0.0
+    total_admin_total = 0.0
     total_costo = 0.0
+    colaboradores = []
     clientes_set = set()
     
     for so in ordenes:
@@ -550,15 +554,20 @@ def fetch_facturacion_julio(sess):
         
         lineas_orden = lineas_por_orden.get(so_id, [])
         gasto_admin = 0.0
+        gasto_admin_total = 0.0
         costo_producto = 0.0
+        es_colaborador = False
+        pct_dscto = 0
         lineas_detalle = []
         
         for lr in lineas_orden:
             pid = lr.get('product_id')
             pname = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Producto'
             pu = float(lr.get('price_subtotal') or 0)   # precio con descuento (real)
+            pu_unit = float(lr.get('price_unit') or 0)
             qty = float(lr.get('product_uom_qty') or 1)
             cost_unit = float(lr.get('purchase_price') or 0)
+            dsc = float(lr.get('discount') or 0)
             
             cat_name = prod_categ.get(pid[0], 'General') if pid and isinstance(pid, list) and len(pid) > 1 else 'General'
             
@@ -566,7 +575,12 @@ def fetch_facturacion_julio(sess):
             
             if is_admin:
                 gasto_admin += pu
+                gasto_admin_total += pu_unit * qty
                 total_admin += pu
+                total_admin_total += pu_unit * qty
+                if dsc > 0:
+                    es_colaborador = True
+                    pct_dscto = dsc
             else:
                 costo_linea = cost_unit * qty
                 costo_producto += costo_linea
@@ -614,6 +628,15 @@ def fetch_facturacion_julio(sess):
             'lineas': lineas_detalle,
         })
         
+        if es_colaborador:
+            colaboradores.append({
+                'factura': inv_name,
+                'cliente': partner_name,
+                'gasto_admin_total': round(gasto_admin_total, 2),
+                'gasto_admin': round(gasto_admin, 2),
+                'descuento': round(pct_dscto, 0),
+            })
+        
         if ej_name not in ejecutivos:
             ejecutivos[ej_name] = {'cantidad': 0, 'total': 0.0, 'facturas': []}
         ejecutivos[ej_name]['cantidad'] += 1
@@ -627,6 +650,7 @@ def fetch_facturacion_julio(sess):
         })
     
     facturas.sort(key=lambda x: -x['total'])
+    colaboradores.sort(key=lambda x: x['factura'])
     
     ej_list = [
         {'nombre': k, 'cantidad': v['cantidad'],
@@ -663,9 +687,11 @@ def fetch_facturacion_julio(sess):
         'total_facturas': len(facturas),
         'total_clientes': len(clientes_set),
         'total_admin': round(total_admin, 2),
+        'total_admin_total': round(total_admin_total, 2),
         'total_costo': round(total_costo, 2),
         'total_margen': round(total_facturado - total_admin - total_costo, 2),
         'total_productos': round(total_facturado - total_admin, 2),
+        'colaboradores': colaboradores,
     }
 
 def build_html(data):

@@ -633,10 +633,31 @@ html = f'''<!DOCTYPE html>
             <div class="kpi-card success"><div class="number money" id="fjTotalFacturado">—</div><div class="label">Total Facturado</div></div>
             <div class="kpi-card accent"><div class="number money" id="fjTotalProductos">—</div><div class="label">Total Productos</div></div>
             <div class="kpi-card warning"><div class="number money" id="fjTotalAdmin">—</div><div class="label">Gasto Admin.</div></div>
+            <div class="kpi-card warning"><div class="number money" id="fjTotalAdminTotal">—</div><div class="label">Gasto Admin. (Sin Dcto)</div></div>
             <div class="kpi-card danger"><div class="number money" id="fjTotalCosto">—</div><div class="label">Costo Total</div></div>
             <div class="kpi-card success"><div class="number money" id="fjTotalMargen">—</div><div class="label">Margen Bruto</div></div>
             <div class="kpi-card"><div class="number" id="fjTotalFacturas">—</div><div class="label">Facturas</div></div>
             <div class="kpi-card"><div class="number" id="fjTotalClientes">—</div><div class="label">Clientes</div></div>
+        </div>
+
+        <!-- CUENTAS COLABORADORAS CON DSCTO EN GASTO ADMIN -->
+        <div class="results-section">
+            <h3>🤝 Cuentas Colaboradoras — Descuento 30% en Gasto Admin.</h3>
+            <div style="margin:8px 0;font-size:13px;color:#666">Son las órdenes de cuentas colaboradoras que reflejan el <strong>descuento del 30%</strong> en el gasto administrativo.</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Factura</th>
+                            <th>Cliente</th>
+                            <th class="text-right">Gasto Admin. (Sin Dcto)</th>
+                            <th class="text-right">Dcto</th>
+                            <th class="text-right">Gasto Admin. (Real)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaColaboradores"></tbody>
+                </table>
+            </div>
         </div>
 
         <!-- EJECUTIVOS -->
@@ -1428,10 +1449,25 @@ try {{
         document.getElementById('fjTotalFacturado').textContent = fmtMoney(fj.total_facturado);
         document.getElementById('fjTotalProductos').textContent = fmtMoney(fj.total_productos);
         document.getElementById('fjTotalAdmin').textContent = fmtMoney(fj.total_admin);
+        document.getElementById('fjTotalAdminTotal').textContent = fmtMoney(fj.total_admin_total);
         document.getElementById('fjTotalCosto').textContent = fmtMoney(fj.total_costo);
         document.getElementById('fjTotalMargen').textContent = fmtMoney(fj.total_margen);
         document.getElementById('fjTotalFacturas').textContent = fj.total_facturas.toLocaleString();
         document.getElementById('fjTotalClientes').textContent = fj.total_clientes.toLocaleString();
+
+        // Cuentas colaboradoras con dcto en gasto admin
+        var tColab = document.getElementById('tablaColaboradores');
+        if (tColab && fj.colaboradores) {{
+            tColab.innerHTML = fj.colaboradores.map(function(c) {{
+                return '<tr>' +
+                    '<td style="font-size:11px;color:#666">' + c.factura + '</td>' +
+                    '<td><strong>' + c.cliente + '</strong></td>' +
+                    '<td class="text-right">' + fmtMoney(c.gasto_admin_total) + '</td>' +
+                    '<td class="text-right" style="color:#f59e0b;font-weight:700">' + c.descuento + '%</td>' +
+                    '<td class="text-right">' + fmtMoney(c.gasto_admin) + '</td>' +
+                    '</tr>';
+            }}).join('');
+        }}
         
         // Ejecutivos
         var tEje = document.getElementById('tablaEjecutivos');
