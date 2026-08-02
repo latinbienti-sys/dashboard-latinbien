@@ -452,9 +452,7 @@ def fetch_facturacion_julio(sess):
         return {
             'facturas': [], 'ejecutivos': [], 'top_productos': [],
             'total_facturado': 0, 'total_facturas': 0, 'total_clientes': 0,
-            'total_admin': 0, 'total_admin_total': 0,
-            'total_costo': 0, 'total_margen': 0,
-            'total_productos': 0, 'total_productos_total': 0,
+            'total_admin': 0, 'total_costo': 0, 'total_margen': 0,
         }
     
     # 2. Leer órdenes en lotes
@@ -481,8 +479,8 @@ def fetch_facturacion_julio(sess):
         for i in range(0, len(line_ids), 300):
             batch = line_ids[i:i+300]
             recs = json_execute(sess, 'sale.order.line', 'read', [batch, [
-                'id', 'product_id', 'product_uom_qty', 'price_unit',
-                'price_subtotal', 'price_total', 'purchase_price',
+                'id', 'product_id', 'product_uom_qty', 'price_subtotal',
+                'price_total', 'purchase_price',
             ]])
             if recs:
                 lineas.extend(recs)
@@ -525,10 +523,7 @@ def fetch_facturacion_julio(sess):
     categorias = {}
     total_facturado = 0.0
     total_admin = 0.0
-    total_admin_total = 0.0
     total_costo = 0.0
-    total_productos = 0.0
-    total_productos_total = 0.0
     clientes_set = set()
     
     for so in ordenes:
@@ -554,66 +549,52 @@ def fetch_facturacion_julio(sess):
         total_facturado += total
         
         lineas_orden = lineas_por_orden.get(so_id, [])
-        precio_producto = 0.0
-        precio_producto_total = 0.0
         gasto_admin = 0.0
-        gasto_admin_total = 0.0
         costo_producto = 0.0
         lineas_detalle = []
         
         for lr in lineas_orden:
             pid = lr.get('product_id')
             pname = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Producto'
-            pu_dscto = float(lr.get('price_subtotal') or 0)   # con dcto (lo real)
+            pu = float(lr.get('price_subtotal') or 0)   # precio con descuento (real)
             qty = float(lr.get('product_uom_qty') or 1)
             cost_unit = float(lr.get('purchase_price') or 0)
-            
-            precio_dscto_linea = pu_dscto          # precio con descuento (real)
-            precio_total_linea = float(lr.get('price_unit') or 0) * qty   # precio total sin dcto
             
             cat_name = prod_categ.get(pid[0], 'General') if pid and isinstance(pid, list) and len(pid) > 1 else 'General'
             
             is_admin = 'gasto administrativo' in pname.lower() or 'gestion de cobranza' in pname.lower()
             
             if is_admin:
-                gasto_admin += precio_dscto_linea
-                gasto_admin_total += precio_total_linea
-                total_admin += precio_dscto_linea
-                total_admin_total += precio_total_linea
+                gasto_admin += pu
+                total_admin += pu
             else:
-                precio_producto += precio_dscto_linea
-                precio_producto_total += precio_total_linea
-                total_productos += precio_dscto_linea
-                total_productos_total += precio_total_linea
                 costo_linea = cost_unit * qty
                 costo_producto += costo_linea
                 total_costo += costo_linea
                 
                 if pname not in productos:
-                    productos[pname] = {'qty': 0, 'subtotal': 0.0, 'subtotal_total': 0.0, 'veces': 0, 'categoria': cat_name}
+                    productos[pname] = {'qty': 0, 'subtotal': 0.0, 'veces': 0, 'categoria': cat_name}
                 productos[pname]['qty'] += qty
-                productos[pname]['subtotal'] += precio_dscto_linea
-                productos[pname]['subtotal_total'] += precio_total_linea
+                productos[pname]['subtotal'] += pu
                 productos[pname]['veces'] += 1
             
             if team_name not in equipos:
                 equipos[team_name] = {'cantidad': 0, 'total_suma': 0.0, 'lineas_count': 0}
             equipos[team_name]['lineas_count'] += 1
             equipos[team_name]['cantidad'] += qty
-            equipos[team_name]['total_suma'] += precio_dscto_linea
+            equipos[team_name]['total_suma'] += pu
             
             if cat_name not in categorias:
                 categorias[cat_name] = {'cantidad': 0, 'total_suma': 0.0, 'lineas_count': 0}
             categorias[cat_name]['lineas_count'] += 1
             categorias[cat_name]['cantidad'] += qty
-            categorias[cat_name]['total_suma'] += precio_dscto_linea
+            categorias[cat_name]['total_suma'] += pu
             
             lineas_detalle.append({
                 'producto': pname,
                 'tipo': 'GASTO ADMIN' if is_admin else 'PRODUCTO',
                 'cantidad': qty,
-                'precio_total': round(precio_total_linea, 2),
-                'subtotal': round(precio_dscto_linea, 2),
+                'subtotal': round(pu, 2),
                 'categoria': cat_name,
                 'equipo': team_name,
             })
@@ -626,12 +607,10 @@ def fetch_facturacion_julio(sess):
             'status': ST_LABELS.get(st_str, st_str),
             'compra_status': CP_LABELS.get(cp_str, cp_str),
             'total': round(total, 2),
-            'precio_producto': round(precio_producto, 2),
-            'precio_producto_total': round(precio_producto_total, 2),
+            'precio_producto': round(total - gasto_admin, 2),
             'gasto_admin': round(gasto_admin, 2),
-            'gasto_admin_total': round(gasto_admin_total, 2),
             'costo': round(costo_producto, 2),
-            'margen': round(precio_producto - costo_producto, 2),
+            'margen': round((total - gasto_admin) - costo_producto, 2),
             'lineas': lineas_detalle,
         })
         
@@ -658,7 +637,6 @@ def fetch_facturacion_julio(sess):
     top_prod = sorted(productos.items(), key=lambda x: -x[1]['subtotal'])
     prod_list = [
         {'nombre': k, 'qty': v['qty'], 'subtotal': round(v['subtotal'], 2),
-         'subtotal_total': round(v['subtotal_total'], 2),
          'veces': v['veces'], 'categoria': v['categoria'], 'lineas': []}
         for k, v in top_prod
     ]
@@ -685,11 +663,9 @@ def fetch_facturacion_julio(sess):
         'total_facturas': len(facturas),
         'total_clientes': len(clientes_set),
         'total_admin': round(total_admin, 2),
-        'total_admin_total': round(total_admin_total, 2),
         'total_costo': round(total_costo, 2),
         'total_margen': round(total_facturado - total_admin - total_costo, 2),
-        'total_productos': round(total_productos, 2),
-        'total_productos_total': round(total_productos_total, 2),
+        'total_productos': round(total_facturado - total_admin, 2),
     }
 
 def build_html(data):
