@@ -631,8 +631,10 @@ html = f'''<!DOCTYPE html>
     <div class="tab-content" id="tab-factjulio">
         <div class="kpi-row">
             <div class="kpi-card success"><div class="number money" id="fjTotalFacturado">—</div><div class="label">Total Facturado</div></div>
-            <div class="kpi-card accent"><div class="number money" id="fjTotalProductos">—</div><div class="label">Total Productos</div></div>
-            <div class="kpi-card warning"><div class="number money" id="fjTotalAdmin">—</div><div class="label">Gasto Admin.</div></div>
+            <div class="kpi-card accent"><div class="number money" id="fjTotalProductos">—</div><div class="label">Productos (Dcto)</div></div>
+            <div class="kpi-card accent"><div class="number money" id="fjTotalProductosTotal">—</div><div class="label">Productos (Sin Dcto)</div></div>
+            <div class="kpi-card warning"><div class="number money" id="fjTotalAdmin">—</div><div class="label">Gasto Admin. (Dcto)</div></div>
+            <div class="kpi-card warning"><div class="number money" id="fjTotalAdminTotal">—</div><div class="label">Gasto Admin. (Sin Dcto)</div></div>
             <div class="kpi-card danger"><div class="number money" id="fjTotalCosto">—</div><div class="label">Costo Total</div></div>
             <div class="kpi-card success"><div class="number money" id="fjTotalMargen">—</div><div class="label">Margen Bruto</div></div>
             <div class="kpi-card"><div class="number" id="fjTotalFacturas">—</div><div class="label">Facturas</div></div>
@@ -678,7 +680,8 @@ html = f'''<!DOCTYPE html>
                             <th>Producto</th>
                             <th class="text-right">Cantidad</th>
                             <th class="text-right">Veces</th>
-                            <th class="text-right">Subtotal</th>
+                            <th class="text-right">Subtotal (Dcto)</th>
+                            <th class="text-right">Subtotal (Sin Dcto)</th>
                         </tr>
                     </thead>
                     <tbody id="tablaTopProductos"></tbody>
@@ -689,7 +692,7 @@ html = f'''<!DOCTYPE html>
         <!-- DETALLE POR FACTURA -->
         <div class="results-section">
             <h3>📋 Detalle por Factura</h3>
-            <div style="margin:8px 0;font-size:13px;color:#666">Cada factura desglosada: producto, gasto administrativo, costo y margen</div>
+            <div style="margin:8px 0;font-size:13px;color:#666">Cada factura desglosada: producto y gasto administrativo en su <strong>Precio Total (sin dcto)</strong> y <strong>Precio con Dcto (lo real)</strong>, más costo y margen</div>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -700,8 +703,10 @@ html = f'''<!DOCTYPE html>
                             <th>Compra</th>
                             <th>Ejecutivo</th>
                             <th class="text-right">Total</th>
-                            <th class="text-right">Producto</th>
-                            <th class="text-right">Gasto Admin</th>
+                            <th class="text-right">Prod. (Sin Dcto)</th>
+                            <th class="text-right">Prod. (Dcto)</th>
+                            <th class="text-right">Admin (Sin Dcto)</th>
+                            <th class="text-right">Admin (Dcto)</th>
                             <th class="text-right">Costo</th>
                             <th class="text-right">Margen</th>
                         </tr>
@@ -1427,7 +1432,9 @@ try {{
         // KPIs
         document.getElementById('fjTotalFacturado').textContent = fmtMoney(fj.total_facturado);
         document.getElementById('fjTotalProductos').textContent = fmtMoney(fj.total_productos);
+        document.getElementById('fjTotalProductosTotal').textContent = fmtMoney(fj.total_productos_total);
         document.getElementById('fjTotalAdmin').textContent = fmtMoney(fj.total_admin);
+        document.getElementById('fjTotalAdminTotal').textContent = fmtMoney(fj.total_admin_total);
         document.getElementById('fjTotalCosto').textContent = fmtMoney(fj.total_costo);
         document.getElementById('fjTotalMargen').textContent = fmtMoney(fj.total_margen);
         document.getElementById('fjTotalFacturas').textContent = fj.total_facturas.toLocaleString();
@@ -1465,8 +1472,9 @@ try {{
                     '<td class="text-right">' + p.qty.toLocaleString() + '</td>' +
                     '<td class="text-right">' + p.veces.toLocaleString() + '</td>' +
                     '<td class="text-right">' + fmtMoney(p.subtotal) + '</td>' +
+                    '<td class="text-right">' + fmtMoney(p.subtotal_total) + '</td>' +
                     '</tr>' +
-                    '<tr class="sub-table" style="display:none"><td colspan="5">' +
+                    '<tr class="sub-table" style="display:none"><td colspan="6">' +
                     '<table class="sub-table-inner"><thead><tr>' +
                     '<th>Factura</th><th>Cliente</th><th class="text-right">Cant.</th><th class="text-right">Subtotal</th>' +
                     '</tr></thead><tbody>' +
@@ -1548,18 +1556,20 @@ try {{
                     '<td>' + cpBadge + '</td>' +
                     '<td style="font-size:12px">' + f.ejecutivo + '</td>' +
                     '<td class="text-right">' + fmtMoney(f.total) + '</td>' +
+                    '<td class="text-right">' + fmtMoney(f.precio_producto_total) + '</td>' +
                     '<td class="text-right">' + fmtMoney(f.precio_producto) + '</td>' +
+                    '<td class="text-right">' + fmtMoney(f.gasto_admin_total) + '</td>' +
                     '<td class="text-right">' + fmtMoney(f.gasto_admin) + '</td>' +
                     '<td class="text-right">' + fmtMoney(f.costo) + '</td>' +
                     '<td class="text-right" ' + margenCls + '>' + fmtMoney(f.margen) + '</td>' +
                     '</tr>' +
-                    '<tr class="sub-table" style="display:none"><td colspan="10">' +
+                    '<tr class="sub-table" style="display:none"><td colspan="12">' +
                     '<table class="sub-table-inner"><thead><tr>' +
-                    '<th>Producto</th><th>Tipo</th><th class="text-right">Cant.</th><th class="text-right">Subtotal</th><th>Categoría</th><th>Equipo</th>' +
+                    '<th>Producto</th><th>Tipo</th><th class="text-right">Cant.</th><th class="text-right">Precio Total</th><th class="text-right">Subtotal (Dcto)</th><th>Categoría</th><th>Equipo</th>' +
                     '</tr></thead><tbody>' +
                     (f.lineas || []).map(function(l) {{
                         var tipoCls = l.tipo==='GASTO ADMIN' ? 'style="color:#f59e0b"' : '';
-                        return '<tr><td>' + l.producto + '</td><td ' + tipoCls + '>' + l.tipo + '</td><td class="text-right">' + l.cantidad.toLocaleString() + '</td><td class="text-right">' + fmtMoney(l.subtotal) + '</td><td style="font-size:11px">' + (l.categoria || '') + '</td><td style="font-size:11px">' + (l.equipo || '') + '</td></tr>';
+                        return '<tr><td>' + l.producto + '</td><td ' + tipoCls + '>' + l.tipo + '</td><td class="text-right">' + l.cantidad.toLocaleString() + '</td><td class="text-right">' + fmtMoney(l.precio_total) + '</td><td class="text-right">' + fmtMoney(l.subtotal) + '</td><td style="font-size:11px">' + (l.categoria || '') + '</td><td style="font-size:11px">' + (l.equipo || '') + '</td></tr>';
                     }}).join('') +
                     '</tbody></table></td></tr>';
             }}).join('');
