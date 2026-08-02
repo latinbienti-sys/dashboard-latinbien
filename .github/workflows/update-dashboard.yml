@@ -6,6 +6,9 @@ on:
     - cron: '0 * * * *'
   workflow_dispatch:  # También se puede ejecutar manualmente desde GitHub
 
+permissions:
+  contents: write  # Necesario para hacer commit y push del index.html generado
+
 jobs:
   generate:
     runs-on: ubuntu-latest
@@ -35,5 +38,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git diff --quiet && git diff --staged --quiet || git commit -m "Dashboard actualizado $(date -u '+%Y-%m-%d %H:00 UTC')"
-          git push
+          if git diff --cached --quiet; then
+            echo "No hay cambios en index.html, omitiendo commit"
+          else
+            git commit -m "Dashboard actualizado $(date -u '+%Y-%m-%d %H:00 UTC')"
+            git push
+          fi
