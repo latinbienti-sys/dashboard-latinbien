@@ -638,6 +638,7 @@ html = f'''<!DOCTYPE html>
             <div class="kpi-card success"><div class="number money" id="fjTotalMargen">—</div><div class="label">Margen Bruto</div></div>
             <div class="kpi-card"><div class="number" id="fjTotalFacturas">—</div><div class="label">Facturas</div></div>
             <div class="kpi-card"><div class="number" id="fjTotalClientes">—</div><div class="label">Clientes</div></div>
+            <div class="kpi-card danger"><div class="number money" id="fjCancelacionesMonto">—</div><div class="label" id="fjCancelacionesLbl">Cancelaciones</div></div>
         </div>
 
         <!-- CUENTAS COLABORADORAS CON DSCTO EN GASTO ADMIN -->
@@ -657,6 +658,17 @@ html = f'''<!DOCTYPE html>
                     </thead>
                     <tbody id="tablaColaboradores"></tbody>
                 </table>
+            </div>
+        </div>
+
+        <!-- GRAFICO RESUMEN FACT. JULIO -->
+        <div class="results-section">
+            <h3>📊 Resumen — Total Facturado, Productos, Gasto Admin. y Costos</h3>
+            <div class="charts-row">
+                <div class="chart-card full-width">
+                    <h3>💰 Totales Fact. Julio 2026</h3>
+                    <div class="chart-container"><canvas id="chartResumenJulio"></canvas></div>
+                </div>
             </div>
         </div>
 
@@ -1454,6 +1466,8 @@ try {{
         document.getElementById('fjTotalMargen').textContent = fmtMoney(fj.total_margen);
         document.getElementById('fjTotalFacturas').textContent = fj.total_facturas.toLocaleString();
         document.getElementById('fjTotalClientes').textContent = fj.total_clientes.toLocaleString();
+        document.getElementById('fjCancelacionesMonto').textContent = fmtMoney(fj.cancelaciones_monto);
+        document.getElementById('fjCancelacionesLbl').textContent = fj.cancelaciones_count + ' Cancelaciones';
 
         // Cuentas colaboradoras con dcto en gasto admin
         var tColab = document.getElementById('tablaColaboradores');
@@ -1468,6 +1482,35 @@ try {{
                     '</tr>';
             }}).join('');
         }}
+
+        // Grafico resumen: Total Facturado, Productos, Gasto Admin, Costos
+        try {{
+            var rCanvas = document.getElementById('chartResumenJulio');
+            if (rCanvas) {{
+                var rLabels = ['Total Facturado', 'Total Productos', 'Gasto Admin.', 'Costos', 'Cancelaciones'];
+                var rData = [fj.total_facturado, fj.total_productos, fj.total_admin, fj.total_costo, fj.cancelaciones_monto];
+                var rColors = ['#213C83', '#2a4a96', '#f59e0b', '#ef4444', '#dc2626'];
+                safeChart('chartResumenJulio', {{
+                    type: 'bar',
+                    data: {{
+                        labels: rLabels,
+                        datasets: [{{ data: rData, backgroundColor: rColors, borderWidth: 0, borderRadius: 6 }}]
+                    }},
+                    options: {{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {{
+                            legend: {{ display: false }},
+                            tooltip: {{ callbacks: {{ label: function(ctx) {{ return '  ' + fmtMoney(ctx.parsed.y); }} }} }}
+                        }},
+                        scales: {{
+                            y: {{ beginAtZero: true, ticks: {{ callback: function(v) {{ return fmtMoney(v); }} }}, grid: {{ color: 'rgba(0,0,0,0.05)' }} }},
+                            x: {{ ticks: {{ font: {{ size: 12 }}, maxRotation: 0, minRotation: 0 }}, grid: {{ display: false }} }}
+                        }}
+                    }}
+                }});
+            }}
+        }} catch(e) {{ console.error('Resumen julio chart error:', e); }}
         
         // Ejecutivos
         var tEje = document.getElementById('tablaEjecutivos');

@@ -455,6 +455,7 @@ def fetch_facturacion_julio(sess):
             'total_admin': 0, 'total_admin_total': 0,
             'total_costo': 0, 'total_margen': 0, 'total_productos': 0,
             'colaboradores': [],
+            'cancelaciones_count': 0, 'cancelaciones_monto': 0,
         }
     
     # 2. Leer órdenes en lotes
@@ -652,6 +653,8 @@ def fetch_facturacion_julio(sess):
     facturas.sort(key=lambda x: -x['total'])
     colaboradores.sort(key=lambda x: x['factura'])
     
+    cancelaciones = [f for f in facturas if f['status'] == 'Cancelación Total']
+    
     ej_list = [
         {'nombre': k, 'cantidad': v['cantidad'],
          'total': round(v['total'], 2), 'facturas': v['facturas']}
@@ -692,6 +695,8 @@ def fetch_facturacion_julio(sess):
         'total_margen': round(total_facturado - total_admin - total_costo, 2),
         'total_productos': round(total_facturado - total_admin, 2),
         'colaboradores': colaboradores,
+        'cancelaciones_count': len(cancelaciones),
+        'cancelaciones_monto': round(sum(f['total'] for f in cancelaciones), 2),
     }
 
 def build_html(data):
