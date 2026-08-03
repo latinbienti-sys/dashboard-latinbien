@@ -179,6 +179,7 @@ html = f'''<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Análisis de Cartera - LATINBIEN</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         :root {{
@@ -669,10 +670,29 @@ html = f'''<!DOCTYPE html>
                     <h3>💰 Totales Fact. Julio 2026</h3>
                     <div class="chart-container"><canvas id="chartResumenJulio"></canvas></div>
                 </div>
-            </div>
-        </div>
+</div>
+    </div>
 
-        <!-- EJECUTIVOS -->
+    <!-- DESCUENTOS POR FACTURA -->
+    <div class="results-section">
+        <h3>🏷️ Descuentos aplicados por factura (Julio 2026)</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Factura</th>
+                        <th>Cliente</th>
+                        <th class="text-right">Dcto Producto</th>
+                        <th class="text-right">Dcto Gasto Admin</th>
+                        <th class="text-right">Total Dcto</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaDescuentos"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- EJECUTIVOS -->
         <div class="results-section">
             <h3>👔 Desglose por Ejecutivo de Ventas</h3>
             <div class="table-wrapper">
@@ -1501,7 +1521,15 @@ try {{
                         maintainAspectRatio: false,
                         plugins: {{
                             legend: {{ display: false }},
-                            tooltip: {{ callbacks: {{ label: function(ctx) {{ return '  ' + fmtMoney(ctx.parsed.y); }} }} }}
+                            tooltip: {{ callbacks: {{ label: function(ctx) {{ return '  ' + fmtMoney(ctx.parsed.y); }} }} }},
+                            datalabels: {{
+                                color: '#111',
+                                font: {{ size: 12, weight: 'bold' }},
+                                formatter: function(v) {{ return fmtMoney(v); }},
+                                anchor: 'end',
+                                align: 'top',
+                                offset: 4
+                            }}
                         }},
                         scales: {{
                             y: {{ beginAtZero: true, ticks: {{ callback: function(v) {{ return fmtMoney(v); }} }}, grid: {{ color: 'rgba(0,0,0,0.05)' }} }},
@@ -1511,6 +1539,33 @@ try {{
                 }});
             }}
         }} catch(e) {{ console.error('Resumen julio chart error:', e); }}
+
+        // DESCUENTOS POR FACTURA
+        try {{
+            var dBody = document.getElementById('tablaDescuentos');
+            if (dBody && fj.facturas) {{
+                var rows = '';
+                fj.facturas.forEach(function(f) {{
+                    if (!f.lineas) return;
+                    var dctoProd = 0, dctoAdmin = 0;
+                    f.lineas.forEach(function(l) {{
+                        if (l.tipo === 'GASTO ADMIN' && l.discount > 0) dctoAdmin += l.discount;
+                        else if (l.tipo === 'PRODUCTO' && l.discount > 0) dctoProd += l.discount;
+                    }});
+                    if (dctoProd > 0 || dctoAdmin > 0) {{
+                        var totalDcto = dctoProd + dctoAdmin;
+                        rows += '<tr>' +
+                            '<td style="font-size:11px;color:#666">' + f.factura + '</td>' +
+                            '<td><strong>' + f.cliente + '</strong></td>' +
+                            '<td class="text-right">' + dctoProd.toFixed(2) + '%</td>' +
+                            '<td class="text-right">' + dctoAdmin.toFixed(2) + '%</td>' +
+                            '<td class="text-right">' + fmtMoney(totalDcto) + '</td>' +
+                            '</tr>';
+                    }}
+                }});
+                dBody.innerHTML = rows || '<tr><td colspan="5" style="text-align:center;color:#999">Sin descuentos en facturas de julio</td></tr>';
+            }}
+        }} catch(e) {{ console.error('Descuentos table error:', e); }}
         
         // Ejecutivos
         var tEje = document.getElementById('tablaEjecutivos');

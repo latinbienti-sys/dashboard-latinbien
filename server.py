@@ -612,6 +612,7 @@ def fetch_facturacion_julio(sess):
                 'subtotal': round(pu, 2),
                 'categoria': cat_name,
                 'equipo': team_name,
+                'discount': round(dsc, 2),
             })
         
         facturas.append({
