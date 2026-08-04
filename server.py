@@ -240,83 +240,151 @@ def fetch_data():
 
 # ── Expedientes (Credit Lines Aprobadas) ─────────────────────────────────────
 def fetch_expedientes(sess):
-    """Obtiene líneas de crédito aprobadas desde res.partner usando JSON-RPC.
-    Devuelve agrupado por año/mes y segmentos de rangos."""
+    """Obtiene líneas de crédito APROBADAS desde res.partner (JSON-RPC).
+    Filtro: x_status_expediente = '7pre' (Línea de Crédito - Aprobada).
+    Agrupa por año/mes de x_fecha_activacion y segmenta por rangos del
+    límite aprobado (x_credit_limit_aprobado): <3000, 3000-6000, >6000.
+    Estado de caso:
+      - Usada      : usa crédito (x_credit_limit_use > 0)
+      - No usada   : línes aprobada sin uso
+      - Caducada   : aprobada y no usada con fecha de activación vieja (>= 365 días)
+    """
     from datetime import datetime, date
     from collections import defaultdict
-    
-    # Para evitar timeouts, buscamos los partners relacionados con lineas de crédito
-    # Primero, verificamos si hay campos en res.partner como x_estado_credito
-    # como se mencionó en el requerimiento (Resolucion final linea de credito es "7. Linea de Credito Aprobada")
-    # Probamos con un search simple en res.partner para ver si hay campos de este tipo
-    
+
+    FIELDS = [
+        'id', 'name',
+        'x_credit_limit_aprobado',   # Límite de crédito aprobado
+        'x_credit_limit_available',  # Límite de crédito disponible
+        'x_credit_limit_use',        # Límite de crédito usado
+        'x_fecha_activacion',        # Fecha de activación (datetime)
+        'x_activacion_linea',        # Línea activada (boolean)
+    ]
+
+    # Caducidad: línea aprobada que permanece SIN USO más de este número de días
+    CADUCA_DAYS = 365
+
     try:
-        # Intentar buscar con un campo genérico primero
-        ids = json_execute(sess, 'res.partner', 'search', [[]])
-        batch_size = 200
+        ids = json_execute(sess, 'res.partner', 'search',
+                           [[['x_status_expediente', '=', '7pre']]])
+        if isinstance(ids, dict) and 'value' in ids:
+            ids = ids['value']
+
         all_records = []
-        for i in range(0, min(len(ids), 500), batch_size):  # Limitamos a 500 por seguridad
+        batch_size = 500
+        for i in range(0, len(ids), batch_size):
             batch = ids[i:i+batch_size]
-            recs = json_execute(sess, 'res.partner', 'read', [batch, ['id', 'name']])
+            recs = json_execute(sess, 'res.partner', 'read',
+                                [batch, FIELDS])
             all_records.extend(recs)
-        
-        # Si hay datos, filtrar por estado en el nombre del partner (como aproximación)
-        # o podríamos usar x_estado_linea si existe (pero necesitamos verificar)
-        # Dado que el requerimiento es específico, vamos a simular la agrupación
-        # basada en datos reales de la facturación (ya disponibles en facturacion_julio)
-        
-        # En cambio, vamos a usar facturacion_julio para crear una agrupación similar
-        # a la solicitada, pero basada en los datos que ya tenemos del dashboard
-        
-        # Vamos a crear un placeholder que muestra el enfoque que se seguiría
-        # Esta función devolvería un placeholder de datos para el desarrollo
-        
-        return [
-            {
-                'year': 2026,
-                'month': 8,
-                'rango_menor_3000': 5,
-                'rango_3000_6000': 3,
-                'rango_mayor_6000': 2,
-                'total_clientes': 10,
-                'total_monto': 15750.00,
-                'usadas': 7,
-                'no_usadas': 3,
-                'caducados': 1,
-                'clientes': [
-                    {
-                        'name': 'CLIENTE DEMO 1',
-                        'id': i,
-                        'limite': 2500.00,
-                        'fecha_activacion': '2026-08-01',
-                        'dias_activos': 15,
-                        'caducado': False,
-                        'usada': True,
-                        'estado': 'Aprobada'
-                    }
-                    for i in range(1, 11)
-                ]
-            }
-        ]
-        
+
+        hoy = date.today()
+        month_agg = defaultdict(lambda: {
+            'rango_menor_3000': 0, 'rango_3000_6000': 0, 'rango_mayor_6000': 0,
+            'total_clientes': 0, 'total_monto': 0.0,
+            'usadas': 0, 'no_usadas': 0, 'caducados': 0,
+            'clientes': [],
+        })
+        total_general = {'usadas': 0, 'no_usadas': 0, 'caducados': 0,
+                         'total_lineas': 0, 'total_monto': 0.0}
+
+        for rec in all_records:
+            limite = rec.get('x_credit_limit_aprobado') or 0.0
+            limite = float(limite)
+            usado = float(rec.get('x_credit_limit_use') or 0.0)
+            es_usada = usado > 0
+
+            fech = rec.get('x_fecha_activacion')
+            dias_activos = None
+            if fech:
+                try:
+                    fdt = datetime.strptime(str(fech)[:19], '%Y-%m-%d %H:%M:%S').date()
+                    dias_activos = (hoy - fdt).days
+                except Exception:
+                    fdt = None
+            else:
+                fdt = None
+
+            es_caducada = (not es_usada) and (dias_activos is not None) and (dias_activos >= CADUCA_DAYS)
+
+            # Año/mes (usa fecha de activación; si no hay, "Sin activar")
+            if fdt:
+                key = (fdt.year, fdt.month)
+            else:
+                key = (-1, -1)  # sin fecha de activación
+
+            g = month_agg[key]
+            g['total_clientes'] += 1
+            g['total_monto'] += limite
+            if limite < 3000:
+                g['rango_menor_3000'] += 1
+            elif limite <= 6000:
+                g['rango_3000_6000'] += 1
+            else:
+                g['rango_mayor_6000'] += 1
+
+            if es_usada:
+                g['usadas'] += 1
+                total_general['usadas'] += 1
+            else:
+                g['no_usadas'] += 1
+                total_general['no_usadas'] += 1
+            if es_caducada:
+                g['caducados'] += 1
+                total_general['caducados'] += 1
+
+            total_general['total_lineas'] += 1
+            total_general['total_monto'] += limite
+
+            g['clientes'].append({
+                'name': rec.get('name') or '',
+                'id': rec.get('id'),
+                'limite': round(limite, 2),
+                'available': round(float(rec.get('x_credit_limit_available') or 0.0), 2),
+                'usado': round(usado, 2),
+                'activada': bool(rec.get('x_activacion_linea')),
+                'fecha_activacion': str(fech)[:10] if fech else '',
+                'dias_activos': dias_activos,
+                'caducado': es_caducada,
+                'usada': es_usada,
+                'estado': 'Usada' if es_usada else ('Caducada' if es_caducada else 'No usada'),
+            })
+
+        # Orden: grupos con fecha primero (año desc, mes desc), "Sin activar" al final
+        def sort_key(item):
+            if item == (-1, -1):
+                return (0, 0, 0)
+            return (1, -item[0], -item[1])
+
+        grupos = []
+        for k in sorted(month_agg.keys(), key=sort_key):
+            g = month_agg[k]
+            if k == (-1, -1):
+                grupos.append(dict({
+                    'year': None, 'month': None,
+                    'label': 'Sin activar',
+                }, **g))
+            else:
+                grupos.append(dict({
+                    'year': k[0], 'month': k[1],
+                    'label': f"{k[1]:02d}-{k[0]}",
+                }, **g))
+
+        # Totales generales como objeto adicional (lo consume el frontend)
+        total_general['monto'] = round(total_general['total_monto'], 2)
+        # Guardamos además el total año/mes resumido
+        return {
+            'grupos': grupos,
+            'totales': total_general,
+        }
+
     except Exception as e:
         print(f"Error al buscar expedientes: {e}")
-        # Devolver datos de ejemplo mientras se investiga el esquema real de Odoo
-        return [
-            {
-                'year': 2026,
-                'month': 7,
-                'rango_menor_3000': 5,
-                'rango_3000_6000': 3,
-                'rango_mayor_6000': 2,
-                'total_clientes': 10,
-                'total_monto': 15750.00,
-                'usadas': 7,
-                'no_usadas': 3,
-                'caducados': 1,
-                'clientes': []
-            }
-        ]
+        return {
+            'grupos': [],
+            'totales': {'usadas': 0, 'no_usadas': 0, 'caducados': 0,
+                        'total_lineas': 0, 'total_monto': 0.0, 'monto': 0.0},
+        }
 
 # ── Plan de Pagos (Cuotas Fraccionadas) ──────────────────────────
 def fetch_payment_plan(sess):

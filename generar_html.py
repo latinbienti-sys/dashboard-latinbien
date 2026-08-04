@@ -2019,10 +2019,13 @@ function mostrarClientesDia(rango, dia) {{
 try {{
     var ex = DATA.expedientes;
     if (ex) {{
+        // ex puede ser array (formato previo) o {grupos, totales} (nuevo)
+        var exGrupos = Array.isArray(ex) ? ex : (ex.grupos || []);
+        var exTot = (ex && !Array.isArray(ex) && ex.totales) ? ex.totales : null;
         // Totales
         var totLineas = 0, totMonto = 0, totUsadas = 0, totNoUsadas = 0, totCad = 0;
         var totMenor = 0, tot3K6K = 0, totMayor = 0;
-        ex.forEach(function(g) {{
+        exGrupos.forEach(function(g) {{
             totLineas += g.total_clientes || 0;
             totMonto += g.total_monto || 0;
             totUsadas += g.usadas || 0;
@@ -2032,6 +2035,13 @@ try {{
             tot3K6K += g.rango_3000_6000 || 0;
             totMayor += g.rango_mayor_6000 || 0;
         }});
+        if (exTot) {{
+            totLineas = exTot.total_lineas || totLineas;
+            totMonto = exTot.monto || exTot.total_monto || totMonto;
+            totUsadas = exTot.usadas || totUsadas;
+            totNoUsadas = exTot.no_usadas || totNoUsadas;
+            totCad = exTot.caducados || totCad;
+        }}
         document.getElementById('expTotalLineas').textContent = totLineas.toLocaleString();
         document.getElementById('expTotalMonto').textContent = fmtMoney(totMonto);
         document.getElementById('expUsadas').textContent = totUsadas.toLocaleString();
@@ -2045,15 +2055,17 @@ try {{
         var teBody = document.getElementById('tablaExpedientes');
         if (teBody) {{
             var mesi = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-            teBody.innerHTML = ex.map(function(g) {{
+            teBody.innerHTML = exGrupos.map(function(g) {{
                 var datosExtra = (g.clientes || []).map(function(c) {{
                     var stCls = c.usada ? 'status-entregado' : (c.caducado ? 'status-cancelado' : 'status-aprobado');
                     var stTxt = c.usada ? 'Usada' : (c.caducado ? 'Caducada' : 'No usada');
                     return '<tr><td>' + (c.name||'') + '</td><td class="text-right">' + fmtMoney(c.limite) + '</td><td>' + (c.fecha_activacion||'') + '</td><td><span class="' + stCls + '">' + stTxt + '</span></td></tr>';
                 }}).join('');
+                var mostAnio = g.year ? g.year : '—';
+                var mostMes = g.month ? (mesi[(g.month||1)-1]) : (g.label || '—');
                 return '<tr class="clickable" onclick="toggleSubTable(this)">' +
-                    '<td><strong>' + g.year + '</strong></td>' +
-                    '<td><strong>' + mesi[(g.month||1)-1] + '</strong></td>' +
+                    '<td><strong>' + mostAnio + '</strong></td>' +
+                    '<td><strong>' + mostMes + '</strong></td>' +
                     '<td class="text-right">' + g.rango_menor_3000 + '</td>' +
                     '<td class="text-right">' + g.rango_3000_6000 + '</td>' +
                     '<td class="text-right">' + g.rango_mayor_6000 + '</td>' +
@@ -2073,11 +2085,11 @@ try {{
         // Grafico de expedientes por mes/rango
         try {{
             var exCanvas = document.getElementById('chartExpedientes');
-            if (exCanvas && ex.length) {{
-                var labels = ex.map(function(g) {{ return g.year + '-' + String(g.month).padStart(2,'0'); }});
-                var dMenor = ex.map(function(g) {{ return g.rango_menor_3000; }});
-                var d3K6K = ex.map(function(g) {{ return g.rango_3000_6000; }});
-                var dMayor = ex.map(function(g) {{ return g.rango_mayor_6000; }});
+            if (exCanvas && exGrupos.length) {{
+                var labels = exGrupos.map(function(g) {{ return g.year && g.month ? (g.year + '-' + String(g.month).padStart(2,'0')) : (g.label || 'Sin activar'); }});
+                var dMenor = exGrupos.map(function(g) {{ return g.rango_menor_3000; }});
+                var d3K6K = exGrupos.map(function(g) {{ return g.rango_3000_6000; }});
+                var dMayor = exGrupos.map(function(g) {{ return g.rango_mayor_6000; }});
                 safeChart('chartExpedientes', {{
                     type: 'bar',
                     data: {{
