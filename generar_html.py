@@ -379,6 +379,7 @@ html = f'''<!DOCTYPE html>
         <button class="tab-btn" onclick="switchTab('tabla')">📋 Listado</button>
         <button class="tab-btn" onclick="switchTab('pagos')">💳 Plan de Pagos</button>
         <button class="tab-btn" onclick="switchTab('factjulio')">📋 Fact. Julio</button>
+        <button class="tab-btn" onclick="switchTab('expedientes')">🗂️ Expedientes</button>
     </div>
 
     <!-- TAB 1: RESUMEN -->
@@ -765,6 +766,57 @@ html = f'''<!DOCTYPE html>
         </div>
     </div>
 
+    <!-- TAB 8: EXPEDIENTES (Credit Lines Aprobadas) -->
+    <div class="tab-content" id="tab-expedientes">
+        <div class="kpi-row">
+            <div class="kpi-card success"><div class="number" id="expTotalLineas">—</div><div class="label">Líneas Crédito</div></div>
+            <div class="kpi-card accent"><div class="number money" id="expTotalMonto">—</div><div class="label">Total Monto</div></div>
+            <div class="kpi-card"><div class="number" id="expUsadas">—</div><div class="label">Usadas</div></div>
+            <div class="kpi-card warning"><div class="number" id="expNoUsadas">—</div><div class="label">No Usadas</div></div>
+            <div class="kpi-card danger"><div class="number" id="expCaducadas">—</div><div class="label">Caducadas</div></div>
+            <div class="kpi-card"><div class="number" id="expMenor3K">—</div><div class="label">&lt; $3,000</div></div>
+            <div class="kpi-card"><div class="number" id="exp3K6K">—</div><div class="label">$3K-$6K</div></div>
+            <div class="kpi-card"><div class="number" id="expMayor6K">—</div><div class="label">&gt; $6,000</div></div>
+        </div>
+
+        <!-- GRAFICO: Lineas por año/mes segmentado por rango -->
+        <div class="results-section">
+            <h3>📊 Líneas de Crédito Aprobadas por Año/Mes — Segmentado por Rango</h3>
+            <div class="charts-row">
+                <div class="chart-card full-width">
+                    <h3>💰 Distribución por Rango y Mes</h3>
+                    <div class="chart-container"><canvas id="chartExpedientes"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DETALLE EXPEDIENTES: relacion por año/mes -->
+        <div class="results-section">
+            <h3>🗂️ Relación de Expedientes por Año/Mes</h3>
+            <div style="margin:8px 0;font-size:13px;color:#666">Líneas de crédito aprobadas (Resolución final: "7. Linea de Credito Aprobada"), segmentadas por rango y con estado de uso/caducidad.</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Año</th>
+                            <th>Mes</th>
+                            <th class="text-right">&lt; $3,000</th>
+                            <th class="text-right">$3K-$6K</th>
+                            <th class="text-right">&gt; $6,000</th>
+                            <th class="text-right">Total Clientes</th>
+                            <th class="text-right">Total Monto</th>
+                            <th class="text-right">Usadas</th>
+                            <th class="text-right">No Usadas</th>
+                            <th class="text-right">Caducadas</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaExpedientes"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div class="footer">
         <strong>LATINBIEN</strong> — Latinoamericana de Bienes y Servicios, C.A. &nbsp;·&nbsp;
         Generado el <span id="fechaGeneracion"></span>
@@ -938,6 +990,11 @@ function safeChart(canvasId, config) {{
         if (typeof Chart === 'undefined') {{
             console.warn('Chart.js not loaded, skipping:', canvasId);
             return null;
+        }}
+        // Registrar plugin datalabels (una sola vez)
+        if (typeof ChartDataLabels !== 'undefined' && !Chart._datalabelsRegistered) {{
+            Chart.register(ChartDataLabels);
+            Chart._datalabelsRegistered = true;
         }}
         return new Chart(document.getElementById(canvasId), config);
     }} catch(e) {{
@@ -1418,7 +1475,7 @@ function renderTable() {{
 function switchTab(tab) {{
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio'}};
+    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes'}};
     const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes(tabMap[tab]));
     if (btn) btn.classList.add('active');
     document.getElementById('tab-'+tab).classList.add('active');
@@ -1525,7 +1582,7 @@ try {{
                             datalabels: {{
                                 color: '#111',
                                 font: {{ size: 12, weight: 'bold' }},
-                                formatter: function(v) {{ return fmtMoney(v); }},
+                                formatter: function(v) {{ return v.toLocaleString(undefined, {{minimumFractionDigits:2,maximumFractionDigits:2}}); }},
                                 anchor: 'end',
                                 align: 'top',
                                 offset: 4
@@ -1540,7 +1597,7 @@ try {{
             }}
         }} catch(e) {{ console.error('Resumen julio chart error:', e); }}
 
-        // DESCUENTOS POR FACTURA
+        // DESCUENTOS POR FACTURA (mostrar % de descuentos, no en dólares)
         try {{
             var dBody = document.getElementById('tablaDescuentos');
             if (dBody && fj.facturas) {{
@@ -1559,11 +1616,10 @@ try {{
                             '<td><strong>' + f.cliente + '</strong></td>' +
                             '<td class="text-right">' + dctoProd.toFixed(2) + '%</td>' +
                             '<td class="text-right">' + dctoAdmin.toFixed(2) + '%</td>' +
-                            '<td class="text-right">' + fmtMoney(totalDcto) + '</td>' +
                             '</tr>';
                     }}
                 }});
-                dBody.innerHTML = rows || '<tr><td colspan="5" style="text-align:center;color:#999">Sin descuentos en facturas de julio</td></tr>';
+                dBody.innerHTML = rows || '<tr><td colspan="4" style="text-align:center;color:#999">Sin descuentos en facturas de julio</td></tr>';
             }}
         }} catch(e) {{ console.error('Descuentos table error:', e); }}
         
@@ -1956,6 +2012,96 @@ function mostrarClientesDia(rango, dia) {{
             '</tr>';
     }}).join('');
 }}
+
+// ================================================================
+//  EXPEDIENTES
+// ================================================================
+try {{
+    var ex = DATA.expedientes;
+    if (ex) {{
+        // Totales
+        var totLineas = 0, totMonto = 0, totUsadas = 0, totNoUsadas = 0, totCad = 0;
+        var totMenor = 0, tot3K6K = 0, totMayor = 0;
+        ex.forEach(function(g) {{
+            totLineas += g.total_clientes || 0;
+            totMonto += g.total_monto || 0;
+            totUsadas += g.usadas || 0;
+            totNoUsadas += g.no_usadas || 0;
+            totCad += g.caducados || 0;
+            totMenor += g.rango_menor_3000 || 0;
+            tot3K6K += g.rango_3000_6000 || 0;
+            totMayor += g.rango_mayor_6000 || 0;
+        }});
+        document.getElementById('expTotalLineas').textContent = totLineas.toLocaleString();
+        document.getElementById('expTotalMonto').textContent = fmtMoney(totMonto);
+        document.getElementById('expUsadas').textContent = totUsadas.toLocaleString();
+        document.getElementById('expNoUsadas').textContent = totNoUsadas.toLocaleString();
+        document.getElementById('expCaducadas').textContent = totCad.toLocaleString();
+        document.getElementById('expMenor3K').textContent = totMenor.toLocaleString();
+        document.getElementById('exp3K6K').textContent = tot3K6K.toLocaleString();
+        document.getElementById('expMayor6K').textContent = totMayor.toLocaleString();
+
+        // Tabla de expedientes
+        var teBody = document.getElementById('tablaExpedientes');
+        if (teBody) {{
+            var mesi = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+            teBody.innerHTML = ex.map(function(g) {{
+                var datosExtra = (g.clientes || []).map(function(c) {{
+                    var stCls = c.usada ? 'status-entregado' : (c.caducado ? 'status-cancelado' : 'status-aprobado');
+                    var stTxt = c.usada ? 'Usada' : (c.caducado ? 'Caducada' : 'No usada');
+                    return '<tr><td>' + (c.name||'') + '</td><td class="text-right">' + fmtMoney(c.limite) + '</td><td>' + (c.fecha_activacion||'') + '</td><td><span class="' + stCls + '">' + stTxt + '</span></td></tr>';
+                }}).join('');
+                return '<tr class="clickable" onclick="toggleSubTable(this)">' +
+                    '<td><strong>' + g.year + '</strong></td>' +
+                    '<td><strong>' + mesi[(g.month||1)-1] + '</strong></td>' +
+                    '<td class="text-right">' + g.rango_menor_3000 + '</td>' +
+                    '<td class="text-right">' + g.rango_3000_6000 + '</td>' +
+                    '<td class="text-right">' + g.rango_mayor_6000 + '</td>' +
+                    '<td class="text-right">' + g.total_clientes + '</td>' +
+                    '<td class="text-right">' + fmtMoney(g.total_monto) + '</td>' +
+                    '<td class="text-right" style="color:#10b981">' + (g.usadas||0) + '</td>' +
+                    '<td class="text-right" style="color:#f59e0b">' + (g.no_usadas||0) + '</td>' +
+                    '<td class="text-right" style="color:#ef4444">' + (g.caducados||0) + '</td>' +
+                    '<td style="font-size:11px;color:#888">▼ Ver</td></tr>' +
+                    '<tr class="sub-table" style="display:none"><td colspan="11">' +
+                    '<table class="sub-table-inner"><thead><tr><th>Cliente</th><th class="text-right">Límite</th><th>Activación</th><th>Estado</th></tr></thead><tbody>' +
+                    (datosExtra || '<tr><td colspan="4" style="text-align:center;color:#999">Sin clientes detallados</td></tr>') +
+                    '</tbody></table></td></tr>';
+            }}).join('') || '<tr><td colspan="11" style="text-align:center;color:#999">Sin datos</td></tr>';
+        }}
+
+        // Grafico de expedientes por mes/rango
+        try {{
+            var exCanvas = document.getElementById('chartExpedientes');
+            if (exCanvas && ex.length) {{
+                var labels = ex.map(function(g) {{ return g.year + '-' + String(g.month).padStart(2,'0'); }});
+                var dMenor = ex.map(function(g) {{ return g.rango_menor_3000; }});
+                var d3K6K = ex.map(function(g) {{ return g.rango_3000_6000; }});
+                var dMayor = ex.map(function(g) {{ return g.rango_mayor_6000; }});
+                safeChart('chartExpedientes', {{
+                    type: 'bar',
+                    data: {{
+                        labels: labels,
+                        datasets: [
+                            {{ label: '< $3,000', data: dMenor, backgroundColor: '#213C83', borderWidth: 0, borderRadius: 4 }},
+                            {{ label: '$3K-$6K', data: d3K6K, backgroundColor: '#F98B10', borderWidth: 0, borderRadius: 4 }},
+                            {{ label: '> $6,000', data: dMayor, backgroundColor: '#10b981', borderWidth: 0, borderRadius: 4 }}
+                        ]
+                    }},
+                    options: {{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {{ legend: {{ position: 'bottom' }}, tooltip: {{ mode: 'index', intersect: false }} }},
+                        scales: {{
+                            y: {{ beginAtZero: true, ticks: {{ precision: 0 }}, grid: {{ color: 'rgba(0,0,0,0.05)' }} }},
+                            x: {{ stacked: true, grid: {{ display: false }} }}
+                        }}
+                    }}
+                }});
+            }}
+        }} catch(e) {{ console.error('Expedientes chart error:', e); }}
+    }}
+}} catch(e) {{ console.error('Expedientes error:', e); }}
 
 renderTable();
 switchTab('resumen');
