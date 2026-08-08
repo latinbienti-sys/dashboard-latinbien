@@ -538,6 +538,28 @@ html = f'''<!DOCTYPE html>
             </div>
         </div>
 
+        <!-- FACTURAS ENTREGADAS VENCIDAS -->
+        <div class="table-card" style="border-color:#2563eb">
+            <h3>🚚 Facturas Entregadas con Cuotas Vencidas</h3>
+            <div style="margin:8px 0;font-size:13px;color:#666">Total: <strong id="evFacturasCount">—</strong> facturas · <strong id="evMontoTotal">—</strong> · <strong id="evCuotasCount">—</strong> cuotas vencidas</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Factura</th>
+                            <th>Cliente</th>
+                            <th>Fecha Factura</th>
+                            <th class="text-right">Cuotas Venc.</th>
+                            <th class="text-right">Monto Vencido</th>
+                            <th>Última Cuota</th>
+                            <th class="text-right">Días Mora</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaEntregadasVenc"></tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- CICLO DE PAGO (dentro del tab) -->
         <div class="table-card">
             <h3>📆 Ciclo de Pago — Análisis por Día</h3>
@@ -1519,6 +1541,31 @@ try {{
                 if (v.facturas.length > 3) factStr += '...';
                 return '<tr><td><strong>' + v.cliente + '</strong></td><td class=\"text-right\">' + v.cuotas + '</td><td class=\"text-right\" style=\"color:#ef4444;font-weight:600\">' + fmtMoney(v.monto) + '</td><td>' + statusHtml + '</td><td style=\"font-size:11px;color:#666\">' + factStr + '</td></tr>';
             }}).join('');
+        }}
+        // Facturas entregadas con cuotas vencidas
+        var ev = pp.facturas_entregadas_vencidas || [];
+        var evT = pp.total_entregadas_venc || {{facturas:0,monto:0,cuotas:0}};
+        var elEvF = document.getElementById('evFacturasCount');
+        var elEvM = document.getElementById('evMontoTotal');
+        var elEvC = document.getElementById('evCuotasCount');
+        if (elEvF) elEvF.textContent = evT.facturas.toLocaleString();
+        if (elEvM) elEvM.textContent = fmtMoney(evT.monto);
+        if (elEvC) elEvC.textContent = evT.cuotas.toLocaleString();
+        var tevBody = document.getElementById('tablaEntregadasVenc');
+        if (tevBody) {{
+            tevBody.innerHTML = ev.map(function(f) {{
+                var dMora = f.max_dias_mora || 0;
+                var moraCls = dMora > 90 ? 'status-cancelado' : (dMora > 30 ? 'status-congelado' : 'status-aprobado');
+                return '<tr>' +
+                    '<td style=\"font-size:12px;color:#2563eb;font-weight:600\">' + (f.factura||'') + '</td>' +
+                    '<td><strong>' + (f.cliente||'') + '</strong></td>' +
+                    '<td style=\"font-size:12px\">' + (f.fecha_factura||'') + '</td>' +
+                    '<td class=\"text-right\">' + f.cuotas + '</td>' +
+                    '<td class=\"text-right\" style=\"color:#ef4444;font-weight:600\">' + fmtMoney(f.monto) + '</td>' +
+                    '<td style=\"font-size:12px;color:#666\">' + (f.ultima_cuota||'') + '</td>' +
+                    '<td class=\"text-right\"><span class=\"' + moraCls + '\">' + dMora + ' d</span></td>' +
+                    '</tr>';
+            }}).join('') || '<tr><td colspan="7" style="text-align:center;color:#999">Sin facturas entregadas vencidas</td></tr>';
         }}
         renderCiclo('10-25');
         renderCicloResumen();

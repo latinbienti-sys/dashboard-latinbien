@@ -415,6 +415,7 @@ def fetch_payment_plan(sess):
     # ciclo_clientes[dia][partner_name][state] = {'cantidad': N, 'monto': X}
     ciclo_clientes = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: {'cantidad': 0, 'monto': 0.0})))
     invoice_status_map = {}  # se llena después con datos de Odoo (consulta separada)
+    invoice_date_map = {}    # invoice_id -> fecha de factura
     
     for line in all_lines:
         st = line.get('state', '')
@@ -477,13 +478,14 @@ def fetch_payment_plan(sess):
         inv_list = list(inv_ids)
         inv_batches = [inv_list[i:i+500] for i in range(0, len(inv_list), 500)]
         for batch in inv_batches:
-            inv_data = json_execute(sess, 'account.move', 'read', [batch, ['partner_id', 'name', 'x_status_operativos']])
+            inv_data = json_execute(sess, 'account.move', 'read', [batch, ['partner_id', 'name', 'x_status_operativos', 'invoice_date']])
             for inv in inv_data:
                 pid = inv.get('partner_id')
                 partner = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Desconocido'
                 partner_map[inv['id']] = partner
                 raw_st = inv.get('x_status_operativos', '')
                 invoice_status_map[inv['id']] = status_labels.get(str(raw_st), '')
+                invoice_date_map[inv['id']] = str(inv.get('invoice_date') or '')[:10]
     
     # Resolver inv_id -> partner name en ciclo_clientes (agregar por partner)
     ciclo_clientes_por_partner = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: {'cantidad': 0, 'monto': 0.0})))
@@ -521,7 +523,56 @@ def fetch_payment_plan(sess):
     # Proyección ordenada
     proyeccion_list = [{'fecha': k, 'monto': round(v, 2)}
                        for k, v in sorted(proyeccion.items())]
-    
+
+    # Facturas ENTREGADAS con cuotas vencidas
+    # Agrupa las cuotas vencidas por factura cuyo status operativo = 'Entregado'
+    entregadas_venc = defaultdict(lambda: {
+        'monto': 0.0, 'cuotas': 0, 'cliente': '', 'fecha_factura': '',
+        'ultima_cuota': '', 'primer_cuota': '', 'facturas': [], 'max_dias_mora': 0
+    })
+    for v in vencidos:
+        inv_id = v['invoice_id']
+        if invoice_status_map.get(inv_id) != 'Entregado':
+            continue
+        f = entregadas_venc[inv_id]
+        f['monto'] += v['monto']
+        f['cuotas'] += 1
+        f['cliente'] = partner_map.get(inv_id, 'Desconocido')
+        f['fecha_factura'] = invoice_date_map.get(inv_id, '')
+        fc = str(v['fecha'] or '')[:10]
+        if fc:
+            if not f['primer_cuota'] or fc < f['primer_cuota']:
+                f['primer_cuota'] = fc
+            if fc > f['ultima_cuota']:
+                f['ultima_cuota'] = fc
+            try:
+                fd = datetime.strptime(fc, '%Y-%m-%d').date()
+                d_mora = (hoy - fd).days
+                if d_mora > f['max_dias_mora']:
+                    f['max_dias_mora'] = d_mora
+            except (ValueError, TypeError):
+                pass
+        if v['invoice_name'] not in f['facturas']:
+            f['facturas'].append(v['invoice_name'])
+
+    facturas_entregadas_vencidas = [{
+        'invoice_id': inv_id,
+        'factura': f['facturas'][0] if f['facturas'] else '',
+        'cliente': f['cliente'],
+        'monto': round(f['monto'], 2),
+        'cuotas': f['cuotas'],
+        'fecha_factura': f['fecha_factura'],
+        'ultima_cuota': f['ultima_cuota'],
+        'primer_cuota': f['primer_cuota'],
+        'max_dias_mora': f['max_dias_mora'],
+    } for inv_id, f in sorted(entregadas_venc.items(), key=lambda x: -x[1]['monto'])]
+
+    total_entregadas_venc = {
+        'facturas': len(facturas_entregadas_vencidas),
+        'monto': round(sum(f['monto'] for f in facturas_entregadas_vencidas), 2),
+        'cuotas': sum(f['cuotas'] for f in facturas_entregadas_vencidas),
+    }
+
     # Construir ciclo_analysis para rangos 03-18 y 10-25
     def build_ciclo_range(dia_min, dia_max):
         """Construye datos para un rango de días de ciclo, incluyendo clientes."""
@@ -577,6 +628,8 @@ def fetch_payment_plan(sess):
         'total_pagado': round(state_totals['paid']['monto'], 2),
         'total_cuotas': len(all_lines),
         'ciclo_analysis': ciclo_analysis,
+        'facturas_entregadas_vencidas': facturas_entregadas_vencidas,
+        'total_entregadas_venc': total_entregadas_venc,
     }
 
 def fetch_facturacion_julio(sess):
