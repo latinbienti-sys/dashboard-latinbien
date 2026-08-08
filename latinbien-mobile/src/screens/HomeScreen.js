@@ -147,7 +147,7 @@ export default function HomeScreen({ navigation, onAddToCart }) {
         </TouchableOpacity>
       </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.catScroll}>
-        {categories.slice(0, 10).map((cat) => (
+        {Array.isArray(categories) && categories.slice(0, 10).map((cat) => (
           <TouchableOpacity
             key={cat.id}
             style={styles.catPill}
@@ -166,7 +166,7 @@ export default function HomeScreen({ navigation, onAddToCart }) {
         </TouchableOpacity>
       </View>
       <View style={styles.productGrid}>
-        {products.map((p) => (
+        {Array.isArray(products) && products.map((p) => (
           <ProductCard
             key={p.id}
             product={p}

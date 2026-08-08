@@ -8,6 +8,19 @@ import { BASE_URL } from '../utils/constants';
 
 let _partnerId = null;
 
+/**
+ * Normaliza la respuesta de search_read a un ARRAY siempre.
+ * Odoo puede devolver: [ {...}, {...} ]  ó  { records: [...], length: N }
+ * Sin esta normalización, `productos.slice()` reventaba (pantalla blanca).
+ */
+function asArray(result) {
+  if (result == null) return [];
+  if (Array.isArray(result)) return result;
+  if (Array.isArray(result.records)) return result.records;
+  if (Array.isArray(result.data)) return result.data;
+  return [];
+}
+
 export function setPartnerId(id) {
   _partnerId = id;
 }
@@ -83,7 +96,7 @@ export function getFeaturedProducts(limit = 20) {
     fields: ['id', 'name', 'list_price', 'default_code', 'image_256', 'website_url', 'categ_id'],
     limit,
     order: 'write_date desc',
-  });
+  }).then(asArray);
 }
 
 export function searchProducts(query, limit = 20) {
@@ -97,7 +110,7 @@ export function searchProducts(query, limit = 20) {
     ],
     fields: ['id', 'name', 'list_price', 'default_code', 'image_256', 'website_url', 'categ_id'],
     limit,
-  });
+  }).then(asArray);
 }
 
 export function getCategories() {
@@ -106,7 +119,7 @@ export function getCategories() {
     domain: [],
     fields: ['id', 'name'],
     order: 'sequence asc',
-  });
+  }).then(asArray);
 }
 
 export function getProductsByCategory(categoryId, limit = 50) {
@@ -118,7 +131,7 @@ export function getProductsByCategory(categoryId, limit = 50) {
     ],
     fields: ['id', 'name', 'list_price', 'default_code', 'image_256', 'website_url', 'categ_id'],
     limit,
-  });
+  }).then(asArray);
 }
 
 // ============================================================
@@ -143,7 +156,7 @@ export function getMyOrders(limit = 20) {
     fields: ['id', 'name', 'date_order', 'amount_total', 'state', 'payment_term_id'],
     limit,
     order: 'date_order desc',
-  });
+  }).then(asArray);
 }
 
 export function getCreditLines() {
@@ -153,7 +166,7 @@ export function getCreditLines() {
     domain: [['partner_id', '=', _partnerId]],
     fields: ['id', 'name', 'credit_limit', 'available_credit', 'state', 'date'],
     order: 'date desc',
-  });
+  }).then(asArray);
 }
 
 // ============================================================
