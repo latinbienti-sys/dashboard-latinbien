@@ -617,7 +617,51 @@ def fetch_payment_plan(sess):
         '03-18': build_ciclo_range(3, 18),
         '10-25': build_ciclo_range(10, 25),
     }
-    
+
+    # ── Últimas entregas realizadas: morosidad del cliente ──────────
+    # 1) Morosidad TOTAL por cliente (todas sus facturas con cuotas vencidas)
+    partner_vencido = defaultdict(lambda: {'monto': 0.0, 'facturas': set(), 'cuotas': 0})
+    for v in vencidos:
+        cli = partner_map.get(v['invoice_id'], 'Desconocido')
+        partner_vencido[cli]['monto'] += v['monto']
+        partner_vencido[cli]['cuotas'] += 1
+        if v['invoice_name']:
+            partner_vencido[cli]['facturas'].add(v['invoice_name'])
+
+    # 2) Últimas facturas ENTREGADAS ordenadas por fecha efectiva de entrega
+    entregadas_ids = json_execute(sess, 'account.move', 'search', [[['x_status_operativos', '=', '6']]])
+    entregadas_recs = []
+    for i in range(0, len(entregadas_ids), 500):
+        batch = entregadas_ids[i:i+500]
+        recs = json_execute(sess, 'account.move', 'read', [batch, [
+            'id', 'name', 'partner_id', 'invoice_date', 'x_commitment_date']])
+        if recs:
+            entregadas_recs.extend(recs)
+
+    entregadas_recs.sort(key=lambda x: str(x.get('x_commitment_date') or ''), reverse=True)
+    ULTIMAS_N = 60
+    ultimas_entregas = []
+    for inv in entregadas_recs[:ULTIMAS_N]:
+        pid = inv.get('partner_id')
+        cliente = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Desconocido'
+        pv = partner_vencido.get(cliente, {'monto': 0.0, 'facturas': set(), 'cuotas': 0})
+        ultimas_entregas.append({
+            'factura': inv.get('name') or '',
+            'cliente': cliente,
+            'entrega': str(inv.get('x_commitment_date') or '')[:10],
+            'factura_fecha': str(inv.get('invoice_date') or '')[:10],
+            'vencido_cliente': round(pv['monto'], 2),
+            'facturas_mora': len(pv['facturas']),
+            'cuotas_mora': pv['cuotas'],
+            'moroso': pv['monto'] > 0,
+        })
+
+    total_ultimas = {
+        'entregas': len(ultimas_entregas),
+        'morosos': sum(1 for u in ultimas_entregas if u['moroso']),
+        'monto': round(sum(u['vencido_cliente'] for u in ultimas_entregas), 2),
+    }
+
     return {
         'state_totals': {k: {'monto': round(v['monto'], 2), 'cantidad': v['cantidad']}
                          for k, v in sorted(state_totals.items())},
@@ -630,6 +674,8 @@ def fetch_payment_plan(sess):
         'ciclo_analysis': ciclo_analysis,
         'facturas_entregadas_vencidas': facturas_entregadas_vencidas,
         'total_entregadas_venc': total_entregadas_venc,
+        'ultimas_entregas': ultimas_entregas,
+        'total_ultimas': total_ultimas,
     }
 
 def fetch_facturacion_julio(sess):

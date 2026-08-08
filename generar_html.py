@@ -560,6 +560,28 @@ html = f'''<!DOCTYPE html>
             </div>
         </div>
 
+        <!-- ÚLTIMAS ENTREGAS REALIZADAS + MOROSIDAD DEL CLIENTE -->
+        <div class="table-card" style="border-color:#7c3aed">
+            <h3>📦 Últimas Entregas Realizadas — ¿Quién está Moroso?</h3>
+            <div style="margin:8px 0;font-size:13px;color:#666"><strong id="ueEntregas">—</strong> entregas revisadas · <strong id="ueMorosos">—</strong> clientes morosos · <strong id="ueMonto">—</strong> vencido acumulado</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Factura</th>
+                            <th>Cliente</th>
+                            <th>Fecha Entrega</th>
+                            <th class="text-right">Vencido del Cliente</th>
+                            <th class="text-right">Facturas en Mora</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaUltimasEntregas"></tbody>
+                </table>
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:#888">El vencido del cliente incluye TODAS sus facturas, no solo esta entrega. Resalta clientes que reciben mercancía ya teniendo deudas.</div>
+        </div>
+
         <!-- CICLO DE PAGO (dentro del tab) -->
         <div class="table-card">
             <h3>📆 Ciclo de Pago — Análisis por Día</h3>
@@ -1566,6 +1588,31 @@ try {{
                     '<td class=\"text-right\"><span class=\"' + moraCls + '\">' + dMora + ' d</span></td>' +
                     '</tr>';
             }}).join('') || '<tr><td colspan="7" style="text-align:center;color:#999">Sin facturas entregadas vencidas</td></tr>';
+        }}
+        // Últimas entregas realizadas + morosidad del cliente
+        var ue = pp.ultimas_entregas || [];
+        var ueT = pp.total_ultimas || {{entregas:0,morosos:0,monto:0}};
+        var elUeE = document.getElementById('ueEntregas');
+        var elUeM = document.getElementById('ueMorosos');
+        var elUeMo = document.getElementById('ueMonto');
+        if (elUeE) elUeE.textContent = ueT.entregas.toLocaleString();
+        if (elUeM) elUeM.textContent = ueT.morosos.toLocaleString();
+        if (elUeMo) elUeMo.textContent = fmtMoney(ueT.monto);
+        var ueBody = document.getElementById('tablaUltimasEntregas');
+        if (ueBody) {{
+            ueBody.innerHTML = ue.map(function(u) {{
+                var cls = u.moroso ? 'status-cancelado' : 'status-entregado';
+                var txt = u.moroso ? '🔴 MOROSO' : '✅ Al día';
+                var vencColor = u.moroso ? '#ef4444' : '#10b981';
+                return '<tr>' +
+                    '<td style=\"font-size:12px;color:#7c3aed;font-weight:600\">' + (u.factura||'') + '</td>' +
+                    '<td><strong>' + (u.cliente||'') + '</strong></td>' +
+                    '<td style=\"font-size:12px\">' + (u.entrega||'') + '</td>' +
+                    '<td class=\"text-right\" style=\"color:' + vencColor + ';font-weight:600\">' + fmtMoney(u.vencido_cliente) + '</td>' +
+                    '<td class=\"text-right\">' + (u.facturas_mora||0) + '</td>' +
+                    '<td><span class=\"' + cls + '\">' + txt + '</span></td>' +
+                    '</tr>';
+            }}).join('') || '<tr><td colspan="6" style="text-align:center;color:#999">Sin entregas recientes</td></tr>';
         }}
         renderCiclo('10-25');
         renderCicloResumen();
