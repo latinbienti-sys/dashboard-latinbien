@@ -23,10 +23,12 @@ export default function LoginScreen({ onLoginSuccess }) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
 
   const handleLogin = async () => {
+    setError('');
     if (!email.trim() || !password) {
-      Alert.alert('Campos requeridos', 'Ingresa tu correo y contraseña');
+      setError('Ingresa tu correo y contraseña');
       return;
     }
 
@@ -35,7 +37,12 @@ export default function LoginScreen({ onLoginSuccess }) {
       await auth.login(email.trim(), password);
       onLoginSuccess?.();
     } catch (err) {
-      Alert.alert('Error', err.message || 'Credenciales inválidas');
+      const msg = err.message || 'Credenciales inválidas';
+      setError(msg);
+      // Alert no funciona en web; en nativo también mostramos el error en pantalla
+      if (Platform.OS !== 'web') {
+        Alert.alert('Error', msg);
+      }
     } finally {
       setLoading(false);
     }
@@ -90,6 +97,12 @@ export default function LoginScreen({ onLoginSuccess }) {
             </TouchableOpacity>
           </View>
         </View>
+
+        {error ? (
+          <View style={styles.errorBox}>
+            <Text style={styles.errorText}>⚠️ {error}</Text>
+          </View>
+        ) : null}
 
         <TouchableOpacity
           style={[styles.loginBtn, loading && styles.loginBtnDisabled]}
@@ -220,6 +233,19 @@ const styles = StyleSheet.create({
   },
   loginBtnDisabled: {
     opacity: 0.7,
+  },
+  errorBox: {
+    backgroundColor: '#fef2f2',
+    borderWidth: 1,
+    borderColor: '#fecaca',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 8,
+  },
+  errorText: {
+    color: COLORS.danger,
+    fontSize: 12,
+    textAlign: 'center',
   },
   loginBtnText: {
     color: COLORS.white,

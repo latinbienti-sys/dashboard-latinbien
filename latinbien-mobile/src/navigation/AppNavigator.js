@@ -8,7 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { COLORS } from '../utils/constants';
-import { initAuth, isAuthenticated, onAuthChange } from '../services/auth';
+import { initAuth, isAuthenticated, onAuthChange, checkSession } from '../services/auth';
 import { getCart, saveCart } from '../utils/storage';
 
 // Screens
@@ -80,6 +80,11 @@ export default function AppNavigator() {
   useEffect(() => {
     (async () => {
       await initAuth();
+      // Si no hay sesión guardada localmente, verificar si el servidor
+      // ya tiene una sesión activa (cookie) para no pedir login de nuevo
+      if (!isAuthenticated()) {
+        await checkSession();
+      }
       setIsLoggedIn(isAuthenticated());
       const savedCart = await getCart();
       setCart(savedCart || []);
