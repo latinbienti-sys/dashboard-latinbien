@@ -2,7 +2,10 @@
 // LatinBien Mobile — Constantes
 // ============================================================
 
-export const BASE_URL = 'https://latinbien.com';
+import { Platform } from 'react-native';
+
+// En web, usar URL relativa (el proxy local se encarga de redirigir a latinbien.com)
+export const BASE_URL = Platform.OS === 'web' ? '' : 'https://latinbien.com';
 export const STORAGE_KEYS = {
   SESSION: 'latinbien_session',
   CART: 'latinbien_cart',

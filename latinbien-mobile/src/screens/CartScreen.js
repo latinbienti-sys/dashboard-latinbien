@@ -10,14 +10,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  Linking,
   Alert,
 } from 'react-native';
 import { COLORS } from '../utils/constants';
 import { getProductImageUrl } from '../services/api';
 import { formatPrice } from '../utils/storage';
 
-export default function CartScreen({ cart, onUpdateQty, onRemove, onClear }) {
+export default function CartScreen({ cart, onUpdateQty, onRemove, onClear, navigation }) {
   const total = cart.reduce((s, i) => s + (i.price || 0) * (i.qty || 1), 0);
   const count = cart.reduce((s, i) => s + (i.qty || 1), 0);
 
@@ -91,10 +90,10 @@ export default function CartScreen({ cart, onUpdateQty, onRemove, onClear }) {
           <TouchableOpacity
             style={styles.checkoutBtn}
             onPress={() =>
-              Linking.openURL('https://latinbien.com/shop/cart')
+              navigation.navigate('Checkout', { items: cart, total })
             }
           >
-            <Text style={styles.checkoutText}>🛒 Ir al carrito en la web</Text>
+            <Text style={styles.checkoutText}>💳 Continuar con el pago</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.clearBtn}

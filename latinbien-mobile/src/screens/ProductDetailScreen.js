@@ -25,7 +25,7 @@ import {
   ADMIN_FEE_PER_QUINCENA,
 } from '../utils/plans';
 
-export default function ProductDetailScreen({ route, onAddToCart }) {
+export default function ProductDetailScreen({ route, navigation, onAddToCart }) {
   const { product } = route.params || {};
   const [plans, setPlans] = useState(null);
   const [adminFee, setAdminFee] = useState(ADMIN_FEE_PER_QUINCENA);
@@ -72,13 +72,28 @@ export default function ProductDetailScreen({ route, onAddToCart }) {
   };
 
   const requestCredit = () => {
-    Linking.openURL(
-      `https://latinbien.com/solicitud?product=${encodeURIComponent(product.name)}`
-    );
+    navigation.navigate('Solicitud', {
+      product,
+      plan: {
+        numInstallments: installments,
+        initialPct,
+      },
+    });
   };
 
   const addToCart = () => {
     onAddToCart?.(product);
+    navigation.navigate('Checkout', {
+      items: [
+        {
+          id: product.id,
+          name: product.name,
+          price: product.list_price || 0,
+          qty: 1,
+        },
+      ],
+      total: product.list_price || 0,
+    });
   };
 
   return (

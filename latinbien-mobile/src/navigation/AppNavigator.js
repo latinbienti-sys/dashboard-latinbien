@@ -22,6 +22,8 @@ import ProfileScreen from '../screens/ProfileScreen';
 import OrdersScreen from '../screens/OrdersScreen';
 import PaymentScreen from '../screens/PaymentScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
+import CheckoutScreen from '../screens/CheckoutScreen';
+import SolicitudScreen from '../screens/SolicitudScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -192,8 +194,9 @@ export default function AppNavigator() {
           )}
         </Tab.Screen>
         <Tab.Screen name="Cart" options={{ title: 'Carrito' }}>
-          {() => (
+          {(props) => (
             <CartScreen
+              {...props}
               cart={cart}
               onUpdateQty={updateCartQty}
               onRemove={removeFromCart}
@@ -253,8 +256,24 @@ export default function AppNavigator() {
         />
         <Stack.Screen
           name="ProductDetail"
-          component={ProductDetailScreen}
           options={{ title: 'Detalle del Producto' }}
+        >
+          {(props) => (
+            <ProductDetailScreen
+              {...props}
+              onAddToCart={addToCart}
+            />
+          )}
+        </Stack.Screen>
+        <Stack.Screen
+          name="Checkout"
+          component={CheckoutScreen}
+          options={{ title: 'Pago / Checkout' }}
+        />
+        <Stack.Screen
+          name="Solicitud"
+          component={SolicitudScreen}
+          options={{ title: 'Solicitud de Crédito' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
