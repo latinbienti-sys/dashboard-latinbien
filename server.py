@@ -400,6 +400,52 @@ def fetch_payment_plan(sess):
         recs = json_execute(sess, 'invoice.installment.line', 'read',
                             [batch, ['state', 'amount', 'payment_date', 'invoice_id']])
         all_lines.extend(recs)
+
+    # ── SOLO FACTURAS PUBLICADAS (posted): excluir canceladas y notas de crédito ──
+    # El plan de pagos fraccionado solo debe reflejar facturas de venta publicadas.
+    # Se descartan: facturas canceladas (state='cancel') y notas de crédito
+    # (move_type='out_refund'/'in_refund'), que dejan cuotas 'vencido' residuales
+    # e inflan la morosidad (ej: SAV/2025/00319 cancelada -> 21 cuotas fantasma).
+    all_inv_ids = set()
+    for l in all_lines:
+        inv = l.get('invoice_id')
+        inv_id = inv[0] if isinstance(inv, list) and len(inv) > 1 else None
+        if inv_id:
+            all_inv_ids.add(inv_id)
+
+    partner_map = {}
+    invoice_status_map = {}
+    invoice_date_map = {}
+    invoice_valido = set()
+    status_labels = {'6': 'Entregado', '4': 'Aprobado',
+                     '8': 'Cancelación Total', '10': 'Congelado', '12': 'Congelado'}
+
+    all_inv_list = list(all_inv_ids)
+    for i in range(0, len(all_inv_list), 500):
+        batch = all_inv_list[i:i+500]
+        inv_data = json_execute(sess, 'account.move', 'read',
+                                [batch, ['id', 'partner_id', 'name',
+                                         'x_status_operativos', 'invoice_date',
+                                         'state', 'move_type']])
+        for inv in inv_data:
+            iid = inv['id']
+            pid = inv.get('partner_id')
+            partner = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Desconocido'
+            partner_map[iid] = partner
+            raw_st = inv.get('x_status_operativos', '')
+            invoice_status_map[iid] = status_labels.get(str(raw_st), '')
+            invoice_date_map[iid] = str(inv.get('invoice_date') or '')[:10]
+            # Solo facturas de venta PUBLICADAS (excluye canceladas, borradores y NC)
+            if inv.get('state') == 'posted' and inv.get('move_type') == 'out_invoice':
+                invoice_valido.add(iid)
+
+    # Filtrar líneas: conservar solo cuotas de facturas publicadas de venta
+    def _inv_id(line):
+        inv = line.get('invoice_id')
+        return inv[0] if isinstance(inv, list) and len(inv) > 1 else None
+
+    all_lines = [l for l in all_lines if _inv_id(l) in invoice_valido]
+
     
     # Agrupar por estado
     state_totals = defaultdict(lambda: {'monto': 0.0, 'cantidad': 0})
@@ -414,8 +460,6 @@ def fetch_payment_plan(sess):
     ciclo_data = defaultdict(lambda: defaultdict(lambda: {'cantidad': 0, 'monto': 0.0, 'dias_mora': []}))
     # ciclo_clientes[dia][partner_name][state] = {'cantidad': N, 'monto': X}
     ciclo_clientes = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: {'cantidad': 0, 'monto': 0.0})))
-    invoice_status_map = {}  # se llena después con datos de Odoo (consulta separada)
-    invoice_date_map = {}    # invoice_id -> fecha de factura
     
     for line in all_lines:
         st = line.get('state', '')
@@ -463,30 +507,10 @@ def fetch_payment_plan(sess):
             if fecha:
                 proyeccion[fecha] += amt
     
-    # Obtener nombres de clientes desde las facturas involucradas
-    inv_ids = set()
-    for v in vencidos:
-        if v['invoice_id']: inv_ids.add(v['invoice_id'])
-    for d in debidos:
-        if d['invoice_id']: inv_ids.add(d['invoice_id'])
-    
-    partner_map = {}
-    status_labels = {'6': 'Entregado', '4': 'Aprobado',
-                     '8': 'Cancelación Total', '10': 'Congelado', '12': 'Congelado'}
-    
-    if inv_ids:
-        inv_list = list(inv_ids)
-        inv_batches = [inv_list[i:i+500] for i in range(0, len(inv_list), 500)]
-        for batch in inv_batches:
-            inv_data = json_execute(sess, 'account.move', 'read', [batch, ['partner_id', 'name', 'x_status_operativos', 'invoice_date']])
-            for inv in inv_data:
-                pid = inv.get('partner_id')
-                partner = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Desconocido'
-                partner_map[inv['id']] = partner
-                raw_st = inv.get('x_status_operativos', '')
-                invoice_status_map[inv['id']] = status_labels.get(str(raw_st), '')
-                invoice_date_map[inv['id']] = str(inv.get('invoice_date') or '')[:10]
-    
+    # Obtener nombres de clientes desde las facturas involucradas (ya cargadas arriba)
+    # partner_map / invoice_status_map / invoice_date_map ya están poblados con
+    # SOLO facturas publicadas (posted + out_invoice).
+
     # Resolver inv_id -> partner name en ciclo_clientes (agregar por partner)
     ciclo_clientes_por_partner = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: {'cantidad': 0, 'monto': 0.0})))
     ciclo_partner_statuses = defaultdict(lambda: defaultdict(set))  # dia -> partner -> set de statuses
