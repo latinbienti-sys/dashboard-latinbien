@@ -167,6 +167,21 @@
   .msg{ font-size:12px; font-weight:600; }
   .msg.err{ color:var(--honda-red); }
   .msg.ok{ color:var(--green); }
+
+  /* ============ FILTROS ============ */
+  .filtro-bar{
+    display:flex; align-items:flex-end; gap:8px; flex-wrap:wrap;
+    background:#f8faff; border:1px solid var(--border); border-radius:10px;
+    padding:10px 12px; margin-bottom:12px;
+  }
+  .filtro-bar .lbl{ font-size:10.5px; margin-bottom:3px; display:block; }
+  .filtro-bar select{ padding:6px 9px; font-size:12px; max-width:200px; }
+
+  /* ============ IMPORTAR ============ */
+  .import-row{ display:flex; gap:14px; flex-wrap:wrap; align-items:stretch; }
+  .import-row .fld{ flex:1; }
+  .import-row textarea{ font-family:Consolas, monospace; font-size:11px; resize:vertical; width:100%; }
+  #impMsg{ align-self:center; }
 </style>
 </head>
 <body>
@@ -202,8 +217,39 @@
     </div>
     <div class="grp">
       <button class="btn btn-green btn-sm" id="btnExportar">⬇ Exportar CSV</button>
+      <button class="btn btn-blue btn-sm" id="btnImportar">⬆ Importar de Sheets</button>
       <button class="btn btn-gray btn-sm" id="btnNueva">➕ Nuevo registro</button>
-      <button class="btn btn-blue btn-sm" id="btnFiltroBanco">🏦 Por banco</button>
+      <button class="btn btn-outline btn-sm" id="btnFiltroBanco">🏦 Por banco</button>
+    </div>
+  </div>
+
+  <!-- ============ PANEL IMPORTAR (Google Sheets) ============ -->
+  <div class="card hidden" id="panelImportar" style="margin-bottom:16px;border:2px dashed var(--honda-blue);">
+    <h3>Importar datos desde Google Sheets
+      <span class="hint">Exporta tu hoja → Archivo → Descargar → CSV</span>
+    </h3>
+    <div class="import-row">
+      <div class="fld" style="min-width:180px;">
+        <label class="lbl">Mes destino</label>
+        <input type="month" id="impMes" value="2026-07">
+      </div>
+      <div class="fld" style="flex:1;min-width:260px;">
+        <label class="lbl">Pega aquí el CSV (copiar/pegar)</label>
+        <textarea id="impTexto" rows="6" placeholder="Pega el contenido del CSV exportado de tu hoja de cálculo..."></textarea>
+      </div>
+      <div class="fld" style="min-width:200px;">
+        <label class="lbl">Ejemplo del formato (Jul 2026)</label>
+        <textarea id="impEjemplo" rows="6" readonly style="background:#f5f7fb;font-size:11px;">,Nº,CLIENTE,Nº DE CEDULA,VEHICULO,MONTO TOTAL,MONTO APROBADO,FECHA DE APROBACION,PLAZO,% APROBADO,FINANCIERA BANCO,Nº DE SOLICITUD,...
+,1,MARIA ANDREINA MORENO,V16199070,HONDA CITY - EXL,34158.32,17079.16,46171,36,50,PIVCA,5463,,46196,913,,PENDIENTE POR LIQUIDAR</textarea>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;">
+      <label style="font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;">
+        <input type="checkbox" id="impReemplazar"> Reemplazar los datos de este mes (borra antes)
+      </label>
+      <button class="btn btn-blue btn-sm" id="btnImportarProcesar">⚙ Procesar e importar</button>
+      <button class="btn btn-outline btn-sm" id="btnImportarCerrar">Cerrar</button>
+      <span class="msg" id="impMsg"></span>
     </div>
   </div>
 
@@ -349,8 +395,43 @@
   <!-- ============ MATRIZ ============ -->
   <div class="card">
     <h3>Matriz de seguimiento — <span id="matrizMesTitulo">—</span>
-      <span class="hint">total de registros: <b id="matrizCount">0</b></span>
+      <span class="hint"><b id="matrizCount">0</b> registros encontrados</span>
     </h3>
+    <div class="filtro-bar" id="filtroBar">
+      <label class="lbl">Filtrar por plan/vehículo:</label>
+      <select id="filtroPlan">
+        <option value="">Todos los planes</option>
+        <option value="HONDA CITY 1.5L A/T EXL 2026">HONDA CITY EXL 2026</option>
+        <option value="HONDA HR-V 1.5L A/T EXL 2026">HONDA HR-V EXL 2026</option>
+        <option value="HONDA HR-V 1.5L A/T LX 2026">HONDA HR-V LX 2026</option>
+        <option value="HONDA WR-V 1.5L A/T EXL 2026">HONDA WR-V EXL 2026</option>
+      </select>
+      <label class="lbl">Banco:</label>
+      <select id="filtroBanco">
+        <option value="">Todos</option>
+        <option>PIVCA</option>
+        <option>BANESCO</option>
+        <option>PROVINCIAL</option>
+        <option>ARCA</option>
+      </select>
+      <label class="lbl">Plazo:</label>
+      <select id="filtroPlazo">
+        <option value="">Todos</option>
+        <option>12</option>
+        <option>24</option>
+        <option>36</option>
+        <option>48</option>
+        <option>60</option>
+      </select>
+      <label class="lbl">Estado:</label>
+      <select id="filtroEstado">
+        <option value="">Todos</option>
+        <option>APROBADO</option>
+        <option>LIQUIDADO</option>
+        <option>PENDIENTE</option>
+      </select>
+      <button class="btn btn-outline btn-xs" id="btnLimpiarFiltros">Limpiar filtros</button>
+    </div>
     <div class="table-scroll">
       <table>
         <thead>
@@ -771,11 +852,12 @@ function badgeEstado(r){
   return `<span class="estado ${cls}"><span class="dot"></span>${e}</span>`;
 }
 function renderTabla(){
-  const regs = data.filter(r => r.mes === mesActual).sort((a,b)=>(a.num||0)-(b.num||0));
+  let regs = data.filter(r => r.mes === mesActual);
+  regs = aplicarFiltros(regs).sort((a,b)=>(a.num||0)-(b.num||0));
   document.getElementById("matrizCount").textContent = regs.length;
   const tb = document.getElementById("tblBody");
   if(!regs.length){
-    tb.innerHTML = `<tr><td colspan="17" class="empty">No hay registros para este mes. Usa el formulario para agregar uno.</td></tr>`;
+    tb.innerHTML = `<tr><td colspan="17" class="empty">No hay registros que coincidan. Usa el formulario o importa un CSV.</td></tr>`;
     return;
   }
   tb.innerHTML = regs.map(r => `
@@ -831,6 +913,207 @@ function exportarCSV(){
   toast("CSV exportado ✓");
 }
 
+/* ================= IMPORTAR GOOGLE SHEETS ================= */
+// Mapeo de modelos abreviados de la hoja -> modelos completos
+const MODELO_MAP = {
+  "HONDA CITY - EXL":"HONDA CITY 1.5L A/T EXL 2026",
+  "HONDA HRV - EXL":"HONDA HR-V 1.5L A/T EXL 2026",
+  "HONDA HRV - LX":"HONDA HR-V 1.5L A/T LX 2026",
+  "HONDA WR - EXL":"HONDA WR-V 1.5L A/T EXL 2026",
+  "CITY":"HONDA CITY 1.5L A/T EXL 2026",
+  "HRV - EXL":"HONDA HR-V 1.5L A/T EXL 2026",
+  "HRV - LX":"HONDA HR-V 1.5L A/T LX 2026",
+  "WR - EXL":"HONDA WR-V 1.5L A/T EXL 2026"
+};
+// Normalización de texto de vehículo para hacer match flexible
+function normalizarModelo(t){
+  if(!t) return "";
+  const s = String(t).toUpperCase().trim();
+  // exacto
+  if(MODELO_MAP[s]) return MODELO_MAP[s];
+  // contiene
+  const keys = Object.keys(MODELO_MAP).sort((a,b)=>b.length-a.length);
+  for(const k of keys){
+    if(s.includes(k)) return MODELO_MAP[k];
+  }
+  // búsqueda simple por palabra-clave
+  if(s.includes("CITY")) return MODELO_MAP["CITY"];
+  if(s.includes("HR-V") || s.includes("HRV")){
+    return s.includes("LX") ? MODELO_MAP["HRV - LX"] : MODELO_MAP["HRV - EXL"];
+  }
+  if(s.includes("WR-V") || s.includes("WRV") || s.includes("WR")) return MODELO_MAP["WR - EXL"];
+  return t.trim();
+}
+
+// Fecha: maneja serial de Excel (46171) o texto dd/mm/yyyy o date
+function parseFecha(v){
+  if(!v) return "";
+  const s = String(v).trim();
+  if(!s) return "";
+  // serial de Excel (5 dígitos)
+  if(/^\d{4,5}$/.test(s)){
+    const n = parseInt(s,10);
+    if(n > 40000){ return xl(n); }
+  }
+  // dd/mm/yyyy o dd-mm-yyyy
+  const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+  if(m){
+    const d = String(m[1]).padStart(2,"0");
+    const mo = String(m[2]).padStart(2,"0");
+    let y = m[3];
+    if(y.length === 2) y = "20" + y;
+    return `${y}-${mo}-${d}`;
+  }
+  return s; // ya formato ISO
+}
+// Número: maneja "34,158.32" "19.468,76" "34.158,32" etc.
+function parseNumero(v){
+  if(v === null || v === undefined || v === "") return 0;
+  let s = String(v).replace(/[^\d.,\-]/g,"");
+  if(!s) return 0;
+  // decide separador decimal según la última aparición
+  const lastComma = s.lastIndexOf(",");
+  const lastDot = s.lastIndexOf(".");
+  if(lastComma > lastDot){
+    s = s.replace(/\./g,"").replace(/,/g,".");
+  } else if(lastDot > lastComma){
+    s = s.replace(/,/g,"");
+  }
+  const n = parseFloat(s);
+  return isNaN(n) ? 0 : n;
+}
+
+function togglePanelImportar(show){
+  const p = document.getElementById("panelImportar");
+  p.classList.toggle("hidden", !show);
+  if(show){ document.getElementById("impMes").value = mesActual; document.getElementById("impMsg").textContent = ""; }
+}
+function importarCSV(){
+  const texto = document.getElementById("impTexto").value.trim();
+  const mesDest = document.getElementById("impMes").value;
+  const reemplazar = document.getElementById("impReemplazar").checked;
+  const msg = document.getElementById("impMsg");
+  if(!texto){ msg.textContent = "⚠ Pega primero el CSV exportado de Sheets."; msg.className = "msg err"; return; }
+
+  // dividir en líneas y celdas (soporta comillas)
+  const lineas = texto.split(/\r?\n/).filter(l => l.trim());
+  const filas = lineas.map(l => {
+    // parse simple entre comillas
+    const out = []; let cur = ""; let inQ = false;
+    for(let i=0;i<l.length;i++){
+      const ch = l[i];
+      if(inQ){
+        if(ch === '"' && l[i+1] === '"'){ cur += '"'; i++; }
+        else if(ch === '"'){ inQ = false; }
+        else cur += ch;
+      }else{
+        if(ch === '"'){ inQ = true; }
+        else if(ch === ","){ out.push(cur); cur = ""; }
+        else cur += ch;
+      }
+    }
+    out.push(cur);
+    return out;
+  });
+
+  // buscar línea de encabezado (que contenga CLIENTE y VEHICULO)
+  let headIdx = -1;
+  for(let i=0;i<filas.length;i++){
+    const joined = filas[i].join(",").toUpperCase();
+    if(joined.includes("CLIENTE") || joined.includes("VEHICULO")){ headIdx = i; break; }
+  }
+  if(headIdx === -1){ msg.textContent = "⚠ No encontré el encabezado (CLIENTE / VEHICULO). Verifica el CSV."; msg.className = "msg err"; return; }
+
+  const head = filas[headIdx].map(h => String(h||"").toUpperCase().replace(/\s+/g," ").trim());
+  const idx = (nombres) => {
+    const n = head.findIndex(h => nombres.some(nm => h.includes(nm)));
+    return n;
+  };
+  const iNum = idx(["Nº","NO.","NUM.", "NUMERO"]);
+  const iCliente = idx(["CLIENTE"]);
+  const iCedula = idx(["CEDULA"]);
+  const iVehiculo = idx(["VEHICULO", "MODELO"]);
+  const iMontoTotal = idx(["MONTO TOTAL", "MONTO  TOTAL"]);
+  const iMontoApr = idx(["MONTO APROBADO"]);
+  const iFechaApr = idx(["FECHA DE APROBACION"]);
+  const iPlazo = idx(["PLAZO"]);
+  const iPct = idx(["% APROBADO", "APROBADO"]);  // cuidado con monto aprobado
+  const iBanco = idx(["FINANCIERA", "BANCO"]);
+  const iSolicitud = idx(["SOLICITUD"]);
+  const iVenc = idx(["VENCIMIENTO"]);
+  const iFact = idx(["FACTURACION"]);
+  const iNumFact = idx(["Nº DE FACTURA", "NO. DE FACTURA", "FACTURA"]);
+  const iLiq = idx(["LIQUIDACION"]);
+  const iObs = idx(["OBSERV"]);
+  const iColor = idx(["COLOR"]);
+
+  if(iCliente === -1 || iVehiculo === -1){ msg.textContent = "⚠ No encontré columnas CLIENTE / VEHICULO."; msg.className = "msg err"; return; }
+
+  let nuevos = 0;
+  let registros = reemplazar ? data.filter(r => r.mes !== mesDest) : data.slice();
+
+  for(let i=headIdx+1;i<filas.length;i++){
+    const c = filas[i];
+    const cliente = (c[iCliente]||"").trim();
+    if(!cliente) continue;
+    const vehiculoRaw = c[iVehiculo]||"";
+    const fechaApr = iFechaApr>=0 ? parseFecha(c[iFechaApr]) : "";
+    const plazo = iPlazo>=0 ? (parseFloat(c[iPlazo]) || "") : "";
+    const banco = iBanco>=0 ? String(c[iBanco]||"").trim().toUpperCase() : "";
+    const color = iColor>=0 ? String(c[iColor]||"").trim() : "";
+
+    nuevos++;
+    registros.push({
+      id: "imp_" + Date.now() + "_" + nuevos + "_" + Math.random().toString(36).slice(2,5),
+      mes: mesDest,
+      num: iNum>=0 ? (parseInt(c[iNum]) || nuevos) : nuevos,
+      cliente: cliente.toUpperCase(),
+      cedula: (iCedula>=0 ? c[iCedula]||"" : "").trim(),
+      vehiculo: normalizarModelo(vehiculoRaw),
+      color: color,
+      montoTotal: iMontoTotal>=0 ? parseNumero(c[iMontoTotal]) : 0,
+      montoAprobado: iMontoApr>=0 ? parseNumero(c[iMontoApr]) : 0,
+      fechaAprobacion: fechaApr,
+      plazo: plazo,
+      pct: iPct>=0 && iPct !== iMontoApr ? (parseNumero(c[iPct])) : (iMontoTotal>=0 && iMontoApr>=0 && parseNumero(c[iMontoTotal])>0 ? parseNumero(c[iMontoApr])/parseNumero(c[iMontoTotal])*100 : 0),
+      banco: banco,
+      solicitud: iSolicitud>=0 ? (c[iSolicitud]||"").trim() : "",
+      vencimiento: iVenc>=0 ? parseFecha(c[iVenc]) : "",
+      facturacion: iFact>=0 ? parseFecha(c[iFact]) : "",
+      factura: iNumFact>=0 ? String(c[iNumFact]||"").replace(/"/g,"").trim() : "",
+      liquidacion: iLiq>=0 ? parseFecha(c[iLiq]) : "",
+      observacion: iObs>=0 ? String(c[iObs]||"").replace(/"/g,"").trim() : ""
+    });
+  }
+
+  if(!nuevos){ msg.textContent = "⚠ No se encontraron filas de datos."; msg.className = "msg err"; return; }
+  save(registros);
+  mesActual = mesDest;
+  renderTodo();
+  msg.textContent = "✓ Se importaron " + nuevos + " registros a " + mesDest + ".";
+  msg.className = "msg ok";
+  togglePanelImportar(false);
+  toast("Importados " + nuevos + " registros ✓");
+}
+
+/* ================= FILTROS ================= */
+let filtros = { plan:"", banco:"", plazo:"", estado:"" };
+function aplicarFiltros(regs){
+  if(filtros.plan) regs = regs.filter(r => r.vehiculo === filtros.plan);
+  if(filtros.banco) regs = regs.filter(r => r.banco === filtros.banco);
+  if(filtros.plazo) regs = regs.filter(r => String(r.plazo) === filtros.plazo);
+  if(filtros.estado) regs = regs.filter(r => estadoOf(r) === filtros.estado);
+  return regs;
+}
+function limpiarFiltros(){
+  filtros = { plan:"", banco:"", plazo:"", estado:"" };
+  document.getElementById("filtroPlan").value = "";
+  document.getElementById("filtroBanco").value = "";
+  document.getElementById("filtroPlazo").value = "";
+  document.getElementById("filtroEstado").value = "";
+  renderTabla();
+}
+
 /* ================= FILTRO BANCO ================= */
 let filtroBanco = false;
 function toggleFiltroBanco(){
@@ -849,7 +1132,17 @@ document.getElementById("btnGuardar").addEventListener("click", guardar);
 document.getElementById("btnCancelar").addEventListener("click", limpiarForm);
 document.getElementById("btnNueva").addEventListener("click", limpiarForm);
 document.getElementById("btnExportar").addEventListener("click", exportarCSV);
+document.getElementById("btnImportar").addEventListener("click", () => togglePanelImportar(true));
+document.getElementById("btnImportarCerrar").addEventListener("click", () => togglePanelImportar(false));
+document.getElementById("btnImportarProcesar").addEventListener("click", importarCSV);
 document.getElementById("btnFiltroBanco").addEventListener("click", toggleFiltroBanco);
+[["filtroPlan","plan"],["filtroBanco","banco"],["filtroPlazo","plazo"],["filtroEstado","estado"]].forEach(([id,k]) => {
+  document.getElementById(id).addEventListener("change", e => {
+    filtros[k] = e.target.value;
+    renderTabla();
+  });
+});
+document.getElementById("btnLimpiarFiltros").addEventListener("click", limpiarFiltros);
 document.getElementById("btnIrMes").addEventListener("click", () => {
   const m = document.getElementById("inpNuevoMes").value;
   if(!m){ toast("Selecciona un mes en el selector"); return; }
