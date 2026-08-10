@@ -182,6 +182,56 @@
   .import-row .fld{ flex:1; }
   .import-row textarea{ font-family:Consolas, monospace; font-size:11px; resize:vertical; width:100%; }
   #impMsg{ align-self:center; }
+
+  /* ============ PESTAÑAS ============ */
+  .tabs-nav{
+    display:flex; gap:8px; margin:18px 0 0; padding:0;
+    background:var(--card); border-radius:14px 14px 0 0;
+    padding:10px 10px 0 10px; box-shadow:0 -3px 10px rgba(0,0,0,.03);
+  }
+  .tab-btn{
+    border:none; background:#eef1f8; color:var(--muted); font-weight:700; font-size:13px;
+    padding:11px 20px; border-radius:10px 10px 0 0; cursor:pointer; transition:all .2s;
+    display:inline-flex; align-items:center; gap:7px;
+  }
+  .tab-btn:hover{ background:#e3e8f2; color:var(--accent); }
+  .tab-btn.active{ background:var(--honda-blue); color:#fff; }
+  .tab-content{
+    background:var(--card); border-radius:0 0 14px 14px;
+    padding:20px 20px 24px; box-shadow:0 4px 14px rgba(0,0,0,.05);
+    margin-bottom:18px;
+  }
+
+  /* ============ CHECKLIST ============ */
+  .check-head{ font-size:14px; color:var(--accent); margin:18px 0 4px; }
+  .check-head::before{ content:none; }
+  .check-sub{ font-size:12px; color:var(--muted); margin-bottom:10px; }
+  .check-cat{ margin-bottom:12px; }
+  .check-cat .cat-name{
+    font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.5px;
+    color:var(--honda-blue); background:#eef2fb; border-radius:8px; padding:5px 10px; margin-bottom:6px;
+  }
+  .check-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:6px; }
+  .check-item{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    background:#f8faff; border:1px solid var(--border); border-radius:8px; padding:6px 9px;
+  }
+  .check-item .ci-name{ font-size:12.5px; color:var(--text); }
+  .check-opts{ display:flex; gap:4px; }
+  .ck-btn{
+    border:1px solid var(--border); background:#fff; font-size:10px; font-weight:800;
+    padding:4px 7px; border-radius:6px; cursor:pointer; color:var(--muted); transition:all .15s; min-width:38px; text-align:center;
+  }
+  .ck-btn:hover{ transform:translateY(-1px); }
+  .ck-btn.sel-ok{ background:#dcfce7; border-color:#16a34a; color:#166534; }
+  .ck-btn.sel-reg{ background:#fef3c7; border-color:#f59e0b; color:#92400e; }
+  .ck-btn.sel-dan{ background:#fee2e2; border-color:#dc2626; color:#b91c1c; }
+  .ck-btn.sel-na{ background:#f1f5f9; border-color:#94a3b8; color:#475569; }
+
+  .resumen-check{ display:flex; gap:6px; flex-wrap:wrap; }
+  .mini-badge{ font-size:10px; font-weight:800; padding:2px 7px; border-radius:12px; }
+  .mini-ok{ background:#dcfce7; color:#166534; } .mini-reg{ background:#fef3c7; color:#92400e; }
+  .mini-dan{ background:#fee2e2; color:#b91c1c; } .mini-na{ background:#f1f5f9; color:#475569; }
 </style>
 </head>
 <body>
@@ -206,6 +256,15 @@
       <div style="margin-top:6px;opacity:.8;">Financiamiento vehicular</div>
     </div>
   </header>
+
+  <!-- ============ NAVEGACIÓN / PESTAÑAS ============ -->
+  <nav class="tabs-nav">
+    <button class="tab-btn active" data-tab="matriz">📋 Matriz / Financiamiento</button>
+    <button class="tab-btn" data-tab="servicios">🔧 Servicios / Checklist</button>
+  </nav>
+
+  <!-- ============ CONTENIDO: MATRIZ ============ -->
+  <div class="tab-content" id="tab-matriz">
 
   <!-- ============ TOOLBAR ============ -->
   <div class="toolbar">
@@ -445,7 +504,134 @@
         <tbody id="tblBody"></tbody>
       </table>
     </div>
-  </div>
+  </div><!-- fin tabla matriz -->
+
+  </div><!-- fin tab-matriz -->
+
+  <!-- ============ CONTENIDO: SERVICIOS / CHECKLIST ============ -->
+  <div class="tab-content hidden" id="tab-servicios">
+
+    <div class="toolbar">
+      <div class="grp">
+        <label class="lbl">Servicios / Recepción de vehículos</label>
+      </div>
+      <div class="grp">
+        <button class="btn btn-green btn-sm" id="btnNuevoServicio">➕ Nuevo servicio</button>
+        <button class="btn btn-blue btn-sm" id="btnExportarServicios">⬇ Exportar CSV</button>
+      </div>
+    </div>
+
+    <!-- KPIs de servicios -->
+    <div class="kpis" id="kpisServicios"></div>
+
+    <!-- Formulario de recepción / checklist -->
+    <div class="card hidden" id="cardServicio" style="margin-bottom:16px;border:2px solid var(--honda-blue);">
+      <h3 id="servicioTitle">Registrar recepción de vehículo <span class="hint" id="servicioHint"></span></h3>
+
+      <div class="form-grid">
+        <div class="fld c2">
+          <label class="req">Cliente</label>
+          <input type="text" id="sCliente" placeholder="Nombre del cliente">
+        </div>
+        <div class="fld c2">
+          <label>Teléfono</label>
+          <input type="text" id="sTelefono" placeholder="0412-0000000">
+        </div>
+        <div class="fld c2">
+          <label>Placa</label>
+          <input type="text" id="sPlaca" placeholder="AB123CD">
+        </div>
+        <div class="fld c3">
+          <label class="req">Vehículo (modelo)</label>
+          <select id="sVehiculo">
+            <option value="">— Seleccionar modelo —</option>
+            <option value="HONDA CITY 1.5L A/T EXL 2026">HONDA CITY 1.5L A/T EXL 2026</option>
+            <option value="HONDA HR-V 1.5L A/T EXL 2026">HONDA HR-V 1.5L A/T EXL 2026</option>
+            <option value="HONDA HR-V 1.5L A/T LX 2026">HONDA HR-V 1.5L A/T LX 2026</option>
+            <option value="HONDA WR-V 1.5L A/T EXL 2026">HONDA WR-V 1.5L A/T EXL 2026</option>
+          </select>
+        </div>
+        <div class="fld c3">
+          <label>Color</label>
+          <select id="sColor"><option value="">— Primero el modelo —</option></select>
+        </div>
+        <div class="fld c3">
+          <label>Kilometraje (km) al recibir</label>
+          <input type="number" id="sKm" min="0" placeholder="0">
+        </div>
+
+        <div class="fld c2">
+          <label>Fecha de entrada / recepción</label>
+          <input type="date" id="sFechaIngreso">
+        </div>
+        <div class="fld c2">
+          <label>Fecha salida / entrega</label>
+          <input type="date" id="sFechaSalida">
+        </div>
+        <div class="fld c2">
+          <label>Estado del servicio</label>
+          <select id="sEstado">
+            <option value="RECIBIDO">🟡 Recibido (en taller)</option>
+            <option value="EN PROCESO">🔵 En proceso</option>
+            <option value="ENTREGADO">🟢 Entregado</option>
+          </select>
+        </div>
+      </div>
+
+      <h3 class="check-head">📝 Checklist de recepción — ¿cómo entra el carro?</h3>
+      <p class="check-sub">Marca el estado de cada punto al recibir el vehículo: <b>✓ OK</b> (buen estado), <b>△ REG</b> (regular / leve), <b>✕ DAÑ</b> (dañado), <b>— N/A</b> (no aplica).</p>
+      <div id="checklist"></div>
+
+      <div class="fld" style="margin-top:12px;">
+        <label>Observaciones del servicio</label>
+        <textarea id="sObservacion" rows="2" placeholder="Trabajo a realizar, daños detectados, accesorios recibidos, llaves, etc."></textarea>
+      </div>
+
+      <div class="form-actions" style="margin-top:12px;">
+        <button class="btn btn-red" id="btnGuardarServicio">💾 Guardar servicio</button>
+        <button class="btn btn-outline btn-gray" id="btnCancelarServicio">Cancelar</button>
+        <span class="msg" id="servicioMsg"></span>
+      </div>
+    </div>
+
+    <!-- Filtros de servicios -->
+    <div class="filtro-bar" id="filtroBarServ">
+      <label class="lbl">Filtrar estado:</label>
+      <select id="filtroServEstado">
+        <option value="">Todos</option>
+        <option>RECIBIDO</option>
+        <option>EN PROCESO</option>
+        <option>ENTREGADO</option>
+      </select>
+      <label class="lbl">Vehículo:</label>
+      <select id="filtroServVehiculo">
+        <option value="">Todos</option>
+        <option value="HONDA CITY 1.5L A/T EXL 2026">HONDA CITY EXL 2026</option>
+        <option value="HONDA HR-V 1.5L A/T EXL 2026">HONDA HR-V EXL 2026</option>
+        <option value="HONDA HR-V 1.5L A/T LX 2026">HONDA HR-V LX 2026</option>
+        <option value="HONDA WR-V 1.5L A/T EXL 2026">HONDA WR-V EXL 2026</option>
+      </select>
+      <button class="btn btn-outline btn-xs" id="btnLimpiarServFiltros">Limpiar</button>
+      <span class="msg" style="margin-left:auto" id="servCount"></span>
+    </div>
+
+    <!-- Tabla servicios -->
+    <div class="card">
+      <h3>Servicios registrados <span class="hint">recepción y checklist</span></h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>F. Ingreso</th><th>Cliente</th><th>Teléfono</th><th>Vehículo</th><th>Color</th>
+              <th>Placa</th><th>Km</th><th>Estado</th><th>Checklist</th><th>F. Salida</th><th>Obs.</th><th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tblServicios"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- fin tab-servicios -->
 
   <div class="footer">LatinBienMotors — Honda Mérida | Matriz de control y seguimiento de financiamiento por mes</div>
 </div>
@@ -1124,6 +1310,293 @@ function toggleFiltroBanco(){
   renderTabla();
 }
 
+/* ================= PESTAÑAS ================= */
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".tab-content").forEach(t => t.classList.add("hidden"));
+    const tab = btn.getAttribute("data-tab");
+    document.getElementById("tab-" + tab).classList.remove("hidden");
+  });
+});
+
+/* ================= SERVICIOS / CHECKLIST ================= */
+const CHECKLIST_CATS = [
+  { cat:"CARROCERÍA / EXTERIOR", items:["Carrocería general","Pintura","Rayones","Abolladuras","Puertas","Capó","Maletero / Cajuela","Parabrisas","Vidrios laterales","Espejos laterales","Faros delanteros","Luces traseras","Rines / Llantas"] },
+  { cat:"INTERIOR", item:["Tablero / Panel","Asientos","Alfombras / Tapicería","Cinturones de seguridad","Espejo retrovisor","Radio / Pantalla","Aire acondicionado","Botones / Controles"] },
+  { cat:"MECÁNICA / FUNCIONAMIENTO", items:["Arranque del motor","Motor (ruidos, fugas)","Caja / Transmisión","Frenos","Dirección","Suspensión","Clima / Calefacción","Luces (todas)","Limpiaparabrisas","Bocina"] },
+  { cat:"DOCUMENTOS / ACCESORIOS", item:["Documento de propiedad","Seguro vigente","Placas / Chapas","Llaves (juego)","Control remoto / Alarma","Manual del propietario","Kit de herramientas","Gato / Palanca","Rueda de repuesto / Gato","Triángulo de seguridad","Extintor"] }
+];
+const CK_OPTS = [
+  ["OK","sel-ok"], ["REG","sel-reg"], ["DAÑ","sel-dan"], ["N/A","sel-na"]
+];
+const SERVICIO_STORAGE = "honda_servicios_v1";
+let servicios = loadServicios();
+let editServicioId = null;
+let servFiltros = { estado:"", vehiculo:"" };
+
+function loadServicios(){
+  try{
+    const raw = localStorage.getItem(SERVICIO_STORAGE);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  const s = seedServicios();
+  try{ localStorage.setItem(SERVICIO_STORAGE, JSON.stringify(s)); }catch(e){}
+  return s;
+}
+function saveServicios(){
+  try{ localStorage.setItem(SERVICIO_STORAGE, JSON.stringify(servicios)); }catch(e){}
+}
+function seedServicios(){
+  // Ejemplo de recepción
+  const hoy = "2026-08-10";
+  return [
+    {
+      id:"svc_seed1", cliente:"FERNANDO JOSE VERA USECHE", telefono:"0412-5551234", placa:"A1B23CD",
+      vehiculo:"HONDA HR-V 1.5L A/T LX 2026", color:"Blanco Perlado", km:12450,
+      fechaIngreso: hoy, fechaSalida:"", estado:"EN PROCESO",
+      checklist: {"Carrocería general":"OK","Pintura":"OK","Rayones":"REG","Abolladuras":"OK","Faros delanteros":"OK","Kilometraje":"OK"},
+      observacion:"Mantenimiento de 15.000 km + rayón leve en puerta trasera derecha. Recibido con 1 juego de llaves y control remoto."
+    },
+    {
+      id:"svc_seed2", cliente:"ANA MARIA NIGRO", telefono:"0424-5559876", placa:"B2C34DE",
+      vehiculo:"HONDA WR-V 1.5L A/T EXL 2026", color:"Azul Cosmico", km:8900,
+      fechaIngreso:"2026-08-08", fechaSalida:"2026-08-10", estado:"ENTREGADO",
+      checklist: {"Carrocería general":"OK","Pintura":"OK","Parabrisas":"DAÑ","Luces (todas)":"OK","Bocina":"OK"},
+      observacion:"Cambio de parabrisas por impacto. Entregado a satisfacción, sin novedades."
+    }
+  ];
+}
+
+function actualizarColorServicio(){
+  const v = document.getElementById("sVehiculo").value;
+  const sel = document.getElementById("sColor");
+  const colores = MODELOS[v] || [];
+  sel.innerHTML = `<option value="">${colores.length ? "— Seleccionar color —" : "— Primero el modelo —"}</option>`;
+  colores.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c; opt.textContent = c;
+    sel.appendChild(opt);
+  });
+  sel.value = sel.options.length > 1 ? sel.options[1].value : "";
+}
+function actualizarColoresConValor(modelo, colorActual){
+  const v = modelo;
+  const sel = document.getElementById("sColor");
+  const colores = MODELOS[v] || [];
+  sel.innerHTML = `<option value="">${colores.length ? "— Seleccionar color —" : "— Primero el modelo —"}</option>`;
+  colores.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c; opt.textContent = c;
+    sel.appendChild(opt);
+  });
+  sel.value = colorActual || "";
+}
+
+function renderChecklist(checklist){
+  const cont = document.getElementById("checklist");
+  cont.innerHTML = "";
+  CHECKLIST_CATS.forEach(g => {
+    const sec = document.createElement("div"); sec.className = "check-cat";
+    const name = document.createElement("div"); name.className = "cat-name"; name.textContent = g.cat;
+    sec.appendChild(name);
+    const grid = document.createElement("div"); grid.className = "check-grid";
+    (g.items||g.item||[]).forEach(item => {
+      const estado = checklist ? (checklist[item] || "") : "";
+      const row = document.createElement("div"); row.className = "check-item";
+      const nm = document.createElement("span"); nm.className = "ci-name"; nm.textContent = item;
+      const opts = document.createElement("div"); opts.className = "check-opts";
+      CK_OPTS.forEach(([val, cls]) => {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "ck-btn" + (estado === val ? " " + cls : "");
+        b.textContent = val;
+        b.setAttribute("data-item", item); b.setAttribute("data-val", val); b.setAttribute("data-cls", cls);
+        b.addEventListener("click", () => {
+          document.querySelectorAll(`.ck-btn[data-item="${CSS.escape(item)}"]`).forEach(x => x.className = "ck-btn");
+          b.className = "ck-btn " + cls;
+          b.setAttribute("data-sel", val);
+        });
+        opts.appendChild(b);
+      });
+      row.appendChild(nm); row.appendChild(opts);
+      grid.appendChild(row);
+    });
+    sec.appendChild(grid);
+    cont.appendChild(sec);
+  });
+}
+function leerChecklist(){
+  const out = {};
+  document.querySelectorAll("#checklist .ck-btn").forEach(b => {
+    const sel = b.getAttribute("data-sel");
+    if(sel){ out[b.getAttribute("data-item")] = sel; }
+  });
+  return out;
+}
+
+function limpiarFormServicio(){
+  ["sCliente","sTelefono","sPlaca","sKm","sFechaIngreso","sFechaSalida","sObservacion"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("sVehiculo").value = "";
+  actualizarColorServicio();
+  document.getElementById("sEstado").value = "RECIBIDO";
+  document.getElementById("sFechaIngreso").value = new Date().toISOString().slice(0,10);
+  renderChecklist({});
+  editServicioId = null;
+  document.getElementById("servicioTitle").textContent = "Registrar recepción de vehículo";
+  document.getElementById("servicioHint").textContent = "";
+  document.getElementById("servicioMsg").textContent = "";
+  document.getElementById("cardServicio").classList.remove("hidden");
+  window.scrollTo({top: document.getElementById("cardServicio").offsetTop - 10, behavior:"smooth"});
+}
+function cargarServicioForm(s){
+  editServicioId = s.id;
+  const $ = id => document.getElementById(id);
+  $("sCliente").value = s.cliente || "";
+  $("sTelefono").value = s.telefono || "";
+  $("sPlaca").value = s.placa || "";
+  $("sVehiculo").value = s.vehiculo || "";
+  actualizarColoresConValor(s.vehiculo, s.color);
+  $("sKm").value = s.km || "";
+  $("sFechaIngreso").value = s.fechaIngreso || new Date().toISOString().slice(0,10);
+  $("sFechaSalida").value = s.fechaSalida || "";
+  $("sEstado").value = s.estado || "RECIBIDO";
+  $("sObservacion").value = s.observacion || "";
+  renderChecklist(s.checklist || {});
+  $("servicioTitle").textContent = "Editando servicio — " + s.cliente;
+  $("servicioHint").textContent = s.vehiculo + (s.placa ? " · Placa " + s.placa : "");
+  $("servicioMsg").textContent = "";
+  $("cardServicio").classList.remove("hidden");
+  window.scrollTo({top: document.getElementById("cardServicio").offsetTop - 10, behavior:"smooth"});
+}
+function guardarServicio(){
+  const msg = document.getElementById("servicioMsg");
+  const c = document.getElementById("sCliente").value.trim();
+  const v = document.getElementById("sVehiculo").value;
+  if(!c){ msg.textContent = "⚠ Ingresa el cliente."; msg.className = "msg err"; return; }
+  if(!v){ msg.textContent = "⚠ Selecciona el vehículo."; msg.className = "msg err"; return; }
+  const serv = {
+    id: editServicioId || ("svc_" + Date.now() + "_" + Math.random().toString(36).slice(2,6)),
+    cliente: c.toUpperCase(),
+    telefono: document.getElementById("sTelefono").value.trim(),
+    placa: document.getElementById("sPlaca").value.trim().toUpperCase(),
+    vehiculo: v,
+    color: document.getElementById("sColor").value,
+    km: parseFloat(document.getElementById("sKm").value) || 0,
+    fechaIngreso: document.getElementById("sFechaIngreso").value,
+    fechaSalida: document.getElementById("sFechaSalida").value,
+    estado: document.getElementById("sEstado").value,
+    checklist: leerChecklist(),
+    observacion: document.getElementById("sObservacion").value.trim()
+  };
+  if(editServicioId){
+    servicios = servicios.map(x => x.id === editServicioId ? serv : x);
+    msg.textContent = "✓ Servicio actualizado.";
+  }else{
+    servicios.push(serv);
+    msg.textContent = "✓ Servicio guardado.";
+  }
+  saveServicios();
+  renderServicios();
+  msg.className = "msg ok";
+  document.getElementById("cardServicio").classList.add("hidden");
+  toast("Servicio guardado ✓");
+}
+function eliminarServicio(id){
+  const s = servicios.find(x => x.id === id);
+  if(!s) return;
+  if(!confirm("¿Eliminar el servicio de " + s.cliente + "?")) return;
+  servicios = servicios.filter(x => x.id !== id);
+  if(editServicioId === id){ editServicioId = null; document.getElementById("cardServicio").classList.add("hidden"); }
+  saveServicios();
+  renderServicios();
+  toast("Servicio eliminado");
+}
+function resumenChecklist(s){
+  const chk = s.checklist || {};
+  let ok=0, reg=0, dan=0, na=0;
+  Object.values(chk).forEach(v => {
+    if(v === "OK") ok++; else if(v === "REG") reg++; else if(v === "DAÑ") dan++; else if(v === "N/A") na++;
+  });
+  let html = "";
+  if(ok) html += `<span class="mini-badge mini-ok">✓ ${ok}</span>`;
+  if(reg) html += `<span class="mini-badge mini-reg">△ ${reg}</span>`;
+  if(dan) html += `<span class="mini-badge mini-dan">✕ ${dan}</span>`;
+  if(na) html += `<span class="mini-badge mini-na">— ${na}</span>`;
+  if(!html) html = `<span class="badge b-sinbanco">S/D</span>`;
+  return html;
+}
+function renderTablaServicios(){
+  let regs = servicios.slice().sort((a,b) => (b.fechaIngreso||"").localeCompare(a.fechaIngreso||""));
+  if(servFiltros.estado) regs = regs.filter(s => s.estado === servFiltros.estado);
+  if(servFiltros.vehiculo) regs = regs.filter(s => s.vehiculo === servFiltros.vehiculo);
+  document.getElementById("servCount").textContent = regs.length + " servicio(s)";
+  const tb = document.getElementById("tblServicios");
+  if(!regs.length){
+    tb.innerHTML = `<tr><td colspan="12" class="empty">No hay servicios registrados.</td></tr>`;
+    return;
+  }
+  tb.innerHTML = regs.map(s => {
+    const eCls = s.estado === "ENTREGADO" ? "e-liq" : s.estado === "EN PROCESO" ? "e-apr" : "e-pen";
+    return `<tr>
+      <td>${s.fechaIngreso||"—"}</td>
+      <td><b>${s.cliente}</b></td>
+      <td>${s.telefono||"—"}</td>
+      <td>${(s.vehiculo||"—").replace("HONDA ","HONDA ")}</td>
+      <td>${chipColor(s.color)}</td>
+      <td>${s.placa||"—"}</td>
+      <td>${s.km? s.km.toLocaleString() : "—"}</td>
+      <td><span class="estado ${eCls}"><span class="dot"></span>${s.estado||"—"}</span></td>
+      <td><div class="resumen-check">${resumenChecklist(s)}</div></td>
+      <td>${s.fechaSalida||"—"}</td>
+      <td style="max-width:200px;font-size:11px;color:var(--muted)">${(s.observacion||"—")}</td>
+      <td class="actions-cell">
+        <button class="btn btn-blue btn-xs" onclick="cargarServicioForm(servicios.find(x=>x.id==='${s.id}'))">Ver/Editar</button>
+        <button class="btn btn-red btn-xs" onclick="eliminarServicio('${s.id}')">✕</button>
+      </td>
+    </tr>`;
+  }).join("");
+}
+function renderKpisServicios(){
+  const el = document.getElementById("kpisServicios");
+  const recibidos = servicios.filter(s => s.estado === "RECIBIDO").length;
+  const proceso = servicios.filter(s => s.estado === "EN PROCESO").length;
+  const entregados = servicios.filter(s => s.estado === "ENTREGADO").length;
+  const total = servicios.length;
+  el.innerHTML = `
+    <div class="kpi"><div class="v">${total}</div><div class="l">Servicios registrados</div></div>
+    <div class="kpi yellow"><div class="v">${recibidos}</div><div class="l">🟡 Recibidos en taller</div></div>
+    <div class="kpi orange"><div class="v">${proceso}</div><div class="l">🔵 En proceso</div></div>
+    <div class="kpi green"><div class="v">${entregados}</div><div class="l">🟢 Entregados</div></div>
+  `;
+}
+function renderServicios(){
+  renderKpisServicios();
+  renderTablaServicios();
+}
+function exportarServiciosCSV(){
+  if(!servicios.length){ toast("No hay servicios para exportar"); return; }
+  const head = ["FECHA INGRESO","CLIENTE","TELEFONO","VEHICULO","COLOR","PLACA","KM","ESTADO","FECHA SALIDA","OBSERVACION"];
+  const lines = servicios.map(s => [
+    s.fechaIngreso, s.cliente, s.telefono, s.vehiculo, s.color, s.placa, s.km, s.estado, s.fechaSalida,
+    (s.observacion||"").replace(/\n/g," ")
+  ].map(c => `"${String(c==null?"":c).replace(/"/g,'""')}"`).join(","));
+  const csv = "\uFEFF" + [head.join(","), ...lines].join("\r\n");
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Servicios_Honda.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast("CSV de servicios exportado ✓");
+}
+function limpiarServFiltros(){
+  servFiltros = { estado:"", vehiculo:"" };
+  document.getElementById("filtroServEstado").value = "";
+  document.getElementById("filtroServVehiculo").value = "";
+  renderTablaServicios();
+}
+
 /* ================= EVENTOS ================= */
 document.getElementById("fVehiculo").addEventListener("change", actualizarColores);
 document.getElementById("fMontoTotal").addEventListener("input", calcPct);
@@ -1157,9 +1630,22 @@ document.getElementById("selMes").addEventListener("change", e => {
 // Enter en campos principales guarda
 document.getElementById("fCliente").addEventListener("keydown", e => { if(e.key==="Enter") guardar(); });
 
+// ======== EVENTOS SERVICIOS ========
+document.getElementById("sVehiculo").addEventListener("change", actualizarColorServicio);
+document.getElementById("btnNuevoServicio").addEventListener("click", limpiarFormServicio);
+document.getElementById("btnGuardarServicio").addEventListener("click", guardarServicio);
+document.getElementById("btnCancelarServicio").addEventListener("click", () => {
+  document.getElementById("cardServicio").classList.add("hidden");
+});
+document.getElementById("btnExportarServicios").addEventListener("click", exportarServiciosCSV);
+document.getElementById("filtroServEstado").addEventListener("change", e => { servFiltros.estado = e.target.value; renderTablaServicios(); });
+document.getElementById("filtroServVehiculo").addEventListener("change", e => { servFiltros.vehiculo = e.target.value; renderTablaServicios(); });
+document.getElementById("btnLimpiarServFiltros").addEventListener("click", limpiarServFiltros);
+
 /* ================= INICIO ================= */
 renderTodo();
 limpiarForm();
+renderServicios();
 </script>
 </body>
 </html>
