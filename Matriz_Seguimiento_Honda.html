@@ -526,16 +526,22 @@
 
     <!-- Formulario de recepción / checklist -->
     <div class="card hidden" id="cardServicio" style="margin-bottom:16px;border:2px solid var(--honda-blue);">
-      <h3 id="servicioTitle">Registrar recepción de vehículo <span class="hint" id="servicioHint"></span></h3>
+      <h3 id="servicioTitle">CONTROL DE RECEPCIÓN E INVENTARIO <span class="hint" id="servicioHint"></span></h3>
 
+      <!-- 1. INFORMACIÓN GENERAL -->
+      <h3 class="check-head">1. INFORMACIÓN GENERAL</h3>
       <div class="form-grid">
         <div class="fld c2">
-          <label class="req">Cliente</label>
+          <label class="req">Nombre del Cliente</label>
           <input type="text" id="sCliente" placeholder="Nombre del cliente">
         </div>
         <div class="fld c2">
           <label>Teléfono</label>
           <input type="text" id="sTelefono" placeholder="0412-0000000">
+        </div>
+        <div class="fld c2">
+          <label>Email</label>
+          <input type="text" id="sEmail" placeholder="cliente@correo.com">
         </div>
         <div class="fld c2">
           <label>Placa</label>
@@ -556,10 +562,17 @@
           <select id="sColor"><option value="">— Primero el modelo —</option></select>
         </div>
         <div class="fld c3">
-          <label>Kilometraje (km) al recibir</label>
+          <label>VIN / Chasis</label>
+          <input type="text" id="sVin" placeholder="93HRV...">
+        </div>
+        <div class="fld c2">
+          <label>Nº de Requisición</label>
+          <input type="text" id="sReq" placeholder="Requisición">
+        </div>
+        <div class="fld c2">
+          <label>Kilometraje</label>
           <input type="number" id="sKm" min="0" placeholder="0">
         </div>
-
         <div class="fld c2">
           <label>Fecha de entrada / recepción</label>
           <input type="date" id="sFechaIngreso">
@@ -578,13 +591,40 @@
         </div>
       </div>
 
-      <h3 class="check-head">📝 Checklist de recepción — ¿cómo entra el carro?</h3>
+      <!-- 2. DESCRIPCIÓN DEL TRABAJO -->
+      <h3 class="check-head">2. DESCRIPCIÓN DEL TRABAJO / MANTENIMIENTO</h3>
+      <div class="form-grid">
+        <div class="fld c4">
+          <label>Descripción del trabajo / mantenimiento</label>
+          <input type="text" id="sTrabajo" placeholder="Ej: Mantenimiento 15.000 km, cambio de aceite, alineación...">
+        </div>
+        <div class="fld c2">
+          <label>Costo estimado ($)</label>
+          <input type="number" id="sCosto" step="0.01" min="0" placeholder="0.00">
+        </div>
+      </div>
+
+      <!-- 3 a 6: CHECKLIST -->
+      <h3 class="check-head">3 a 6. CHECKLIST DE RECEPCIÓN Y ESTADO</h3>
       <p class="check-sub">Marca el estado de cada punto al recibir el vehículo: <b>✓ OK</b> (buen estado), <b>△ REG</b> (regular / leve), <b>✕ DAÑ</b> (dañado), <b>— N/A</b> (no aplica).</p>
       <div id="checklist"></div>
 
-      <div class="fld" style="margin-top:12px;">
-        <label>Observaciones del servicio</label>
-        <textarea id="sObservacion" rows="2" placeholder="Trabajo a realizar, daños detectados, accesorios recibidos, llaves, etc."></textarea>
+      <!-- 7. OBSERVACIONES GENERALES -->
+      <h3 class="check-head">7. OBSERVACIONES GENERALES</h3>
+      <div class="fld">
+        <label>Observaciones</label>
+        <textarea id="sObservacion" rows="2" placeholder="Observaciones adicionales, accesorios no incluidos, detalles, etc."></textarea>
+      </div>
+
+      <div class="form-grid" style="margin-top:14px;">
+        <div class="fld c3">
+          <label>Firma del Cliente</label>
+          <input type="text" id="sFirmaCliente" placeholder="Nombre / firma del cliente">
+        </div>
+        <div class="fld c3">
+          <label>Recepcionista / Asesor de Servicio</label>
+          <input type="text" id="sAsesor" placeholder="Nombre del asesor">
+        </div>
       </div>
 
       <div class="form-actions" style="margin-top:12px;">
@@ -622,8 +662,9 @@
         <table>
           <thead>
             <tr>
-              <th>F. Ingreso</th><th>Cliente</th><th>Teléfono</th><th>Vehículo</th><th>Color</th>
-              <th>Placa</th><th>Km</th><th>Estado</th><th>Checklist</th><th>F. Salida</th><th>Obs.</th><th>Acciones</th>
+              <th>F. Ingreso</th><th>Cliente</th><th>Vehículo</th><th>Color</th>
+              <th>Placa</th><th>VIN</th><th>Km</th><th>Trabajo / Mantenimiento</th><th>Costo</th><th>Estado</th>
+              <th>Checklist</th><th>F. Salida</th><th>Asesor</th><th>Obs.</th><th>Acciones</th>
             </tr>
           </thead>
           <tbody id="tblServicios"></tbody>
@@ -1323,10 +1364,12 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 
 /* ================= SERVICIOS / CHECKLIST ================= */
 const CHECKLIST_CATS = [
-  { cat:"CARROCERÍA / EXTERIOR", items:["Carrocería general","Pintura","Rayones","Abolladuras","Puertas","Capó","Maletero / Cajuela","Parabrisas","Vidrios laterales","Espejos laterales","Faros delanteros","Luces traseras","Rines / Llantas"] },
-  { cat:"INTERIOR", item:["Tablero / Panel","Asientos","Alfombras / Tapicería","Cinturones de seguridad","Espejo retrovisor","Radio / Pantalla","Aire acondicionado","Botones / Controles"] },
-  { cat:"MECÁNICA / FUNCIONAMIENTO", items:["Arranque del motor","Motor (ruidos, fugas)","Caja / Transmisión","Frenos","Dirección","Suspensión","Clima / Calefacción","Luces (todas)","Limpiaparabrisas","Bocina"] },
-  { cat:"DOCUMENTOS / ACCESORIOS", item:["Documento de propiedad","Seguro vigente","Placas / Chapas","Llaves (juego)","Control remoto / Alarma","Manual del propietario","Kit de herramientas","Gato / Palanca","Rueda de repuesto / Gato","Triángulo de seguridad","Extintor"] }
+  { cat:"3. CONTROL VISUAL DEL VEHÍCULO (marque daños o imperfecciones)", items:["Rayón","Golpe","Abolladura","Rotura"] },
+  { cat:"4A. INVENTARIO Y ACCESORIOS — Electrónicos", items:["Smart Key","Llave Remota (Auto/Remoto)","Tablero Digital","Pantalla de Infoentretenimiento","Cámara de Reversa","Radio / Sistema de Audio","Aire Acondicionado","Encendedor / Puerto USB","Antena","Sensores ADAS (Asistencia)"] },
+  { cat:"4B. INVENTARIO Y ACCESORIOS — Documentos / Kits", items:["Manual del propietario","Gato","Triángulo de Seguridad","Herramientas de Bordo","Chaleco Reflectivo","Kit de Seguridad","Llanta de Repuesto","Alfombras"] },
+  { cat:"4C. VEHÍCULO — Estado general", items:["Puertas / Ventanas eléctricas","Estado de llantas","Presión de llantas","Frenos (prueba visual)","Suspensión (prueba visual)","Escape (fugas visibles)","Fugas de fluidos","Estado general de carrocería"] },
+  { cat:"5. ESTADO DE NIVELES", items:["Estado de Batería (voltaje)","Nivel de Combustible (barra digital)","Nivel Aceite Motor","Nivel de Líquido Refrigerante","Nivel de Líquido de Frenos"] },
+  { cat:"6. REVISIÓN ADICIONAL", items:["Luces interiores","Direccionales","Luces de freno","Parabrisas","Limpiaparabrisas","Espejos (central)","Bocina","Cinturones de seguridad"] }
 ];
 const CK_OPTS = [
   ["OK","sel-ok"], ["REG","sel-reg"], ["DAÑ","sel-dan"], ["N/A","sel-na"]
@@ -1353,18 +1396,20 @@ function seedServicios(){
   const hoy = "2026-08-10";
   return [
     {
-      id:"svc_seed1", cliente:"FERNANDO JOSE VERA USECHE", telefono:"0412-5551234", placa:"A1B23CD",
-      vehiculo:"HONDA HR-V 1.5L A/T LX 2026", color:"Blanco Perlado", km:12450,
+      id:"svc_seed1", cliente:"FERNANDO JOSE VERA USECHE", telefono:"0412-5551234", email:"fernando.vera@mail.com", placa:"A1B23CD", vin:"93HRV3860TK304041", req:"REQ-001",
+      vehiculo:"HONDA HR-V 1.5L A/T LX 2026", color:"Blanco Perlado", km:12450, trabajo:"Mantenimiento 15.000 km + cambio de aceite", costo:185.50,
       fechaIngreso: hoy, fechaSalida:"", estado:"EN PROCESO",
-      checklist: {"Carrocería general":"OK","Pintura":"OK","Rayones":"REG","Abolladuras":"OK","Faros delanteros":"OK","Kilometraje":"OK"},
-      observacion:"Mantenimiento de 15.000 km + rayón leve en puerta trasera derecha. Recibido con 1 juego de llaves y control remoto."
+      checklist: {"Rayón":"REG","Golpe":"OK","Abolladura":"OK","Rotura":"OK","Smart Key":"OK","Llave Remota (Auto/Remoto)":"OK","Tablero Digital":"OK","Pantalla de Infoentretenimiento":"OK","Cámara de Reversa":"OK","Radio / Sistema de Audio":"OK","Aire Acondicionado":"OK","Encendedor / Puerto USB":"OK","Antena":"OK","Sensores ADAS (Asistencia)":"OK","Manual del propietario":"OK","Gato":"OK","Triángulo de Seguridad":"OK","Herramientas de Bordo":"N/A","Chaleco Reflectivo":"OK","Kit de Seguridad":"OK","Llanta de Repuesto":"OK","Alfombras":"OK","Puertas / Ventanas eléctricas":"OK","Estado de llantas":"REG","Presión de llantas":"OK","Frenos (prueba visual)":"OK","Suspensión (prueba visual)":"OK","Escape (fugas visibles)":"OK","Fugas de fluidos":"OK","Estado general de carrocería":"OK","Estado de Batería (voltaje)":"OK","Nivel de Combustible (barra digital)":"REG","Nivel Aceite Motor":"OK","Nivel de Líquido Refrigerante":"OK","Nivel de Líquido de Frenos":"OK","Luces interiores":"OK","Direccionales":"OK","Luces de freno":"OK","Parabrisas":"OK","Limpiaparabrisas":"OK","Espejos (central)":"OK","Bocina":"OK","Cinturones de seguridad":"OK"},
+      observacion:"Rayón leve en puerta trasera derecha. Recibido con 1 juego de llaves (Smart Key) y control remoto.",
+      firmaCliente:"FERNANDO J. VERA", asesor:"YARLEYC CONTRERAS"
     },
     {
-      id:"svc_seed2", cliente:"ANA MARIA NIGRO", telefono:"0424-5559876", placa:"B2C34DE",
-      vehiculo:"HONDA WR-V 1.5L A/T EXL 2026", color:"Azul Cosmico", km:8900,
+      id:"svc_seed2", cliente:"ANA MARIA NIGRO", telefono:"0424-5559876", email:"anamaria@mail.com", placa:"B2C34DE", vin:"93HDG5840TK503048", req:"REQ-002",
+      vehiculo:"HONDA WR-V 1.5L A/T EXL 2026", color:"Azul Cosmico", km:8900, trabajo:"Cambio de parabrisas por impacto", costo:420.00,
       fechaIngreso:"2026-08-08", fechaSalida:"2026-08-10", estado:"ENTREGADO",
-      checklist: {"Carrocería general":"OK","Pintura":"OK","Parabrisas":"DAÑ","Luces (todas)":"OK","Bocina":"OK"},
-      observacion:"Cambio de parabrisas por impacto. Entregado a satisfacción, sin novedades."
+      checklist: {"Rayón":"OK","Golpe":"OK","Abolladura":"OK","Rotura":"DAÑ","Smart Key":"OK","Llave Remota (Auto/Remoto)":"OK","Tablero Digital":"OK","Pantalla de Infoentretenimiento":"OK","Cámara de Reversa":"OK","Radio / Sistema de Audio":"OK","Aire Acondicionado":"OK","Encendedor / Puerto USB":"OK","Antena":"OK","Sensores ADAS (Asistencia)":"OK","Manual del propietario":"OK","Gato":"OK","Triángulo de Seguridad":"OK","Herramientas de Bordo":"N/A","Chaleco Reflectivo":"OK","Kit de Seguridad":"OK","Llanta de Repuesto":"OK","Alfombras":"OK","Puertas / Ventanas eléctricas":"OK","Estado de llantas":"OK","Presión de llantas":"OK","Frenos (prueba visual)":"OK","Suspensión (prueba visual)":"OK","Escape (fugas visibles)":"OK","Fugas de fluidos":"OK","Estado general de carrocería":"OK","Estado de Batería (voltaje)":"OK","Nivel de Combustible (barra digital)":"REG","Nivel Aceite Motor":"OK","Nivel de Líquido Refrigerante":"OK","Nivel de Líquido de Frenos":"OK","Luces interiores":"OK","Direccionales":"OK","Luces de freno":"OK","Parabrisas":"DAÑ","Limpiaparabrisas":"OK","Espejos (central)":"OK","Bocina":"OK","Cinturones de seguridad":"OK"},
+      observacion:"Cambio de parabrisas por impacto. Entregado a satisfacción, sin novedades.",
+      firmaCliente:"ANA M. NIGRO", asesor:"YARLEYC CONTRERAS"
     }
   ];
 }
@@ -1436,14 +1481,14 @@ function leerChecklist(){
 }
 
 function limpiarFormServicio(){
-  ["sCliente","sTelefono","sPlaca","sKm","sFechaIngreso","sFechaSalida","sObservacion"].forEach(id => document.getElementById(id).value = "");
+  ["sCliente","sTelefono","sEmail","sPlaca","sVin","sReq","sKm","sTrabajo","sCosto","sFechaIngreso","sFechaSalida","sObservacion","sFirmaCliente","sAsesor"].forEach(id => document.getElementById(id).value = "");
   document.getElementById("sVehiculo").value = "";
   actualizarColorServicio();
   document.getElementById("sEstado").value = "RECIBIDO";
   document.getElementById("sFechaIngreso").value = new Date().toISOString().slice(0,10);
   renderChecklist({});
   editServicioId = null;
-  document.getElementById("servicioTitle").textContent = "Registrar recepción de vehículo";
+  document.getElementById("servicioTitle").textContent = "CONTROL DE RECEPCIÓN E INVENTARIO";
   document.getElementById("servicioHint").textContent = "";
   document.getElementById("servicioMsg").textContent = "";
   document.getElementById("cardServicio").classList.remove("hidden");
@@ -1454,17 +1499,24 @@ function cargarServicioForm(s){
   const $ = id => document.getElementById(id);
   $("sCliente").value = s.cliente || "";
   $("sTelefono").value = s.telefono || "";
+  $("sEmail").value = s.email || "";
   $("sPlaca").value = s.placa || "";
+  $("sVin").value = s.vin || "";
+  $("sReq").value = s.req || "";
   $("sVehiculo").value = s.vehiculo || "";
   actualizarColoresConValor(s.vehiculo, s.color);
   $("sKm").value = s.km || "";
+  $("sTrabajo").value = s.trabajo || "";
+  $("sCosto").value = s.costo || "";
   $("sFechaIngreso").value = s.fechaIngreso || new Date().toISOString().slice(0,10);
   $("sFechaSalida").value = s.fechaSalida || "";
   $("sEstado").value = s.estado || "RECIBIDO";
   $("sObservacion").value = s.observacion || "";
+  $("sFirmaCliente").value = s.firmaCliente || "";
+  $("sAsesor").value = s.asesor || "";
   renderChecklist(s.checklist || {});
-  $("servicioTitle").textContent = "Editando servicio — " + s.cliente;
-  $("servicioHint").textContent = s.vehiculo + (s.placa ? " · Placa " + s.placa : "");
+  $("servicioTitle").textContent = "CONTROL DE RECEPCIÓN — " + s.cliente;
+  $("servicioHint").textContent = s.vehiculo + (s.placa ? " · Placa " + s.placa : "") + (s.req ? " · " + s.req : "");
   $("servicioMsg").textContent = "";
   $("cardServicio").classList.remove("hidden");
   window.scrollTo({top: document.getElementById("cardServicio").offsetTop - 10, behavior:"smooth"});
@@ -1479,15 +1531,22 @@ function guardarServicio(){
     id: editServicioId || ("svc_" + Date.now() + "_" + Math.random().toString(36).slice(2,6)),
     cliente: c.toUpperCase(),
     telefono: document.getElementById("sTelefono").value.trim(),
+    email: document.getElementById("sEmail").value.trim(),
     placa: document.getElementById("sPlaca").value.trim().toUpperCase(),
+    vin: document.getElementById("sVin").value.trim(),
+    req: document.getElementById("sReq").value.trim(),
     vehiculo: v,
     color: document.getElementById("sColor").value,
     km: parseFloat(document.getElementById("sKm").value) || 0,
+    trabajo: document.getElementById("sTrabajo").value.trim(),
+    costo: parseFloat(document.getElementById("sCosto").value) || 0,
     fechaIngreso: document.getElementById("sFechaIngreso").value,
     fechaSalida: document.getElementById("sFechaSalida").value,
     estado: document.getElementById("sEstado").value,
     checklist: leerChecklist(),
-    observacion: document.getElementById("sObservacion").value.trim()
+    observacion: document.getElementById("sObservacion").value.trim(),
+    firmaCliente: document.getElementById("sFirmaCliente").value.trim(),
+    asesor: document.getElementById("sAsesor").value.trim()
   };
   if(editServicioId){
     servicios = servicios.map(x => x.id === editServicioId ? serv : x);
@@ -1533,23 +1592,26 @@ function renderTablaServicios(){
   document.getElementById("servCount").textContent = regs.length + " servicio(s)";
   const tb = document.getElementById("tblServicios");
   if(!regs.length){
-    tb.innerHTML = `<tr><td colspan="12" class="empty">No hay servicios registrados.</td></tr>`;
+    tb.innerHTML = `<tr><td colspan="15" class="empty">No hay servicios registrados.</td></tr>`;
     return;
   }
   tb.innerHTML = regs.map(s => {
     const eCls = s.estado === "ENTREGADO" ? "e-liq" : s.estado === "EN PROCESO" ? "e-apr" : "e-pen";
     return `<tr>
       <td>${s.fechaIngreso||"—"}</td>
-      <td><b>${s.cliente}</b></td>
-      <td>${s.telefono||"—"}</td>
-      <td>${(s.vehiculo||"—").replace("HONDA ","HONDA ")}</td>
+      <td><b>${s.cliente}</b><br><span style="font-size:10px;color:var(--muted)">${s.telefono||""}${s.email?" · "+s.email:""}</span></td>
+      <td>${s.vehiculo||"—"}</td>
       <td>${chipColor(s.color)}</td>
       <td>${s.placa||"—"}</td>
+      <td style="font-family:Consolas,monospace;font-size:11px">${s.vin||"—"}</td>
       <td>${s.km? s.km.toLocaleString() : "—"}</td>
+      <td style="max-width:180px;font-size:11px">${s.trabajo||"—"}</td>
+      <td>${s.costo? dinero(s.costo) : "—"}</td>
       <td><span class="estado ${eCls}"><span class="dot"></span>${s.estado||"—"}</span></td>
       <td><div class="resumen-check">${resumenChecklist(s)}</div></td>
       <td>${s.fechaSalida||"—"}</td>
-      <td style="max-width:200px;font-size:11px;color:var(--muted)">${(s.observacion||"—")}</td>
+      <td style="font-size:11px">${s.asesor||"—"}</td>
+      <td style="max-width:160px;font-size:11px;color:var(--muted)">${(s.observacion||"—")}</td>
       <td class="actions-cell">
         <button class="btn btn-blue btn-xs" onclick="cargarServicioForm(servicios.find(x=>x.id==='${s.id}'))">Ver/Editar</button>
         <button class="btn btn-red btn-xs" onclick="eliminarServicio('${s.id}')">✕</button>
@@ -1576,9 +1638,10 @@ function renderServicios(){
 }
 function exportarServiciosCSV(){
   if(!servicios.length){ toast("No hay servicios para exportar"); return; }
-  const head = ["FECHA INGRESO","CLIENTE","TELEFONO","VEHICULO","COLOR","PLACA","KM","ESTADO","FECHA SALIDA","OBSERVACION"];
+  const head = ["FECHA INGRESO","CLIENTE","TELEFONO","EMAIL","VEHICULO","COLOR","PLACA","VIN","REQUISICION","KM","TRABAJO/MANTENIMIENTO","COSTO","ESTADO","FECHA SALIDA","FIRMA CLIENTE","ASESOR","OBSERVACION"];
   const lines = servicios.map(s => [
-    s.fechaIngreso, s.cliente, s.telefono, s.vehiculo, s.color, s.placa, s.km, s.estado, s.fechaSalida,
+    s.fechaIngreso, s.cliente, s.telefono, s.email, s.vehiculo, s.color, s.placa, s.vin, s.req,
+    s.km, (s.trabajo||"").replace(/\n/g," "), s.costo, s.estado, s.fechaSalida, s.firmaCliente, s.asesor,
     (s.observacion||"").replace(/\n/g," ")
   ].map(c => `"${String(c==null?"":c).replace(/"/g,'""')}"`).join(","));
   const csv = "\uFEFF" + [head.join(","), ...lines].join("\r\n");
