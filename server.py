@@ -642,6 +642,63 @@ def fetch_payment_plan(sess):
         '10-25': build_ciclo_range(10, 25),
     }
 
+    # ── Proyección por ciclo y mes: pagadas vs pendientes ──────────
+    # Para cada ciclo (03-18, 10-25), por cada mes, contar cuotas
+    # pagadas y pendientes (vencido + draft) y clientes únicos.
+    ciclo_proj = {'03-18': defaultdict(lambda: {'pagadas': {'cuotas': 0, 'monto': 0.0, 'clientes': set()},
+                                                 'pendientes': {'cuotas': 0, 'monto': 0.0, 'clientes': set()}}),
+                  '10-25': defaultdict(lambda: {'pagadas': {'cuotas': 0, 'monto': 0.0, 'clientes': set()},
+                                                 'pendientes': {'cuotas': 0, 'monto': 0.0, 'clientes': set()}})}
+
+    for line in all_lines:
+        st = line.get('state', '')
+        amt = float(line.get('amount') or 0)
+        inv = line.get('invoice_id')
+        inv_id = inv[0] if isinstance(inv, list) and len(inv) > 1 else None
+        if not inv_id:
+            continue
+        cliente = partner_map.get(inv_id, 'Desconocido')
+        fecha = str(line.get('payment_date') or '')[:10]
+        if not fecha or fecha < str(hoy)[:7]:
+            continue  # Solo meses actuales y futuros
+        try:
+            parts = fecha.split('-')
+            anio_mes = parts[0] + '-' + parts[1]
+            dia = int(parts[2])
+        except (ValueError, IndexError):
+            continue
+
+        # Asignar a ciclo
+        ciclo_key = None
+        if 3 <= dia <= 18:
+            ciclo_key = '03-18'
+        elif 10 <= dia <= 25:
+            ciclo_key = '10-25'
+        if not ciclo_key:
+            continue
+
+        bucket = 'pagadas' if st == 'paid' else 'pendientes'
+        c = ciclo_proj[ciclo_key][anio_mes][bucket]
+        c['cuotas'] += 1
+        c['monto'] += amt
+        c['clientes'].add(cliente)
+
+    # Convertir sets a count para JSON
+    ciclo_proj_json = {}
+    for ciclo in ['03-18', '10-25']:
+        ciclo_proj_json[ciclo] = {}
+        for mes, data in sorted(ciclo_proj[ciclo].items()):
+            pag = data['pagadas']
+            pend = data['pendientes']
+            ciclo_proj_json[ciclo][mes] = {
+                'pagadas_cuotas': pag['cuotas'],
+                'pagadas_monto': round(pag['monto'], 2),
+                'pagadas_clientes': len(pag['clientes']),
+                'pendientes_cuotas': pend['cuotas'],
+                'pendientes_monto': round(pend['monto'], 2),
+                'pendientes_clientes': len(pend['clientes']),
+            }
+
     # ── Últimas entregas realizadas: morosidad del cliente ──────────
     # 1) Morosidad TOTAL por cliente (todas sus facturas con cuotas vencidas)
     partner_vencido = defaultdict(lambda: {'monto': 0.0, 'facturas': set(), 'cuotas': 0})
@@ -703,13 +760,15 @@ def fetch_payment_plan(sess):
         if invoice_status_map.get(inv_id) != 'Entregado':
             continue
         cliente = partner_map.get(inv_id, 'Desconocido')
+        inv = line.get('invoice_id')
+        inv_name = inv[1] if isinstance(inv, list) and len(inv) > 1 else ''
         try:
             dias_antes = (date.fromisoformat(pd) - hoy).days
         except (ValueError, TypeError):
             dias_antes = 0
         pronto_pago_raw.append({
             'invoice_id': inv_id,
-            'factura': line.get('invoice_name', ''),
+            'factura': inv_name,
             'cliente': cliente,
             'monto': float(line.get('amount') or 0),
             'payment_date': pd,
@@ -765,6 +824,7 @@ def fetch_payment_plan(sess):
         'total_ultimas': total_ultimas,
         'pronto_pago': pronto_pago_list,
         'total_pronto': total_pronto,
+        'ciclo_proj': ciclo_proj_json,
     }
 
 def fetch_facturacion_julio(sess):

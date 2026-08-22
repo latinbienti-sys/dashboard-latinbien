@@ -381,6 +381,7 @@ html = f'''<!DOCTYPE html>
         <button class="tab-btn" onclick="switchTab('factjulio')">📋 Fact. Julio</button>
         <button class="tab-btn" onclick="switchTab('expedientes')">🗂️ Expedientes</button>
         <button class="tab-btn" onclick="switchTab('prontopago')">⚡ Pronto Pago</button>
+        <button class="tab-btn" onclick="switchTab('ciclos')">📅 Ciclos</button>
     </div>
 
     <!-- TAB 1: RESUMEN -->
@@ -886,6 +887,49 @@ html = f'''<!DOCTYPE html>
                         </tr>
                     </thead>
                     <tbody id="tablaProntoPago"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ TAB: PROYECCIÓN POR CICLOS ═══ -->
+    <div class="tab-content" id="tab-ciclos">
+        <div class="kpi-row">
+            <div class="kpi-card accent"><div class="number" id="ciclo0318Clientes">—</div><div class="label">Ciclo 03-18 Clientes</div></div>
+            <div class="kpi-card success"><div class="number money" id="ciclo0318Pagado">—</div><div class="label">03-18 Pagado (Ago)</div></div>
+            <div class="kpi-card danger"><div class="number money" id="ciclo0318Pendiente">—</div><div class="label">03-18 Pendiente (Ago)</div></div>
+            <div class="kpi-card accent"><div class="number" id="ciclo1025Clientes">—</div><div class="label">Ciclo 10-25 Clientes</div></div>
+            <div class="kpi-card success"><div class="number money" id="ciclo1025Pagado">—</div><div class="label">10-25 Pagado (Ago)</div></div>
+            <div class="kpi-card danger"><div class="number money" id="ciclo1025Pendiente">—</div><div class="label">10-25 Pendiente (Ago)</div></div>
+        </div>
+
+        <div class="results-section">
+            <h3>📅 Ciclo 03-18 — Cuotas Pagadas vs Pendientes por Mes</h3>
+            <div class="chart-container" style="height:320px"><canvas id="chartCiclo0318"></canvas></div>
+        </div>
+
+        <div class="results-section">
+            <h3>📅 Ciclo 10-25 — Cuotas Pagadas vs Pendientes por Mes</h3>
+            <div class="chart-container" style="height:320px"><canvas id="chartCiclo1025"></canvas></div>
+        </div>
+
+        <div class="results-section">
+            <h3>📊 Resumen por Ciclo y Mes</h3>
+            <div class="table-container">
+                <table class="data-table" id="tblCiclos">
+                    <thead>
+                        <tr>
+                            <th>Mes</th>
+                            <th>Ciclo</th>
+                            <th class="text-right">Pagadas</th>
+                            <th class="text-right">Pendientes</th>
+                            <th class="text-right">$ Pagado</th>
+                            <th class="text-right">$ Pendiente</th>
+                            <th class="text-right">Clientes Pagaron</th>
+                            <th class="text-right">Clientes Adeudan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaCiclos"></tbody>
                 </table>
             </div>
         </div>
@@ -1549,7 +1593,7 @@ function renderTable() {{
 function switchTab(tab) {{
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago'}};
+    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos'}};
     const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes(tabMap[tab]));
     if (btn) btn.classList.add('active');
     document.getElementById('tab-'+tab).classList.add('active');
@@ -2250,18 +2294,118 @@ try {{
     var ppBody = document.getElementById('tablaProntoPago');
     if (ppBody) {{
         ppBody.innerHTML = pp.map(function(c) {{
-            var facts = (c.facturas || []).join(', ');
+            var facts = (c.facturas || []).map(function(f) {{
+                var url = 'https://latinbien.com/web#id=' + f.id + '&model=account.move&view_type=form';
+                return '<a href="' + url + '" target="_blank" style="color:#213C83;text-decoration:none;border-bottom:1px dashed #213C83">' + f.name + '</a>';
+            }}).join(', ');
             return '<tr>' +
                 '<td><strong>' + (c.cliente || '') + '</strong></td>' +
                 '<td class="text-right">' + c.cuotas + '</td>' +
                 '<td class="text-right">' + fmtMoney(c.monto) + '</td>' +
-                '<td style="font-size:12px;color:#555;max-width:200px">' + facts + '</td>' +
+                '<td style="font-size:12px;max-width:250px">' + facts + '</td>' +
                 '<td>' + (c.fecha_mas_lejana || '') + '</td>' +
                 '<td class="text-right"><span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:4px;font-weight:600">' + c.max_dias + ' días</span></td>' +
                 '</tr>';
         }}).join('') || '<tr><td colspan="6" style="text-align:center;color:#999">Sin pronto pago registrado</td></tr>';
     }}
 }} catch(e) {{ console.error('Pronto Pago error:', e); }}
+
+// ── Proyección por Ciclos: pagadas vs pendientes por mes ──
+try {{
+    var cp = (DATA.payment_plan || {{}}).ciclo_proj || {{}};
+    var mesN = {{'01':'Ene','02':'Feb','03':'Mar','04':'Abr','05':'May','06':'Jun','07':'Jul','08':'Ago','09':'Sep','10':'Oct','11':'Nov','12':'Dic'}};
+
+    function fmtMes(m) {{
+        var p = m.split('-');
+        return mesN[p[1]] + ' ' + p[0];
+    }}
+
+    // KPIs de agosto
+    var ago0318 = ((cp['03-18'] || {{}})['2026-08'] || {{}});
+    var ago1025 = ((cp['10-25'] || {{}})['2026-08'] || {{}});
+    document.getElementById('ciclo0318Clientes').textContent = ((ago0318.pagadas_clientes||0) + (ago0318.pendientes_clientes||0)).toLocaleString();
+    document.getElementById('ciclo0318Pagado').textContent = fmtMoney(ago0318.pagadas_monto || 0);
+    document.getElementById('ciclo0318Pendiente').textContent = fmtMoney(ago0318.pendientes_monto || 0);
+    document.getElementById('ciclo1025Clientes').textContent = ((ago1025.pagadas_clientes||0) + (ago1025.pendientes_clientes||0)).toLocaleString();
+    document.getElementById('ciclo1025Pagado').textContent = fmtMoney(ago1025.pagadas_monto || 0);
+    document.getElementById('ciclo1025Pendiente').textContent = fmtMoney(ago1025.pendientes_monto || 0);
+
+    // Gráficos por ciclo
+    ['03-18', '10-25'].forEach(function(ciclo) {{
+        var data = cp[ciclo] || {{}};
+        var canvasId = ciclo === '03-18' ? 'chartCiclo0318' : 'chartCiclo1025';
+        var labels = Object.keys(data).sort().map(fmtMes);
+        var pagCuotas = Object.keys(data).sort().map(function(m) {{ return data[m].pagadas_cuotas; }});
+        var pendCuotas = Object.keys(data).sort().map(function(m) {{ return data[m].pendientes_cuotas; }});
+        var pagMonto = Object.keys(data).sort().map(function(m) {{ return data[m].pagadas_monto; }});
+        var pendMonto = Object.keys(data).sort().map(function(m) {{ return data[m].pendientes_monto; }});
+
+        try {{
+            safeChart(canvasId, {{
+                type: 'bar',
+                data: {{
+                    labels: labels,
+                    datasets: [
+                        {{ label: 'Pagadas (cuotas)', data: pagCuotas, backgroundColor: '#10b981', borderWidth: 0, borderRadius: 4, yAxisID: 'y' }},
+                        {{ label: 'Pendientes (cuotas)', data: pendCuotas, backgroundColor: '#ef4444', borderWidth: 0, borderRadius: 4, yAxisID: 'y' }},
+                    ]
+                }},
+                options: {{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {{
+                        legend: {{ position: 'bottom' }},
+                        tooltip: {{
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {{
+                                afterBody: function(items) {{
+                                    var idx = items[0].dataIndex;
+                                    var mes = Object.keys(data).sort()[idx];
+                                    var d = data[mes];
+                                    return [
+                                        '───────────',
+                                        '$ Pagado: ' + fmtMoney(d.pagadas_monto),
+                                        '$ Pendiente: ' + fmtMoney(d.pendientes_monto),
+                                        'Clientes al día: ' + (d.pagadas_clientes||0),
+                                        'Clientes adeudan: ' + (d.pendientes_clientes||0)
+                                    ];
+                                }}
+                            }}
+                        }}
+                    }},
+                    scales: {{
+                        y: {{ beginAtZero: true, ticks: {{ precision: 0 }}, grid: {{ color: 'rgba(0,0,0,0.05)' }}, title: {{ display: true, text: 'Cuotas' }} }},
+                        x: {{ grid: {{ display: false }} }}
+                    }}
+                }}
+            }});
+        }} catch(e) {{ console.error('Chart ' + canvasId + ' error:', e); }}
+    }});
+
+    // Tabla resumen
+    var tcBody = document.getElementById('tablaCiclos');
+    if (tcBody) {{
+        var rows = [];
+        Object.keys(cp).forEach(function(ciclo) {{
+            var data = cp[ciclo] || {{}};
+            Object.keys(data).sort().forEach(function(mes) {{
+                var d = data[mes];
+                rows.push('<tr>' +
+                    '<td>' + fmtMes(mes) + '</td>' +
+                    '<td><strong>' + ciclo + '</strong></td>' +
+                    '<td class="text-right" style="color:#10b981;font-weight:600">' + d.pagadas_cuotas + '</td>' +
+                    '<td class="text-right" style="color:#ef4444;font-weight:600">' + d.pendientes_cuotas + '</td>' +
+                    '<td class="text-right">' + fmtMoney(d.pagadas_monto) + '</td>' +
+                    '<td class="text-right">' + fmtMoney(d.pendientes_monto) + '</td>' +
+                    '<td class="text-right">' + (d.pagadas_clientes||0) + '</td>' +
+                    '<td class="text-right">' + (d.pendientes_clientes||0) + '</td>' +
+                    '</tr>');
+            }});
+        }});
+        tcBody.innerHTML = rows.join('') || '<tr><td colspan="8" style="text-align:center;color:#999">Sin datos</td></tr>';
+    }}
+}} catch(e) {{ console.error('Ciclos error:', e); }}
 
 renderTable();
 switchTab('resumen');
