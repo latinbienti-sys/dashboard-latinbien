@@ -699,6 +699,9 @@ def fetch_payment_plan(sess):
         inv_id = _inv_id(line)
         if not inv_id:
             continue
+        # Solo facturas con status operativo = Entregado
+        if invoice_status_map.get(inv_id) != 'Entregado':
+            continue
         cliente = partner_map.get(inv_id, 'Desconocido')
         try:
             dias_antes = (date.fromisoformat(pd) - hoy).days
