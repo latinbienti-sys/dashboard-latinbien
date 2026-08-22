@@ -725,8 +725,10 @@ def fetch_payment_plan(sess):
         c = pronto_cliente[p['cliente']]
         c['monto'] += p['monto']
         c['cuotas'] += 1
-        if p['factura'] and p['factura'] not in c['facturas']:
-            c['facturas'].append(p['factura'])
+        inv_name = p.get('factura', '')
+        inv_id = p.get('invoice_id')
+        if inv_name and not any(f['name'] == inv_name for f in c['facturas']):
+            c['facturas'].append({'name': inv_name, 'id': inv_id})
         if p['payment_date'] > c['fecha_mas_lejana']:
             c['fecha_mas_lejana'] = p['payment_date']
         if p['dias_antes'] > c['max_dias']:
