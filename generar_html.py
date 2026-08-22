@@ -380,6 +380,7 @@ html = f'''<!DOCTYPE html>
         <button class="tab-btn" onclick="switchTab('pagos')">💳 Plan de Pagos</button>
         <button class="tab-btn" onclick="switchTab('factjulio')">📋 Fact. Julio</button>
         <button class="tab-btn" onclick="switchTab('expedientes')">🗂️ Expedientes</button>
+        <button class="tab-btn" onclick="switchTab('prontopago')">⚡ Pronto Pago</button>
     </div>
 
     <!-- TAB 1: RESUMEN -->
@@ -856,6 +857,35 @@ html = f'''<!DOCTYPE html>
                         </tr>
                     </thead>
                     <tbody id="tablaExpedientes"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ TAB: PRONTO PAGO ═══ -->
+    <div class="tab-content" id="tab-prontopago">
+        <div class="kpi-row">
+            <div class="kpi-card success"><div class="number" id="ppClientes">—</div><div class="label">Clientes</div></div>
+            <div class="kpi-card accent"><div class="number money" id="ppMonto">—</div><div class="label">Total Pagado Adelantado</div></div>
+            <div class="kpi-card"><div class="number" id="ppCuotas">—</div><div class="label">Cuotas Pagadas</div></div>
+        </div>
+
+        <div class="results-section">
+            <h3>⚡ Clientes con Pronto Pago — Cuotas Pagadas Antes del Vencimiento</h3>
+            <p style="color:#666;margin:0 0 12px">Clientes que ya pagaron cuotas cuyo vencimiento es <strong>futuro</strong> (state=paid y payment_date > hoy).</p>
+            <div class="table-container">
+                <table class="data-table" id="tblProntoPago">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th class="text-right">Cuotas</th>
+                            <th>Monto Pagado</th>
+                            <th>Facturas</th>
+                            <th>Fecha Más Lejana</th>
+                            <th class="text-right">Días Adelantado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaProntoPago"></tbody>
                 </table>
             </div>
         </div>
@@ -1519,7 +1549,7 @@ function renderTable() {{
 function switchTab(tab) {{
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes'}};
+    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago'}};
     const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes(tabMap[tab]));
     if (btn) btn.classList.add('active');
     document.getElementById('tab-'+tab).classList.add('active');
@@ -2208,6 +2238,30 @@ try {{
         }} catch(e) {{ console.error('Expedientes chart error:', e); }}
     }}
 }} catch(e) {{ console.error('Expedientes error:', e); }}
+
+// ── Pronto Pago: clientes que pagan antes del vencimiento ──
+try {{
+    var pp = (DATA.payment_plan || {{}}).pronto_pago || [];
+    var ppTot = (DATA.payment_plan || {{}}).total_pronto || {{}};
+    document.getElementById('ppClientes').textContent = (ppTot.clientes || 0).toLocaleString();
+    document.getElementById('ppMonto').textContent = fmtMoney(ppTot.monto || 0);
+    document.getElementById('ppCuotas').textContent = (ppTot.cuotas || 0).toLocaleString();
+
+    var ppBody = document.getElementById('tablaProntoPago');
+    if (ppBody) {{
+        ppBody.innerHTML = pp.map(function(c) {{
+            var facts = (c.facturas || []).join(', ');
+            return '<tr>' +
+                '<td><strong>' + (c.cliente || '') + '</strong></td>' +
+                '<td class="text-right">' + c.cuotas + '</td>' +
+                '<td class="text-right">' + fmtMoney(c.monto) + '</td>' +
+                '<td style="font-size:12px;color:#555;max-width:200px">' + facts + '</td>' +
+                '<td>' + (c.fecha_mas_lejana || '') + '</td>' +
+                '<td class="text-right"><span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:4px;font-weight:600">' + c.max_dias + ' días</span></td>' +
+                '</tr>';
+        }}).join('') || '<tr><td colspan="6" style="text-align:center;color:#999">Sin pronto pago registrado</td></tr>';
+    }}
+}} catch(e) {{ console.error('Pronto Pago error:', e); }}
 
 renderTable();
 switchTab('resumen');

@@ -686,6 +686,64 @@ def fetch_payment_plan(sess):
         'monto': round(sum(u['vencido_cliente'] for u in ultimas_entregas), 2),
     }
 
+    # ── Pronto Pago: cuotas pagadas cuyo payment_date es futuro ──────
+    # Clientes que pagan ANTES de la fecha de vencimiento de la cuota.
+    # Cuota con state='paid' y payment_date > hoy => pronto pago.
+    pronto_pago_raw = []
+    for line in all_lines:
+        if line.get('state') != 'paid':
+            continue
+        pd = str(line.get('payment_date') or '')[:10]
+        if not pd or pd <= str(hoy):
+            continue
+        inv_id = _inv_id(line)
+        if not inv_id:
+            continue
+        cliente = partner_map.get(inv_id, 'Desconocido')
+        try:
+            dias_antes = (date.fromisoformat(pd) - hoy).days
+        except (ValueError, TypeError):
+            dias_antes = 0
+        pronto_pago_raw.append({
+            'invoice_id': inv_id,
+            'factura': line.get('invoice_name', ''),
+            'cliente': cliente,
+            'monto': float(line.get('amount') or 0),
+            'payment_date': pd,
+            'dias_antes': dias_antes,
+        })
+
+    # Agrupar por cliente
+    pronto_cliente = defaultdict(lambda: {
+        'monto': 0.0, 'cuotas': 0, 'facturas': [],
+        'fecha_mas_lejana': '', 'max_dias': 0,
+    })
+    for p in pronto_pago_raw:
+        c = pronto_cliente[p['cliente']]
+        c['monto'] += p['monto']
+        c['cuotas'] += 1
+        if p['factura'] and p['factura'] not in c['facturas']:
+            c['facturas'].append(p['factura'])
+        if p['payment_date'] > c['fecha_mas_lejana']:
+            c['fecha_mas_lejana'] = p['payment_date']
+        if p['dias_antes'] > c['max_dias']:
+            c['max_dias'] = p['dias_antes']
+
+    pronto_pago_list = [{
+        'cliente': k,
+        'monto': round(v['monto'], 2),
+        'cuotas': v['cuotas'],
+        'facturas': v['facturas'],
+        'fecha_mas_lejana': v['fecha_mas_lejana'],
+        'max_dias': v['max_dias'],
+    } for k, v in sorted(pronto_cliente.items(), key=lambda x: -x[1]['monto'])]
+
+    total_pronto = {
+        'clientes': len(pronto_pago_list),
+        'cuotas': len(pronto_pago_raw),
+        'monto': round(sum(p['monto'] for p in pronto_pago_raw), 2),
+    }
+
     return {
         'state_totals': {k: {'monto': round(v['monto'], 2), 'cantidad': v['cantidad']}
                          for k, v in sorted(state_totals.items())},
@@ -700,6 +758,8 @@ def fetch_payment_plan(sess):
         'total_entregadas_venc': total_entregadas_venc,
         'ultimas_entregas': ultimas_entregas,
         'total_ultimas': total_ultimas,
+        'pronto_pago': pronto_pago_list,
+        'total_pronto': total_pronto,
     }
 
 def fetch_facturacion_julio(sess):
