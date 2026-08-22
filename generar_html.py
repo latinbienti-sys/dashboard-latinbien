@@ -870,20 +870,39 @@ html = f'''<!DOCTYPE html>
             <div class="kpi-card accent"><div class="number money" id="ppMonto">—</div><div class="label">Total Pagado Adelantado</div></div>
             <div class="kpi-card"><div class="number" id="ppCuotas">—</div><div class="label">Cuotas Pagadas</div></div>
         </div>
+        <div class="kpi-row">
+            <div class="kpi-card"><div class="number money" id="ppPromedio">—</div><div class="label">Monto Promedio / Cliente</div></div>
+            <div class="kpi-card accent"><div class="number" id="ppDias">—</div><div class="label">Días Anticipación (Ponderado)</div></div>
+            <div class="kpi-card"><div class="number" id="ppPenetracion">—</div><div class="label">Penetración % del Total</div></div>
+        </div>
+        <div class="kpi-row">
+            <div class="kpi-card" style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b"><div class="number" id="ppOro">—</div><div class="label">🏆 Prioridad ORO</div></div>
+            <div class="kpi-card" style="background:linear-gradient(135deg,#e5e7eb,#d1d5db);border:2px solid #9ca3af"><div class="number" id="ppPlata">—</div><div class="label">🥈 Prioridad PLATA</div></div>
+            <div class="kpi-card" style="background:linear-gradient(135deg,#fed7aa,#fdba74);border:2px solid #f97316"><div class="number" id="ppBronce">—</div><div class="label">🥉 Prioridad BRONCE</div></div>
+        </div>
 
+        <!-- Top 10 Impacto en Flujo -->
         <div class="results-section">
-            <h3>⚡ Clientes con Pronto Pago — Cuotas Pagadas Antes del Vencimiento</h3>
-            <p style="color:#666;margin:0 0 12px">Clientes que ya pagaron cuotas cuyo vencimiento es <strong>futuro</strong> (state=paid y payment_date > hoy).</p>
+            <h3>📊 Top 10 Clientes por Impacto en Flujo de Caja</h3>
+            <div class="chart-container" style="height:320px"><canvas id="chartTop10PP"></canvas></div>
+        </div>
+
+        <!-- Tabla con flags de priorización -->
+        <div class="results-section">
+            <h3>⚡ Clientes Pronto Pago — Acciones de Priorización</h3>
+            <p style="color:#666;margin:0 0 12px"><strong>🏆 ORO:</strong> ejecutivo preferencial + factura prioritaria + extensión de términos &nbsp;|&nbsp; <strong>🥈 PLATA:</strong> prioridad en entregas + descuento próximo servicio &nbsp;|&nbsp; <strong>🥉 BRONCE:</strong> reconocimiento + beneficio fidelidad</p>
             <div class="table-container">
                 <table class="data-table" id="tblProntoPago">
                     <thead>
                         <tr>
+                            <th>Prioridad</th>
                             <th>Cliente</th>
                             <th class="text-right">Cuotas</th>
-                            <th>Monto Pagado</th>
+                            <th class="text-right">Monto Pagado</th>
                             <th>Facturas</th>
                             <th>Fecha Más Lejana</th>
                             <th class="text-right">Días Adelantado</th>
+                            <th>Acción Sugerida</th>
                         </tr>
                     </thead>
                     <tbody id="tablaProntoPago"></tbody>
@@ -2287,10 +2306,45 @@ try {{
 try {{
     var pp = (DATA.payment_plan || {{}}).pronto_pago || [];
     var ppTot = (DATA.payment_plan || {{}}).total_pronto || {{}};
+    var top10 = (DATA.payment_plan || {{}}).top10_impacto || [];
     document.getElementById('ppClientes').textContent = (ppTot.clientes || 0).toLocaleString();
     document.getElementById('ppMonto').textContent = fmtMoney(ppTot.monto || 0);
     document.getElementById('ppCuotas').textContent = (ppTot.cuotas || 0).toLocaleString();
+    document.getElementById('ppPromedio').textContent = fmtMoney(ppTot.monto_promedio || 0);
+    document.getElementById('ppDias').textContent = (ppTot.dias_ponderado || 0) + ' días';
+    document.getElementById('ppPenetracion').textContent = (ppTot.penetracion || 0).toFixed(2) + '%';
+    document.getElementById('ppOro').textContent = (ppTot.oro || 0);
+    document.getElementById('ppPlata').textContent = (ppTot.plata || 0);
+    document.getElementById('ppBronce').textContent = (ppTot.bronce || 0);
 
+    // Gráfico Top 10 Impacto
+    try {{
+        var labels10 = top10.map(function(c) {{ return c.cliente.split(' ').slice(0,2).join(' '); }});
+        var montos10 = top10.map(function(c) {{ return c.monto; }});
+        var cuotas10 = top10.map(function(c) {{ return c.cuotas; }});
+        safeChart('chartTop10PP', {{
+            type: 'bar',
+            data: {{
+                labels: labels10,
+                datasets: [
+                    {{ label: 'Monto ($)', data: montos10, backgroundColor: '#213C83', borderWidth: 0, borderRadius: 4, yAxisID: 'y' }},
+                    {{ label: 'Cuotas', data: cuotas10, backgroundColor: '#F98B10', borderWidth: 0, borderRadius: 4, yAxisID: 'y1' }}
+                ]
+            }},
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {{ legend: {{ position: 'bottom' }}, tooltip: {{ mode: 'index', intersect: false }} }},
+                scales: {{
+                    y: {{ beginAtZero: true, position: 'left', ticks: {{ callback: function(v) {{ return '$' + v.toLocaleString(); }} }}, grid: {{ color: 'rgba(0,0,0,0.05)' }}, title: {{ display: true, text: 'Monto ($)' }} }},
+                    y1: {{ beginAtZero: true, position: 'right', ticks: {{ precision: 0 }}, grid: {{ drawOnChartArea: false }}, title: {{ display: true, text: 'Cuotas' }} }},
+                    x: {{ grid: {{ display: false }} }}
+                }}
+            }}
+        }});
+    }} catch(e) {{ console.error('Top10 chart error:', e); }}
+
+    // Tabla con flags
     var ppBody = document.getElementById('tablaProntoPago');
     if (ppBody) {{
         ppBody.innerHTML = pp.map(function(c) {{
@@ -2298,15 +2352,22 @@ try {{
                 var url = 'https://latinbien.com/web#id=' + f.id + '&model=account.move&view_type=form';
                 return '<a href="' + url + '" target="_blank" style="color:#213C83;text-decoration:none;border-bottom:1px dashed #213C83">' + f.name + '</a>';
             }}).join(', ');
-            return '<tr>' +
+            var flagHtml = '';
+            var flagCls = '';
+            if (c.flag === 'oro') {{ flagHtml = '<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-weight:700;border:1px solid #f59e0b">🏆 ORO</span>'; flagCls = 'border-left:4px solid #f59e0b'; }}
+            else if (c.flag === 'plata') {{ flagHtml = '<span style="background:#e5e7eb;color:#374151;padding:2px 8px;border-radius:4px;font-weight:700;border:1px solid #9ca3af">🥈 PLATA</span>'; flagCls = 'border-left:4px solid #9ca3af'; }}
+            else {{ flagHtml = '<span style="background:#fed7aa;color:#9a3412;padding:2px 8px;border-radius:4px;font-weight:700;border:1px solid #f97316">🥉 BRONCE</span>'; flagCls = 'border-left:4px solid #f97316'; }}
+            return '<tr style="' + flagCls + '">' +
+                '<td>' + flagHtml + '</td>' +
                 '<td><strong>' + (c.cliente || '') + '</strong></td>' +
                 '<td class="text-right">' + c.cuotas + '</td>' +
                 '<td class="text-right">' + fmtMoney(c.monto) + '</td>' +
                 '<td style="font-size:12px;max-width:250px">' + facts + '</td>' +
                 '<td>' + (c.fecha_mas_lejana || '') + '</td>' +
                 '<td class="text-right"><span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:4px;font-weight:600">' + c.max_dias + ' días</span></td>' +
+                '<td style="font-size:11px;color:#555;max-width:280px">' + (c.accion || '') + '</td>' +
                 '</tr>';
-        }}).join('') || '<tr><td colspan="6" style="text-align:center;color:#999">Sin pronto pago registrado</td></tr>';
+        }}).join('') || '<tr><td colspan="8" style="text-align:center;color:#999">Sin pronto pago registrado</td></tr>';
     }}
 }} catch(e) {{ console.error('Pronto Pago error:', e); }}
 

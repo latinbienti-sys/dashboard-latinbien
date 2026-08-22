@@ -802,10 +802,59 @@ def fetch_payment_plan(sess):
         'max_dias': v['max_dias'],
     } for k, v in sorted(pronto_cliente.items(), key=lambda x: -x[1]['monto'])]
 
+    total_pronto_raw_monto = round(sum(p['monto'] for p in pronto_pago_raw), 2)
+
+    # ── KPIs avanzados de Pronto Pago ────────────────────────────
+    total_pagado_general = round(state_totals['paid']['monto'], 2)
+
+    # Promedio adelantado por cliente
+    monto_promedio = round(total_pronto_raw_monto / len(pronto_cliente), 2) if pronto_cliente else 0
+
+    # Índice de anticipación PROMEDIO PONDERADO por monto
+    dias_ponderado = 0
+    if total_pronto_raw_monto > 0:
+        sum_pond = sum(p['dias_antes'] * p['monto'] for p in pronto_pago_raw)
+        dias_ponderado = round(sum_pond / total_pronto_raw_monto, 1)
+
+    # Ratio de penetración (% de recaudación total que representa pronto pago)
+    penetracion = round((total_pronto_raw_monto / total_pagado_general * 100), 2) if total_pagado_general > 0 else 0
+
+    # Top 10 por impacto en flujo
+    top10_impacto = [{
+        'cliente': c['cliente'],
+        'monto': c['monto'],
+        'cuotas': c['cuotas'],
+        'dias_max': c['max_dias'],
+    } for c in pronto_pago_list[:10]]
+
+    # ── Flags de alerta / priorización ──────────────────────────
+    # Reglas de priorización:
+    #   ORO  : monto >= $500 O cuotas >= 5 O max_dias >= 100
+    #   PLATA: monto >= $200 O cuotas >= 3 O max_dias >= 50
+    #   BRONCE: tiene pronto pago (cualquier monto)
+    for c in pronto_pago_list:
+        m, cu, d = c['monto'], c['cuotas'], c['max_dias']
+        if m >= 500 or cu >= 5 or d >= 100:
+            c['flag'] = 'oro'
+            c['accion'] = 'Asignar ejecutivo preferencial + factura prioritaria + extensión de términos'
+        elif m >= 200 or cu >= 3 or d >= 50:
+            c['flag'] = 'plata'
+            c['accion'] = 'Beneficio Non-Cash: prioridad en entregas + descuento en próximo servicio'
+        else:
+            c['flag'] = 'bronce'
+            c['accion'] = 'Reconocimiento: correo de agradecimiento + beneficio por fidelidad'
+
     total_pronto = {
         'clientes': len(pronto_pago_list),
         'cuotas': len(pronto_pago_raw),
-        'monto': round(sum(p['monto'] for p in pronto_pago_raw), 2),
+        'monto': round(total_pronto_raw_monto, 2),
+        'monto_promedio': monto_promedio,
+        'dias_ponderado': dias_ponderado,
+        'penetracion': penetracion,
+        'total_pagado': total_pagado_general,
+        'oro': sum(1 for c in pronto_pago_list if c['flag'] == 'oro'),
+        'plata': sum(1 for c in pronto_pago_list if c['flag'] == 'plata'),
+        'bronce': sum(1 for c in pronto_pago_list if c['flag'] == 'bronce'),
     }
 
     return {
@@ -824,6 +873,7 @@ def fetch_payment_plan(sess):
         'total_ultimas': total_ultimas,
         'pronto_pago': pronto_pago_list,
         'total_pronto': total_pronto,
+        'top10_impacto': top10_impacto,
         'ciclo_proj': ciclo_proj_json,
     }
 
