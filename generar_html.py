@@ -512,6 +512,39 @@ html = f'''<!DOCTYPE html>
 
     <!-- TAB 6: PLAN DE PAGOS -->
     <div class="tab-content" id="tab-pagos">
+        <!-- BANNER DE ALERTAS -->
+        <div id="alertasBanner" style="display:none;margin-bottom:16px;border-radius:12px;overflow:hidden">
+            <div style="background:linear-gradient(135deg,#dc2626,#991b1b);color:white;padding:16px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+                <div style="font-size:32px">🚨</div>
+                <div style="flex:1;min-width:200px">
+                    <div style="font-size:18px;font-weight:700" id="alertasTitulo">ALERTAS DE MOROSIDAD</div>
+                    <div style="font-size:12px;opacity:0.8;font-style:italic" id="alertasSubtitulo">Vista interna — sin acciones automáticas</div>
+                </div>
+                <div style="display:flex;gap:12px;flex-wrap:wrap">
+                    <div style="background:rgba(255,255,255,0.2);padding:8px 14px;border-radius:8px;text-align:center">
+                        <div style="font-size:22px;font-weight:800" id="alertasCriticos">0</div>
+                        <div style="font-size:10px;opacity:0.8">CRÍTICOS</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.2);padding:8px 14px;border-radius:8px;text-align:center">
+                        <div style="font-size:22px;font-weight:800" id="alertasAltos">0</div>
+                        <div style="font-size:10px;opacity:0.8">ALTOS</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.15);padding:8px 14px;border-radius:8px;text-align:center">
+                        <div style="font-size:22px;font-weight:800" id="alertasMedios">0</div>
+                        <div style="font-size:10px;opacity:0.8">MEDIOS</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.15);padding:8px 14px;border-radius:8px;text-align:center">
+                        <div style="font-size:22px;font-weight:800" id="alertasBajos">0</div>
+                        <div style="font-size:10px;opacity:0.8">BAJOS</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.15);padding:8px 14px;border-radius:8px;text-align:center">
+                        <div style="font-size:22px;font-weight:800" id="alertasMonto">—</div>
+                        <div style="font-size:10px;opacity:0.8">EN RIESGO</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="kpi-row">
             <div class="kpi-card danger"><div class="number money" id="pkTotalVencido">—</div><div class="label">Total Vencido</div></div>
             <div class="kpi-card accent"><div class="number money" id="pkTotalDebido">—</div><div class="label">Total Debido (al día)</div></div>
@@ -671,6 +704,36 @@ html = f'''<!DOCTYPE html>
                         <tbody id="tablaClientesDia"></tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+
+        <!-- ALERTAS DE MOROSIDAD DETALLADAS -->
+        <div class="results-section" id="seccionAlertas" style="display:none">
+            <h3>🚨 Alertas de Morosidad — Clientes con Cuotas Atrasadas</h3>
+            <p style="color:#666;margin:0 0 12px"><strong>Vista interna de consideración.</strong> No se ejecuta ninguna acción automática ni se contacta clientes. Solo fines informativos.</p>
+            <p style="color:#666;margin:0 0 12px"><strong>CRÍTICO:</strong> &gt;90 días &nbsp;|&nbsp; <strong>ALTO:</strong> 30-90 días &nbsp;|&nbsp; <strong>MEDIO:</strong> 7-30 días &nbsp;|&nbsp; <strong>BAJO:</strong> 1-7 días</p>
+            <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">
+                <button onclick="filtrarAlertas('todos')" style="padding:6px 14px;border-radius:6px;border:1px solid #ccc;background:#fff;cursor:pointer;font-size:12px" class="btn-alerta active">Todos</button>
+                <button onclick="filtrarAlertas('critico')" style="padding:6px 14px;border-radius:6px;border:1px solid #dc2626;background:#fef2f2;cursor:pointer;font-size:12px;color:#dc2626">🔴 Crítico</button>
+                <button onclick="filtrarAlertas('alto')" style="padding:6px 14px;border-radius:6px;border:1px solid #ea580c;background:#fff7ed;cursor:pointer;font-size:12px;color:#ea580c">🟠 Alto</button>
+                <button onclick="filtrarAlertas('medio')" style="padding:6px 14px;border-radius:6px;border:1px solid #d97706;background:#fffbeb;cursor:pointer;font-size:12px;color:#d97706">🟡 Medio</button>
+                <button onclick="filtrarAlertas('bajo')" style="padding:6px 14px;border-radius:6px;border:1px solid #0ea5e9;background:#f0f9ff;cursor:pointer;font-size:12px;color:#0ea5e9">🔵 Bajo</button>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="tblAlertas">
+                    <thead>
+                        <tr>
+                            <th>Severidad</th>
+                            <th>Cliente</th>
+                            <th class="text-right">Días Atraso</th>
+                            <th class="text-right">$ Vencido</th>
+                            <th class="text-right">Cuotas</th>
+                            <th>Factura Más Antigua</th>
+                            <th>Acción Sugerida</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaAlertas"></tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -1714,6 +1777,65 @@ try {{
         setTimeout(mostrarManana, 50);
     }}
 }} catch(e) {{ console.error('Payment plan error:', e); }}
+
+// ================================================================
+//  ALERTAS DE MOROSIDAD
+// ================================================================
+try {{
+    var pp2 = DATA.payment_plan || {{}};
+    var alertas = pp2.alertas_morosidad || [];
+    var ta = pp2.total_alertas || {{}};
+
+    // Banner
+    if (ta.total > 0) {{
+        document.getElementById('alertasBanner').style.display = 'block';
+        document.getElementById('alertasTitulo').textContent = 'ALERTAS DE MOROSIDAD — ' + ta.total + ' clientes requieren atención';
+        document.getElementById('alertasSubtitulo').textContent = 'Monto total en riesgo: ' + fmtMoney(ta.monto_total_riesgo) + ' | Alertas críticas: ' + ta.criticos;
+        document.getElementById('alertasCriticos').textContent = ta.criticos;
+        document.getElementById('alertasAltos').textContent = ta.altos;
+        document.getElementById('alertasMedios').textContent = ta.medios;
+        document.getElementById('alertasBajos').textContent = ta.bajos;
+        document.getElementById('alertasMonto').textContent = fmtMoney(ta.monto_total_riesgo);
+    }}
+
+    // Tabla
+    function renderAlertas(filtro) {{
+        var filtered = filtro === 'todos' ? alertas : alertas.filter(function(a) {{ return a.severidad === filtro; }});
+        var alBody = document.getElementById('tablaAlertas');
+        var secc = document.getElementById('seccionAlertas');
+        if (!alBody || !secc) return;
+        secc.style.display = alertas.length > 0 ? 'block' : 'none';
+        alBody.innerHTML = filtered.slice(0, 100).map(function(a) {{
+            var sevMap = {{
+                critico: {{ bg: '#fef2f2', border: '#dc2626', color: '#991b1b', label: '🔴 CRÍTICO' }},
+                alto: {{ bg: '#fff7ed', border: '#ea580c', color: '#9a3412', label: '🟠 ALTO' }},
+                medio: {{ bg: '#fffbeb', border: '#d97706', color: '#92400e', label: '🟡 MEDIO' }},
+                bajo: {{ bg: '#f0f9ff', border: '#0ea5e9', color: '#0c4a6e', label: '🔵 BAJO' }},
+            }};
+            var s = sevMap[a.severidad] || sevMap.bajo;
+            var ppTag = a.es_pronto_pago ? '<span style="background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:4px;font-size:10px;margin-left:6px">⚡PP</span>' : '';
+            var link = 'https://latinbien.com/web#id=' + (a.factura_antigua_id || 0) + '&model=account.move&view_type=form';
+            return '<tr style="border-left:4px solid ' + s.border + '">' +
+                '<td style="background:' + s.bg + ';color:' + s.color + ';font-weight:700;font-size:12px">' + s.label + '</td>' +
+                '<td><strong>' + a.cliente + '</strong>' + ppTag + '</td>' +
+                '<td class="text-right" style="font-weight:700;color:' + s.border + '">' + a.dias_max + ' días</td>' +
+                '<td class="text-right" style="color:#ef4444;font-weight:600">' + fmtMoney(a.monto_vencido) + '</td>' +
+                '<td class="text-right">' + a.cuotas_vencidas + '</td>' +
+                '<td style="font-size:12px;color:#555">' + (a.factura_antigua || '') + '<br><span style="font-size:10px;color:#999">' + a.cuota_mas_antigua + '</span></td>' +
+                '<td style="font-size:11px;color:#555;max-width:250px">' + a.accion + '</td>' +
+                '</tr>';
+        }}).join('') || '<tr><td colspan="7" style="text-align:center;color:#999">Sin alertas para este filtro</td></tr>';
+    }}
+
+    window.filtrarAlertas = function(filtro) {{
+        document.querySelectorAll('.btn-alerta').forEach(function(b) {{ b.style.fontWeight = 'normal'; b.style.boxShadow = 'none'; }});
+        event.target.style.fontWeight = '700';
+        event.target.style.boxShadow = '0 0 0 2px #213C83';
+        renderAlertas(filtro);
+    }};
+
+    renderAlertas('todos');
+}} catch(e) {{ console.error('Alertas error:', e); }}
 
 // ================================================================
 //  FACTURACIÓN JULIO 2026

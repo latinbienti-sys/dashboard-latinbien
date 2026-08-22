@@ -857,6 +857,86 @@ def fetch_payment_plan(sess):
         'bronce': sum(1 for c in pronto_pago_list if c['flag'] == 'bronce'),
     }
 
+    # ── ALERTAS DE MOROSIDAD ───────────────────────────────────
+    # Detectar clientes con cuotas vencidas que necesitan atención inmediata.
+    # Severidad: CRITICO (>90 días), ALTO (30-90), MEDIO (7-30), BAJO (1-7)
+    alertas_morosidad = []
+    for cli, data in clientes_vencidos.items():
+        if data['monto'] <= 0:
+            continue
+        # Buscar la cuota más antigua vencida de este cliente
+        cuotas_cli = [v for v in vencidos if partner_map.get(v['invoice_id']) == cli]
+        if not cuotas_cli:
+            continue
+
+        fechas_venc = []
+        for v in cuotas_cli:
+            f = str(v.get('fecha') or '')[:10]
+            if f:
+                try:
+                    fd = date.fromisoformat(f)
+                    dias = (hoy - fd).days
+                    fechas_venc.append({'fecha': f, 'dias': dias, 'monto': v['monto'],
+                                        'factura': v['invoice_name']})
+                except:
+                    pass
+
+        if not fechas_venc:
+            continue
+
+        # Cuota más antigua = mayor días
+        max_dias = max(cv['dias'] for cv in fechas_venc)
+        cuota_antigua = max(fechas_venc, key=lambda x: x['dias'])
+        total_cuotas_venc = len(cuotas_cli)
+
+        # Severidad
+        if max_dias > 90:
+            severidad = 'critico'
+        elif max_dias > 30:
+            severidad = 'alto'
+        elif max_dias > 7:
+            severidad = 'medio'
+        else:
+            severidad = 'bajo'
+
+        # Acción sugerida según severidad
+        if severidad == 'critico':
+            accion = 'Llamar HOY + enviar carta de default + ofrecer reestructuración'
+        elif severidad == 'alto':
+            accion = 'Contactar esta semana + ofrecer plan de pago + suspender entregas'
+        elif severidad == 'medio':
+            accion = 'Enviar recordatorio + verificar motivo del atraso'
+        else:
+            accion = 'Seguimiento suave + recordatorio de próximo vencimiento'
+
+        # ¿Es cliente de pronto pago? (si paga adelante, puede tener problemas de flujo)
+        es_pronto_pago = cli in [c['cliente'] for c in pronto_pago_list]
+
+        alertas_morosidad.append({
+            'cliente': cli,
+            'severidad': severidad,
+            'dias_max': max_dias,
+            'monto_vencido': round(data['monto'], 2),
+            'cuotas_vencidas': total_cuotas_venc,
+            'facturas': list(data.get('facturas', [])),
+            'cuota_mas_antigua': cuota_antigua['fecha'],
+            'factura_antigua': cuota_antigua['factura'],
+            'factura_antigua_id': next((v['invoice_id'] for v in cuotas_cli if v['invoice_name'] == cuota_antigua['factura']), 0),
+            'accion': accion,
+            'es_pronto_pago': es_pronto_pago,
+        })
+
+    alertas_morosidad.sort(key=lambda x: (-{'critico': 4, 'alto': 3, 'medio': 2, 'bajo': 1}[x['severidad']], -x['dias_max']))
+
+    total_alertas = {
+        'total': len(alertas_morosidad),
+        'criticos': sum(1 for a in alertas_morosidad if a['severidad'] == 'critico'),
+        'altos': sum(1 for a in alertas_morosidad if a['severidad'] == 'alto'),
+        'medios': sum(1 for a in alertas_morosidad if a['severidad'] == 'medio'),
+        'bajos': sum(1 for a in alertas_morosidad if a['severidad'] == 'bajo'),
+        'monto_total_riesgo': round(sum(a['monto_vencido'] for a in alertas_morosidad), 2),
+    }
+
     return {
         'state_totals': {k: {'monto': round(v['monto'], 2), 'cantidad': v['cantidad']}
                          for k, v in sorted(state_totals.items())},
@@ -875,6 +955,8 @@ def fetch_payment_plan(sess):
         'total_pronto': total_pronto,
         'top10_impacto': top10_impacto,
         'ciclo_proj': ciclo_proj_json,
+        'alertas_morosidad': alertas_morosidad,
+        'total_alertas': total_alertas,
     }
 
 def fetch_facturacion_julio(sess):
