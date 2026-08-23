@@ -736,6 +736,35 @@ html = f'''<!DOCTYPE html>
                 </table>
             </div>
         </div>
+
+        <!-- COBRANZA VENCIDA CON COMPROMISO -->
+        <div class="results-section" id="seccionCompromiso" style="display:none">
+            <h3>📋 Facturas Vencidas con Compromiso de Pago</h3>
+            <p style="color:#666;margin:0 0 12px">Facturas vencidas que tienen actividades/compromisos registrados en Odoo. Solo informativo.</p>
+            <div class="kpi-row" style="margin-bottom:12px">
+                <div class="kpi-card warning"><div class="number" id="compFacturas">—</div><div class="label">Facturas con Compromiso</div></div>
+                <div class="kpi-card danger"><div class="number money" id="compMonto">—</div><div class="label">$ Monto Vencido</div></div>
+                <div class="kpi-card danger"><div class="number" id="compOverdue">—</div><div class="label">Compromisos Vencidos</div></div>
+                <div class="kpi-card success"><div class="number" id="compPlanned">—</div><div class="label">Compromisos Vigentes</div></div>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Estado</th>
+                            <th>Factura</th>
+                            <th>Cliente</th>
+                            <th class="text-right">Días Atraso</th>
+                            <th class="text-right">$ Vencido</th>
+                            <th>Próximo Compromiso</th>
+                            <th>Responsable</th>
+                            <th>Detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaCompromiso"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <!-- TAB 7: FACTURACIÓN JULIO -->
@@ -1839,6 +1868,46 @@ try {{
 
     renderAlertas('todos');
 }} catch(e) {{ console.error('Alertas error:', e); }}
+
+// ================================================================
+//  COBRANZA VENCIDA CON COMPROMISO
+// ================================================================
+try {{
+    var pp3 = DATA.payment_plan || {{}};
+    var comp = pp3.facturas_con_compromiso || [];
+    var tc3 = pp3.total_compromiso || {{}};
+
+    if (comp.length > 0) {{
+        document.getElementById('seccionCompromiso').style.display = 'block';
+        document.getElementById('compFacturas').textContent = tc3.facturas || 0;
+        document.getElementById('compMonto').textContent = fmtMoney(tc3.monto_total || 0);
+        document.getElementById('compOverdue').textContent = tc3.overdue || 0;
+        document.getElementById('compPlanned').textContent = tc3.planned || 0;
+
+        var coBody = document.getElementById('tablaCompromiso');
+        if (coBody) {{
+            coBody.innerHTML = comp.map(function(f) {{
+                var estadoHtml = f.compromiso_overdue
+                    ? '<span style="background:#fef2f2;color:#991b1b;padding:2px 8px;border-radius:4px;font-weight:700;border:1px solid #dc2626">VENCIDO</span>'
+                    : '<span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:4px;font-weight:700;border:1px solid #10b981">VIGENTE</span>';
+                var factUrl = 'https://latinbien.com/web#id=' + f.invoice_id + '&model=account.move&view_type=form';
+                var acts = (f.actividades || []).map(function(a) {{
+                    return '<div style="margin:2px 0;font-size:11px"><strong>' + (a.summary || '(sin resumen)') + '</strong><br>Deadline: ' + a.deadline + ' | ' + a.responsable + '</div>';
+                }}).join('');
+                return '<tr>' +
+                    '<td>' + estadoHtml + '</td>' +
+                    '<td><a href="' + factUrl + '" target="_blank" style="color:#213C83;font-weight:600;text-decoration:none;border-bottom:1px dashed #213C83">' + (f.factura||'') + '</a></td>' +
+                    '<td><strong>' + f.cliente + '</strong></td>' +
+                    '<td class="text-right" style="font-weight:700;color:#ef4444">' + f.dias_atraso + ' días</td>' +
+                    '<td class="text-right" style="color:#ef4444;font-weight:600">' + fmtMoney(f.monto_vencido) + '</td>' +
+                    '<td>' + (f.proximo_deadline || 'N/A') + '</td>' +
+                    '<td style="font-size:12px">' + (f.actividades[0]?.responsable || '') + '</td>' +
+                    '<td style="font-size:11px;max-width:250px">' + acts + '</td>' +
+                    '</tr>';
+            }}).join('') || '<tr><td colspan="8" style="text-align:center;color:#999">Sin facturas con compromiso</td></tr>';
+        }}
+    }}
+}} catch(e) {{ console.error('Compromiso error:', e); }}
 
 // ================================================================
 //  FACTURACIÓN JULIO 2026

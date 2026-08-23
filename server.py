@@ -1000,6 +1000,77 @@ def fetch_payment_plan(sess):
             'pagado_clientes': len(data['pagado_clientes']),
         }
 
+    # ── COBRANZA VENCIDA CON COMPROMISO ────────────────────────
+    compromiso_ids = json_execute(sess, 'mail.activity', 'search',
+                                  [[['res_model', '=', 'account.move'],
+                                    ['state', 'in', ['overdue', 'planned']]]])
+    compromiso_map = {}
+    for i in range(0, len(compromiso_ids), 500):
+        batch = compromiso_ids[i:i+500]
+        acts = json_execute(sess, 'mail.activity', 'read',
+                            [batch, ['id', 'res_id', 'res_name', 'summary',
+                                     'note', 'state', 'date_deadline',
+                                     'activity_type_id', 'user_id']])
+        for a in acts:
+            inv_id = a.get('res_id')
+            if not inv_id:
+                continue
+            if inv_id not in compromiso_map:
+                compromiso_map[inv_id] = []
+            tipo = a.get('activity_type_id')
+            tipo_nombre = tipo[1] if isinstance(tipo, list) and len(tipo) > 1 else ''
+            user = a.get('user_id')
+            user_nombre = user[1] if isinstance(user, list) and len(user) > 1 else ''
+            compromiso_map[inv_id].append({
+                'actividad_id': a['id'],
+                'summary': a.get('summary') or '',
+                'note': str(a.get('note') or '')[:200],
+                'state': a.get('state', ''),
+                'deadline': str(a.get('date_deadline') or '')[:10],
+                'tipo': tipo_nombre,
+                'responsable': user_nombre,
+            })
+
+    facturas_con_compromiso = []
+    seen_comp = set()
+    for v in vencidos:
+        inv_id = v['invoice_id']
+        if inv_id in seen_comp:
+            continue
+        acts = compromiso_map.get(inv_id, [])
+        if not acts:
+            continue
+        seen_comp.add(inv_id)
+        cliente = partner_map.get(inv_id, 'Desconocido')
+        inv_name = v.get('invoice_name', '')
+        fecha_str = str(v.get('fecha', ''))[:10]
+        try:
+            dias = (hoy - date.fromisoformat(fecha_str)).days if fecha_str else 0
+        except:
+            dias = 0
+        monto_venc = sum(x['monto'] for x in vencidos if x['invoice_id'] == inv_id)
+        hay_overdue = any(a['state'] == 'overdue' for a in acts)
+        proximo_deadline = min((a['deadline'] for a in acts if a['deadline']), default='')
+        facturas_con_compromiso.append({
+            'invoice_id': inv_id,
+            'factura': inv_name,
+            'cliente': cliente,
+            'fecha_vencida': fecha_str,
+            'dias_atraso': dias,
+            'monto_vencido': round(monto_venc, 2),
+            'actividades': acts,
+            'total_actividades': len(acts),
+            'compromiso_overdue': hay_overdue,
+            'proximo_deadline': proximo_deadline,
+        })
+    facturas_con_compromiso.sort(key=lambda x: -x['dias_atraso'])
+    total_compromiso = {
+        'facturas': len(facturas_con_compromiso),
+        'monto_total': round(sum(f['monto_vencido'] for f in facturas_con_compromiso), 2),
+        'overdue': sum(1 for f in facturas_con_compromiso if f['compromiso_overdue']),
+        'planned': sum(1 for f in facturas_con_compromiso if not f['compromiso_overdue']),
+    }
+
     return {
         'state_totals': {k: {'monto': round(v['monto'], 2), 'cantidad': v['cantidad']}
                          for k, v in sorted(state_totals.items())},
@@ -1021,6 +1092,8 @@ def fetch_payment_plan(sess):
         'fecha_cobro': fecha_cobro_json,
         'alertas_morosidad': alertas_morosidad,
         'total_alertas': total_alertas,
+        'facturas_con_compromiso': facturas_con_compromiso,
+        'total_compromiso': total_compromiso,
     }
 
 def fetch_facturacion_julio(sess):
