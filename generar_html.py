@@ -995,27 +995,6 @@ html = f'''<!DOCTYPE html>
             <div class="chart-container" style="height:320px"><canvas id="chartCiclo1025"></canvas></div>
         </div>
 
-        <div class="results-section">
-            <h3>📊 Resumen por Ciclo y Mes</h3>
-            <div class="table-container">
-                <table class="data-table" id="tblCiclos">
-                    <thead>
-                        <tr>
-                            <th>Mes</th>
-                            <th>Ciclo</th>
-                            <th class="text-right">Pagadas</th>
-                            <th class="text-right">Pendientes</th>
-                            <th class="text-right">$ Pagado</th>
-                            <th class="text-right">$ Pendiente</th>
-                            <th class="text-right">Clientes Pagaron</th>
-                            <th class="text-right">Clientes Adeudan</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaCiclos"></tbody>
-                </table>
-            </div>
-        </div>
-
         <!-- PROYECCIÓN POR FECHA DE COBRO -->
         <div class="results-section">
             <h3>💰 Proyección de Ingreso por Fecha de Cobro</h3>
@@ -2590,28 +2569,6 @@ try {{
         }} catch(e) {{ console.error('Chart ' + canvasId + ' error:', e); }}
     }});
 
-    // Tabla resumen
-    var tcBody = document.getElementById('tablaCiclos');
-    if (tcBody) {{
-        var rows = [];
-        Object.keys(cp).forEach(function(ciclo) {{
-            var data = cp[ciclo] || {{}};
-            Object.keys(data).sort().forEach(function(mes) {{
-                var d = data[mes];
-                rows.push('<tr>' +
-                    '<td>' + fmtMes(mes) + '</td>' +
-                    '<td><strong>' + ciclo + '</strong></td>' +
-                    '<td class="text-right" style="color:#10b981;font-weight:600">' + d.pagadas_cuotas + '</td>' +
-                    '<td class="text-right" style="color:#ef4444;font-weight:600">' + d.pendientes_cuotas + '</td>' +
-                    '<td class="text-right">' + fmtMoney(d.pagadas_monto) + '</td>' +
-                    '<td class="text-right">' + fmtMoney(d.pendientes_monto) + '</td>' +
-                    '<td class="text-right">' + (d.pagadas_clientes||0) + '</td>' +
-                    '<td class="text-right">' + (d.pendientes_clientes||0) + '</td>' +
-                    '</tr>');
-            }});
-        }});
-        tcBody.innerHTML = rows.join('') || '<tr><td colspan="8" style="text-align:center;color:#999">Sin datos</td></tr>';
-    }}
 }} catch(e) {{ console.error('Ciclos error:', e); }}
 
 // ── Proyección por Fecha de Cobro ──
