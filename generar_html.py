@@ -1020,7 +1020,8 @@ html = f'''<!DOCTYPE html>
         <div class="results-section">
             <h3>💰 Proyección de Ingreso por Fecha de Cobro</h3>
             <p style="color:#666;margin:0 0 12px">Monto proyectado a recibir en cada fecha de cobro vs. lo que ya pagaron antes de la fecha.</p>
-            <div class="table-container">
+            <div class="chart-container" style="height:350px"><canvas id="chartFechaCobro"></canvas></div>
+            <div class="table-container" style="margin-top:16px">
                 <table class="data-table" id="tblFechaCobro">
                     <thead>
                         <tr>
@@ -2619,6 +2620,47 @@ try {{
     var mesN = {{'01':'Ene','02':'Feb','03':'Mar','04':'Abr','05':'May','06':'Jun','07':'Jul','08':'Ago','09':'Sep','10':'Oct','11':'Nov','12':'Dic'}};
     function fmtMesFc(m) {{ var p = m.split('-'); return mesN[p[1]] + ' ' + p[0]; }}
 
+    // Gráfico de barras: Pendiente vs Pagado por fecha
+    try {{
+        var fcLabels = [];
+        var fcPendiente = [];
+        var fcPagado = [];
+        Object.keys(fc).sort().forEach(function(mes) {{
+            var dias = fc[mes];
+            Object.keys(dias).sort(function(a,b) {{ return dias[a].dia - dias[b].dia; }}).forEach(function(dk) {{
+                var d = dias[dk];
+                fcLabels.push(fmtMesFc(mes) + ' / ' + d.dia);
+                fcPendiente.push(d.pendiente_monto);
+                fcPagado.push(d.pagado_monto);
+            }});
+        }});
+        if (fcLabels.length > 0) {{
+            safeChart('chartFechaCobro', {{
+                type: 'bar',
+                data: {{
+                    labels: fcLabels,
+                    datasets: [
+                        {{ label: 'Pendiente Recibir ($)', data: fcPendiente, backgroundColor: '#ef4444', borderWidth: 0, borderRadius: 4 }},
+                        {{ label: 'Ya Pagaron ($)', data: fcPagado, backgroundColor: '#10b981', borderWidth: 0, borderRadius: 4 }}
+                    ]
+                }},
+                options: {{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {{
+                        legend: {{ position: 'bottom' }},
+                        tooltip: {{ mode: 'index', intersect: false, callbacks: {{ afterBody: function(items) {{ var idx = items[0].dataIndex; var total = fcPendiente[idx] + fcPagado[idx]; return ['───────────', 'Total Esperado: ' + fmtMoney(total)]; }} }} }}
+                    }},
+                    scales: {{
+                        y: {{ beginAtZero: true, ticks: {{ callback: function(v) {{ return '$' + v.toLocaleString(); }} }}, grid: {{ color: 'rgba(0,0,0,0.05)' }}, title: {{ display: true, text: 'Monto ($)' }} }},
+                        x: {{ grid: {{ display: false }}, ticks: {{ maxRotation: 45, font: {{ size: 10 }} }} }}
+                    }}
+                }}
+            }});
+        }}
+    }} catch(e) {{ console.error('Chart Fecha Cobro error:', e); }}
+
+    // Tabla
     var fcBody = document.getElementById('tablaFechaCobro');
     if (fcBody) {{
         var rows = [];
