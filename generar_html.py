@@ -1015,6 +1015,29 @@ html = f'''<!DOCTYPE html>
                 </table>
             </div>
         </div>
+
+        <!-- PROYECCIÓN POR FECHA DE COBRO -->
+        <div class="results-section">
+            <h3>💰 Proyección de Ingreso por Fecha de Cobro</h3>
+            <p style="color:#666;margin:0 0 12px">Monto proyectado a recibir en cada fecha de cobro vs. lo que ya pagaron antes de la fecha.</p>
+            <div class="table-container">
+                <table class="data-table" id="tblFechaCobro">
+                    <thead>
+                        <tr>
+                            <th>Mes</th>
+                            <th>Día</th>
+                            <th>Ciclo</th>
+                            <th class="text-right">$ Pendiente Recibir</th>
+                            <th class="text-right">Clientes Adeudan</th>
+                            <th class="text-right">$ Ya Pagaron</th>
+                            <th class="text-right">Clientes Pagaron</th>
+                            <th class="text-right">$ Total Esperado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaFechaCobro"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <div class="footer">
@@ -2589,6 +2612,39 @@ try {{
         tcBody.innerHTML = rows.join('') || '<tr><td colspan="8" style="text-align:center;color:#999">Sin datos</td></tr>';
     }}
 }} catch(e) {{ console.error('Ciclos error:', e); }}
+
+// ── Proyección por Fecha de Cobro ──
+try {{
+    var fc = (DATA.payment_plan || {{}}).fecha_cobro || {{}};
+    var mesN = {{'01':'Ene','02':'Feb','03':'Mar','04':'Abr','05':'May','06':'Jun','07':'Jul','08':'Ago','09':'Sep','10':'Oct','11':'Nov','12':'Dic'}};
+    function fmtMesFc(m) {{ var p = m.split('-'); return mesN[p[1]] + ' ' + p[0]; }}
+
+    var fcBody = document.getElementById('tablaFechaCobro');
+    if (fcBody) {{
+        var rows = [];
+        Object.keys(fc).sort().forEach(function(mes) {{
+            var dias = fc[mes];
+            var mesTotal = 0;
+            Object.keys(dias).forEach(function(dk) {{ mesTotal += dias[dk].pendiente_monto + dias[dk].pagado_monto; }});
+            Object.keys(dias).sort(function(a,b) {{ return dias[a].dia - dias[b].dia; }}).forEach(function(dk) {{
+                var d = dias[dk];
+                var total = d.pendiente_monto + d.pagado_monto;
+                var pct = mesTotal > 0 ? Math.round(total / mesTotal * 100) : 0;
+                rows.push('<tr>' +
+                    '<td><strong>' + fmtMesFc(mes) + '</strong></td>' +
+                    '<td>Día ' + d.dia + '</td>' +
+                    '<td>' + (d.ciclo === '03-18' ? '<span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-size:11px">03-18</span>' : '<span style="background:#fce7f3;color:#9d174d;padding:2px 8px;border-radius:4px;font-size:11px">10-25</span>') + '</td>' +
+                    '<td class="text-right" style="color:#ef4444;font-weight:600">' + fmtMoney(d.pendiente_monto) + '</td>' +
+                    '<td class="text-right">' + d.pendiente_clientes + '</td>' +
+                    '<td class="text-right" style="color:#10b981;font-weight:600">' + fmtMoney(d.pagado_monto) + '</td>' +
+                    '<td class="text-right">' + d.pagado_clientes + '</td>' +
+                    '<td class="text-right" style="font-weight:700">' + fmtMoney(total) + ' <span style="color:#888;font-size:10px">(' + pct + '%)</span></td>' +
+                    '</tr>');
+            }});
+        }});
+        fcBody.innerHTML = rows.join('') || '<tr><td colspan="8" style="text-align:center;color:#999">Sin datos de proyección</td></tr>';
+    }}
+}} catch(e) {{ console.error('Fecha cobro error:', e); }}
 
 renderTable();
 switchTab('resumen');

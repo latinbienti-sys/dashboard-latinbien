@@ -937,6 +937,69 @@ def fetch_payment_plan(sess):
         'monto_total_riesgo': round(sum(a['monto_vencido'] for a in alertas_morosidad), 2),
     }
 
+    # ── Proyección por fecha de cobro ─────────────────────────
+    # Para cada fecha específica (3, 10, 18, 25), mostrar:
+    # - Monto pendiente de recibir (draft)
+    # - Monto que ya pagaron antes (paid + futuro)
+    # - Clientes que pagaron vs los que adeudan
+    hoy_str = str(hoy)
+    fecha_cobro_data = defaultdict(lambda: {
+        'pendiente_monto': 0.0, 'pendiente_cuotas': 0, 'pendiente_clientes': set(),
+        'pagado_monto': 0.0, 'pagado_cuotas': 0, 'pagado_clientes': set(),
+    })
+
+    for line in all_lines:
+        st = line.get('state', '')
+        amt = float(line.get('amount') or 0)
+        fecha = str(line.get('payment_date') or '')[:10]
+        if not fecha:
+            continue
+        try:
+            dia = int(fecha.split('-')[2])
+        except (ValueError, IndexError):
+            continue
+        inv_id = _inv_id(line)
+        if not inv_id:
+            continue
+        if invoice_status_map.get(inv_id) != 'Entregado':
+            continue
+        cliente = partner_map.get(inv_id, 'Desconocido')
+        mes = fecha[:7]
+
+        fc = fecha_cobro_data[f"{mes}|{dia}"]
+        if st == 'paid' and fecha > hoy_str:
+            fc['pagado_monto'] += amt
+            fc['pagado_cuotas'] += 1
+            fc['pagado_clientes'].add(cliente)
+        elif st == 'draft' and fecha >= hoy_str:
+            fc['pendiente_monto'] += amt
+            fc['pendiente_cuotas'] += 1
+            fc['pendiente_clientes'].add(cliente)
+        elif st == 'vencido' and fecha[:7] >= hoy_str[:7]:
+            fc['pendiente_monto'] += amt
+            fc['pendiente_cuotas'] += 1
+            fc['pendiente_clientes'].add(cliente)
+
+    fecha_cobro_json = {}
+    for key, data in sorted(fecha_cobro_data.items()):
+        mes, dia = key.split('|')
+        # Solo meses actuales y futuros
+        if mes < hoy_str[:7]:
+            continue
+        ciclo_key = '03-18' if 3 <= int(dia) <= 18 else '10-25'
+        if mes not in fecha_cobro_json:
+            fecha_cobro_json[mes] = {}
+        fecha_cobro_json[mes][f"dia_{dia}"] = {
+            'dia': int(dia),
+            'ciclo': ciclo_key,
+            'pendiente_monto': round(data['pendiente_monto'], 2),
+            'pendiente_cuotas': data['pendiente_cuotas'],
+            'pendiente_clientes': len(data['pendiente_clientes']),
+            'pagado_monto': round(data['pagado_monto'], 2),
+            'pagado_cuotas': data['pagado_cuotas'],
+            'pagado_clientes': len(data['pagado_clientes']),
+        }
+
     return {
         'state_totals': {k: {'monto': round(v['monto'], 2), 'cantidad': v['cantidad']}
                          for k, v in sorted(state_totals.items())},
@@ -955,6 +1018,7 @@ def fetch_payment_plan(sess):
         'total_pronto': total_pronto,
         'top10_impacto': top10_impacto,
         'ciclo_proj': ciclo_proj_json,
+        'fecha_cobro': fecha_cobro_json,
         'alertas_morosidad': alertas_morosidad,
         'total_alertas': total_alertas,
     }
