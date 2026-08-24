@@ -2847,9 +2847,14 @@ try {{
             if (fd && x.fecha_pago !== fd) return false;
             return true;
         }});
-        var csv = 'Ciclo,Morosidad,Fase,Status Op,Cliente,Factura,Fecha Pago,Monto,Cuotas,Dias\\n';
+        var csv = 'Nombre,Telefono\\n';
+        var seen = {{}};
         filtered.forEach(function(x) {{
-            csv += '"' + x.ciclo + '","' + x.morosidad + '","' + faseL(x.fase) + '","' + x.status_op + '","' + x.cliente + '","' + x.factura + '","' + x.fecha_pago + '",' + x.monto + ',' + x.cuotas + ',' + x.diff_dias + '\\n';
+            var phone = (x.phone || '').replace(/[^0-9+]/g, '');
+            var key = x.cliente + '|' + phone;
+            if (seen[key]) return;
+            seen[key] = true;
+            csv += '"' + x.cliente + '","' + phone + '"\\n';
         }});
         var blob = new Blob([csv], {{type: 'text/csv;charset=utf-8;'}});
         var link = document.createElement('a');

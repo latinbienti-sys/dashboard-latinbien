@@ -414,6 +414,8 @@ def fetch_payment_plan(sess):
             all_inv_ids.add(inv_id)
 
     partner_map = {}
+    partner_id_map = {}  # invoice_id -> partner_id (para teléfono)
+    partner_phone = {}  # partner_id -> teléfono
     invoice_status_map = {}
     invoice_date_map = {}
     invoice_valido = set()
@@ -432,12 +434,30 @@ def fetch_payment_plan(sess):
             pid = inv.get('partner_id')
             partner = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Desconocido'
             partner_map[iid] = partner
+            partner_id_map[iid] = pid[0] if isinstance(pid, list) else 0
             raw_st = inv.get('x_status_operativos', '')
             invoice_status_map[iid] = status_labels.get(str(raw_st), '')
             invoice_date_map[iid] = str(inv.get('invoice_date') or '')[:10]
             # Solo facturas de venta PUBLICADAS (excluye canceladas, borradores y NC)
             if inv.get('state') == 'posted' and inv.get('move_type') == 'out_invoice':
                 invoice_valido.add(iid)
+
+    # Cargar teléfonos de partners involucrados
+    partner_ids = list(set(pid[0] for inv in inv_data if (pid := inv.get('partner_id')) and isinstance(pid, list)))
+    for i in range(0, len(partner_ids), 500):
+        batch = partner_ids[i:i+500]
+        pdata = json_execute(sess, 'res.partner', 'read',
+                             [batch, ['id', 'phone', 'mobile']])
+        for p in pdata:
+            pid = p['id']
+            phone = p.get('mobile') or p.get('phone') or ''
+            import re
+            phone_clean = re.sub(r'[^0-9]', '', str(phone))
+            if phone_clean and not phone_clean.startswith('58'):
+                phone_clean = '58' + phone_clean
+            if phone_clean and not phone_clean.startswith('+'):
+                phone_clean = '+' + phone_clean
+            partner_phone[pid] = phone_clean
 
     # Filtrar líneas: conservar solo cuotas de facturas publicadas de venta
     def _inv_id(line):
@@ -1077,7 +1097,7 @@ def fetch_payment_plan(sess):
     ciclo_gestion_agg = defaultdict(lambda: {
         'cliente': '', 'factura': '', 'invoice_id': 0, 'ciclo': '',
         'fase': '', 'monto_total': 0.0, 'cuotas': 0, 'fecha_min': '',
-        'fecha_max': '', 'status_op': '',
+        'fecha_max': '', 'status_op': '', 'phone': '',
     })
     for line in all_lines:
         inv_id = _inv_id(line)
@@ -1144,6 +1164,7 @@ def fetch_payment_plan(sess):
         c['fase'] = fase
         c['morosidad'] = morosidad
         c['status_op'] = st_op
+        c['phone'] = partner_phone.get(partner_id_map.get(inv_id, 0), '')
         c['monto_total'] += monto
         c['cuotas'] += 1
         if not c['fecha_min'] or fecha < c['fecha_min']:
@@ -1155,6 +1176,7 @@ def fetch_payment_plan(sess):
 
     ciclo_gestion_list = [{
         'cliente': v['cliente'],
+        'phone': v['phone'],
         'factura': v['factura'],
         'invoice_id': v['invoice_id'],
         'ciclo': v['ciclo'],
