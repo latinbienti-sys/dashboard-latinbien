@@ -1071,6 +1071,76 @@ def fetch_payment_plan(sess):
         'planned': sum(1 for f in facturas_con_compromiso if not f['compromiso_overdue']),
     }
 
+    # ── GESTIÓN DE COBRANZA POR CICLO ─────────────────────────
+    # Solo Entregado (6) y Aprobado espera de entrega (4)
+    # Excluye NC, canceladas y otros status
+    ciclo_gestion_raw = []
+    for line in all_lines:
+        inv_id = _inv_id(line)
+        if not inv_id:
+            continue
+        st_op = invoice_status_map.get(inv_id, '')
+        if st_op not in ('Entregado', 'Aprobado'):
+            continue
+        fecha = str(line.get('payment_date') or '')[:10]
+        if not fecha:
+            continue
+        try:
+            dia_pago = int(fecha.split('-')[2])
+            fecha_dt = date.fromisoformat(fecha)
+        except:
+            continue
+        if 3 <= dia_pago <= 18:
+            ciclo = '03-18'
+        elif 10 <= dia_pago <= 25:
+            ciclo = '10-25'
+        else:
+            continue
+        cliente = partner_map.get(inv_id, 'Desconocido')
+        inv = line.get('invoice_id')
+        inv_name = inv[1] if isinstance(inv, list) and len(inv) > 1 else ''
+        estado = 'pagado' if line.get('state') == 'paid' else 'pendiente'
+        monto = float(line.get('amount') or 0)
+        diff_dias = (fecha_dt - hoy).days
+        if diff_dias <= -2:
+            fase = '2_dias_despues'
+        elif diff_dias == -1:
+            fase = '1_dia_despues'
+        elif diff_dias == 0:
+            fase = 'dia_ciclo'
+        elif diff_dias == 1:
+            fase = '1_dia_antes'
+        elif diff_dias >= 2:
+            fase = '2_dias_antes'
+        else:
+            fase = 'pasado'
+        ciclo_gestion_raw.append({
+            'cliente': cliente, 'factura': inv_name, 'invoice_id': inv_id,
+            'ciclo': ciclo, 'fase': fase, 'estado': estado,
+            'monto': round(monto, 2), 'payment_date': fecha, 'diff_dias': diff_dias,
+        })
+
+    ciclo_gestion = {
+        'items': ciclo_gestion_raw,
+        'resumen': {
+            '03-18': {
+                'total': sum(1 for x in ciclo_gestion_raw if x['ciclo'] == '03-18'),
+                'pagados': sum(1 for x in ciclo_gestion_raw if x['ciclo'] == '03-18' and x['estado'] == 'pagado'),
+                'pendientes': sum(1 for x in ciclo_gestion_raw if x['ciclo'] == '03-18' and x['estado'] == 'pendiente'),
+                'monto_total': round(sum(x['monto'] for x in ciclo_gestion_raw if x['ciclo'] == '03-18'), 2),
+                'monto_pendiente': round(sum(x['monto'] for x in ciclo_gestion_raw if x['ciclo'] == '03-18' and x['estado'] == 'pendiente'), 2),
+            },
+            '10-25': {
+                'total': sum(1 for x in ciclo_gestion_raw if x['ciclo'] == '10-25'),
+                'pagados': sum(1 for x in ciclo_gestion_raw if x['ciclo'] == '10-25' and x['estado'] == 'pagado'),
+                'pendientes': sum(1 for x in ciclo_gestion_raw if x['ciclo'] == '10-25' and x['estado'] == 'pendiente'),
+                'monto_total': round(sum(x['monto'] for x in ciclo_gestion_raw if x['ciclo'] == '10-25'), 2),
+                'monto_pendiente': round(sum(x['monto'] for x in ciclo_gestion_raw if x['ciclo'] == '10-25' and x['estado'] == 'pendiente'), 2),
+            },
+        },
+        'hoy': str(hoy),
+    }
+
     return {
         'state_totals': {k: {'monto': round(v['monto'], 2), 'cantidad': v['cantidad']}
                          for k, v in sorted(state_totals.items())},
@@ -1094,6 +1164,7 @@ def fetch_payment_plan(sess):
         'total_alertas': total_alertas,
         'facturas_con_compromiso': facturas_con_compromiso,
         'total_compromiso': total_compromiso,
+        'ciclo_gestion': ciclo_gestion,
     }
 
 def fetch_facturacion_julio(sess):

@@ -382,6 +382,7 @@ html = f'''<!DOCTYPE html>
         <button class="tab-btn" onclick="switchTab('expedientes')">🗂️ Expedientes</button>
         <button class="tab-btn" onclick="switchTab('prontopago')">⚡ Pronto Pago</button>
         <button class="tab-btn" onclick="switchTab('ciclos')">📅 Ciclos</button>
+        <button class="tab-btn" onclick="switchTab('gestion')">📋 Gestión Cobranza</button>
     </div>
 
     <!-- TAB 1: RESUMEN -->
@@ -1049,6 +1050,60 @@ html = f'''<!DOCTYPE html>
         </div>
     </div>
 
+    <!-- ═══ TAB: GESTIÓN DE COBRANZA POR CICLO ═══ -->
+    <div class="tab-content" id="tab-gestion">
+        <div class="kpi-row">
+            <div class="kpi-card accent"><div class="number" id="gTotal0318">—</div><div class="label">Ciclo 03-18 Total</div></div>
+            <div class="kpi-card danger"><div class="number" id="gPend0318">—</div><div class="label">03-18 Pendientes</div></div>
+            <div class="kpi-card success"><div class="number" id="gPag0318">—</div><div class="label">03-18 Pagados</div></div>
+            <div class="kpi-card accent"><div class="number" id="gTotal1025">—</div><div class="label">Ciclo 10-25 Total</div></div>
+            <div class="kpi-card danger"><div class="number" id="gPend1025">—</div><div class="label">10-25 Pendientes</div></div>
+            <div class="kpi-card success"><div class="number" id="gPag1025">—</div><div class="label">10-25 Pagados</div></div>
+        </div>
+        <div class="results-section">
+            <h3>📋 Gestión de Cobranza por Ciclo — Segmentación por Fase</h3>
+            <p style="color:#666;margin:0 0 12px">Cuotas de clientes con status <strong>Entregado</strong> y <strong>Aprobado</strong>. Segmentadas por ciclo (03-18 / 10-25), fase (2 días antes, día del ciclo, después) y estado (pagado/pendiente).</p>
+            <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                <strong>Ciclo:</strong>
+                <button onclick="filtrarGestion('todos')" style="padding:6px 14px;border-radius:6px;border:1px solid #ccc;background:#fff;cursor:pointer;font-size:12px" class="btn-gestion active">Todos</button>
+                <button onclick="filtrarGestion('03-18')" style="padding:6px 14px;border-radius:6px;border:1px solid #213C83;background:#dbeafe;cursor:pointer;font-size:12px;color:#213C83">03-18</button>
+                <button onclick="filtrarGestion('10-25')" style="padding:6px 14px;border-radius:6px;border:1px solid #9d174d;background:#fce7f3;cursor:pointer;font-size:12px;color:#9d174d">10-25</button>
+                <strong style="margin-left:12px">Estado:</strong>
+                <button onclick="filtrarGestionEstado('todos')" style="padding:6px 14px;border-radius:6px;border:1px solid #ccc;background:#fff;cursor:pointer;font-size:12px" class="btn-estado active">Todos</button>
+                <button onclick="filtrarGestionEstado('pendiente')" style="padding:6px 14px;border-radius:6px;border:1px solid #ef4444;background:#fef2f2;cursor:pointer;font-size:12px;color:#ef4444">Pendientes</button>
+                <button onclick="filtrarGestionEstado('pagado')" style="padding:6px 14px;border-radius:6px;border:1px solid #10b981;background:#d1fae5;cursor:pointer;font-size:12px;color:#10b981">Pagados</button>
+                <strong style="margin-left:12px">Fase:</strong>
+                <select id="filtroFase" onchange="aplicarFiltrosGestion()" style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;font-size:12px">
+                    <option value="todas">Todas</option>
+                    <option value="2_dias_antes">2 días antes</option>
+                    <option value="1_dia_antes">1 día antes</option>
+                    <option value="dia_ciclo">Día del ciclo</option>
+                    <option value="1_dia_despues">1 día después</option>
+                    <option value="2_dias_despues">2+ días después</option>
+                </select>
+                <button onclick="exportarGestionCSV()" style="padding:6px 14px;border-radius:6px;border:1px solid #059669;background:#d1fae5;cursor:pointer;font-size:12px;color:#059669;margin-left:auto">📥 Exportar CSV</button>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Ciclo</th>
+                            <th>Fase</th>
+                            <th>Estado</th>
+                            <th>Cliente</th>
+                            <th>Factura</th>
+                            <th>Fecha Pago</th>
+                            <th class="text-right">Monto</th>
+                            <th class="text-right">Días</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaGestion"></tbody>
+                </table>
+            </div>
+            <div style="margin-top:8px;color:#666;font-size:12px" id="gContador"></div>
+        </div>
+    </div>
+
     <div class="footer">
         <strong>LATINBIEN</strong> — Latinoamericana de Bienes y Servicios, C.A. &nbsp;·&nbsp;
         Generado el <span id="fechaGeneracion"></span>
@@ -1707,7 +1762,7 @@ function renderTable() {{
 function switchTab(tab) {{
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos'}};
+    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza'}};
     const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes(tabMap[tab]));
     if (btn) btn.classList.add('active');
     document.getElementById('tab-'+tab).classList.add('active');
@@ -2713,6 +2768,105 @@ try {{
         fcBody.innerHTML = rows.join('') || '<tr><td colspan="8" style="text-align:center;color:#999">Sin datos de proyección</td></tr>';
     }}
 }} catch(e) {{ console.error('Fecha cobro error:', e); }}
+
+// ── Gestión de Cobranza por Ciclo ──
+try {{
+    var gg = (DATA.payment_plan || {{}}).ciclo_gestion || {{}};
+    var ggItems = gg.items || [];
+    var ggRes = gg.resumen || {{}};
+    var ggHoy = gg.hoy || '';
+
+    // KPIs
+    var r0318 = ggRes['03-18'] || {{}};
+    var r1025 = ggRes['10-25'] || {{}};
+    document.getElementById('gTotal0318').textContent = (r0318.total||0).toLocaleString();
+    document.getElementById('gPend0318').textContent = (r0318.pendientes||0).toLocaleString();
+    document.getElementById('gPag0318').textContent = (r0318.pagados||0).toLocaleString();
+    document.getElementById('gTotal1025').textContent = (r1025.total||0).toLocaleString();
+    document.getElementById('gPend1025').textContent = (r1025.pendientes||0).toLocaleString();
+    document.getElementById('gPag1025').textContent = (r1025.pagados||0).toLocaleString();
+
+    // Filtros
+    window._gestionFiltroCiclo = 'todos';
+    window._gestionFiltroEstado = 'todos';
+
+    function faseLabel(f) {{
+        var m = {{'2_dias_antes':'2 días antes','1_dia_antes':'1 día antes','dia_ciclo':'Día del ciclo','1_dia_despues':'1 día después','2_dias_despues':'2+ días después','pasado':'Pasado'}};
+        return m[f] || f;
+    }}
+    function faseColor(f) {{
+        if (f.includes('antes')) return '#2563eb';
+        if (f === 'dia_ciclo') return '#d97706';
+        return '#ef4444';
+    }}
+
+    window.filtrarGestion = function(ciclo) {{
+        window._gestionFiltroCiclo = ciclo;
+        document.querySelectorAll('.btn-gestion').forEach(function(b) {{ b.style.fontWeight='normal'; b.style.boxShadow='none'; }});
+        event.target.style.fontWeight='700';
+        event.target.style.boxShadow='0 0 0 2px #213C83';
+        renderGestion();
+    }};
+    window.filtrarGestionEstado = function(estado) {{
+        window._gestionFiltroEstado = estado;
+        document.querySelectorAll('.btn-estado').forEach(function(b) {{ b.style.fontWeight='normal'; b.style.boxShadow='none'; }});
+        event.target.style.fontWeight='700';
+        event.target.style.boxShadow='0 0 0 2px #213C83';
+        renderGestion();
+    }};
+    window.aplicarFiltrosGestion = function() {{ renderGestion(); }};
+
+    function renderGestion() {{
+        var fc = document.getElementById('filtroFase').value;
+        var filtered = ggItems.filter(function(x) {{
+            if (window._gestionFiltroCiclo !== 'todos' && x.ciclo !== window._gestionFiltroCiclo) return false;
+            if (window._gestionFiltroEstado !== 'todos' && x.estado !== window._gestionFiltroEstado) return false;
+            if (fc !== 'todas' && x.fase !== fc) return false;
+            return true;
+        }});
+        var body = document.getElementById('tablaGestion');
+        var cont = document.getElementById('gContador');
+        if (!body) return;
+        var html = filtered.slice(0, 500).map(function(x) {{
+            var factUrl = 'https://latinbien.com/web#id=' + x.invoice_id + '&model=account.move&view_type=form';
+            var cicloCls = x.ciclo === '03-18' ? 'background:#dbeafe;color:#1e40af' : 'background:#fce7f3;color:#9d174d';
+            var estadoCls = x.estado === 'pagado' ? 'background:#d1fae5;color:#065f46' : 'background:#fef2f2;color:#991b1b';
+            return '<tr>' +
+                '<td><span style="padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;' + cicloCls + '">' + x.ciclo + '</span></td>' +
+                '<td style="color:' + faseColor(x.fase) + ';font-weight:600;font-size:12px">' + faseLabel(x.fase) + '</td>' +
+                '<td><span style="padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;' + estadoCls + '">' + x.estado.toUpperCase() + '</span></td>' +
+                '<td><strong>' + x.cliente + '</strong></td>' +
+                '<td><a href="' + factUrl + '" target="_blank" style="color:#213C83;text-decoration:none;border-bottom:1px dashed #213C83;font-size:12px">' + x.factura + '</a></td>' +
+                '<td style="font-size:12px">' + x.payment_date + '</td>' +
+                '<td class="text-right" style="font-weight:600">' + fmtMoney(x.monto) + '</td>' +
+                '<td class="text-right">' + x.diff_dias + '</td>' +
+                '</tr>';
+        }}).join('');
+        body.innerHTML = html || '<tr><td colspan="8" style="text-align:center;color:#999">Sin datos para este filtro</td></tr>';
+        cont.textContent = filtered.length + ' cuotas de ' + ggItems.length + ' totales (mostrando ' + Math.min(filtered.length, 500) + ')';
+    }}
+
+    window.exportarGestionCSV = function() {{
+        var fc = document.getElementById('filtroFase').value;
+        var filtered = ggItems.filter(function(x) {{
+            if (window._gestionFiltroCiclo !== 'todos' && x.ciclo !== window._gestionFiltroCiclo) return false;
+            if (window._gestionFiltroEstado !== 'todos' && x.estado !== window._gestionFiltroEstado) return false;
+            if (fc !== 'todas' && x.fase !== fc) return false;
+            return true;
+        }});
+        var csv = 'Ciclo,Fase,Estado,Cliente,Factura,Fecha Pago,Monto,Dias\\n';
+        filtered.forEach(function(x) {{
+            csv += '"' + x.ciclo + '","' + faseLabel(x.fase) + '","' + x.estado + '","' + x.cliente + '","' + x.factura + '","' + x.payment_date + '",' + x.monto + ',' + x.diff_dias + '\\n';
+        }});
+        var blob = new Blob([csv], {{type: 'text/csv;charset=utf-8;'}});
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'gestion_cobranza_' + ggHoy + '_' + window._gestionFiltroCiclo + '_' + window._gestionFiltroEstado + '.csv';
+        link.click();
+    }};
+
+    renderGestion();
+}} catch(e) {{ console.error('Gestion cobranza error:', e); }}
 
 renderTable();
 switchTab('resumen');
