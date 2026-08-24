@@ -1081,7 +1081,7 @@ html = f'''<!DOCTYPE html>
                 </select>
                 <strong style="margin-left:12px">Fecha:</strong>
                 <input type="date" id="filtroFecha" onchange="aplicarFiltrosGestion()" style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;font-size:12px">
-                <button onclick="exportarGestionCSV()" style="padding:6px 14px;border-radius:6px;border:1px solid #059669;background:#d1fae5;cursor:pointer;font-size:12px;color:#059669;margin-left:auto">📥 Exportar CSV</button>
+                <button onclick="exportarGestionXLSX()" style="padding:6px 14px;border-radius:6px;border:1px solid #059669;background:#d1fae5;cursor:pointer;font-size:12px;color:#059669;margin-left:auto">📥 Exportar XLSX</button>
             </div>
             <div class="table-container">
                 <table class="data-table">
@@ -2838,7 +2838,7 @@ try {{
         cont.textContent = filtered.length + ' facturas de ' + ggItems.length + ' totales' + (fd ? ' (fecha: ' + fd + ')' : '');
     }}
 
-    window.exportarGestionCSV = function() {{
+    window.exportarGestionXLSX = function() {{
         var fc = document.getElementById('filtroFase').value;
         var fd = document.getElementById('filtroFecha').value;
         var filtered = ggItems.filter(function(x) {{
@@ -2847,20 +2847,19 @@ try {{
             if (fd && x.fecha_pago !== fd) return false;
             return true;
         }});
-        var csv = 'Nombre,Telefono\\n';
+        var data = [['Nombre', 'Telefono']];
         var seen = {{}};
         filtered.forEach(function(x) {{
             var phone = (x.phone || '').replace(/[^0-9+]/g, '');
             var key = x.cliente + '|' + phone;
             if (seen[key]) return;
             seen[key] = true;
-            csv += '"' + x.cliente + '","' + phone + '"\\n';
+            data.push([x.cliente, phone]);
         }});
-        var blob = new Blob([csv], {{type: 'text/csv;charset=utf-8;'}});
-        var link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'gestion_cobranza_' + ggHoy + '_' + window._gfCiclo + '.csv';
-        link.click();
+        var wb = XLSX.utils.book_new();
+        var ws = XLSX.utils.aoa_to_sheet(data);
+        XLSX.utils.book_append_sheet(wb, ws, 'Cobranza');
+        XLSX.writeFile(wb, 'gestion_cobranza_' + ggHoy + '_' + window._gfCiclo + '.xlsx');
     }};
 
     renderGestion();
@@ -2878,6 +2877,7 @@ switchTab('resumen');
     document.body.appendChild(msg);
 }}
 </script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 </body>
 </html>'''
 
