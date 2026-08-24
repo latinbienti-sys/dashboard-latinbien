@@ -442,12 +442,12 @@ def fetch_payment_plan(sess):
             if inv.get('state') == 'posted' and inv.get('move_type') == 'out_invoice':
                 invoice_valido.add(iid)
 
-    # Cargar teléfonos: res.partner + acrux.chat.conversation
+    # Cargar teléfonos: res.partner.phone/mobile + contact_ids → chatroom number_format
     partner_ids = list(set(pid[0] for inv in inv_data if (pid := inv.get('partner_id')) and isinstance(pid, list)))
     for i in range(0, len(partner_ids), 500):
         batch = partner_ids[i:i+500]
         pdata = json_execute(sess, 'res.partner', 'read',
-                             [batch, ['id', 'phone', 'mobile']])
+                             [batch, ['id', 'phone', 'mobile', 'contact_ids']])
         for p in pdata:
             pid = p['id']
             phone = p.get('mobile') or p.get('phone') or ''
@@ -458,27 +458,23 @@ def fetch_payment_plan(sess):
                 phone_clean = '+' + phone_clean
             partner_phone[pid] = phone_clean
 
-    # Enriquecer desde acrux.chat.conversation (tiene number format +58)
-    try:
-        chat_ids = json_execute(sess, 'acrux.chat.conversation', 'search',
-                                [[['res_partner_id', 'in', partner_ids]]])
-        for i in range(0, len(chat_ids), 500):
-            batch = chat_ids[i:i+500]
-            chats = json_execute(sess, 'acrux.chat.conversation', 'read',
-                                 [batch, ['res_partner_id', 'number_format', 'number']])
-            for ch in chats:
-                pid = ch.get('res_partner_id')
-                if not pid or not isinstance(pid, list):
-                    continue
-                pid = pid[0]
-                if not partner_phone.get(pid):
-                    num = ch.get('number_format') or ''
-                    if not num:
+            # Si no tiene phone, buscar en contact_ids (chatrooms)
+            cids = p.get('contact_ids', [])
+            if not partner_phone[pid] and cids:
+                try:
+                    chats = json_execute(sess, 'acrux.chat.conversation', 'read',
+                                         [cids, ['number_format', 'number']])
+                    for ch in chats:
+                        nf = ch.get('number_format') or ''
+                        if nf:
+                            partner_phone[pid] = nf
+                            break
                         n = str(ch.get('number') or '')
-                        num = '+' + n if n else ''
-                    partner_phone[pid] = num
-    except Exception:
-        pass
+                        if n:
+                            partner_phone[pid] = '+' + n
+                            break
+                except Exception:
+                    pass
 
     # Filtrar líneas: conservar solo cuotas de facturas publicadas de venta
     def _inv_id(line):
@@ -1210,6 +1206,49 @@ def fetch_payment_plan(sess):
         'diff_dias': v.get('min_diff', 0),
     } for k, v in ciclo_gestion_agg.items()]
     ciclo_gestion_list.sort(key=lambda x: x['diff_dias'])
+
+    # Fallback: buscar teléfonos faltantes directamente de res.partner
+    missing_inv_ids = set(x['invoice_id'] for x in ciclo_gestion_list if not x['phone'])
+    if missing_inv_ids:
+        missing_pid_set = set()
+        for mid in missing_inv_ids:
+            pid_val = partner_id_map.get(mid, 0)
+            if pid_val and pid_val not in partner_phone:
+                missing_pid_set.add(pid_val)
+        if missing_pid_set:
+            for i in range(0, len(list(missing_pid_set)), 500):
+                batch = list(missing_pid_set)[i:i+500]
+                pdata2 = json_execute(sess, 'res.partner', 'read',
+                                      [batch, ['id', 'phone', 'mobile', 'contact_ids']])
+                for p in pdata2:
+                    pid2 = p['id']
+                    phone = p.get('mobile') or p.get('phone') or ''
+                    pc = str(phone).replace(' ', '').replace('-', '').replace('+', '')
+                    if pc and not pc.startswith('58'):
+                        pc = '58' + pc
+                    if pc:
+                        pc = '+' + pc
+                    if not pc and p.get('contact_ids'):
+                        try:
+                            chats2 = json_execute(sess, 'acrux.chat.conversation', 'read',
+                                                  [p['contact_ids'][:3], ['number_format', 'number']])
+                            for ch2 in chats2:
+                                nf = ch2.get('number_format') or ''
+                                if nf:
+                                    pc = nf
+                                    break
+                                n2 = str(ch2.get('number') or '')
+                                if n2:
+                                    pc = '+' + n2
+                                    break
+                        except Exception:
+                            pass
+                    partner_phone[pid2] = pc
+        # Re-asignar teléfonos
+        for x in ciclo_gestion_list:
+            if not x['phone']:
+                pid_val = partner_id_map.get(x['invoice_id'], 0)
+                x['phone'] = partner_phone.get(pid_val, '')
 
     ciclo_gestion = {
         'items': ciclo_gestion_list,
