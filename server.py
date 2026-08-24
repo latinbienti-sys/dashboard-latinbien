@@ -442,7 +442,7 @@ def fetch_payment_plan(sess):
             if inv.get('state') == 'posted' and inv.get('move_type') == 'out_invoice':
                 invoice_valido.add(iid)
 
-    # Cargar teléfonos de partners involucrados
+    # Cargar teléfonos: res.partner + acrux.chat.conversation
     partner_ids = list(set(pid[0] for inv in inv_data if (pid := inv.get('partner_id')) and isinstance(pid, list)))
     for i in range(0, len(partner_ids), 500):
         batch = partner_ids[i:i+500]
@@ -451,13 +451,34 @@ def fetch_payment_plan(sess):
         for p in pdata:
             pid = p['id']
             phone = p.get('mobile') or p.get('phone') or ''
-            import re
-            phone_clean = re.sub(r'[^0-9]', '', str(phone))
+            phone_clean = str(phone).replace(' ', '').replace('-', '').replace('+', '')
             if phone_clean and not phone_clean.startswith('58'):
                 phone_clean = '58' + phone_clean
-            if phone_clean and not phone_clean.startswith('+'):
+            if phone_clean:
                 phone_clean = '+' + phone_clean
             partner_phone[pid] = phone_clean
+
+    # Enriquecer desde acrux.chat.conversation (tiene number format +58)
+    try:
+        chat_ids = json_execute(sess, 'acrux.chat.conversation', 'search',
+                                [[['res_partner_id', 'in', partner_ids]]])
+        for i in range(0, len(chat_ids), 500):
+            batch = chat_ids[i:i+500]
+            chats = json_execute(sess, 'acrux.chat.conversation', 'read',
+                                 [batch, ['res_partner_id', 'number_format', 'number']])
+            for ch in chats:
+                pid = ch.get('res_partner_id')
+                if not pid or not isinstance(pid, list):
+                    continue
+                pid = pid[0]
+                if not partner_phone.get(pid):
+                    num = ch.get('number_format') or ''
+                    if not num:
+                        n = str(ch.get('number') or '')
+                        num = '+' + n if n else ''
+                    partner_phone[pid] = num
+    except Exception:
+        pass
 
     # Filtrar líneas: conservar solo cuotas de facturas publicadas de venta
     def _inv_id(line):
