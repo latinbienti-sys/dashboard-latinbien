@@ -1072,16 +1072,25 @@ def fetch_payment_plan(sess):
     }
 
     # ── GESTIÓN DE COBRANZA POR CICLO ─────────────────────────
-    # Solo Entregado (6) y Aprobado espera de entrega (4)
-    # Excluye NC, canceladas y otros status
-    ciclo_gestion_raw = []
+    # Solo: Entregado/Aprobado + PUBLICADO + NO PAGADO
+    # Sin duplicados: agrupar por cliente+factura, sumar cuotas pendientes
+    ciclo_gestion_agg = defaultdict(lambda: {
+        'cliente': '', 'factura': '', 'invoice_id': 0, 'ciclo': '',
+        'fase': '', 'monto_total': 0.0, 'cuotas': 0, 'fecha_min': '',
+        'fecha_max': '', 'status_op': '',
+    })
     for line in all_lines:
         inv_id = _inv_id(line)
         if not inv_id:
             continue
+        # Solo no pagados
+        if line.get('state') == 'paid':
+            continue
+        # Solo Entregado/Aprobado
         st_op = invoice_status_map.get(inv_id, '')
         if st_op not in ('Entregado', 'Aprobado'):
             continue
+        # Solo facturas publicadas (ya filtrado en all_lines por invoice_valido)
         fecha = str(line.get('payment_date') or '')[:10]
         if not fecha:
             continue
@@ -1099,7 +1108,6 @@ def fetch_payment_plan(sess):
         cliente = partner_map.get(inv_id, 'Desconocido')
         inv = line.get('invoice_id')
         inv_name = inv[1] if isinstance(inv, list) and len(inv) > 1 else ''
-        estado = 'pagado' if line.get('state') == 'paid' else 'pendiente'
         monto = float(line.get('amount') or 0)
         diff_dias = (fecha_dt - hoy).days
         if diff_dias <= -2:
@@ -1114,28 +1122,62 @@ def fetch_payment_plan(sess):
             fase = '2_dias_antes'
         else:
             fase = 'pasado'
-        ciclo_gestion_raw.append({
-            'cliente': cliente, 'factura': inv_name, 'invoice_id': inv_id,
-            'ciclo': ciclo, 'fase': fase, 'estado': estado,
-            'monto': round(monto, 2), 'payment_date': fecha, 'diff_dias': diff_dias,
-        })
+
+        # Morosidad
+        if diff_dias < -90:
+            morosidad = 'critico'
+        elif diff_dias < -30:
+            morosidad = 'alto'
+        elif diff_dias < 0:
+            morosidad = 'medio'
+        elif diff_dias == 0:
+            morosidad = 'hoy'
+        else:
+            morosidad = 'pendiente'
+
+        key = f"{inv_id}_{fecha}"
+        c = ciclo_gestion_agg[key]
+        c['cliente'] = cliente
+        c['factura'] = inv_name
+        c['invoice_id'] = inv_id
+        c['ciclo'] = ciclo
+        c['fase'] = fase
+        c['morosidad'] = morosidad
+        c['status_op'] = st_op
+        c['monto_total'] += monto
+        c['cuotas'] += 1
+        if not c['fecha_min'] or fecha < c['fecha_min']:
+            c['fecha_min'] = fecha
+        if not c['fecha_max'] or fecha > c['fecha_max']:
+            c['fecha_max'] = fecha
+        if diff_dias < c.get('min_diff', 9999):
+            c['min_diff'] = diff_dias
+
+    ciclo_gestion_list = [{
+        'cliente': v['cliente'],
+        'factura': v['factura'],
+        'invoice_id': v['invoice_id'],
+        'ciclo': v['ciclo'],
+        'fase': v['fase'],
+        'morosidad': v['morosidad'],
+        'status_op': v['status_op'],
+        'monto': round(v['monto_total'], 2),
+        'cuotas': v['cuotas'],
+        'fecha_pago': v['fecha_min'],
+        'diff_dias': v.get('min_diff', 0),
+    } for k, v in ciclo_gestion_agg.items()]
+    ciclo_gestion_list.sort(key=lambda x: x['diff_dias'])
 
     ciclo_gestion = {
-        'items': ciclo_gestion_raw,
+        'items': ciclo_gestion_list,
         'resumen': {
             '03-18': {
-                'total': sum(1 for x in ciclo_gestion_raw if x['ciclo'] == '03-18'),
-                'pagados': sum(1 for x in ciclo_gestion_raw if x['ciclo'] == '03-18' and x['estado'] == 'pagado'),
-                'pendientes': sum(1 for x in ciclo_gestion_raw if x['ciclo'] == '03-18' and x['estado'] == 'pendiente'),
-                'monto_total': round(sum(x['monto'] for x in ciclo_gestion_raw if x['ciclo'] == '03-18'), 2),
-                'monto_pendiente': round(sum(x['monto'] for x in ciclo_gestion_raw if x['ciclo'] == '03-18' and x['estado'] == 'pendiente'), 2),
+                'total': sum(1 for x in ciclo_gestion_list if x['ciclo'] == '03-18'),
+                'monto': round(sum(x['monto'] for x in ciclo_gestion_list if x['ciclo'] == '03-18'), 2),
             },
             '10-25': {
-                'total': sum(1 for x in ciclo_gestion_raw if x['ciclo'] == '10-25'),
-                'pagados': sum(1 for x in ciclo_gestion_raw if x['ciclo'] == '10-25' and x['estado'] == 'pagado'),
-                'pendientes': sum(1 for x in ciclo_gestion_raw if x['ciclo'] == '10-25' and x['estado'] == 'pendiente'),
-                'monto_total': round(sum(x['monto'] for x in ciclo_gestion_raw if x['ciclo'] == '10-25'), 2),
-                'monto_pendiente': round(sum(x['monto'] for x in ciclo_gestion_raw if x['ciclo'] == '10-25' and x['estado'] == 'pendiente'), 2),
+                'total': sum(1 for x in ciclo_gestion_list if x['ciclo'] == '10-25'),
+                'monto': round(sum(x['monto'] for x in ciclo_gestion_list if x['ciclo'] == '10-25'), 2),
             },
         },
         'hoy': str(hoy),

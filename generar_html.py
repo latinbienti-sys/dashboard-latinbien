@@ -1052,13 +1052,11 @@ html = f'''<!DOCTYPE html>
 
     <!-- ═══ TAB: GESTIÓN DE COBRANZA POR CICLO ═══ -->
     <div class="tab-content" id="tab-gestion">
-        <div class="kpi-row">
-            <div class="kpi-card accent"><div class="number" id="gTotal0318">—</div><div class="label">Ciclo 03-18 Total</div></div>
-            <div class="kpi-card danger"><div class="number" id="gPend0318">—</div><div class="label">03-18 Pendientes</div></div>
-            <div class="kpi-card success"><div class="number" id="gPag0318">—</div><div class="label">03-18 Pagados</div></div>
-            <div class="kpi-card accent"><div class="number" id="gTotal1025">—</div><div class="label">Ciclo 10-25 Total</div></div>
-            <div class="kpi-card danger"><div class="number" id="gPend1025">—</div><div class="label">10-25 Pendientes</div></div>
-            <div class="kpi-card success"><div class="number" id="gPag1025">—</div><div class="label">10-25 Pagados</div></div>
+            <div class="kpi-row">
+            <div class="kpi-card accent"><div class="number" id="gTotal0318">—</div><div class="label">Ciclo 03-18 Pendientes</div></div>
+            <div class="kpi-card danger"><div class="number money" id="gPend0318">—</div><div class="label">03-18 Monto</div></div>
+            <div class="kpi-card accent"><div class="number" id="gTotal1025">—</div><div class="label">Ciclo 10-25 Pendientes</div></div>
+            <div class="kpi-card danger"><div class="number money" id="gPend1025">—</div><div class="label">10-25 Monto</div></div>
         </div>
         <div class="results-section">
             <h3>📋 Gestión de Cobranza por Ciclo — Segmentación por Fase</h3>
@@ -1081,6 +1079,8 @@ html = f'''<!DOCTYPE html>
                     <option value="1_dia_despues">1 día después</option>
                     <option value="2_dias_despues">2+ días después</option>
                 </select>
+                <strong style="margin-left:12px">Fecha:</strong>
+                <input type="date" id="filtroFecha" onchange="aplicarFiltrosGestion()" style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;font-size:12px">
                 <button onclick="exportarGestionCSV()" style="padding:6px 14px;border-radius:6px;border:1px solid #059669;background:#d1fae5;cursor:pointer;font-size:12px;color:#059669;margin-left:auto">📥 Exportar CSV</button>
             </div>
             <div class="table-container">
@@ -2776,40 +2776,29 @@ try {{
     var ggRes = gg.resumen || {{}};
     var ggHoy = gg.hoy || '';
 
-    // KPIs
     var r0318 = ggRes['03-18'] || {{}};
     var r1025 = ggRes['10-25'] || {{}};
     document.getElementById('gTotal0318').textContent = (r0318.total||0).toLocaleString();
-    document.getElementById('gPend0318').textContent = (r0318.pendientes||0).toLocaleString();
-    document.getElementById('gPag0318').textContent = (r0318.pagados||0).toLocaleString();
+    document.getElementById('gPend0318').textContent = fmtMoney(r0318.monto||0);
     document.getElementById('gTotal1025').textContent = (r1025.total||0).toLocaleString();
-    document.getElementById('gPend1025').textContent = (r1025.pendientes||0).toLocaleString();
-    document.getElementById('gPag1025').textContent = (r1025.pagados||0).toLocaleString();
+    document.getElementById('gPend1025').textContent = fmtMoney(r1025.monto||0);
 
-    // Filtros
-    window._gestionFiltroCiclo = 'todos';
-    window._gestionFiltroEstado = 'todos';
+    window._gfCiclo = 'todos';
+    window._gfFecha = '';
 
-    function faseLabel(f) {{
-        var m = {{'2_dias_antes':'2 días antes','1_dia_antes':'1 día antes','dia_ciclo':'Día del ciclo','1_dia_despues':'1 día después','2_dias_despues':'2+ días después','pasado':'Pasado'}};
-        return m[f] || f;
+    function faseL(f) {{
+        return {{'2_dias_antes':'2 días antes','1_dia_antes':'1 día antes','dia_ciclo':'Día del ciclo','1_dia_despues':'1 día después','2_dias_despues':'2+ días después','pasado':'Pasado'}}[f] || f;
     }}
-    function faseColor(f) {{
-        if (f.includes('antes')) return '#2563eb';
-        if (f === 'dia_ciclo') return '#d97706';
-        return '#ef4444';
+    function moraColor(m) {{
+        return {{'critico':'#dc2626','alto':'#ea580c','medio':'#d97706','hoy':'#0ea5e9','pendiente':'#10b981'}}[m] || '#6b7280';
+    }}
+    function moraLabel(m) {{
+        return {{'critico':'🔴 CRÍTICO','alto':'🟠 ALTO','medio':'🟡 MEDIO','hoy':'🔵 HOY','pendiente':'🟢 PENDIENTE'}}[m] || m;
     }}
 
     window.filtrarGestion = function(ciclo) {{
-        window._gestionFiltroCiclo = ciclo;
+        window._gfCiclo = ciclo;
         document.querySelectorAll('.btn-gestion').forEach(function(b) {{ b.style.fontWeight='normal'; b.style.boxShadow='none'; }});
-        event.target.style.fontWeight='700';
-        event.target.style.boxShadow='0 0 0 2px #213C83';
-        renderGestion();
-    }};
-    window.filtrarGestionEstado = function(estado) {{
-        window._gestionFiltroEstado = estado;
-        document.querySelectorAll('.btn-estado').forEach(function(b) {{ b.style.fontWeight='normal'; b.style.boxShadow='none'; }});
         event.target.style.fontWeight='700';
         event.target.style.boxShadow='0 0 0 2px #213C83';
         renderGestion();
@@ -2818,50 +2807,54 @@ try {{
 
     function renderGestion() {{
         var fc = document.getElementById('filtroFase').value;
+        var fd = document.getElementById('filtroFecha').value;
         var filtered = ggItems.filter(function(x) {{
-            if (window._gestionFiltroCiclo !== 'todos' && x.ciclo !== window._gestionFiltroCiclo) return false;
-            if (window._gestionFiltroEstado !== 'todos' && x.estado !== window._gestionFiltroEstado) return false;
+            if (window._gfCiclo !== 'todos' && x.ciclo !== window._gfCiclo) return false;
             if (fc !== 'todas' && x.fase !== fc) return false;
+            if (fd && x.fecha_pago !== fd) return false;
             return true;
         }});
         var body = document.getElementById('tablaGestion');
         var cont = document.getElementById('gContador');
         if (!body) return;
         var html = filtered.slice(0, 500).map(function(x) {{
-            var factUrl = 'https://latinbien.com/web#id=' + x.invoice_id + '&model=account.move&view_type=form';
-            var cicloCls = x.ciclo === '03-18' ? 'background:#dbeafe;color:#1e40af' : 'background:#fce7f3;color:#9d174d';
-            var estadoCls = x.estado === 'pagado' ? 'background:#d1fae5;color:#065f46' : 'background:#fef2f2;color:#991b1b';
+            var url = 'https://latinbien.com/web#id=' + x.invoice_id + '&model=account.move&view_type=form';
+            var cc = x.ciclo === '03-18' ? 'background:#dbeafe;color:#1e40af' : 'background:#fce7f3;color:#9d174d';
+            var mc = moraColor(x.morosidad);
             return '<tr>' +
-                '<td><span style="padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;' + cicloCls + '">' + x.ciclo + '</span></td>' +
-                '<td style="color:' + faseColor(x.fase) + ';font-weight:600;font-size:12px">' + faseLabel(x.fase) + '</td>' +
-                '<td><span style="padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;' + estadoCls + '">' + x.estado.toUpperCase() + '</span></td>' +
+                '<td><span style="padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;' + cc + '">' + x.ciclo + '</span></td>' +
+                '<td style="color:' + mc + ';font-weight:600;font-size:12px">' + moraLabel(x.morosidad) + '</td>' +
+                '<td style="font-size:12px">' + faseL(x.fase) + '</td>' +
+                '<td style="font-size:11px;color:#888">' + x.status_op + '</td>' +
                 '<td><strong>' + x.cliente + '</strong></td>' +
-                '<td><a href="' + factUrl + '" target="_blank" style="color:#213C83;text-decoration:none;border-bottom:1px dashed #213C83;font-size:12px">' + x.factura + '</a></td>' +
-                '<td style="font-size:12px">' + x.payment_date + '</td>' +
+                '<td><a href="' + url + '" target="_blank" style="color:#213C83;text-decoration:none;border-bottom:1px dashed #213C83;font-size:12px">' + x.factura + '</a></td>' +
+                '<td style="font-size:12px">' + x.fecha_pago + '</td>' +
                 '<td class="text-right" style="font-weight:600">' + fmtMoney(x.monto) + '</td>' +
-                '<td class="text-right">' + x.diff_dias + '</td>' +
+                '<td class="text-right">' + x.cuotas + '</td>' +
+                '<td class="text-right" style="color:' + mc + ';font-weight:700">' + x.diff_dias + '</td>' +
                 '</tr>';
         }}).join('');
-        body.innerHTML = html || '<tr><td colspan="8" style="text-align:center;color:#999">Sin datos para este filtro</td></tr>';
-        cont.textContent = filtered.length + ' cuotas de ' + ggItems.length + ' totales (mostrando ' + Math.min(filtered.length, 500) + ')';
+        body.innerHTML = html || '<tr><td colspan="10" style="text-align:center;color:#999">Sin datos para este filtro</td></tr>';
+        cont.textContent = filtered.length + ' facturas de ' + ggItems.length + ' totales' + (fd ? ' (fecha: ' + fd + ')' : '');
     }}
 
     window.exportarGestionCSV = function() {{
         var fc = document.getElementById('filtroFase').value;
+        var fd = document.getElementById('filtroFecha').value;
         var filtered = ggItems.filter(function(x) {{
-            if (window._gestionFiltroCiclo !== 'todos' && x.ciclo !== window._gestionFiltroCiclo) return false;
-            if (window._gestionFiltroEstado !== 'todos' && x.estado !== window._gestionFiltroEstado) return false;
+            if (window._gfCiclo !== 'todos' && x.ciclo !== window._gfCiclo) return false;
             if (fc !== 'todas' && x.fase !== fc) return false;
+            if (fd && x.fecha_pago !== fd) return false;
             return true;
         }});
-        var csv = 'Ciclo,Fase,Estado,Cliente,Factura,Fecha Pago,Monto,Dias\\n';
+        var csv = 'Ciclo,Morosidad,Fase,Status Op,Cliente,Factura,Fecha Pago,Monto,Cuotas,Dias\\n';
         filtered.forEach(function(x) {{
-            csv += '"' + x.ciclo + '","' + faseLabel(x.fase) + '","' + x.estado + '","' + x.cliente + '","' + x.factura + '","' + x.payment_date + '",' + x.monto + ',' + x.diff_dias + '\\n';
+            csv += '"' + x.ciclo + '","' + x.morosidad + '","' + faseL(x.fase) + '","' + x.status_op + '","' + x.cliente + '","' + x.factura + '","' + x.fecha_pago + '",' + x.monto + ',' + x.cuotas + ',' + x.diff_dias + '\\n';
         }});
         var blob = new Blob([csv], {{type: 'text/csv;charset=utf-8;'}});
         var link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'gestion_cobranza_' + ggHoy + '_' + window._gestionFiltroCiclo + '_' + window._gestionFiltroEstado + '.csv';
+        link.download = 'gestion_cobranza_' + ggHoy + '_' + window._gfCiclo + '.csv';
         link.click();
     }};
 
