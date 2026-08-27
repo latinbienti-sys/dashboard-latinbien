@@ -237,6 +237,7 @@ def fetch_data():
         'facturacion_julio': facturacion_julio,
         'expedientes': expedientes,
         'ventas_motos': fetch_ventas_motos(sess),
+        'pago_proveedor_moto': fetch_pagoProveedorMoto(sess),
     }
 
 # ── Expedientes (Credit Lines Aprobadas) ─────────────────────────────────────
