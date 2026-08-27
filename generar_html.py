@@ -376,6 +376,7 @@ html = f'''<!DOCTYPE html>
         <button class="tab-btn" onclick="switchTab('expedientes')">🗂️ Expedientes</button>
         <button class="tab-btn" onclick="switchTab('prontopago')">⚡ Pronto Pago</button>
         <button class="tab-btn" onclick="switchTab('ventas_motos')">🏍️ Ventas Motos</button>
+        <button class="tab-btn" onclick="switchTab('pago_proveedor')">💰 Pago Proveedor</button>
         <button class="tab-btn" onclick="switchTab('resumen')">📊 Resumen</button>
         <button class="tab-btn" onclick="switchTab('pagos')">💳 Plan de Pagos</button>
         <button class="tab-btn" onclick="switchTab('ciclos')">📅 Ciclos</button>
@@ -1137,6 +1138,56 @@ html = f'''<!DOCTYPE html>
         </div>
     </div>
 
+    <!-- ═══ TAB: PAGO PROVEEDOR MOTO ═══ -->
+    <div class="tab-content" id="tab-pago_proveedor">
+        <div class="kpi-row">
+            <div class="kpi-card accent"><div class="number" id="ppmProvedor">—</div><div class="label">Proveedor</div></div>
+            <div class="kpi-card"><div class="number" id="ppmOrdenes">—</div><div class="label">Órdenes</div></div>
+            <div class="kpi-card success"><div class="number money" id="ppmInicial">—</div><div class="label">40% Inicial</div></div>
+            <div class="kpi-card"><div class="number money" id="ppmFinanciado">—</div><div class="label">60% Financiado</div></div>
+        </div>
+        <div class="results-section">
+            <h3>💰 Pago a Proveedor — MOTO CITY PRO, C.A.</h3>
+            <p style="color:#666;margin:0 0 12px"><strong>40% Inicial:</strong> pagadero al momento de facturación y entrega. &nbsp;|&nbsp; <strong>60% Restante:</strong> 8 cuotas quincenales según ciclo del cliente. &nbsp;|&nbsp; <strong>Opción A:</strong> días 5 y 20 &nbsp;|&nbsp; <strong>Opción B:</strong> días 12 y 27</p>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Orden</th>
+                            <th>Cliente</th>
+                            <th>Modelo</th>
+                            <th>Ciclo</th>
+                            <th>Opción</th>
+                            <th class="text-right">Precio Moto</th>
+                            <th class="text-right">40% Inicial</th>
+                            <th class="text-right">60% Restante</th>
+                            <th class="text-right">Cuota Quincenal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaPagoProveedor"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="results-section">
+            <h3>📅 Cronograma de Pagos (8 cuotas quincenales)</h3>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Orden</th>
+                            <th>Cliente</th>
+                            <th>Cuota</th>
+                            <th>Fecha Pago</th>
+                            <th class="text-right">Monto</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaCronograma"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div class="footer">
         <strong>LATINBIEN</strong> — Latinoamericana de Bienes y Servicios, C.A. &nbsp;·&nbsp;
         Generado el <span id="fechaGeneracion"></span>
@@ -1795,7 +1846,7 @@ function renderTable() {{
 function switchTab(tab) {{
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza', ventas_motos:'Ventas Motos'}};
+    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza', ventas_motos:'Ventas Motos', pago_proveedor:'Pago Proveedor'}};
     const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes(tabMap[tab]));
     if (btn) btn.classList.add('active');
     document.getElementById('tab-'+tab).classList.add('active');
@@ -2927,6 +2978,53 @@ try {{
         }}).join('');
     }}
 }} catch(e) {{ console.error('Ventas Motos error:', e); }}
+
+// ── Pago Proveedor Moto ──
+try {{
+    var ppm = DATA.pago_proveedor_moto || {{}};
+    document.getElementById('ppmProvedor').textContent = ppm.proveedor || '';
+    document.getElementById('ppmOrdenes').textContent = (ppm.total_ordenes||0).toLocaleString();
+    document.getElementById('ppmInicial').textContent = fmtMoney(ppm.total_pagoInicial||0);
+    document.getElementById('ppmFinanciado').textContent = fmtMoney(ppm.total_financiado||0);
+
+    var ppmItems = ppm.items || [];
+    var ppmBody = document.getElementById('tablaPagoProveedor');
+    if (ppmBody && ppmItems.length) {{
+        ppmBody.innerHTML = ppmItems.map(function(it) {{
+            var ordUrl = 'https://latinbien.com/web#id=' + (it.orden_id||0) + '&model=sale.order&view_type=form';
+            return '<tr>' +
+                '<td><a href="' + ordUrl + '" target="_blank" style="color:#213C83;font-weight:600;text-decoration:none;border-bottom:1px dashed #213C83">' + it.orden + '</a></td>' +
+                '<td><strong>' + it.cliente + '</strong></td>' +
+                '<td>' + it.modelo + '</td>' +
+                '<td>' + it.ciclo + '</td>' +
+                '<td><span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">' + it.opcion + '</span></td>' +
+                '<td class="text-right" style="font-weight:600">' + fmtMoney(it.precio_moto) + '</td>' +
+                '<td class="text-right" style="color:#059669;font-weight:700">' + fmtMoney(it.inicial_40) + '</td>' +
+                '<td class="text-right" style="color:#2563eb;font-weight:600">' + fmtMoney(it.restante_60) + '</td>' +
+                '<td class="text-right">' + fmtMoney(it.cuota_quincenal) + '</td>' +
+                '</tr>';
+        }}).join('');
+    }}
+
+    // Cronograma
+    var cronBody = document.getElementById('tablaCronograma');
+    if (cronBody && ppmItems.length) {{
+        var cronHtml = '';
+        ppmItems.forEach(function(it) {{
+            it.pagos.forEach(function(p) {{
+                cronHtml += '<tr>' +
+                    '<td>' + it.orden + '</td>' +
+                    '<td><strong>' + it.cliente + '</strong></td>' +
+                    '<td class="text-right">Cuota ' + p.cuota + '/8</td>' +
+                    '<td>' + p.fecha_pago + '</td>' +
+                    '<td class="text-right" style="font-weight:600">' + fmtMoney(p.monto) + '</td>' +
+                    '<td><span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:11px">Pendiente</span></td>' +
+                    '</tr>';
+            }});
+        }});
+        cronBody.innerHTML = cronHtml || '<tr><td colspan="6" style="text-align:center;color:#999">Sin cronograma</td></tr>';
+    }}
+}} catch(e) {{ console.error('Pago Proveedor error:', e); }}
 
 renderTable();
 switchTab('gestion');
