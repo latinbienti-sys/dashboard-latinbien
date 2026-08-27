@@ -1118,19 +1118,20 @@ html = f'''<!DOCTYPE html>
             <div class="chart-container" style="height:350px"><canvas id="chartVentasMotos"></canvas></div>
         </div>
         <div class="results-section">
-            <h3>📋 Detalle por Modelo</h3>
+            <h3>📋 Órdenes Publicadas</h3>
             <div class="table-container">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Mes</th>
+                            <th>Orden</th>
+                            <th>Cliente</th>
                             <th>Modelo</th>
                             <th class="text-right">Unidades</th>
                             <th class="text-right">Monto</th>
-                            <th class="text-right">Promedio</th>
+                            <th>Mes</th>
                         </tr>
                     </thead>
-                    <tbody id="tablaVentasMotos"></tbody>
+                    <tbody id="tablaOrdenesMotos"></tbody>
                 </table>
             </div>
         </div>
@@ -2945,6 +2946,24 @@ try {{
                 '<td class="text-right">' + d.unidades + '</td>' +
                 '<td class="text-right">' + fmtMoney(d.monto) + '</td>' +
                 '<td class="text-right">' + fmtMoney(d.promedio) + '</td></tr>';
+        }}).join('');
+    }}
+
+    // Tabla órdenes
+    var vmItems = vm.items || [];
+    var vmOrdBody = document.getElementById('tablaOrdenesMotos');
+    if (vmOrdBody && vmItems.length) {{
+        vmOrdBody.innerHTML = vmItems.map(function(it) {{
+            var ordUrl = 'https://latinbien.com/web#id=' + (it.orden_id||0) + '&model=sale.order&view_type=form';
+            var credTag = it.credimoto ? '<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;border:1px solid #f59e0b">CREDIMOTO</span>' : '';
+            return '<tr>' +
+                '<td><a href="' + ordUrl + '" target="_blank" style="color:#213C83;font-weight:600;text-decoration:none;border-bottom:1px dashed #213C83">' + it.orden + '</a></td>' +
+                '<td><strong>' + it.cliente + '</strong> ' + credTag + '</td>' +
+                '<td>' + it.modelo + '</td>' +
+                '<td class="text-right">' + it.unidades + '</td>' +
+                '<td class="text-right">' + fmtMoney(it.monto) + '</td>' +
+                '<td>' + it.mes + '</td>' +
+                '</tr>';
         }}).join('');
     }}
 }} catch(e) {{ console.error('Ventas Motos error:', e); }}

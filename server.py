@@ -1307,20 +1307,14 @@ def fetch_payment_plan(sess):
     }
 
 def fetch_ventas_motos(sess):
-    """Ventas de motos: sale.order con productos categoría CASO MOTO/Motos."""
+    """Ventas de motos PUBLICADAS: sale.order con productos categoría CASO MOTO/Motos, state='sale'."""
     from collections import defaultdict
-    moto_categ_ids = [174, 167]  # CASO MOTO, Motos
+    moto_categ_ids = [174, 167]
 
     # Productos moto
     prod_ids = json_execute(sess, 'product.product', 'search', [
         [['categ_id', 'in', moto_categ_ids]]
     ])
-    prod_names = {}
-    if prod_ids:
-        prods = json_execute(sess, 'product.product', 'read',
-                             [prod_ids, ['id', 'name']])
-        for p in prods:
-            prod_names[p['id']] = p.get('name', '')
 
     # Sale order lines con productos moto
     sol_ids = json_execute(sess, 'sale.order.line', 'search', [
@@ -1328,6 +1322,7 @@ def fetch_ventas_motos(sess):
     ])
 
     items = []
+    seen_orders = set()
     for i in range(0, len(sol_ids), 500):
         batch = sol_ids[i:i+500]
         sols = json_execute(sess, 'sale.order.line', 'read',
@@ -1340,29 +1335,50 @@ def fetch_ventas_motos(sess):
             oid_id = oid[0]
             # Datos de la orden
             order = json_execute(sess, 'sale.order', 'read', [
-                [oid_id], ['name', 'partner_id', 'date_order', 'amount_total', 'x_status_compra']
+                [oid_id], ['name', 'partner_id', 'date_order', 'amount_total',
+                           'state', 'x_status_compra']
             ])
             if not order:
                 continue
             o = order[0]
+            # SOLO PUBLICADAS (state=sale)
+            if o.get('state') != 'sale':
+                continue
             date_order = str(o.get('date_order') or '')[:7]
             if not date_order:
                 continue
             pid = o.get('partner_id')
+            partner_id = pid[0] if isinstance(pid, list) and len(pid) > 1 else 0
             cliente = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Desconocido'
             prod = sol.get('product_id')
             modelo = prod[1] if isinstance(prod, list) and len(prod) > 1 else ''
             qty = sol.get('product_uom_qty', 0)
             monto = sol.get('price_subtotal', 0)
 
+            # Buscar tag CREDIMOTO del partner
+            credimoto = False
+            if partner_id:
+                try:
+                    p_data = json_execute(sess, 'res.partner', 'read',
+                                         [partner_id], ['category_id'])
+                    if p_data:
+                        tags = [t[1] for t in p_data[0].get('category_id', [])
+                                if isinstance(t, list)]
+                        credimoto = any('CREDIMOTO' in t or 'CERDIMOTO' in t for t in tags)
+                except:
+                    pass
+
             items.append({
                 'mes': date_order,
                 'modelo': modelo,
                 'cliente': cliente,
                 'orden': o.get('name', ''),
+                'orden_id': oid_id,
                 'unidades': int(qty),
                 'monto': round(float(monto), 2),
+                'credimoto': credimoto,
             })
+            seen_orders.add(oid_id)
 
     # Agrupar por mes y modelo
     por_mes_modelo = defaultdict(lambda: {'unidades': 0, 'monto': 0.0})
@@ -1382,7 +1398,7 @@ def fetch_ventas_motos(sess):
     return {
         'items': items,
         'detalle': detalle,
-        'total_ordenes': len(set(it['orden'] for it in items)),
+        'total_ordenes': len(seen_orders),
         'total_motos': sum(it['unidades'] for it in items),
         'total_monto': round(sum(it['monto'] for it in items), 2),
     }
