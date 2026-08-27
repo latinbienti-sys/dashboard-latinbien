@@ -1109,25 +1109,25 @@ html = f'''<!DOCTYPE html>
     <div class="tab-content" id="tab-ventas_motos">
         <div class="kpi-row">
             <div class="kpi-card accent"><div class="number" id="vmTotal">—</div><div class="label">Órdenes Motos</div></div>
-            <div class="kpi-card success"><div class="number money" id="vmMonto">—</div><div class="label">Monto Total</div></div>
+            <div class="kpi-card success"><div class="number money" id="vmMonto">—</div><div class="label">Monto Total Facturado</div></div>
             <div class="kpi-card"><div class="number" id="vmMotos">—</div><div class="label">Motos Vendidas</div></div>
+            <div class="kpi-card accent"><div class="number money" id="vmProducto">—</div><div class="label">Precio Producto</div></div>
+            <div class="kpi-card"><div class="number money" id="vmGasto">—</div><div class="label">Gasto Admin</div></div>
         </div>
         <div class="results-section">
-            <h3>🏍️ Ventas de Motos por Mes y Modelo</h3>
-            <p style="color:#666;margin:0 0 12px">Órdenes de venta de motos (categoría CASO MOTO/Motos). Solo facturadas.</p>
-            <div class="chart-container" style="height:350px"><canvas id="chartVentasMotos"></canvas></div>
-        </div>
-        <div class="results-section">
-            <h3>📋 Órdenes Publicadas</h3>
+            <h3>📋 Órdenes Publicadas de Motos</h3>
+            <p style="color:#666;margin:0 0 12px">Solo órdenes de venta publicadas (state=sale). Precio producto y gasto administrativo por separado.</p>
             <div class="table-container">
                 <table class="data-table">
                     <thead>
                         <tr>
                             <th>Orden</th>
                             <th>Cliente</th>
+                            <th>CREDIMOTO</th>
                             <th>Modelo</th>
-                            <th class="text-right">Unidades</th>
-                            <th class="text-right">Monto</th>
+                            <th class="text-right">Precio Moto</th>
+                            <th class="text-right">Gasto Admin</th>
+                            <th class="text-right">Total</th>
                             <th>Mes</th>
                         </tr>
                     </thead>
@@ -2904,50 +2904,8 @@ try {{
     document.getElementById('vmTotal').textContent = (vm.total_ordenes||0).toLocaleString();
     document.getElementById('vmMonto').textContent = fmtMoney(vm.total_monto||0);
     document.getElementById('vmMotos').textContent = (vm.total_motos||0).toLocaleString();
-
-    var det = vm.detalle || [];
-    if (det.length > 0) {{
-        // Agrupar por mes para el gráfico
-        var vmMeses = {{}};
-        det.forEach(function(d) {{
-            if (!vmMeses[d.mes]) vmMeses[d.mes] = {{}};
-            vmMeses[d.mes][d.modelo] = (vmMeses[d.mes][d.modelo] || 0) + d.unidades;
-        }});
-        var sortedMeses = Object.keys(vmMeses).sort();
-        var allModelos = [...new Set(det.map(function(d) {{ return d.modelo; }}))].slice(0, 10);
-        var colors = ['#213C83','#F98B10','#10b981','#ef4444','#8b5cf6','#06b6d4','#f59e0b','#ec4899','#14b8a6','#6366f1'];
-        var datasets = allModelos.map(function(m, i) {{
-            return {{
-                label: m.replace('Motocicleta Bel ', ''),
-                data: sortedMeses.map(function(me) {{ return vmMeses[me][m] || 0; }}),
-                backgroundColor: colors[i % colors.length],
-                borderWidth: 0, borderRadius: 4
-            }};
-        }});
-        safeChart('chartVentasMotos', {{
-            type: 'bar',
-            data: {{ labels: sortedMeses, datasets: datasets }},
-            options: {{
-                responsive: true, maintainAspectRatio: false,
-                plugins: {{ legend: {{ position: 'bottom' }} }},
-                scales: {{
-                    y: {{ beginAtZero: true, stacked: true, ticks: {{ precision: 0 }}, grid: {{ color: 'rgba(0,0,0,0.05)' }} }},
-                    x: {{ stacked: true, grid: {{ display: false }} }}
-                }}
-            }}
-        }});
-    }}
-
-    // Tabla detalle
-    var vmBody = document.getElementById('tablaVentasMotos');
-    if (vmBody && det.length) {{
-        vmBody.innerHTML = det.map(function(d) {{
-            return '<tr><td>' + d.mes + '</td><td><strong>' + d.modelo + '</strong></td>' +
-                '<td class="text-right">' + d.unidades + '</td>' +
-                '<td class="text-right">' + fmtMoney(d.monto) + '</td>' +
-                '<td class="text-right">' + fmtMoney(d.promedio) + '</td></tr>';
-        }}).join('');
-    }}
+    document.getElementById('vmProducto').textContent = fmtMoney(vm.total_producto||0);
+    document.getElementById('vmGasto').textContent = fmtMoney(vm.total_gasto_admin||0);
 
     // Tabla órdenes
     var vmItems = vm.items || [];
@@ -2955,13 +2913,15 @@ try {{
     if (vmOrdBody && vmItems.length) {{
         vmOrdBody.innerHTML = vmItems.map(function(it) {{
             var ordUrl = 'https://latinbien.com/web#id=' + (it.orden_id||0) + '&model=sale.order&view_type=form';
-            var credTag = it.credimoto ? '<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;border:1px solid #f59e0b">CREDIMOTO</span>' : '';
+            var credTag = it.credimoto ? '<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;border:1px solid #f59e0b">CREDIMOTO</span>' : '<span style="color:#ccc">—</span>';
             return '<tr>' +
                 '<td><a href="' + ordUrl + '" target="_blank" style="color:#213C83;font-weight:600;text-decoration:none;border-bottom:1px dashed #213C83">' + it.orden + '</a></td>' +
-                '<td><strong>' + it.cliente + '</strong> ' + credTag + '</td>' +
+                '<td><strong>' + it.cliente + '</strong></td>' +
+                '<td>' + credTag + '</td>' +
                 '<td>' + it.modelo + '</td>' +
-                '<td class="text-right">' + it.unidades + '</td>' +
-                '<td class="text-right">' + fmtMoney(it.monto) + '</td>' +
+                '<td class="text-right" style="font-weight:600">' + fmtMoney(it.precio_producto) + '</td>' +
+                '<td class="text-right" style="color:#888">' + fmtMoney(it.gasto_admin) + '</td>' +
+                '<td class="text-right" style="font-weight:700">' + fmtMoney(it.monto_total) + '</td>' +
                 '<td>' + it.mes + '</td>' +
                 '</tr>';
         }}).join('');
