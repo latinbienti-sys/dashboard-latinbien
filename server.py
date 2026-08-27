@@ -236,6 +236,7 @@ def fetch_data():
         'payment_plan': payment_plan,
         'facturacion_julio': facturacion_julio,
         'expedientes': expedientes,
+        'ventas_motos': fetch_ventas_motos(sess),
     }
 
 # ── Expedientes (Credit Lines Aprobadas) ─────────────────────────────────────
@@ -444,10 +445,11 @@ def fetch_payment_plan(sess):
 
     # Cargar teléfonos: res.partner.phone/mobile + contact_ids → chatroom number_format
     partner_ids = list(set(pid[0] for inv in inv_data if (pid := inv.get('partner_id')) and isinstance(pid, list)))
+    partner_tags = {}  # partner_id -> set of tag names
     for i in range(0, len(partner_ids), 500):
         batch = partner_ids[i:i+500]
         pdata = json_execute(sess, 'res.partner', 'read',
-                             [batch, ['id', 'phone', 'mobile', 'contact_ids']])
+                             [batch, ['id', 'phone', 'mobile', 'contact_ids', 'category_id']])
         for p in pdata:
             pid = p['id']
             phone = p.get('mobile') or p.get('phone') or ''
@@ -457,6 +459,9 @@ def fetch_payment_plan(sess):
             if phone_clean:
                 phone_clean = '+' + phone_clean
             partner_phone[pid] = phone_clean
+            # Tags del partner
+            tags = p.get('category_id', [])
+            partner_tags[pid] = set(t[1] for t in tags if isinstance(t, list))
 
             # Si no tiene phone, buscar en contact_ids (chatrooms)
             cids = p.get('contact_ids', [])
@@ -830,14 +835,24 @@ def fetch_payment_plan(sess):
         if p['dias_antes'] > c['max_dias']:
             c['max_dias'] = p['dias_antes']
 
-    pronto_pago_list = [{
-        'cliente': k,
-        'monto': round(v['monto'], 2),
-        'cuotas': v['cuotas'],
-        'facturas': v['facturas'],
-        'fecha_mas_lejana': v['fecha_mas_lejana'],
-        'max_dias': v['max_dias'],
-    } for k, v in sorted(pronto_cliente.items(), key=lambda x: -x[1]['monto'])]
+    pronto_pago_list = []
+    for k, v in sorted(pronto_cliente.items(), key=lambda x: -x[1]['monto']):
+        es_credimoto = False
+        for iid, pn in partner_map.items():
+            if pn == k:
+                tags = partner_tags.get(partner_id_map.get(iid, 0), set())
+                if 'CREDIMOTO' in tags or 'CERDIMOTO' in tags:
+                    es_credimoto = True
+                break
+        pronto_pago_list.append({
+            'cliente': k,
+            'monto': round(v['monto'], 2),
+            'cuotas': v['cuotas'],
+            'facturas': v['facturas'],
+            'fecha_mas_lejana': v['fecha_mas_lejana'],
+            'max_dias': v['max_dias'],
+            'credimoto': es_credimoto,
+        })
 
     total_pronto_raw_monto = round(sum(p['monto'] for p in pronto_pago_raw), 2)
 
@@ -1289,6 +1304,87 @@ def fetch_payment_plan(sess):
         'facturas_con_compromiso': facturas_con_compromiso,
         'total_compromiso': total_compromiso,
         'ciclo_gestion': ciclo_gestion,
+    }
+
+def fetch_ventas_motos(sess):
+    """Ventas de motos: sale.order con productos categoría CASO MOTO/Motos."""
+    from collections import defaultdict
+    moto_categ_ids = [174, 167]  # CASO MOTO, Motos
+
+    # Productos moto
+    prod_ids = json_execute(sess, 'product.product', 'search', [
+        [['categ_id', 'in', moto_categ_ids]]
+    ])
+    prod_names = {}
+    if prod_ids:
+        prods = json_execute(sess, 'product.product', 'read',
+                             [prod_ids, ['id', 'name']])
+        for p in prods:
+            prod_names[p['id']] = p.get('name', '')
+
+    # Sale order lines con productos moto
+    sol_ids = json_execute(sess, 'sale.order.line', 'search', [
+        [['product_id', 'in', prod_ids]]
+    ])
+
+    items = []
+    for i in range(0, len(sol_ids), 500):
+        batch = sol_ids[i:i+500]
+        sols = json_execute(sess, 'sale.order.line', 'read',
+                            [batch, ['order_id', 'product_id', 'product_uom_qty',
+                                     'price_subtotal', 'name']])
+        for sol in sols:
+            oid = sol.get('order_id')
+            if not oid or not isinstance(oid, list):
+                continue
+            oid_id = oid[0]
+            # Datos de la orden
+            order = json_execute(sess, 'sale.order', 'read', [
+                [oid_id], ['name', 'partner_id', 'date_order', 'amount_total', 'x_status_compra']
+            ])
+            if not order:
+                continue
+            o = order[0]
+            date_order = str(o.get('date_order') or '')[:7]
+            if not date_order:
+                continue
+            pid = o.get('partner_id')
+            cliente = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Desconocido'
+            prod = sol.get('product_id')
+            modelo = prod[1] if isinstance(prod, list) and len(prod) > 1 else ''
+            qty = sol.get('product_uom_qty', 0)
+            monto = sol.get('price_subtotal', 0)
+
+            items.append({
+                'mes': date_order,
+                'modelo': modelo,
+                'cliente': cliente,
+                'orden': o.get('name', ''),
+                'unidades': int(qty),
+                'monto': round(float(monto), 2),
+            })
+
+    # Agrupar por mes y modelo
+    por_mes_modelo = defaultdict(lambda: {'unidades': 0, 'monto': 0.0})
+    for it in items:
+        key = f"{it['mes']}|{it['modelo']}"
+        por_mes_modelo[key]['unidades'] += it['unidades']
+        por_mes_modelo[key]['monto'] += it['monto']
+
+    detalle = [{
+        'mes': k.split('|')[0],
+        'modelo': k.split('|')[1],
+        'unidades': v['unidades'],
+        'monto': round(v['monto'], 2),
+        'promedio': round(v['monto'] / v['unidades'], 2) if v['unidades'] else 0,
+    } for k, v in sorted(por_mes_modelo.items())]
+
+    return {
+        'items': items,
+        'detalle': detalle,
+        'total_ordenes': len(set(it['orden'] for it in items)),
+        'total_motos': sum(it['unidades'] for it in items),
+        'total_monto': round(sum(it['monto'] for it in items), 2),
     }
 
 def fetch_facturacion_julio(sess):

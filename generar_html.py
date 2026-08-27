@@ -372,17 +372,18 @@ html = f'''<!DOCTYPE html>
     </div>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('resumen')">📊 Resumen</button>
+        <button class="tab-btn active" onclick="switchTab('gestion')">📋 Gestión Cobranza</button>
+        <button class="tab-btn" onclick="switchTab('expedientes')">🗂️ Expedientes</button>
+        <button class="tab-btn" onclick="switchTab('prontopago')">⚡ Pronto Pago</button>
+        <button class="tab-btn" onclick="switchTab('ventas_motos')">🏍️ Ventas Motos</button>
+        <button class="tab-btn" onclick="switchTab('resumen')">📊 Resumen</button>
+        <button class="tab-btn" onclick="switchTab('pagos')">💳 Plan de Pagos</button>
+        <button class="tab-btn" onclick="switchTab('ciclos')">📅 Ciclos</button>
         <button class="tab-btn" onclick="switchTab('montos')">💰 Montos</button>
         <button class="tab-btn" onclick="switchTab('segmentos')">👥 Segmentos</button>
         <button class="tab-btn" onclick="switchTab('temporal')">⏱ Temporal VIP</button>
         <button class="tab-btn" onclick="switchTab('tabla')">📋 Listado</button>
-        <button class="tab-btn" onclick="switchTab('pagos')">💳 Plan de Pagos</button>
         <button class="tab-btn" onclick="switchTab('factjulio')">📋 Fact. Julio</button>
-        <button class="tab-btn" onclick="switchTab('expedientes')">🗂️ Expedientes</button>
-        <button class="tab-btn" onclick="switchTab('prontopago')">⚡ Pronto Pago</button>
-        <button class="tab-btn" onclick="switchTab('ciclos')">📅 Ciclos</button>
-        <button class="tab-btn" onclick="switchTab('gestion')">📋 Gestión Cobranza</button>
     </div>
 
     <!-- TAB 1: RESUMEN -->
@@ -1104,6 +1105,37 @@ html = f'''<!DOCTYPE html>
         </div>
     </div>
 
+    <!-- ═══ TAB: VENTAS MOTOS ═══ -->
+    <div class="tab-content" id="tab-ventas_motos">
+        <div class="kpi-row">
+            <div class="kpi-card accent"><div class="number" id="vmTotal">—</div><div class="label">Órdenes Motos</div></div>
+            <div class="kpi-card success"><div class="number money" id="vmMonto">—</div><div class="label">Monto Total</div></div>
+            <div class="kpi-card"><div class="number" id="vmMotos">—</div><div class="label">Motos Vendidas</div></div>
+        </div>
+        <div class="results-section">
+            <h3>🏍️ Ventas de Motos por Mes y Modelo</h3>
+            <p style="color:#666;margin:0 0 12px">Órdenes de venta de motos (categoría CASO MOTO/Motos). Solo facturadas.</p>
+            <div class="chart-container" style="height:350px"><canvas id="chartVentasMotos"></canvas></div>
+        </div>
+        <div class="results-section">
+            <h3>📋 Detalle por Modelo</h3>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Mes</th>
+                            <th>Modelo</th>
+                            <th class="text-right">Unidades</th>
+                            <th class="text-right">Monto</th>
+                            <th class="text-right">Promedio</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaVentasMotos"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div class="footer">
         <strong>LATINBIEN</strong> — Latinoamericana de Bienes y Servicios, C.A. &nbsp;·&nbsp;
         Generado el <span id="fechaGeneracion"></span>
@@ -1762,7 +1794,7 @@ function renderTable() {{
 function switchTab(tab) {{
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza'}};
+    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza', ventas_motos:'Ventas Motos'}};
     const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes(tabMap[tab]));
     if (btn) btn.classList.add('active');
     document.getElementById('tab-'+tab).classList.add('active');
@@ -2865,8 +2897,60 @@ try {{
     renderGestion();
 }} catch(e) {{ console.error('Gestion cobranza error:', e); }}
 
+// ── Ventas Motos ──
+try {{
+    var vm = DATA.ventas_motos || {{}};
+    document.getElementById('vmTotal').textContent = (vm.total_ordenes||0).toLocaleString();
+    document.getElementById('vmMonto').textContent = fmtMoney(vm.total_monto||0);
+    document.getElementById('vmMotos').textContent = (vm.total_motos||0).toLocaleString();
+
+    var det = vm.detalle || [];
+    if (det.length > 0) {{
+        // Agrupar por mes para el gráfico
+        var vmMeses = {{}};
+        det.forEach(function(d) {{
+            if (!vmMeses[d.mes]) vmMeses[d.mes] = {{}};
+            vmMeses[d.mes][d.modelo] = (vmMeses[d.mes][d.modelo] || 0) + d.unidades;
+        }});
+        var sortedMeses = Object.keys(vmMeses).sort();
+        var allModelos = [...new Set(det.map(function(d) {{ return d.modelo; }}))].slice(0, 10);
+        var colors = ['#213C83','#F98B10','#10b981','#ef4444','#8b5cf6','#06b6d4','#f59e0b','#ec4899','#14b8a6','#6366f1'];
+        var datasets = allModelos.map(function(m, i) {{
+            return {{
+                label: m.replace('Motocicleta Bel ', ''),
+                data: sortedMeses.map(function(me) {{ return vmMeses[me][m] || 0; }}),
+                backgroundColor: colors[i % colors.length],
+                borderWidth: 0, borderRadius: 4
+            }};
+        }});
+        safeChart('chartVentasMotos', {{
+            type: 'bar',
+            data: {{ labels: sortedMeses, datasets: datasets }},
+            options: {{
+                responsive: true, maintainAspectRatio: false,
+                plugins: {{ legend: {{ position: 'bottom' }} }},
+                scales: {{
+                    y: {{ beginAtZero: true, stacked: true, ticks: {{ precision: 0 }}, grid: {{ color: 'rgba(0,0,0,0.05)' }} }},
+                    x: {{ stacked: true, grid: {{ display: false }} }}
+                }}
+            }}
+        }});
+    }}
+
+    // Tabla detalle
+    var vmBody = document.getElementById('tablaVentasMotos');
+    if (vmBody && det.length) {{
+        vmBody.innerHTML = det.map(function(d) {{
+            return '<tr><td>' + d.mes + '</td><td><strong>' + d.modelo + '</strong></td>' +
+                '<td class="text-right">' + d.unidades + '</td>' +
+                '<td class="text-right">' + fmtMoney(d.monto) + '</td>' +
+                '<td class="text-right">' + fmtMoney(d.promedio) + '</td></tr>';
+        }}).join('');
+    }}
+}} catch(e) {{ console.error('Ventas Motos error:', e); }}
+
 renderTable();
-switchTab('resumen');
+switchTab('gestion');
 }} catch(e) {{
     console.error('Page init error:', e.message, e.stack);
     var errEl = document.getElementById('fechaGeneracion');
