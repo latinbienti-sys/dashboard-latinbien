@@ -1437,7 +1437,7 @@ def fetch_ventas_motos(sess):
             if oid and isinstance(oid, list):
                 order_ids.add(oid[0])
     orders = json_execute(sess, 'sale.order', 'read', [
-        list(order_ids), ['id', 'name', 'state', 'partner_id', 'date_order', 'order_line']
+        list(order_ids), ['id', 'name', 'state', 'partner_id', 'date_order', 'order_line', 'amount_total']
     ])
     posted = [o for o in orders if o.get('state') == 'sale']
     items = []
