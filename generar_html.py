@@ -1141,13 +1141,14 @@ html = f'''<!DOCTYPE html>
     <!-- ═══ TAB: PAGO PROVEEDOR MOTO ═══ -->
     <div class="tab-content" id="tab-pago_proveedor">
         <div class="kpi-row">
+            <div class="kpi-card" style="background:linear-gradient(135deg,#dbeafe,#93c5fd);border:2px solid #2563eb"><div class="number" style="font-size:18px;font-weight:800;color:#1e40af" id="ppmOrdenCompra">P01382</div><div class="label">Pedido de Compra</div></div>
             <div class="kpi-card accent"><div class="number" id="ppmProvedor">—</div><div class="label">Proveedor</div></div>
-            <div class="kpi-card"><div class="number" id="ppmOrdenes">—</div><div class="label">Órdenes</div></div>
+            <div class="kpi-card"><div class="number" id="ppmOrdenes">—</div><div class="label">Órdenes Venta</div></div>
             <div class="kpi-card success"><div class="number money" id="ppmInicial">—</div><div class="label">40% Inicial</div></div>
             <div class="kpi-card"><div class="number money" id="ppmFinanciado">—</div><div class="label">60% Financiado</div></div>
         </div>
         <div class="results-section">
-            <h3>💰 Pago a Proveedor — MOTO CITY PRO, C.A.</h3>
+            <h3>💰 Pedido de Compra P01382 — MOTO CITY PRO, C.A.</h3>
             <p style="color:#666;margin:0 0 12px"><strong>40% Inicial:</strong> pagadero al momento de facturación y entrega. &nbsp;|&nbsp; <strong>60% Restante:</strong> 8 cuotas quincenales según ciclo del cliente. &nbsp;|&nbsp; <strong>Opción A:</strong> días 5 y 20 &nbsp;|&nbsp; <strong>Opción B:</strong> días 12 y 27</p>
             <div class="table-container">
                 <table class="data-table">
@@ -2982,6 +2983,7 @@ try {{
 // ── Pago Proveedor Moto ──
 try {{
     var ppm = DATA.pago_proveedor_moto || {{}};
+    document.getElementById('ppmOrdenCompra').textContent = ppm.orden_compra || 'P01382';
     document.getElementById('ppmProvedor').textContent = ppm.proveedor || '';
     document.getElementById('ppmOrdenes').textContent = (ppm.total_ordenes||0).toLocaleString();
     document.getElementById('ppmInicial').textContent = fmtMoney(ppm.total_pagoInicial||0);
@@ -2991,17 +2993,16 @@ try {{
     var ppmBody = document.getElementById('tablaPagoProveedor');
     if (ppmBody && ppmItems.length) {{
         ppmBody.innerHTML = ppmItems.map(function(it) {{
-            var ordUrl = 'https://latinbien.com/web#id=' + (it.orden_id||0) + '&model=sale.order&view_type=form';
             return '<tr>' +
-                '<td><a href="' + ordUrl + '" target="_blank" style="color:#213C83;font-weight:600;text-decoration:none;border-bottom:1px dashed #213C83">' + it.orden + '</a></td>' +
-                '<td><strong>' + it.cliente + '</strong></td>' +
-                '<td>' + it.modelo + '</td>' +
-                '<td>' + it.ciclo + '</td>' +
-                '<td><span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">' + it.opcion + '</span></td>' +
-                '<td class="text-right" style="font-weight:600">' + fmtMoney(it.precio_moto) + '</td>' +
-                '<td class="text-right" style="color:#059669;font-weight:700">' + fmtMoney(it.inicial_40) + '</td>' +
-                '<td class="text-right" style="color:#2563eb;font-weight:600">' + fmtMoney(it.restante_60) + '</td>' +
-                '<td class="text-right">' + fmtMoney(it.cuota_quincenal) + '</td>' +
+                '<td><strong>' + (it.orden_compra||'P01382') + '</strong></td>' +
+                '<td><strong>' + (it.cliente||'') + '</strong></td>' +
+                '<td>' + (it.modelo||'') + '</td>' +
+                '<td>' + (it.ciclo||'') + '</td>' +
+                '<td><span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">' + (it.opcion||'') + '</span></td>' +
+                '<td class="text-right" style="font-weight:600">' + fmtMoney(it.precio_moto||0) + '</td>' +
+                '<td class="text-right" style="color:#059669;font-weight:700">' + fmtMoney(it.inicial_40||0) + '</td>' +
+                '<td class="text-right" style="color:#2563eb;font-weight:600">' + fmtMoney(it.restante_60||0) + '</td>' +
+                '<td class="text-right">' + fmtMoney(it.cuota_quincenal||0) + '</td>' +
                 '</tr>';
         }}).join('');
     }}
@@ -3013,8 +3014,8 @@ try {{
         ppmItems.forEach(function(it) {{
             it.pagos.forEach(function(p) {{
                 cronHtml += '<tr>' +
-                    '<td>' + it.orden + '</td>' +
-                    '<td><strong>' + it.cliente + '</strong></td>' +
+                    '<td>' + (it.orden_compra||'P01382') + '</td>' +
+                    '<td><strong>' + (it.cliente||'') + '</strong></td>' +
                     '<td class="text-right">Cuota ' + p.cuota + '/8</td>' +
                     '<td>' + p.fecha_pago + '</td>' +
                     '<td class="text-right" style="font-weight:600">' + fmtMoney(p.monto) + '</td>' +
