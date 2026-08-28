@@ -1181,6 +1181,7 @@ html = f'''<!DOCTYPE html>
                             <th>Fecha Pago</th>
                             <th class="text-right">Monto</th>
                             <th>Estado</th>
+                            <th>Acción</th>
                         </tr>
                     </thead>
                     <tbody id="tablaCronograma"></tbody>
@@ -3014,13 +3015,33 @@ try {{
         var cronHtml = '';
         ppmItems.forEach(function(it) {{
             it.pagos.forEach(function(p) {{
-                cronHtml += '<tr>' +
+                var hoy = new Date().toISOString().slice(0, 10);
+                var esHoy = p.fecha_pago === hoy;
+                var esProximo = new Date(p.fecha_pago) <= new Date(hoy);
+                var btnHtml = '';
+                if (esProximo) {{
+                    var asunto = encodeURIComponent('Recordatorio Interno - Pago Proveedor: Cuota ' + p.cuota + '/8 - ' + it.orden_compra + ' - MOTO CITY PRO');
+                    var cuerpo = encodeURIComponent('RECORDATORIO INTERNO DE PAGO A PROVEEDOR\\n\\n' +
+                        'Proveedor: MOTO CITY PRO, C.A.\\n' +
+                        'Orden de Compra: ' + it.orden_compra + '\\n' +
+                        'Orden de Venta: ' + (it.orden_venta||'N/A') + '\\n' +
+                        'Cliente: ' + (it.cliente||'') + '\\n' +
+                        'Modelo: ' + (it.modelo||'') + '\\n' +
+                        'Cuota: ' + p.cuota + '/8\\n' +
+                        'Monto: $' + p.monto.toFixed(2) + '\\n' +
+                        'Fecha de Pago: ' + p.fecha_pago + '\\n' +
+                        'Ciclo: ' + (it.ciclo||'') + ' (Opción ' + (it.opcion||'') + ')\\n\\n' +
+                        'Este es un recordatorio interno. Favor confirmar el pago.');
+                    btnHtml = '<a href="mailto:?subject=' + asunto + '&body=' + cuerpo + '" style="display:inline-block;background:#059669;color:white;padding:3px 10px;border-radius:4px;text-decoration:none;font-size:11px;font-weight:600">📧 Recordar</a>';
+                }}
+                cronHtml += '<tr' + (esProximo ? ' style="background:#fef3c7"' : '') + '>' +
                     '<td>' + (it.orden_compra||'P01382') + '</td>' +
                     '<td><strong>' + (it.cliente||'') + '</strong></td>' +
                     '<td class="text-right">Cuota ' + p.cuota + '/8</td>' +
-                    '<td>' + p.fecha_pago + '</td>' +
+                    '<td>' + p.fecha_pago + (esHoy ? ' <strong style="color:#dc2626">HOY</strong>' : '') + '</td>' +
                     '<td class="text-right" style="font-weight:600">' + fmtMoney(p.monto) + '</td>' +
                     '<td><span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:11px">Pendiente</span></td>' +
+                    '<td>' + btnHtml + '</td>' +
                     '</tr>';
             }});
         }});
