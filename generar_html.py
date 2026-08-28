@@ -2993,8 +2993,9 @@ try {{
     var ppmBody = document.getElementById('tablaPagoProveedor');
     if (ppmBody && ppmItems.length) {{
         ppmBody.innerHTML = ppmItems.map(function(it) {{
+            var puUrl = 'https://latinbien.com/web#id=' + (it.purchase_order_id||0) + '&model=purchase.order&view_type=form';
             return '<tr>' +
-                '<td><strong>' + (it.orden_compra||'P01382') + '</strong></td>' +
+                '<td><a href="' + puUrl + '" target="_blank" style="color:#213C83;font-weight:700;text-decoration:none;border-bottom:2px solid #213C83;font-size:14px">' + (it.orden_compra||'P01382') + '</a></td>' +
                 '<td><strong>' + (it.cliente||'') + '</strong></td>' +
                 '<td>' + (it.modelo||'') + '</td>' +
                 '<td>' + (it.ciclo||'') + '</td>' +

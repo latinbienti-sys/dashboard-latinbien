@@ -498,6 +498,7 @@ def fetch_pagoProveedorMoto(sess):
         })
 
     items = [{
+        'purchase_order_id': p['id'],
         'orden_compra': orden_compra,
         'orden_venta': orden_venta,
         'proveedor': proveedor_nombre,
