@@ -485,17 +485,40 @@ def fetch_pagoProveedorMoto(sess):
         except:
             pass
 
-    # Generar 8 cuotas quincenales desde 05/09/2026
-    fecha_primera_cuota = date(2026, 9, 5)
+    # Generar 8 cuotas quincenales según ciclo del cliente
+    # Opción A (03-18): días 5 y 20 de cada mes
+    # Opción B (10-25): días 12 y 27 de cada mes
+    if ciclo_cliente == '03-18':
+        dias_pago = [5, 20]  # Opción A
+    else:
+        dias_pago = [12, 27]  # Opción B
+    
     pagos = []
+    mes_actual = 9  # Septiembre 2026
+    anio_actual = 2026
     for cuota_num in range(1, 9):
-        fecha_pago = fecha_primera_cuota + timedelta(days=14 * (cuota_num - 1))
+        dia_pago = dias_pago[(cuota_num - 1) % 2]
+        try:
+            fecha_pago = date(anio_actual, mes_actual, dia_pago)
+        except:
+            # Si el día no existe en el mes (ej: 30 en febrero), usar último día
+            import calendar
+            ultimo_dia = calendar.monthrange(anio_actual, mes_actual)[1]
+            fecha_pago = date(anio_actual, mes_actual, min(dia_pago, ultimo_dia))
+        
         pagos.append({
             'cuota': cuota_num,
             'fecha_pago': str(fecha_pago)[:10],
             'monto': cuota_quincenal,
             'estado': 'pendiente',
         })
+        
+        # Avanzar al siguiente mes después de cada par de cuotas
+        if cuota_num % 2 == 0:
+            mes_actual += 1
+            if mes_actual > 12:
+                mes_actual = 1
+                anio_actual += 1
 
     items = [{
         'purchase_order_id': p['id'],
