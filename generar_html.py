@@ -385,6 +385,7 @@ html = f'''<!DOCTYPE html>
         <button class="tab-btn" onclick="switchTab('temporal')">⏱ Temporal VIP</button>
         <button class="tab-btn" onclick="switchTab('tabla')">📋 Listado</button>
         <button class="tab-btn" onclick="switchTab('factjulio')">📋 Fact. Julio</button>
+        <button class="tab-btn" onclick="switchTab('factagosto')">📋 Fact. Agosto</button>
     </div>
 
     <!-- TAB 1: RESUMEN -->
@@ -902,6 +903,39 @@ html = f'''<!DOCTYPE html>
                         </tr>
                     </thead>
                     <tbody id="tablaFactJulio"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: FACTURACIÓN AGOSTO 2026 -->
+    <div class="tab-content" id="tab-factagosto">
+        <div class="kpi-row">
+            <div class="kpi-card success"><div class="number money" id="faTotalFacturado">—</div><div class="label">Total Facturado</div></div>
+            <div class="kpi-card accent"><div class="number money" id="faTotalProductos">—</div><div class="label">Total Productos</div></div>
+            <div class="kpi-card warning"><div class="number money" id="faTotalAdmin">—</div><div class="label">Gasto Admin.</div></div>
+            <div class="kpi-card danger"><div class="number money" id="faTotalCosto">—</div><div class="label">Costo Total</div></div>
+            <div class="kpi-card success"><div class="number money" id="faTotalMargen">—</div><div class="label">Margen Bruto</div></div>
+            <div class="kpi-card"><div class="number" id="faTotalFacturas">—</div><div class="label">Facturas</div></div>
+            <div class="kpi-card"><div class="number" id="faTotalClientes">—</div><div class="label">Clientes</div></div>
+            <div class="kpi-card danger"><div class="number money" id="faCancelacionesMonto">—</div><div class="label" id="faCancelacionesLbl">Cancelaciones</div></div>
+        </div>
+        <div class="results-section">
+            <h3>📋 Detalle Facturación Agosto 2026</h3>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Orden</th>
+                            <th>Cliente</th>
+                            <th>Ejecutivo</th>
+                            <th class="text-right">Monto</th>
+                            <th class="text-right">Costo</th>
+                            <th>Fecha</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaFactAgosto"></tbody>
                 </table>
             </div>
         </div>
@@ -1848,7 +1882,7 @@ function renderTable() {{
 function switchTab(tab) {{
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza', ventas_motos:'Ventas Motos', pago_proveedor:'Pago Proveedor'}};
+    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', factagosto:'Fact. Agosto', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza', ventas_motos:'Ventas Motos', pago_proveedor:'Pago Proveedor'}};
     const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes(tabMap[tab]));
     if (btn) btn.classList.add('active');
     document.getElementById('tab-'+tab).classList.add('active');
@@ -3048,6 +3082,35 @@ try {{
         cronBody.innerHTML = cronHtml || '<tr><td colspan="6" style="text-align:center;color:#999">Sin cronograma</td></tr>';
     }}
 }} catch(e) {{ console.error('Pago Proveedor error:', e); }}
+
+// ── Facturación Agosto 2026 ──
+try {{
+    var fa = DATA.facturacion_agosto || {{}};
+    document.getElementById('faTotalFacturado').textContent = fmtMoney(fa.total_facturado||0);
+    document.getElementById('faTotalProductos').textContent = fmtMoney(fa.total_productos||0);
+    document.getElementById('faTotalAdmin').textContent = fmtMoney(fa.total_admin||0);
+    document.getElementById('faTotalCosto').textContent = fmtMoney(fa.total_costo||0);
+    document.getElementById('faTotalMargen').textContent = fmtMoney(fa.total_margen||0);
+    document.getElementById('faTotalFacturas').textContent = (fa.total_facturas||0).toLocaleString();
+    document.getElementById('faTotalClientes').textContent = (fa.total_clientes||0).toLocaleString();
+    document.getElementById('faCancelacionesMonto').textContent = fmtMoney(fa.cancelaciones_monto||0);
+    document.getElementById('faCancelacionesLbl').textContent = (fa.cancelaciones_count||0) + ' Cancelaciones';
+
+    var faBody = document.getElementById('tablaFactAgosto');
+    var faFacts = fa.facturas || [];
+    if (faBody && faFacts.length) {{
+        faBody.innerHTML = faFacts.map(function(f) {{
+            var stCls = f.status === 'Entregado' ? 'status-entregado' : (f.status === 'Cancelación Total' ? 'status-cancelado' : 'status-aprobado');
+            return '<tr><td style="font-weight:600">' + (f.orden||'') + '</td>' +
+                '<td>' + (f.cliente||'') + '</td>' +
+                '<td>' + (f.ejecutivo||'') + '</td>' +
+                '<td class="text-right">' + fmtMoney(f.monto) + '</td>' +
+                '<td class="text-right">' + fmtMoney(f.costo) + '</td>' +
+                '<td style="font-size:12px">' + (f.fecha||'') + '</td>' +
+                '<td><span class="' + stCls + '">' + (f.status||'') + '</span></td></tr>';
+        }}).join('');
+    }}
+}} catch(e) {{ console.error('Fact Agosto error:', e); }}
 
 renderTable();
 switchTab('gestion');

@@ -235,6 +235,7 @@ def fetch_data():
                 for c in vip_clients],
         'payment_plan': payment_plan,
         'facturacion_julio': facturacion_julio,
+        'facturacion_agosto': fetch_facturacion_agosto(sess),
         'expedientes': expedientes,
         'ventas_motos': fetch_ventas_motos(sess),
         'pago_proveedor_moto': fetch_pagoProveedorMoto(sess),
@@ -1534,6 +1535,200 @@ def fetch_ventas_motos(sess):
         'total_producto': round(sum(it['precio_producto'] for it in items), 2),
         'total_gasto_admin': round(sum(it['gasto_admin'] for it in items), 2),
         'total_monto': round(sum(it['monto_total'] for it in items), 2),
+    }
+
+def fetch_facturacion_agosto(sess):
+    """Facturacion mensual AGOSTO 2026 — replica de fetch_facturacion_julio."""
+    ST_LABELS = {'6': 'Entregado', '8': 'Cancelación Total', '4': 'Aprobado',
+                 '10': 'Congelado', '12': 'Congelado', '0': 'Sin asignar'}
+    so_domain = [
+        ['x_status_compra', '=', '4'],
+        ['commitment_date', '>=', '2026-08-01 04:00:00'],
+        ['commitment_date', '<', '2026-09-01 04:00:00'],
+    ]
+    so_ids = json_execute(sess, 'sale.order', 'search', [so_domain])
+    if not so_ids:
+        return {
+            'facturas': [], 'ejecutivos': [], 'top_productos': [],
+            'total_facturado': 0, 'total_facturas': 0, 'total_clientes': 0,
+            'total_admin': 0, 'total_admin_total': 0,
+            'total_costo': 0, 'total_margen': 0, 'total_productos': 0,
+            'colaboradores': [],
+            'cancelaciones_count': 0, 'cancelaciones_monto': 0,
+        }
+    
+    ordenes = []
+    for i in range(0, len(so_ids), 300):
+        batch = so_ids[i:i+300]
+        recs = json_execute(sess, 'sale.order', 'read', [batch, [
+            'id', 'name', 'partner_id', 'commitment_date',
+            'amount_total', 'amount_untaxed',
+            'user_id', 'team_id', 'x_status_operativos', 'x_status_compra',
+            'order_line',
+        ]])
+        if recs:
+            ordenes.extend(recs)
+    
+    line_ids = []
+    for so in ordenes:
+        for lid in (so.get('order_line') or []):
+            line_ids.append(lid)
+    
+    lineas = []
+    if line_ids:
+        for i in range(0, len(line_ids), 300):
+            batch = line_ids[i:i+300]
+            recs = json_execute(sess, 'sale.order.line', 'read', [batch, [
+                'id', 'product_id', 'product_uom_qty', 'price_unit',
+                'price_subtotal', 'price_total', 'discount', 'purchase_price',
+            ]])
+            if recs:
+                lineas.extend(recs)
+    
+    lineas_por_orden = {}
+    for lr in lineas:
+        lid = lr['id']
+        for so in ordenes:
+            if lid in (so.get('order_line') or []):
+                if so['id'] not in lineas_por_orden:
+                    lineas_por_orden[so['id']] = []
+                lineas_por_orden[so['id']].append(lr)
+                break
+    
+    all_prod_ids = set()
+    for lr in lineas:
+        pid = lr.get('product_id')
+        if pid and isinstance(pid, list) and len(pid) > 1:
+            all_prod_ids.add(pid[0])
+    
+    cat_map = {}
+    if all_prod_ids:
+        prods = json_execute(sess, 'product.product', 'read', [
+            list(all_prod_ids), ['id', 'categ_id']
+        ])
+        for p in prods:
+            pid = p['id']
+            cat = p.get('categ_id')
+            cat_map[pid] = cat[1] if isinstance(cat, list) and len(cat) > 1 else 'Sin categoría'
+    
+    # Procesar órdenes
+    facturas = []
+    ejecutivo_stats = defaultdict(lambda: {'facturado': 0, 'costo': 0, 'facturas': 0, 'unidades': 0})
+    prod_stats = defaultdict(lambda: {'cantidad': 0, 'monto': 0})
+    cancelaciones = []
+    total_admin = 0
+    total_costo = 0
+    clientes_set = set()
+    
+    for so in ordenes:
+        sid = so['id']
+        pid = so.get('partner_id')
+        cliente = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Sin cliente'
+        clientes_set.add(cliente)
+        
+        user = so.get('user_id')
+        ejecutivo = user[1] if isinstance(user, list) and len(user) > 1 else 'Sin ejecutivo'
+        
+        status_code = str(so.get('x_status_operativos', '0'))
+        status_label = ST_LABELS.get(status_code, status_code)
+        
+        monto_total = float(so.get('amount_total', 0) or 0)
+        
+        # Calcular costo y admin de las líneas
+        orden_lineas = lineas_por_orden.get(sid, [])
+        costo_total = 0
+        admin_total = 0
+        unidades_total = 0
+        
+        for l in orden_lineas:
+            qty = float(l.get('product_uom_qty', 0) or 0)
+            pu = float(l.get('price_unit', 0) or 0)
+            pp = float(l.get('purchase_price', 0) or 0)
+            desc = float(l.get('discount', 0) or 0)
+            
+            cat = ''
+            pid2 = l.get('product_id')
+            if pid2 and isinstance(pid2, list):
+                cat = cat_map.get(pid2[0], '')
+            
+            # Gasto administrativo
+            if 'Gasto Administrativo' in cat or 'gasto' in str(pid2[1] if isinstance(pid2, list) else '').lower():
+                admin_total += float(l.get('price_subtotal', 0) or 0)
+            else:
+                costo_total += pp * qty
+            
+            unidades_total += int(qty)
+            
+            # Productos
+            prod_name = pid2[1] if isinstance(pid2, list) and len(pid2) > 1 else 'Sin producto'
+            prod_stats[prod_name]['cantidad'] += int(qty)
+            prod_stats[prod_name]['monto'] += float(l.get('price_subtotal', 0) or 0)
+        
+        ejecutivo_stats[ejecutivo]['facturado'] += monto_total
+        ejecutivo_stats[ejecutivo]['costo'] += costo_total
+        ejecutivo_stats[ejecutivo]['facturas'] += 1
+        ejecutivo_stats[ejecutivo]['unidades'] += unidades_total
+        total_admin += admin_total
+        total_costo += costo_total
+        
+        # Cancelaciones
+        if status_code == '8':
+            cancelaciones.append({
+                'orden': so.get('name', ''),
+                'cliente': cliente,
+                'monto': monto_total,
+            })
+        
+        facturas.append({
+            'orden': so.get('name', ''),
+            'cliente': cliente,
+            'ejecutivo': ejecutivo,
+            'monto': round(monto_total, 2),
+            'costo': round(costo_total, 2),
+            'admin': round(admin_total, 2),
+            'status': status_label,
+            'fecha': str(so.get('commitment_date', ''))[:10],
+        })
+    
+    # Formatear ejecutivos
+    ejecutivos = [{
+        'nombre': k,
+        'facturado': round(v['facturado'], 2),
+        'costo': round(v['costo'], 2),
+        'margen': round(v['facturado'] - v['costo'], 2),
+        'facturas': v['facturas'],
+        'unidades': v['unidades'],
+    } for k, v in sorted(ejecutivo_stats.items(), key=lambda x: -x[1]['facturado'])]
+    
+    # Top productos
+    top_prod = [{
+        'nombre': k,
+        'cantidad': v['cantidad'],
+        'monto': round(v['monto'], 2),
+    } for k, v in sorted(prod_stats.items(), key=lambda x: -x[1]['monto'])[:15]]
+    
+    total_facturado = sum(so.get('amount_total', 0) or 0 for so in ordenes)
+    total_admin_total = total_admin + sum(
+        sum(float(l.get('price_subtotal', 0) or 0) for l in lineas_por_orden.get(so['id'], [])
+            if 'Gasto Administrativo' in (l.get('product_id') and isinstance(l.get('product_id'), list) and l['product_id'][1] or ''))
+        for so in ordenes
+    )
+    
+    return {
+        'facturas': facturas,
+        'ejecutivos': ejecutivos,
+        'top_productos': top_prod,
+        'total_facturado': round(total_facturado, 2),
+        'total_facturas': len(facturas),
+        'total_clientes': len(clientes_set),
+        'total_admin': round(total_admin, 2),
+        'total_admin_total': round(total_facturado, 2),
+        'total_costo': round(total_costo, 2),
+        'total_margen': round(total_facturado - total_costo, 2),
+        'total_productos': sum(v['cantidad'] for v in prod_stats.values()),
+        'colaboradores': ejecutivos,
+        'cancelaciones_count': len(cancelaciones),
+        'cancelaciones_monto': round(sum(c['monto'] for c in cancelaciones), 2),
     }
 
 def fetch_facturacion_julio(sess):
