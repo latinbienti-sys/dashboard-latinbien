@@ -1,0 +1,17 @@
+HTTP/1.1 500 Internal Server Error
+Date: Sat, 25 Jul 2026 01:10:40 GMT
+Content-Type: text/html; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+CF-Ray: a20749461ab9b695-MIA
+CF-Cache-Status: DYNAMIC
+Server: cloudflare
+Strict-Transport-Security: max-age=15552000; includeSubDomains
+Vary: Accept-Encoding
+Content-Security-Policy: base-uri 'self'; default-src 'self'; connect-src 'self' data: http://127.0.0.1:7655 https://o1420875.ingest.us.sentry.io https://api.n8n.io https://api-staging.n8n.io https://api-rs.n8n.io https://cdn-rs.n8n.io https://api.npmjs.org https://registry.npmjs.org https://api.github.com https://api.npms.io https://ph.n8n.io https://us.i.posthog.com https://telemetry.n8n.io https://cdn.jsdelivr.net https://data.jsdelivr.com https://playgroundcdn.typescriptlang.org https://www.google-analytics.com https://docs.google.com; font-src 'self' data: https: moz-extension: https://n8n.io https://fonts.gstatic.com https://fonts.googleapis.com https://cdnjs.cloudflare.com https://use.fontawesome.com https://maxcdn.bootstrapcdn.com; frame-ancestors 'self'; frame-src 'self' https://n8n.io https://unpkg.com https://www.youtube.com https://www.youtube-nocookie.com https://*.vusercontent.net; img-src https: data: blob:; manifest-src 'self'; media-src 'self' data: blob: https://n8niostorageaccount.blob.core.windows.net; object-src 'self' data:; script-src 'report-sample' 'self' 'unsafe-inline' 'unsafe-eval' https://ph.n8n.io https://us.i.posthog.com https://cdn-rs.n8n.io/v1/ra.min.js https://static.cloudflareinsights.com https://cdn.jsdelivr.net; script-src-elem 'self' 'unsafe-inline' blob: https://cdn-rs.n8n.io https://ph.n8n.io https://us.i.posthog.com https://us-assets.i.posthog.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com; style-src 'report-sample' 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src-elem 'self' 'unsafe-inline' https: https://fonts.googleapis.com https://cdn.jsdelivr.net; worker-src 'self';
+referrer-policy: same-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=eMNKaJxB5lWOOFOvXiW30HrsCqmLNhIBIJvpDLVwHcehsxNbzdWrAyf%2BCSn5Wk2C45TrYDjBxnGlEEKIXB3BqPwlXPDLjQfl1DUPVsMbnhSwmrMBScNnzA53tKc71Vax8n7%2B%2F06qog%3D%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+

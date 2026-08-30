@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>LATINBIEN - Dashboard</title>
+<style>
+body { background: #f0f2f5; font-family: Arial, sans-serif; padding: 20px; }
+.card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.header { background: #213C83; color: white; padding: 20px; border-radius: 12px; }
+.kpi { font-size: 24px; font-weight: bold; color: #213C83; }
+table { width: 100%; border-collapse: collapse; }
+th { background: #f0f2f7; padding: 8px; text-align: left; font-size: 12px; }
+td { padding: 8px; border-bottom: 1px solid #eee; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>LATINBIEN | Analisis de Cartera</h1>
+<p>Datos de contratos activos</p>
+</div>
+<div class="card">
+<h2>Resumen</h2>
+<p>Total de clientes activos: <span class="kpi" id="kpiClientes">0</span></p>
+<p>Total de contratos: <span class="kpi" id="kpiContratos">0</span></p>
+<p>Total facturado: <span class="kpi" id="kpiFacturado">$0</span></p>
+<p>Total cobrado: <span class="kpi" id="kpiCobrado">$0</span></p>
+<p>Saldo pendiente: <span class="kpi" id="kpiSaldo">$0</span></p>
+</div>
+<div class="card">
+<h2>Top 5 Clientes</h2>
+<table><thead><tr><th>#</th><th>Cliente</th><th>Contratos</th><th>Facturado</th><th>Segmento</th></tr></thead>
+<tbody id="tablaBody"></tbody>
+</table>
+</div>
+<div class="card" id="statusCard">
+<p>Cargando datos de JavaScript...</p>
+</div>
+<script>
+var DATA = {"total_clientes": 692, "total_contratos": 918, "total_facturado": 806503.08, "total_cobrado": 420710.01, "total_saldo": 385793.07, "top": [{"cliente": "GERARDO JOSE RAMIREZ F.", "contratos": 14, "facturado": 11031.67, "cobrado": 0.0, "saldo": 11031.67, "segmento": "Dependientes"}, {"cliente": "FELIX EDEL LIMA DE LA SOTA", "contratos": 8, "facturado": 6321.58, "cobrado": 2198.69, "saldo": 4122.89, "segmento": "Independiente"}, {"cliente": "YONATHAN JOSE VIVAS CARRERO", "contratos": 7, "facturado": 7535.81, "cobrado": 3755.78, "saldo": 3780.03, "segmento": "Independiente"}, {"cliente": "SORELIS DEL CARMEN MORAN BOLAÑO", "contratos": 6, "facturado": 17269.02, "cobrado": 13741.2, "saldo": 3527.82, "segmento": "Dependientes"}, {"cliente": "JESUS MANUEL GUTIERREZ PEREIRA", "contratos": 4, "facturado": 4474.96, "cobrado": 679.68, "saldo": 3795.28, "segmento": "Sector publico"}]};
+
+document.getElementById("kpiClientes").textContent = DATA.total_clientes;
+document.getElementById("kpiContratos").textContent = DATA.total_contratos;
+document.getElementById("kpiFacturado").textContent = "$" + DATA.total_facturado.toLocaleString("en-US", {minimumFractionDigits:2});
+document.getElementById("kpiCobrado").textContent = "$" + DATA.total_cobrado.toLocaleString("en-US", {minimumFractionDigits:2});
+document.getElementById("kpiSaldo").textContent = "$" + DATA.total_saldo.toLocaleString("en-US", {minimumFractionDigits:2});
+
+var tbody = document.getElementById("tablaBody");
+var html = "";
+for (var i = 0; i < DATA.top.length; i++) {
+  var c = DATA.top[i];
+  html += "<tr>";
+  html += "<td>" + (i+1) + "</td>";
+  html += "<td>" + c.cliente + "</td>";
+  html += "<td>" + c.contratos + "</td>";
+  html += "<td>$" + c.facturado.toLocaleString("en-US", {minimumFractionDigits:2}) + "</td>";
+  html += "<td>" + c.segmento + "</td>";
+  html += "</tr>";
+}
+tbody.innerHTML = html;
+
+document.getElementById("statusCard").innerHTML = "<p style=color:green>Datos cargados correctamente: " + DATA.total_clientes + " clientes, " + DATA.total_contratos + " contratos</p>";
+console.log("OK: " + DATA.total_clientes + " clientes cargados");
+</script>
+</body>
+</html>

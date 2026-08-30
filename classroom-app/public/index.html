@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClassRoom | Plataforma Educativa</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ====== PANTALLA DE AUTENTICACIÓN ====== -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-icon">🎓</div>
+        <h1>ClassRoom</h1>
+        <p>Plataforma educativa: material, clases en vivo, notas y pagos</p>
+      </div>
+
+      <!-- Formulario Login -->
+      <form id="login-form" class="auth-form">
+        <h2>Iniciar sesión</h2>
+        <div class="form-group">
+          <label for="login-email">Correo electrónico</label>
+          <input type="email" id="login-email" placeholder="correo@ejemplo.com" required />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Contraseña</label>
+          <input type="password" id="login-password" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+        <p class="auth-switch">¿No tienes cuenta? <a href="#" id="show-register">Regístrate aquí</a></p>
+        <div class="demo-accounts">
+          <p>🔑 Cuentas demo:</p>
+          <button type="button" class="btn btn-ghost demo-btn" data-email="profesor@classroom.com" data-pass="profesor123">👨‍🏫 Profesor</button>
+          <button type="button" class="btn btn-ghost demo-btn" data-email="estudiante@classroom.com" data-pass="estudiante123">👨‍🎓 Estudiante</button>
+        </div>
+      </form>
+
+      <!-- Formulario Registro -->
+      <form id="register-form" class="auth-form" style="display:none;">
+        <h2>Crear cuenta</h2>
+        <div class="form-group">
+          <label for="reg-name">Nombre completo</label>
+          <input type="text" id="reg-name" placeholder="Tu nombre" required />
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Correo electrónico</label>
+          <input type="email" id="reg-email" placeholder="correo@ejemplo.com" required />
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Contraseña</label>
+          <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" required />
+        </div>
+        <div class="form-group">
+          <label>Rol</label>
+          <div class="role-select">
+            <label class="role-option">
+              <input type="radio" name="role" value="estudiante" checked />
+              <span>👨‍🎓 Estudiante</span>
+            </label>
+            <label class="role-option">
+              <input type="radio" name="role" value="profesor" />
+              <span>👨‍🏫 Profesor</span>
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Crear cuenta</button>
+        <p class="auth-switch">¿Ya tienes cuenta? <a href="#" id="show-login">Inicia sesión</a></p>
+      </form>
+
+      <div id="auth-error" class="alert alert-error" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- ====== PANEL PRINCIPAL ====== -->
+  <div id="app-screen" style="display:none;">
+    <!-- Barra lateral -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-icon">🎓</span>
+        <span>ClassRoom</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="avatar" id="user-avatar">👤</div>
+        <div>
+          <strong id="user-name">Usuario</strong>
+          <span id="user-role" class="badge">rol</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-link active" data-view="dashboard">📊 <span>Dashboard</span></a>
+        <a href="#" class="nav-link" data-view="courses" id="nav-courses">📚 <span>Mis Cursos</span></a>
+        <a href="#" class="nav-link" data-view="materials" id="nav-materials">📎 <span>Material</span></a>
+        <a href="#" class="nav-link" data-view="live" id="nav-live">🎥 <span>Clases en Vivo</span></a>
+        <a href="#" class="nav-link" data-view="grades" id="nav-grades">📝 <span>Notas</span></a>
+        <a href="#" class="nav-link" data-view="payments" id="nav-payments">💳 <span>Pagos</span></a>
+        <a href="#" class="nav-link" data-view="forum" id="nav-forum">💬 <span>Foro</span></a>
+      </nav>
+      <button class="btn btn-danger btn-logout" id="btn-logout">🚪 Cerrar sesión</button>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+      <header class="topbar">
+        <h1 id="view-title">Dashboard</h1>
+        <div class="topbar-actions">
+          <span id="global-error" class="alert alert-error" style="display:none;"></span>
+        </div>
+      </header>
+
+      <!-- Vistas dinámicas -->
+      <div id="view-dashboard" class="view"></div>
+      <div id="view-courses" class="view" style="display:none;"></div>
+      <div id="view-materials" class="view" style="display:none;"></div>
+      <div id="view-live" class="view" style="display:none;"></div>
+      <div id="view-grades" class="view" style="display:none;"></div>
+      <div id="view-payments" class="view" style="display:none;"></div>
+      <div id="view-forum" class="view" style="display:none;"></div>
+    </main>
+  </div>
+
+  <!-- Modal genérico -->
+  <div id="modal-overlay" class="modal-overlay" style="display:none;">
+    <div class="modal">
+      <button class="modal-close" id="modal-close">✕</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <script src="https://meet.jit.si/external_api.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

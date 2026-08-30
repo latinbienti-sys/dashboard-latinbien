@@ -1,0 +1,43 @@
+import requests, json
+
+s = requests.Session()
+s.post('https://latinbien.com/web/session/authenticate', json={
+    'jsonrpc': '2.0', 'method': 'call',
+    'params': {'db': 'erp_production', 'login': 'latinbienti@latinbien.com', 'password': 'z+cakaSe2805*'}
+})
+s.headers['Content-Type'] = 'application/json'
+
+resp = s.post('https://latinbien.com/web/dataset/call_kw/acrux.chat.bot/search_read', json={
+    'jsonrpc': '2.0', 'method': 'call',
+    'params': {'model': 'acrux.chat.bot', 'method': 'search_read',
+        'args': [],
+        'kwargs': {
+            'fields': ['id', 'name', 'parent_id', 'text_match'],
+            'order': 'id asc',
+            'domain': []
+        }
+    }
+})
+result = resp.json()
+print('Keys in result:', result.keys())
+if 'result' in result:
+    r = result['result']
+    if isinstance(r, list):
+        bots = r
+    elif isinstance(r, dict):
+        print('Result keys:', r.keys())
+        bots = r.get('records', [])
+    else:
+        print('Unexpected result type:', type(r))
+        bots = []
+    for bot in bots:
+        parent = bot.get('parent_id')
+        parent_name = parent[1] if parent else 'ROOT'
+        bot_id = bot['id']
+        name = bot['name']
+        upper = name.upper()
+        if ('COMERCIAL' in upper or 'COBRANZA' in upper or 
+            'CATCHER' in upper or 'HONDA' in upper or
+            'VALIDAR' in upper or
+            bot_id in [61, 62, 121, 122, 123, 124, 125]):
+            print(f'ID {bot_id:>3}: {name} (parent: {parent_name})')

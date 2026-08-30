@@ -1,0 +1,22 @@
+{
+  "65_MENU_RECOMPRA": {
+    "len": 327,
+    "body": "Cu\u00e9ntame, \u00bfqu\u00e9 te gustar\u00eda hacer hoy? Elige una opci\u00f3n enviando el n\u00famero correspondiente:\n\n1\ufe0f\u20e3 \ud83d\uded2 Comprar un producto a cr\u00e9dito (Usar mi l\u00ednea disponible)\n2\ufe0f\u20e3 \ud83d\udcb0 Realizar una compra de contado\n3\ufe0f\u20e3 \ud83d\udcd6 Ver el cat\u00e1logo online y precios de productos\n4\ufe0f\u20e3 \ud83e\udd1d Verificar si pertenezco a un Convenio Corporativo\n5\ufe0f\u20e3 \u26a0\ufe0f Reportar un problema"
+  },
+  "66_MENU_LC_APROBADA": {
+    "len": 327,
+    "body": "Cu\u00e9ntame, \u00bfqu\u00e9 te gustar\u00eda hacer hoy? Elige una opci\u00f3n enviando el n\u00famero correspondiente:\n\n1\ufe0f\u20e3 \ud83d\uded2 Comprar un producto a cr\u00e9dito (Usar mi l\u00ednea disponible)\n2\ufe0f\u20e3 \ud83d\udcb0 Realizar una compra de contado\n3\ufe0f\u20e3 \ud83d\udcd6 Ver el cat\u00e1logo online y precios de productos\n4\ufe0f\u20e3 \ud83e\udd1d Verificar si pertenezco a un Convenio Corporativo\n5\ufe0f\u20e3 \u26a0\ufe0f Reportar un problema"
+  },
+  "64_MENU_REGISTRADO (CONECTOR DE COMERCIAL)": {
+    "len": 316,
+    "body": "Elige una opci\u00f3n que desees consultar enviando *solo* el n\u00famero correspondiente para ayudarte:\n\n1\ufe0f\u20e3 \ud83d\ude80 \u00a1Quiero solicitar mi L\u00ednea de Cr\u00e9dito ya!\n2\ufe0f\u20e3 \ud83d\udcd6 Ver el cat\u00e1logo online y precios de productos\n3\ufe0f\u20e3 \ud83d\udcb0 Realizar una compra de contado\n4\ufe0f\u20e3 \ud83e\udd1d Verificar si pertenezco a un Convenio Corporativo\n5\ufe0f\u20e3 \u26a0\ufe0f Reportar un problema"
+  },
+  "63_MENU_NO_REGISTRADO (CONECTOR DE COMERCIAL)": {
+    "len": 284,
+    "body": "Por favor, selecciona una opci\u00f3n del men\u00fa para ayudarte. Env\u00edanos el n\u00famero de la opci\u00f3n que desees:\n\n1\ufe0f\u20e3 \ud83d\udcdd Registrarme y solicitar mi L\u00ednea de Cr\u00e9dito por primera vez\n2\ufe0f\u20e3 \ud83d\udcd6 Ver el cat\u00e1logo online y precios de productos\n3\ufe0f\u20e3 \ud83d\udcb0 Realizar una compra de contado\n4\ufe0f\u20e3 \u26a0\ufe0f Reportar un problema"
+  },
+  "61_CATCHER CHATBOT (CONECTOR DE COMERCIAL)": {
+    "len": 313,
+    "body": "\ud83d\udef7 *\u00a1Bienvenido a Latinbien!* \u2728\n\nEstamos aqu\u00ed para ayudarte a alcanzar tus metas con los mejores productos a cr\u00e9dito, y los mejores precios al contado \ud83d\udcaa\n\nPara brindarte atenci\u00f3n r\u00e1pida y personalizada, por favor escr\u00edbeme tu *n\u00famero de c\u00e9dula* (solo los n\u00fameros, sin puntos ni letras).\n\n\u00a1En un segundo continuamos!"
+  }
+}

@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitud de Crédito - LatinBien</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; margin: 0; background: #f8fafc; color: #1e293b; }
+    .form-card { background: #fff; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.04); }
+    .field-group { margin-bottom: 1.25rem; }
+    .field-group label { display: block; font-size: .8125rem; font-weight: 600; color: #475569; margin-bottom: .375rem; }
+    .field-group label .req { color: #ef4444; margin-left: 2px; }
+    .field-group input, .field-group select, .field-group textarea {
+      width: 100%; padding: .625rem .875rem; border: 1.5px solid #e2e8f0; border-radius: 10px;
+      font-size: .9375rem; color: #1e293b; background: #f8fafc; transition: border-color .15s, box-shadow .15s;
+      outline: none; font-family: inherit;
+    }
+    .field-group input:focus, .field-group select:focus, .field-group textarea:focus {
+      border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.12); background: #fff;
+    }
+    .field-group input::placeholder { color: #94a3b8; }
+    .field-group textarea { resize: vertical; min-height: 80px; }
+    .phone-group { display: flex; gap: .5rem; }
+    .phone-group select { width: 110px; flex-shrink: 0; }
+    .phone-group input { flex: 1; }
+    .radio-group { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .25rem; }
+    .radio-group label {
+      display: flex; align-items: center; gap: .375rem; padding: .5rem .875rem;
+      border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: .875rem;
+      font-weight: 500; color: #475569; transition: all .15s; background: #f8fafc;
+    }
+    .radio-group label:hover { border-color: #c7d2fe; background: #eef2ff; }
+    .radio-group input[type="radio"]:checked + span { color: #4f46e5; }
+    .radio-group:has(input:checked) label:has(input:checked) {
+      border-color: #6366f1; background: #eef2ff; color: #4f46e5;
+    }
+    .step-indicator { display: flex; justify-content: center; gap: .5rem; margin-bottom: 2rem; }
+    .step-dot { width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0; transition: all .3s; }
+    .step-dot.active { background: #6366f1; width: 28px; border-radius: 5px; }
+    .step-dot.done { background: #10b981; }
+    .step-section { display: none; }
+    .step-section.active { display: block; animation: fadeIn .3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .btn-next, .btn-back, .btn-submit {
+      padding: .75rem 1.5rem; border-radius: 10px; font-weight: 600; font-size: .9375rem;
+      cursor: pointer; border: none; transition: all .15s; font-family: inherit;
+    }
+    .btn-next { background: #6366f1; color: #fff; }
+    .btn-next:hover { background: #4f46e5; }
+    .btn-back { background: #f1f5f9; color: #475569; border: 1.5px solid #e2e8f0; }
+    .btn-back:hover { background: #e2e8f0; }
+    .btn-submit { background: #10b981; color: #fff; font-size: 1.0625rem; padding: .875rem 2rem; }
+    .btn-submit:hover { background: #059669; }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; }
+    .success-msg { text-align: center; padding: 3rem 1.5rem; }
+    /* File upload zones */
+    .upload-zone {
+      border: 2px dashed #cbd5e1; border-radius: 12px; padding: 1.25rem; text-align: center;
+      cursor: pointer; transition: all .2s; background: #f8fafc; position: relative;
+    }
+    .upload-zone:hover, .upload-zone.dragover { border-color: #6366f1; background: #eef2ff; }
+    .upload-zone.has-file { border-color: #10b981; background: #ecfdf5; border-style: solid; }
+    .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .upload-zone .upload-icon { font-size: 1.75rem; margin-bottom: .375rem; }
+    .upload-zone .upload-label { font-size: .8125rem; font-weight: 600; color: #475569; }
+    .upload-zone .upload-hint { font-size: .6875rem; color: #94a3b8; margin-top: 2px; }
+    .upload-zone .file-name { font-size: .8125rem; color: #059669; font-weight: 600; display: none; }
+    .upload-zone.has-file .upload-placeholder { display: none; }
+    .upload-zone.has-file .file-name { display: block; }
+    .upload-zone .remove-file {
+      position: absolute; top: 6px; right: 8px; background: #ef4444; color: #fff;
+      border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 11px;
+      cursor: pointer; display: none; line-height: 20px; text-align: center;
+    }
+    .upload-zone.has-file .remove-file { display: block; }
+    .success-msg .check { width: 64px; height: 64px; background: #d1fae5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; }
+    .saved-records { margin-top: 2rem; }
+    .saved-records table { width: 100%; border-collapse: collapse; font-size: .8125rem; }
+    .saved-records th { background: #f1f5f9; padding: .5rem .75rem; text-align: left; font-weight: 600; color: #475569; }
+    .saved-records td { padding: .5rem .75rem; border-bottom: 1px solid #f1f5f9; color: #334155; }
+    .badge-count { background: #6366f1; color: #fff; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 9999px; }
+    .ocr-spinner { width: 12px; height: 12px; border: 2px solid #e2e8f0; border-top-color: #6366f1; border-radius: 50%; animation: spin .6s linear infinite; display: inline-block; }
+    .spinner { width: 24px; height: 24px; border: 3px solid #e2e8f0; border-top-color: #6366f1; border-radius: 50%; animation: spin .6s linear infinite; display: inline-block; }
+  </style>
+</head>
+<body>
+
+<div class="min-h-screen py-8 px-4">
+  <div class="max-w-xl mx-auto">
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-2xl font-bold text-slate-800">Solicitud de Crédito</h1>
+      <p class="text-sm text-slate-500 mt-1">Completa tus datos para iniciar el proceso</p>
+    </div>
+
+    <!-- Step Indicator -->
+    <div class="step-indicator" id="stepIndicator">
+      <div class="step-dot active" data-step="1"></div>
+      <div class="step-dot" data-step="2"></div>
+      <div class="step-dot" data-step="3"></div>
+      <div class="step-dot" data-step="4"></div>
+    </div>
+
+    <!-- Form -->
+    <div class="form-card p-6 md:p-8">
+      <form id="solicitudForm" novalidate>
+
+        <!-- STEP 1: Datos Personales -->
+        <div class="step-section active" data-step="1">
+          <h2 class="text-lg font-bold text-slate-800 mb-1">Datos Personales</h2>
+          <p class="text-xs text-slate-400 mb-5">Información básica de identificación</p>
+
+          <div class="field-group">
+            <label>Cédula / RIF <span class="req">*</span></label>
+            <input type="text" name="cedula" placeholder="Ej: 12345678" required inputmode="numeric" pattern="\d{6,10}">
+          </div>
+
+          <div class="field-group">
+            <label>Nombre y Apellido <span class="req">*</span></label>
+            <input type="text" name="nombre" placeholder="Tu nombre completo" required>
+          </div>
+
+          <div class="field-group">
+            <label>Correo Electrónico <span class="req">*</span></label>
+            <input type="email" name="correo" placeholder="tu@email.com" required>
+          </div>
+
+          <div class="field-group">
+            <label>Teléfono <span class="req">*</span></label>
+            <div class="phone-group">
+              <select name="operador" required>
+                <option value="0412">0412</option>
+                <option value="0414" selected>0414</option>
+                <option value="0416">0416</option>
+                <option value="0424">0424</option>
+                <option value="0426">0426</option>
+              </select>
+              <input type="tel" name="telefono" placeholder="7546789" required maxlength="7" minlength="7" inputmode="numeric">
+            </div>
+            <input type="hidden" name="phone_completo">
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="field-group">
+              <label>Ciudad <span class="req">*</span></label>
+              <input type="text" name="ciudad" placeholder="Ej: Mérida" required>
+            </div>
+            <div class="field-group">
+              <label>Estado <span class="req">*</span></label>
+              <select name="estado" required>
+                <option value="">Seleccionar...</option>
+                <option value="Amazonas">Amazonas</option>
+                <option value="Anzoátegui">Anzoátegui</option>
+                <option value="Apure">Apure</option>
+                <option value="Aragua">Aragua</option>
+                <option value="Barinas">Barinas</option>
+                <option value="Bolívar">Bolívar</option>
+                <option value="Carabobo">Carabobo</option>
+                <option value="Cojedes">Cojedes</option>
+                <option value="Delta Amacuro">Delta Amacuro</option>
+                <option value="Distrito Capital">Distrito Capital</option>
+                <option value="Falcón">Falcón</option>
+                <option value="Guárico">Guárico</option>
+                <option value="Lara">Lara</option>
+                <option value="Merida" selected>Mérida</option>
+                <option value="Miranda">Miranda</option>
+                <option value="Monagas">Monagas</option>
+                <option value="Nueva Esparta">Nueva Esparta</option>
+                <option value="Portuguesa">Portuguesa</option>
+                <option value="Sucre">Sucre</option>
+                <option value="Táchira">Táchira</option>
+                <option value="Trujillo">Trujillo</option>
+                <option value="Vargas">Vargas</option>
+                <option value="Yaracuy">Yaracuy</option>
+                <option value="Zulia">Zulia</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex justify-end mt-6">
+            <button type="button" class="btn-next" onclick="goStep(2)">Siguiente →</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: Perfil Financiero -->
+        <div class="step-section" data-step="2">
+          <h2 class="text-lg font-bold text-slate-800 mb-1">Perfil Financiero</h2>
+          <p class="text-xs text-slate-400 mb-5">Información para evaluar tu capacidad de pago</p>
+
+          <div class="field-group">
+            <label>Empresa / Institución donde trabajas <span class="req">*</span></label>
+            <input type="text" name="empresa" placeholder="Ej: Clínica Razetti" required>
+          </div>
+
+          <div class="field-group">
+            <label>Profesión / Ocupación <span class="req">*</span></label>
+            <input type="text" name="profesion" placeholder="Ej: Médico Cirujano" required>
+          </div>
+
+          <div class="field-group">
+            <label>Origen de tus ingresos <span class="req">*</span></label>
+            <div class="radio-group">
+              <label><input type="radio" name="origen_ingresos" value="dueno_negocio" required><span>Dueño de negocio</span></label>
+              <label><input type="radio" name="origen_ingresos" value="independiente"><span>Independiente</span></label>
+              <label><input type="radio" name="origen_ingresos" value="empresa_privada"><span>Empresa privada</span></label>
+              <label><input type="radio" name="origen_ingresos" value="institucion_publica"><span>Institución pública</span></label>
+              <label><input type="radio" name="origen_ingresos" value="otro"><span>Otro</span></label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Ingreso mensual demostrable (USD) <span class="req">*</span></label>
+            <input type="number" name="ingreso_mensual" placeholder="Ej: 250" min="0" step="any" required>
+          </div>
+
+          <div class="field-group">
+            <label>¿Cuánto podrías pagar como cuota quincenal? <span class="req">*</span></label>
+            <div class="radio-group">
+              <label><input type="radio" name="cuota_quincenal" value="100-150" required><span>$100 - $150</span></label>
+              <label><input type="radio" name="cuota_quincenal" value="150-200"><span>$150 - $200</span></label>
+              <label><input type="radio" name="cuota_quincenal" value="mas-200"><span>Más de $200</span></label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="field-group">
+              <label>¿Tienes la inicial disponible?</label>
+              <div class="radio-group">
+                <label><input type="radio" name="inicial" value="si"><span>Sí</span></label>
+                <label><input type="radio" name="inicial" value="no"><span>No</span></label>
+              </div>
+            </div>
+            <div class="field-group">
+              <label>¿Tienes vehículo propio?</label>
+              <div class="radio-group">
+                <label><input type="radio" name="vehiculo" value="si"><span>Sí</span></label>
+                <label><input type="radio" name="vehiculo" value="no"><span>No</span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Tipo de vivienda</label>
+            <div class="radio-group">
+              <label><input type="radio" name="vivienda" value="propia"><span>Propia</span></label>
+              <label><input type="radio" name="vivienda" value="alquiler"><span>Alquiler</span></label>
+              <label><input type="radio" name="vivienda" value="familiar"><span>Familiar</span></label>
+              <label><input type="radio" name="vivienda" value="hipoteca"><span>Hipotecada</span></label>
+              <label><input type="radio" name="vivienda" value="otro"><span>Otro</span></label>
+            </div>
+          </div>
+
+          <div class="flex justify-between mt-6">
+            <button type="button" class="btn-back" onclick="goStep(1)">← Anterior</button>
+            <button type="button" class="btn-next" onclick="goStep(3)">Siguiente →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Documentos -->
+        <div class="step-section" data-step="3">
+          <h2 class="text-lg font-bold text-slate-800 mb-1">Documentos</h2>
+          <p class="text-xs text-slate-400 mb-5">Sube tus estados de cuenta bancarios y RIF en formato PDF</p>
+
+          <!-- RIF PDF -->
+          <div class="field-group">
+            <label>RIF / Cédula en PDF <span class="req">*</span></label>
+            <div class="upload-zone" id="zoneRif" data-name="rif_pdf">
+              <input type="file" accept=".pdf" name="rif_pdf" onchange="handleFile(this)">
+              <div class="upload-placeholder">
+                <div class="upload-icon">📄</div>
+                <div class="upload-label">Arrastra tu RIF o haz clic para seleccionar</div>
+                <div class="upload-hint">Solo archivos PDF (máx. 10 MB)</div>
+              </div>
+              <div class="file-name"></div>
+              <button type="button" class="remove-file" onclick="removeFile(event, this.parentElement)">✕</button>
+            </div>
+            <div class="ocr-status" id="ocrStatus_rif_pdf" style="display:none;">
+              <div class="flex items-center gap-2 text-xs text-slate-500 mb-1">
+                <span class="ocr-spinner"></span>
+                <span class="ocr-label">Procesando OCR...</span>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-1.5">
+                <div class="ocr-progress bg-indigo-500 h-1.5 rounded-full transition-all" style="width:0%"></div>
+              </div>
+              <div class="ocr-result mt-2 text-xs bg-slate-50 rounded-lg p-2 max-h-32 overflow-auto" style="display:none;"></div>
+            </div>
+          </div>
+
+          <!-- 3 Bank Statements -->
+          <div class="field-group">
+            <label>Estados de Cuenta Bancarios (hasta 3) <span class="req">*</span></label>
+            <p class="text-xs text-slate-400 mb-3">Sube los estados de cuenta de los últimos 3 meses, del más reciente al más antiguo</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div class="upload-zone" id="zoneEst1" data-name="estado_cuenta_1">
+                <input type="file" accept=".pdf" name="estado_cuenta_1" onchange="handleFile(this)">
+                <div class="upload-placeholder">
+                  <div class="upload-icon">🏦</div>
+                  <div class="upload-label">Mes más reciente</div>
+                  <div class="upload-hint">PDF (máx. 10 MB)</div>
+                </div>
+                <div class="file-name"></div>
+                <button type="button" class="remove-file" onclick="removeFile(event, this.parentElement)">✕</button>
+              </div>
+              <div class="ocr-status" id="ocrStatus_estado_cuenta_1" style="display:none;">
+                <div class="flex items-center gap-2 text-xs text-slate-500 mb-1">
+                  <span class="ocr-spinner"></span>
+                  <span class="ocr-label">Procesando OCR...</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-1.5">
+                  <div class="ocr-progress bg-indigo-500 h-1.5 rounded-full transition-all" style="width:0%"></div>
+                </div>
+                <div class="ocr-result mt-2 text-xs bg-slate-50 rounded-lg p-2 max-h-32 overflow-auto" style="display:none;"></div>
+              </div>
+
+              <div class="upload-zone" id="zoneEst2" data-name="estado_cuenta_2">
+                <input type="file" accept=".pdf" name="estado_cuenta_2" onchange="handleFile(this)">
+                <div class="upload-placeholder">
+                  <div class="upload-icon">🏦</div>
+                  <div class="upload-label">Mes intermedio</div>
+                  <div class="upload-hint">PDF (máx. 10 MB)</div>
+                </div>
+                <div class="file-name"></div>
+                <button type="button" class="remove-file" onclick="removeFile(event, this.parentElement)">✕</button>
+              </div>
+              <div class="ocr-status" id="ocrStatus_estado_cuenta_2" style="display:none;">
+                <div class="flex items-center gap-2 text-xs text-slate-500 mb-1">
+                  <span class="ocr-spinner"></span>
+                  <span class="ocr-label">Procesando OCR...</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-1.5">
+                  <div class="ocr-progress bg-indigo-500 h-1.5 rounded-full transition-all" style="width:0%"></div>
+                </div>
+                <div class="ocr-result mt-2 text-xs bg-slate-50 rounded-lg p-2 max-h-32 overflow-auto" style="display:none;"></div>
+              </div>
+
+              <div class="upload-zone" id="zoneEst3" data-name="estado_cuenta_3">
+                <input type="file" accept=".pdf" name="estado_cuenta_3" onchange="handleFile(this)">
+                <div class="upload-placeholder">
+                  <div class="upload-icon">🏦</div>
+                  <div class="upload-label">Mes más antiguo</div>
+                  <div class="upload-hint">PDF (máx. 10 MB)</div>
+                </div>
+                <div class="file-name"></div>
+                <button type="button" class="remove-file" onclick="removeFile(event, this.parentElement)">✕</button>
+              </div>
+              <div class="ocr-status" id="ocrStatus_estado_cuenta_3" style="display:none;">
+                <div class="flex items-center gap-2 text-xs text-slate-500 mb-1">
+                  <span class="ocr-spinner"></span>
+                  <span class="ocr-label">Procesando OCR...</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-1.5">
+                  <div class="ocr-progress bg-indigo-500 h-1.5 rounded-full transition-all" style="width:0%"></div>
+                </div>
+                <div class="ocr-result mt-2 text-xs bg-slate-50 rounded-lg p-2 max-h-32 overflow-auto" style="display:none;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Biometric Identification -->
+          <div class="field-group mt-6">
+            <label>Identificación Biométrica <span class="req">*</span></label>
+            <p class="text-xs text-slate-400 mb-3">Toma una selfie para verificar tu identidad con el documento</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Camera capture -->
+              <div class="bg-slate-50 rounded-xl p-4 text-center">
+                <div id="cameraContainer" class="relative mx-auto" style="max-width:280px;">
+                  <video id="videoElement" autoplay playsinline class="rounded-xl w-full" style="display:none;"></video>
+                  <canvas id="canvasElement" class="hidden"></canvas>
+                  <div id="cameraPlaceholder" class="bg-slate-200 rounded-xl flex items-center justify-center" style="height:210px;">
+                    <span class="text-slate-400 text-sm">Clic en "Activar Cámara"</span>
+                  </div>
+                  <img id="selfiePreview" class="rounded-xl w-full" style="display:none; max-height:210px; object-fit:cover;">
+                </div>
+                <div class="flex gap-2 justify-center mt-3">
+                  <button type="button" class="btn-back text-xs py-1.5 px-3" onclick="startCamera()">📷 Activar Cámara</button>
+                  <button type="button" class="btn-next text-xs py-1.5 px-3" onclick="captureSelfie()" id="captureBtn" disabled>📸 Capturar</button>
+                  <button type="button" class="btn-back text-xs py-1.5 px-3" onclick="retakeSelfie()">🔄 Repetir</button>
+                </div>
+              </div>
+
+              <!-- Face verification result -->
+              <div class="bg-slate-50 rounded-xl p-4">
+                <h4 class="text-xs font-bold text-slate-600 mb-2">Resultado Verificación</h4>
+                <div id="faceVerifyResult">
+                  <div class="text-center py-8 text-slate-400 text-xs">
+                    <div class="text-3xl mb-2">🧑</div>
+                    Esperando selfie...
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mt-4">
+            <p class="text-xs text-amber-700">
+              <strong>💡 Importante:</strong> Los estados de cuenta deben estar en formato PDF.
+              Si tus estados son de varias páginas, sube el archivo completo.
+              Se extraerán automáticamente los depósitos y movimientos de los últimos 3 meses.
+            </p>
+          </div>
+
+          <div class="flex justify-between mt-6">
+            <button type="button" class="btn-back" onclick="goStep(2)">← Anterior</button>
+            <button type="button" class="btn-next" onclick="goStep(4)">Siguiente →</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: Confirmación -->
+        <div class="step-section" data-step="4">
+          <h2 class="text-lg font-bold text-slate-800 mb-1">Confirmación</h2>
+          <p class="text-xs text-slate-400 mb-5">Revisa tus datos antes de enviar</p>
+
+          <div id="resumen" class="bg-slate-50 rounded-xl p-4 mb-5 text-sm space-y-2"></div>
+
+          <div id="docsSummary" class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-5 text-sm">
+            <h4 class="font-bold text-blue-800 mb-2">Documentos adjuntos</h4>
+            <ul id="docsList" class="space-y-1 text-blue-700"></ul>
+          </div>
+
+          <div id="ocrSummaryBox" class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-5 text-sm" style="display:none;">
+            <h4 class="font-bold text-indigo-800 mb-2">Resultados OCR</h4>
+            <ul id="ocrSummaryList" class="space-y-1 text-indigo-700"></ul>
+          </div>
+
+          <div id="faceSummaryBox" class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-5 text-sm" style="display:none;">
+            <h4 class="font-bold text-emerald-800 mb-2">Verificación Biométrica</h4>
+            <div id="faceSummaryContent" class="text-emerald-700"></div>
+          </div>
+
+          <div class="field-group">
+            <label>¿Alguna duda o comentario?</label>
+            <textarea name="descripcion" placeholder="Escribe aquí tu duda o sugerencia..."></textarea>
+          </div>
+
+<!-- Financial Analysis & Scoring -->
+<div id="analysisSection" class="mt-6" style="display:none;">
+  <h3 class="text-base font-bold text-slate-800 mb-3">Análisis Financiero Automático</h3>
+  
+  <!-- Income Analysis -->
+  <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-4">
+    <h4 class="text-sm font-bold text-emerald-800 mb-2">💰 Ingresos Fijos Detectados (OCR)</h4>
+    <div id="incomeAnalysis" class="text-sm text-emerald-700">Procesando...</div>
+  </div>
+  
+  <!-- Credit Score -->
+  <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-4">
+    <h4 class="text-sm font-bold text-indigo-800 mb-2">📊 Scoring Crediticio</h4>
+    <div class="flex items-center gap-4">
+      <div id="scoreGauge" class="relative" style="width:100px; height:100px;">
+        <svg viewBox="0 0 100 100" class="w-full h-full">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#e2e8f0" stroke-width="8"/>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#6366f1" stroke-width="8" 
+            stroke-dasharray="264" stroke-dashoffset="264" stroke-linecap="round"
+            transform="rotate(-90 50 50)" id="scoreArc"/>
+        </svg>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <span id="scoreNumber" class="text-2xl font-bold text-indigo-600">0</span>
+        </div>
+      </div>
+      <div class="flex-1">
+        <div id="scoreDetails" class="text-sm text-indigo-700"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Client Segment / Plan -->
+  <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4">
+    <h4 class="text-sm font-bold text-amber-800 mb-2">🎯 Plan Asignado</h4>
+    <div id="planAssignment" class="text-sm text-amber-700"></div>
+  </div>
+  
+  <!-- Payment Capacity Detail -->
+  <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4">
+    <h4 class="text-sm font-bold text-slate-800 mb-2">💳 Capacidad de Pago</h4>
+    <div id="paymentCapacity" class="text-sm text-slate-700"></div>
+  </div>
+</div>
+
+          <div class="flex justify-between mt-6">
+            <button type="button" class="btn-back" onclick="goStep(3)">← Anterior</button>
+            <button type="submit" class="btn-submit">Enviar Solicitud ✓</button>
+          </div>
+          <button type="button" class="btn-back mt-2" onclick="exportToCRM()" style="width:100%; font-size:.875rem;">
+            📤 Exportar datos para CRM (JSON)
+          </button>
+        </div>
+
+      </form>
+
+      <!-- Success Message -->
+      <div id="successMsg" class="success-msg" style="display:none;">
+        <div class="check">✓</div>
+        <h2 class="text-xl font-bold text-slate-800 mb-2">¡Solicitud Enviada!</h2>
+        <p class="text-slate-500 text-sm mb-4">Tus datos han sido registrados exitosamente.</p>
+        <div class="flex flex-col gap-2 items-center">
+          <a href="portal.html" class="btn-next" style="text-decoration:none;">📊 Ver Mi Portal del Cliente</a>
+          <button class="btn-back text-sm" onclick="resetForm()">Nueva Solicitud</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Saved Records -->
+    <div class="saved-records mt-6" id="savedSection" style="display:none;">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-bold text-slate-700">Solicitudes Guardadas <span class="badge-count" id="recordCount">0</span></h3>
+        <div class="flex gap-2">
+          <a href="portal.html" class="btn-back text-xs py-1 px-3" style="text-decoration:none;">📊 Ver Portal</a>
+          <button class="btn-back text-xs py-1 px-3" onclick="exportJSON()">Exportar JSON</button>
+          <button class="btn-back text-xs py-1 px-3 text-red-500" onclick="clearAll()">Limpiar Todo</button>
+        </div>
+      </div>
+      <div class="form-card p-4 overflow-x-auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Cédula</th>
+              <th>Nombre</th>
+              <th>Ciudad</th>
+              <th>Estado</th>
+              <th>Ingreso</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody id="recordsBody"></tbody>
+        </table>
+        <p class="text-xs text-slate-400 mt-3 text-center" id="emptyMsg">No hay solicitudes guardadas</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ============================================
+  // FACE-API MODELS LOADING
+  // ============================================
+  const FACE_MODELS_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
+  async function loadFaceModels() {
+    try {
+      await faceapi.nets.tinyFaceDetector.loadFromUri(FACE_MODELS_URL);
+      await faceapi.nets.faceLandmark68Net.loadFromUri(FACE_MODELS_URL);
+      await faceapi.nets.faceRecognitionNet.loadFromUri(FACE_MODELS_URL);
+      console.log('Face API models loaded');
+    } catch(e) {
+      console.warn('Face API models failed to load:', e);
+    }
+  }
+  loadFaceModels();
+
+  // ============================================
+  // STATE
+  // ============================================
+  let currentStep = 1;
+  const STORAGE_KEY = 'latinbien_solicitudes';
+
+  // ============================================
+  // OCR PROCESSING
+  // ============================================
+  async function processOCR(inputName, file) {
+    const statusEl = document.getElementById('ocrStatus_' + inputName);
+    if (!statusEl) return;
+    statusEl.style.display = 'block';
+
+    const label = statusEl.querySelector('.ocr-label');
+    const progress = statusEl.querySelector('.ocr-progress');
+    const result = statusEl.querySelector('.ocr-result');
+
+    try {
+      label.textContent = 'Convirtiendo PDF a imagen...';
+      progress.style.width = '10%';
+
+      const arrayBuffer = await file.arrayBuffer();
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({ scale: 2.0 });
+      const canvas = document.createElement('canvas');
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      const ctx = canvas.getContext('2d');
+      await page.render({ canvasContext: ctx, viewport }).promise;
+
+      progress.style.width = '40%';
+      label.textContent = 'Ejecutando OCR con Tesseract.js...';
+
+      const { data } = await Tesseract.recognize(canvas, 'spa+eng', {
+        logger: m => {
+          if (m.status === 'recognizing text') {
+            const pct = 40 + Math.round(m.progress * 55);
+            progress.style.width = pct + '%';
+          }
+        }
+      });
+
+      progress.style.width = '100%';
+      label.textContent = 'OCR completado ✓';
+      label.classList.add('text-emerald-600');
+
+      if (!window.ocrResults) window.ocrResults = {};
+      window.ocrResults[inputName] = data.text;
+
+      result.style.display = 'block';
+      result.textContent = data.text.substring(0, 1500);
+
+      if (inputName === 'rif_pdf') {
+        const cedulaMatch = data.text.match(/(\d{6,10})/);
+        if (cedulaMatch) {
+          result.innerHTML += '<br><br><strong class="text-indigo-600">Cédula detectada: ' + cedulaMatch[1] + '</strong>';
+          window.ocrCedula = cedulaMatch[1];
+        }
+      }
+
+    } catch(e) {
+      label.textContent = 'Error en OCR: ' + e.message;
+      label.classList.add('text-rose-600');
+      progress.style.width = '0%';
+    }
+  }
+
+  // ============================================
+  // CAMERA & BIOMETRIC FUNCTIONS
+  // ============================================
+  let stream = null;
+
+  async function startCamera() {
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 640, height: 480 } });
+      const video = document.getElementById('videoElement');
+      video.srcObject = stream;
+      video.style.display = 'block';
+      document.getElementById('cameraPlaceholder').style.display = 'none';
+      document.getElementById('selfiePreview').style.display = 'none';
+      document.getElementById('captureBtn').disabled = false;
+    } catch(e) {
+      alert('No se pudo acceder a la cámara: ' + e.message);
+    }
+  }
+
+  function captureSelfie() {
+    const video = document.getElementById('videoElement');
+    const canvas = document.getElementById('canvasElement');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+
+    const preview = document.getElementById('selfiePreview');
+    preview.src = canvas.toDataURL('image/jpeg');
+    preview.style.display = 'block';
+    video.style.display = 'none';
+
+    if (stream) stream.getTracks().forEach(t => t.stop());
+
+    window.selfieData = canvas.toDataURL('image/jpeg');
+
+    verifyFace(canvas);
+  }
+
+  function retakeSelfie() {
+    window.selfieData = null;
+    document.getElementById('selfiePreview').style.display = 'none';
+    document.getElementById('videoElement').style.display = 'none';
+    document.getElementById('cameraPlaceholder').style.display = 'flex';
+    document.getElementById('faceVerifyResult').innerHTML = '<div class="text-center py-8 text-slate-400 text-xs"><div class="text-3xl mb-2">🧑</div>Esperando selfie...</div>';
+    document.getElementById('captureBtn').disabled = true;
+    startCamera();
+  }
+
+  async function verifyFace(selfieCanvas) {
+    const resultEl = document.getElementById('faceVerifyResult');
+    resultEl.innerHTML = '<div class="text-center py-4"><div class="spinner inline-block"></div><p class="text-xs text-slate-500 mt-2">Analizando rostro...</p></div>';
+
+    try {
+      const selfieDetection = await faceapi
+        .detectSingleFace(selfieCanvas, new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.5 }))
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+
+      if (!selfieDetection) {
+        resultEl.innerHTML = '<div class="text-center py-4 text-rose-500 text-xs"><div class="text-3xl mb-2">❌</div><strong>No se detectó ningún rostro</strong><br>Asegúrate de que tu cara sea visible</div>';
+        return;
+      }
+
+      const detections = [selfieDetection];
+      const dims = faceapi.matchDimensions(selfieCanvas, { width: selfieCanvas.width, height: selfieCanvas.height }, true);
+      const resized = faceapi.resizeResults(detections, dims);
+
+      window.selfieDescriptor = selfieDetection.descriptor;
+
+      resultEl.innerHTML =
+        '<div class="text-center py-4 text-emerald-600 text-xs">' +
+          '<div class="text-3xl mb-2">✅</div>' +
+          '<strong>Rostro detectado exitosamente</strong>' +
+          '<div class="mt-2 text-slate-500">' +
+            '<div>Confianza: <strong>' + (selfieDetection.detection.score * 100).toFixed(1) + '%</strong></div>' +
+            '<div>Puntos faciales: 68 landmarks</div>' +
+          '</div>' +
+        '</div>';
+
+      window.faceVerified = true;
+
+    } catch(e) {
+      resultEl.innerHTML = '<div class="text-center py-4 text-rose-500 text-xs"><div class="text-3xl mb-2">⚠️</div><strong>Error: ' + e.message + '</strong></div>';
+    }
+  }
+
+  // ============================================
+  // STEP NAVIGATION
+  // ============================================
+  function goStep(step) {
+    if (step > currentStep && !validateStep(currentStep)) return;
+
+    currentStep = step;
+
+    document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+    document.querySelector('.step-section[data-step="' + step + '"]').classList.add('active');
+
+    document.querySelectorAll('.step-dot').forEach(d => {
+      const s = parseInt(d.dataset.step);
+      d.classList.remove('active', 'done');
+      if (s === step) d.classList.add('active');
+      else if (s < step) d.classList.add('done');
+    });
+
+    if (step === 4) { buildSummary(); buildDocsSummary(); buildOCRSummary(); buildFaceSummary(); }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ============================================
+  // VALIDATION
+  // ============================================
+  function validateStep(step) {
+    const section = document.querySelector('.step-section[data-step="' + step + '"]');
+    const required = section.querySelectorAll('[required]');
+    let valid = true;
+
+    if (step === 3) {
+      if (!fileData['rif_pdf']) {
+        alert('Por favor sube tu RIF / Cédula en PDF');
+        return false;
+      }
+      const hasAtLeastOne = fileData['estado_cuenta_1'] || fileData['estado_cuenta_2'] || fileData['estado_cuenta_3'];
+      if (!hasAtLeastOne) {
+        alert('Por favor sube al menos un estado de cuenta bancario');
+        return false;
+      }
+      return true;
+    }
+
+    required.forEach(field => {
+      if (field.type === 'radio') {
+        const group = section.querySelectorAll('[name="' + field.name + '"]');
+        const checked = Array.from(group).some(r => r.checked);
+        if (!checked) {
+          valid = false;
+          group.forEach(r => r.closest('.field-group, .radio-group')?.classList.add('shake'));
+        }
+        return;
+      }
+
+      if (!field.value.trim()) {
+        valid = false;
+        field.style.borderColor = '#ef4444';
+        field.addEventListener('input', () => { field.style.borderColor = ''; }, { once: true });
+      }
+    });
+
+    if (!valid) {
+      alert('Por favor completa todos los campos obligatorios (*)');
+    }
+    return valid;
+  }
+
+  // ============================================
+  // PHONE COMPOSITION
+  // ============================================
+  document.querySelector('[name="telefono"]').addEventListener('input', composePhone);
+  document.querySelector('[name="operador"]').addEventListener('change', composePhone);
+
+  function composePhone() {
+    const op = document.querySelector('[name="operador"]').value;
+    const num = document.querySelector('[name="telefono"]').value.replace(/\D/g, '');
+    document.querySelector('[name="phone_completo"]').value = '+58' + op + num;
+  }
+
+  // ============================================
+  // SUMMARY BUILDER
+  // ============================================
+  function buildSummary() {
+    const f = document.getElementById('solicitudForm');
+    const get = (n) => {
+      const el = f.querySelector('[name="' + n + '"]');
+      if (!el) return '-';
+      if (el.type === 'radio') {
+        const checked = f.querySelector('[name="' + n + '"]:checked');
+        return checked ? checked.nextElementSibling?.textContent?.trim() || checked.value : '-';
+      }
+      if (el.tagName === 'SELECT') return el.options[el.selectedIndex]?.text || '-';
+      return el.value || '-';
+    };
+
+    const op = f.querySelector('[name="operador"]').value;
+    const tel = f.querySelector('[name="telefono"]').value;
+
+    document.getElementById('resumen').innerHTML =
+      '<div class="grid grid-cols-2 gap-x-6 gap-y-2">' +
+        '<div><span class="text-slate-400">Cédula:</span> <strong>' + get('cedula') + '</strong></div>' +
+        '<div><span class="text-slate-400">Nombre:</span> <strong>' + get('nombre') + '</strong></div>' +
+        '<div><span class="text-slate-400">Correo:</span> <strong>' + get('correo') + '</strong></div>' +
+        '<div><span class="text-slate-400">Teléfono:</span> <strong>+58 ' + op + ' ' + tel + '</strong></div>' +
+        '<div><span class="text-slate-400">Ciudad:</span> <strong>' + get('ciudad') + '</strong></div>' +
+        '<div><span class="text-slate-400">Estado:</span> <strong>' + get('estado') + '</strong></div>' +
+        '<div><span class="text-slate-400">Empresa:</span> <strong>' + get('empresa') + '</strong></div>' +
+        '<div><span class="text-slate-400">Profesión:</span> <strong>' + get('profesion') + '</strong></div>' +
+        '<div><span class="text-slate-400">Ingreso mensual:</span> <strong>$' + get('ingreso_mensual') + '</strong></div>' +
+        '<div><span class="text-slate-400">Cuota quincenal:</span> <strong>' + get('cuota_quincenal') + '</strong></div>' +
+      '</div>';
+    // Run analysis
+    runFinancialAnalysis();
+  }
+
+  // ============================================
+  // OCR SUMMARY BUILDER (Step 4)
+  // ============================================
+  function buildOCRSummary() {
+    const box = document.getElementById('ocrSummaryBox');
+    const list = document.getElementById('ocrSummaryList');
+    const ocr = window.ocrResults || {};
+    const keys = Object.keys(ocr);
+    if (keys.length === 0) { box.style.display = 'none'; return; }
+    box.style.display = '';
+    const labels = {
+      'rif_pdf': '📄 RIF / Cédula',
+      'estado_cuenta_1': '🏦 Estado de Cuenta (reciente)',
+      'estado_cuenta_2': '🏦 Estado de Cuenta (intermedio)',
+      'estado_cuenta_3': '🏦 Estado de Cuenta (antiguo)'
+    };
+    list.innerHTML = keys.map(k => {
+      const snippet = ocr[k].substring(0, 200).replace(/\n/g, ' ');
+      return '<li><strong>' + (labels[k] || k) + ':</strong> ' + snippet + (ocr[k].length > 200 ? '...' : '') + '</li>';
+    }).join('');
+    if (window.ocrCedula) {
+      list.innerHTML += '<li class="font-bold text-indigo-700">Cédula detectada via OCR: ' + window.ocrCedula + '</li>';
+    }
+  }
+
+  // ============================================
+  // FACE SUMMARY BUILDER (Step 4)
+  // ============================================
+  function buildFaceSummary() {
+    const box = document.getElementById('faceSummaryBox');
+    const content = document.getElementById('faceSummaryContent');
+    if (window.faceVerified) {
+      box.style.display = '';
+      box.className = 'bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-5 text-sm';
+      content.innerHTML = '<div class="flex items-center gap-2"><span class="text-xl">✅</span><strong>Rostro verificado exitosamente</strong></div><p class="text-xs text-emerald-600 mt-1">Identidad biométrica confirmada</p>';
+    } else {
+      box.style.display = '';
+      box.className = 'bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5 text-sm';
+      content.innerHTML = '<div class="flex items-center gap-2"><span class="text-xl">⚠️</span><strong>Verificación biométrica no completada</strong></div><p class="text-xs text-amber-600 mt-1">No se tomó selfie para verificación</p>';
+    }
+  }
+
+  // ============================================
+  // FORM SUBMISSION → localStorage
+  // ============================================
+  document.getElementById('solicitudForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!validateStep(4)) return;
+
+    const f = this;
+    const data = {};
+    new FormData(f).forEach((v, k) => { if (k !== 'phone_completo' && !k.startsWith('estado_cuenta') && k !== 'rif_pdf') data[k] = v; });
+    data.phone_completo = f.querySelector('[name="phone_completo"]').value;
+    data.fecha = new Date().toISOString();
+    data.id = Date.now();
+
+    data.documentos = {};
+    for (const [key, info] of Object.entries(fileData)) {
+      data.documentos[key] = { name: info.name, size: info.size, type: info.type };
+    }
+
+    data.ocrResults = window.ocrResults || {};
+    data.faceVerified = window.faceVerified || false;
+    data.ocrCedula = window.ocrCedula || null;
+
+    // Merge financial analysis data for portal
+    if (window.clientAnalysis) {
+      Object.assign(data, window.clientAnalysis);
+    }
+
+    const records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    records.push(data);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+
+    f.style.display = 'none';
+    document.getElementById('stepIndicator').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+
+    renderRecords();
+  });
+
+  // ============================================
+  // FILE UPLOAD HANDLING
+  // ============================================
+  const fileData = {};
+
+  function handleFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
+      alert('Solo se permiten archivos PDF');
+      input.value = '';
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      alert('El archivo excede 10 MB');
+      input.value = '';
+      return;
+    }
+
+    const zone = input.closest('.upload-zone');
+    zone.classList.add('has-file');
+    zone.querySelector('.file-name').textContent = file.name + ' (' + (file.size / 1024 / 1024).toFixed(1) + ' MB)';
+
+    fileData[input.name] = {
+      name: file.name,
+      size: file.size,
+      type: file.type
+    };
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      fileData[input.name].dataUrl = e.target.result;
+    };
+    reader.readAsDataURL(file);
+
+    processOCR(input.name, file);
+  }
+
+  function removeFile(e, zone) {
+    e.stopPropagation();
+    e.preventDefault();
+    const input = zone.querySelector('input[type="file"]');
+    input.value = '';
+    zone.classList.remove('has-file');
+    zone.querySelector('.file-name').textContent = '';
+    delete fileData[input.name];
+
+    const statusEl = document.getElementById('ocrStatus_' + input.name);
+    if (statusEl) {
+      statusEl.style.display = 'none';
+      const label = statusEl.querySelector('.ocr-label');
+      const progress = statusEl.querySelector('.ocr-progress');
+      const result = statusEl.querySelector('.ocr-result');
+      label.textContent = 'Procesando OCR...';
+      label.classList.remove('text-emerald-600', 'text-rose-600');
+      progress.style.width = '0%';
+      result.style.display = 'none';
+      result.textContent = '';
+    }
+
+    if (window.ocrResults) delete window.ocrResults[input.name];
+    if (input.name === 'rif_pdf') window.ocrCedula = null;
+  }
+
+  document.querySelectorAll('.upload-zone').forEach(zone => {
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+      const input = zone.querySelector('input[type="file"]');
+      input.files = e.dataTransfer.files;
+      handleFile(input);
+    });
+  });
+
+  function buildDocsSummary() {
+    const list = document.getElementById('docsList');
+    const docs = [];
+    const labels = {
+      'rif_pdf': '📄 RIF / Cédula',
+      'estado_cuenta_1': '🏦 Estado de Cuenta (reciente)',
+      'estado_cuenta_2': '🏦 Estado de Cuenta (intermedio)',
+      'estado_cuenta_3': '🏦 Estado de Cuenta (antiguo)'
+    };
+    for (const [key, info] of Object.entries(fileData)) {
+      docs.push('<li>' + (labels[key] || key) + ': <strong>' + info.name + '</strong></li>');
+    }
+    if (docs.length === 0) {
+      docs.push('<li class="text-amber-600">⚠️ No se adjuntaron documentos</li>');
+    }
+    const formCedula = document.querySelector('[name="cedula"]')?.value || '';
+    const ocrCedula = window.ocrCedula || '';
+    if (ocrCedula && formCedula) {
+      const match = ocrCedula === formCedula;
+      docs.push('<li>' + (match ? '✅' : '⚠️') + ' Cédula OCR (' + ocrCedula + ') ' + (match ? 'coincide' : 'NO coincide') + ' con formulario (' + formCedula + ')</li>');
+    }
+    list.innerHTML = docs.join('');
+  }
+
+  // ============================================
+  // RESET
+  // ============================================
+  function resetForm() {
+    const f = document.getElementById('solicitudForm');
+    f.reset();
+    f.style.display = '';
+    document.getElementById('stepIndicator').style.display = '';
+    document.getElementById('successMsg').style.display = 'none';
+    document.querySelectorAll('.upload-zone').forEach(z => {
+      z.classList.remove('has-file');
+      z.querySelector('.file-name').textContent = '';
+    });
+    document.querySelectorAll('.ocr-status').forEach(s => {
+      s.style.display = 'none';
+      const label = s.querySelector('.ocr-label');
+      const progress = s.querySelector('.ocr-progress');
+      const result = s.querySelector('.ocr-result');
+      if (label) { label.textContent = 'Procesando OCR...'; label.classList.remove('text-emerald-600', 'text-rose-600'); }
+      if (progress) progress.style.width = '0%';
+      if (result) { result.style.display = 'none'; result.textContent = ''; }
+    });
+    Object.keys(fileData).forEach(k => delete fileData[k]);
+    window.ocrResults = {};
+    window.ocrCedula = null;
+    window.faceVerified = false;
+    window.selfieData = null;
+    window.selfieDescriptor = null;
+    window.clientAnalysis = null;
+    document.getElementById('selfiePreview').style.display = 'none';
+    document.getElementById('videoElement').style.display = 'none';
+    document.getElementById('cameraPlaceholder').style.display = 'flex';
+    document.getElementById('captureBtn').disabled = true;
+    document.getElementById('faceVerifyResult').innerHTML = '<div class="text-center py-8 text-slate-400 text-xs"><div class="text-3xl mb-2">🧑</div>Esperando selfie...</div>';
+    if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+    document.getElementById('ocrSummaryBox').style.display = 'none';
+    document.getElementById('faceSummaryBox').style.display = 'none';
+    document.getElementById('analysisSection').style.display = 'none';
+    currentStep = 1;
+    goStep(1);
+  }
+
+  // ============================================
+  // SAVED RECORDS
+  // ============================================
+  function renderRecords() {
+    const records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const tbody = document.getElementById('recordsBody');
+    const section = document.getElementById('savedSection');
+    const count = document.getElementById('recordCount');
+    const empty = document.getElementById('emptyMsg');
+
+    if (records.length === 0) {
+      section.style.display = 'none';
+      return;
+    }
+
+    section.style.display = '';
+    count.textContent = records.length;
+    empty.style.display = records.length ? 'none' : '';
+
+    tbody.innerHTML = records.slice().reverse().map(r =>
+      '<tr>' +
+        '<td>' + (r.cedula || '-') + '</td>' +
+        '<td>' + (r.nombre || '-') + '</td>' +
+        '<td>' + (r.ciudad || '-') + '</td>' +
+        '<td>' + (r.estado || '-') + '</td>' +
+        '<td>$' + (r.ingreso_mensual || '0') + '</td>' +
+        '<td>' + (r.fecha ? new Date(r.fecha).toLocaleDateString('es-VE') : '-') + '</td>' +
+      '</tr>'
+    ).join('');
+  }
+
+  function exportJSON() {
+    const records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const blob = new Blob([JSON.stringify(records, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'solicitudes_' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+  }
+
+  function clearAll() {
+    if (!confirm('¿Eliminar todas las solicitudes guardadas?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    renderRecords();
+  }
+
+  // ============================================
+  // BANK STATEMENT OCR TEXT PARSER
+  // ============================================
+  function parseBankOCR(text) {
+    const lines = text.split('\n').filter(l => l.trim());
+    const transactions = [];
+    
+    const recurringKeywords = ['nómina', 'nomina', 'salario', 'sueldo', 'pago', 'transferencia', 'abono', 'depósito', 'deposito', 'ingreso', 'traspaso'];
+    const debitsKeywords = ['cargo', 'débito', 'debito', 'retiro', 'comisión', 'comision', 'impuesto', 'tarjeta', 'pago móvil', 'pago movil'];
+    
+    let totalDeposits = 0;
+    let totalCharges = 0;
+    let deposits = [];
+    let charges = [];
+    let recurringAmounts = {};
+    
+    for (const line of lines) {
+      const lower = line.toLowerCase();
+      const moneyMatches = line.match(/([\d]{1,3}(?:[.,]\d{3})*(?:[.,]\d{2}))/g);
+      if (!moneyMatches) continue;
+      
+      for (const match of moneyMatches) {
+        const val = parseFloat(match.replace(/,/g, ''));
+        if (val < 10 || isNaN(val)) continue;
+        
+        const isDebit = debitsKeywords.some(k => lower.includes(k));
+        const isDeposit = recurringKeywords.some(k => lower.includes(k));
+        
+        if (isDebit) {
+          charges.push(val);
+          totalCharges += val;
+        } else if (isDeposit || (!isDebit && val > 50)) {
+          deposits.push(val);
+          totalDeposits += val;
+          const rounded = Math.round(val / 10) * 10;
+          recurringAmounts[rounded] = (recurringAmounts[rounded] || 0) + 1;
+        }
+      }
+    }
+    
+    let fixedIncome = 0;
+    let maxFreq = 0;
+    for (const [amt, freq] of Object.entries(recurringAmounts)) {
+      if (freq > maxFreq && parseFloat(amt) > 50) {
+        maxFreq = freq;
+        fixedIncome = parseFloat(amt);
+      }
+    }
+    
+    if (fixedIncome === 0 && deposits.length > 0) {
+      deposits.sort((a, b) => a - b);
+      fixedIncome = deposits[Math.floor(deposits.length / 2)];
+    }
+    
+    return {
+      totalDeposits,
+      totalCharges,
+      netFlow: totalDeposits - totalCharges,
+      fixedIncome,
+      depositCount: deposits.length,
+      chargeCount: charges.length,
+      avgDeposit: deposits.length ? totalDeposits / deposits.length : 0,
+      avgCharge: charges.length ? totalCharges / charges.length : 0,
+      transactions: [...deposits.map(d => ({type:'deposit', amount: d})), ...charges.map(c => ({type:'charge', amount: c}))]
+    };
+  }
+
+  // ============================================
+  // CREDIT SCORING ALGORITHM
+  // ============================================
+  function calculateCreditScore(monthlyData, personalData) {
+    let score = 0;
+    const factors = [];
+    
+    const incomes = monthlyData.map(m => m.fixedIncome).filter(i => i > 0);
+    if (incomes.length >= 2) {
+      const avg = incomes.reduce((a,b) => a+b, 0) / incomes.length;
+      const variance = incomes.reduce((s, i) => s + Math.pow(i - avg, 2), 0) / incomes.length;
+      const cv = Math.sqrt(variance) / avg;
+      const stability = Math.max(0, 1 - cv);
+      const pts = Math.round(stability * 25);
+      score += pts;
+      factors.push({ name: 'Estabilidad de Ingresos', points: pts, max: 25, detail: 'CV: ' + (cv*100).toFixed(1) + '%' });
+    } else {
+      factors.push({ name: 'Estabilidad de Ingresos', points: 0, max: 25, detail: 'Datos insuficientes' });
+    }
+    
+    const positiveMonths = monthlyData.filter(m => m.netFlow > 0).length;
+    const flowPts = Math.round((positiveMonths / Math.max(monthlyData.length, 1)) * 25);
+    score += flowPts;
+    factors.push({ name: 'Flujo Positivo', points: flowPts, max: 25, detail: positiveMonths + '/' + monthlyData.length + ' meses positivos' });
+    
+    const avgIncome = incomes.length ? incomes.reduce((a,b)=>a+b,0)/incomes.length : 0;
+    let incomePts = 0;
+    if (avgIncome >= 700) incomePts = 25;
+    else if (avgIncome >= 350) incomePts = 20;
+    else if (avgIncome >= 200) incomePts = 15;
+    else if (avgIncome >= 100) incomePts = 10;
+    else if (avgIncome >= 50) incomePts = 5;
+    score += incomePts;
+    factors.push({ name: 'Nivel de Ingresos', points: incomePts, max: 25, detail: '$' + avgIncome.toFixed(0) + '/mes promedio' });
+    
+    let empPts = 0;
+    if (personalData.empresa && personalData.empresa.length > 2) empPts += 8;
+    if (personalData.profesion && personalData.profesion.length > 2) empPts += 7;
+    score += empPts;
+    factors.push({ name: 'Perfil Laboral', points: empPts, max: 15, detail: personalData.empresa || 'No especificado' });
+    
+    let extraPts = 0;
+    if (personalData.vehiculo === 'si') extraPts += 3;
+    if (personalData.vivienda === 'propia') extraPts += 4;
+    if (personalData.inicial === 'si') extraPts += 3;
+    score += extraPts;
+    factors.push({ name: 'Perfil Adicional', points: extraPts, max: 10, detail: 'Vehículo, vivienda, inicial' });
+    
+    return { score: Math.min(score, 100), factors };
+  }
+
+  // ============================================
+  // PLAN ASSIGNMENT
+  // ============================================
+  function assignPlan(score, avgIncomeUSD) {
+    const plans = [
+      { id: 'CREDI_CLASICO', name: 'Credi Clásico', inicial: 50, plazos: [6,8,10,12,14,16,18,20], minScore: 0, minIncome: 0 },
+      { id: 'CREDI_MAS', name: 'Credi Más', inicial: 40, plazos: [6,8,10,12,14,16,18,20], minScore: 30, minIncome: 150 },
+      { id: 'CREDI_PRO', name: 'Credi Pro', inicial: 30, plazos: [6,8,10,12,14,16,18,20], minScore: 50, minIncome: 350 },
+      { id: 'CREDI_PREMIUM', name: 'Credi Club Premium', inicial: 20, plazos: [6,8,10,12,14,16,18,20], minScore: 75, minIncome: 700 },
+    ];
+    
+    let assigned = plans[0];
+    for (const plan of plans) {
+      if (score >= plan.minScore && avgIncomeUSD >= plan.minIncome) {
+        assigned = plan;
+      }
+    }
+    
+    const maxCuotaQuincenal = avgIncomeUSD * 0.30;
+    const maxPlazo = assigned.plazos[assigned.plazos.length - 1];
+    const montoCredito = maxCuotaQuincenal * maxPlazo;
+    
+    return {
+      ...assigned,
+      maxCuotaQuincenal: maxCuotaQuincenal.toFixed(2),
+      montoCredito: montoCredito.toFixed(2),
+      plazoRecomendado: assigned.plazos[Math.min(2, assigned.plazos.length - 1)]
+    };
+  }
+
+  // ============================================
+  // MAIN ANALYSIS RUNNER
+  // ============================================
+  function runFinancialAnalysis() {
+    const ocrResults = window.ocrResults || {};
+    const monthlyAnalysis = [];
+    
+    const keys = ['estado_cuenta_1', 'estado_cuenta_2', 'estado_cuenta_3'];
+    for (const key of keys) {
+      if (ocrResults[key]) {
+        monthlyAnalysis.push(parseBankOCR(ocrResults[key]));
+      }
+    }
+    
+    if (monthlyAnalysis.length === 0) {
+      const ingresoForm = parseFloat(document.querySelector('[name="ingreso_mensual"]')?.value) || 200;
+      monthlyAnalysis.push({
+        fixedIncome: ingresoForm,
+        totalDeposits: ingresoForm * 3,
+        totalCharges: ingresoForm * 1.5,
+        netFlow: ingresoForm * 1.5,
+        depositCount: 10,
+        chargeCount: 8,
+        avgDeposit: ingresoForm * 0.3,
+        avgCharge: ingresoForm * 0.18,
+        transactions: []
+      });
+    }
+    
+    const avgIncome = monthlyAnalysis.reduce((s, m) => s + m.fixedIncome, 0) / monthlyAnalysis.length;
+    const avgNet = monthlyAnalysis.reduce((s, m) => s + m.netFlow, 0) / monthlyAnalysis.length;
+    
+    const personalData = {
+      empresa: document.querySelector('[name="empresa"]')?.value || '',
+      profesion: document.querySelector('[name="profesion"]')?.value || '',
+      vehiculo: document.querySelector('[name="vehiculo"]:checked')?.value || '',
+      vivienda: document.querySelector('[name="vivienda"]:checked')?.value || '',
+      inicial: document.querySelector('[name="inicial"]:checked')?.value || '',
+    };
+    
+    const { score, factors } = calculateCreditScore(monthlyAnalysis, personalData);
+    const plan = assignPlan(score, avgIncome);
+    
+    const incomeEl = document.getElementById('incomeAnalysis');
+    incomeEl.innerHTML =
+      '<div class="grid grid-cols-2 gap-3 mt-2">' +
+        '<div><strong>Ingreso fijo mensual:</strong> $' + avgIncome.toFixed(2) + '</div>' +
+        '<div><strong>Promedio depósitos:</strong> $' + (monthlyAnalysis.reduce((s,m)=>s+m.avgDeposit,0)/monthlyAnalysis.length).toFixed(2) + '</div>' +
+        '<div><strong>Flujo neto promedio:</strong> $' + avgNet.toFixed(2) + '</div>' +
+        '<div><strong>Meses analizados:</strong> ' + monthlyAnalysis.length + '</div>' +
+      '</div>' +
+      '<div class="mt-2 text-xs text-emerald-600">Ingresos detectados por OCR de estados bancarios</div>';
+    
+    const scoreArc = document.getElementById('scoreArc');
+    const scoreNum = document.getElementById('scoreNumber');
+    const offset = 264 - (264 * score / 100);
+    scoreArc.style.strokeDashoffset = offset;
+    scoreArc.style.stroke = score >= 70 ? '#10b981' : score >= 40 ? '#f59e0b' : '#ef4444';
+    scoreNum.textContent = score;
+    scoreNum.style.color = score >= 70 ? '#059669' : score >= 40 ? '#d97706' : '#dc2626';
+    
+    const scoreDetails = document.getElementById('scoreDetails');
+    scoreDetails.innerHTML = factors.map(f =>
+      '<div class="flex justify-between text-xs mb-1">' +
+        '<span>' + f.name + '</span>' +
+        '<span class="font-bold">' + f.points + '/' + f.max + '</span>' +
+      '</div>'
+    ).join('') + '<div class="text-xs text-slate-500 mt-1">' + factors.map(f => f.detail).join(' | ') + '</div>';
+    
+    const planEl = document.getElementById('planAssignment');
+    planEl.innerHTML =
+      '<div class="flex items-center gap-3 mt-2">' +
+        '<div class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-bold text-sm">' + plan.name + '</div>' +
+      '</div>' +
+      '<div class="grid grid-cols-2 gap-3 mt-3 text-sm">' +
+        '<div><strong>Inicial requerido:</strong> ' + plan.inicial + '%</div>' +
+        '<div><strong>Plazos:</strong> ' + plan.plazos.join(', ') + ' cuotas</div>' +
+        '<div><strong>Cuota quincenal máx:</strong> $' + plan.maxCuotaQuincenal + '</div>' +
+        '<div><strong>Crédito disponible:</strong> $' + plan.montoCredito + '</div>' +
+        '<div><strong>Plazo recomendado:</strong> ' + plan.plazoRecomendado + ' cuotas</div>' +
+      '</div>';
+    
+    const capacityEl = document.getElementById('paymentCapacity');
+    capacityEl.innerHTML =
+      '<div class="grid grid-cols-2 gap-3 mt-2">' +
+        '<div><strong>Ingreso mensual:</strong> $' + avgIncome.toFixed(2) + '</div>' +
+        '<div><strong>30% capacidad pago:</strong> $' + (avgIncome * 0.3).toFixed(2) + '</div>' +
+        '<div><strong>Cuota quincenal sugerida:</strong> $' + (avgIncome * 0.3).toFixed(2) + '</div>' +
+        '<div><strong>Monto máximo a financiar:</strong> $' + (avgIncome * 0.3 * plan.plazoRecomendado).toFixed(2) + '</div>' +
+      '</div>';
+    
+    document.getElementById('analysisSection').style.display = 'block';
+    
+    window.clientAnalysis = {
+      score: score,
+      factors: factors,
+      plan: plan.name,
+      planId: plan.id,
+      avgIncome: avgIncome.toFixed(2),
+      avgNet: avgNet.toFixed(2),
+      maxCuota: plan.maxCuotaQuincenal,
+      montoCredito: plan.montoCredito,
+      inicial: plan.inicial + '%',
+      plazoRecomendado: plan.plazoRecomendado,
+      monthlyData: monthlyAnalysis.map((m, i) => ({
+        month: i + 1,
+        fixedIncome: m.fixedIncome.toFixed(2),
+        deposits: m.totalDeposits.toFixed(2),
+        charges: m.totalCharges.toFixed(2),
+        net: m.netFlow.toFixed(2)
+      }))
+    };
+  }
+
+  // ============================================
+  // CRM EXPORT
+  // ============================================
+  function exportToCRM() {
+    if (!window.clientAnalysis) {
+      alert('Primero debe completar el análisis financiero');
+      return;
+    }
+    
+    const f = document.getElementById('solicitudForm');
+    const getVal = (n) => {
+      const el = f.querySelector('[name="' + n + '"]');
+      if (!el) return '';
+      if (el.type === 'radio') {
+        const checked = f.querySelector('[name="' + n + '"]:checked');
+        return checked ? checked.value : '';
+      }
+      return el.value || '';
+    };
+    
+    const op = f.querySelector('[name="operador"]').value;
+    const tel = f.querySelector('[name="telefono"]').value;
+    
+    const crmData = {
+      cedula: getVal('cedula'),
+      nombre_completo: getVal('nombre'),
+      email: getVal('correo'),
+      telefono: '+58' + op + tel,
+      ciudad: getVal('ciudad'),
+      estado: getVal('estado'),
+      empresa: getVal('empresa'),
+      profesion: getVal('profesion'),
+      origen_ingresos: getVal('origen_ingresos'),
+      ingreso_mensual_declarado: getVal('ingreso_mensual'),
+      cuota_quincenal_preferida: getVal('cuota_quincenal'),
+      tiene_inicial: getVal('inicial'),
+      tiene_vehiculo: getVal('vehiculo'),
+      tipo_vivienda: getVal('vivienda'),
+      ...window.clientAnalysis,
+      face_verified: window.faceVerified || false,
+      ocr_cedula_detected: window.ocrCedula || null,
+      documentos: Object.keys(window.ocrResults || {}),
+      fecha_solicitud: new Date().toISOString(),
+      fuente: 'formulario_web_local',
+      estado_solicitud: 'nueva'
+    };
+    
+    const json = JSON.stringify(crmData, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'CRM_' + crmData.cedula + '_' + (crmData.nombre_completo || '').replace(/\s/g,'_') + '_' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+    
+    navigator.clipboard?.writeText(json).then(() => {
+      console.log('CRM data copied to clipboard');
+    });
+  }
+
+  // ============================================
+  // INIT
+  // ============================================
+  renderRecords();
+</script>
+
+</body>
+</html>

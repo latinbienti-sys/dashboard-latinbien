@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "LatinBien",
+    "slug": "latinbien",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "scheme": "latinbien",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#213C83"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.latinbien.app",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Para actualizar tu foto de perfil",
+        "NSCameraUsageDescription": "Para escanear código de productos"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#213C83"
+      },
+      "package": "com.latinbien.app",
+      "permissions": [
+        "CAMERA",
+        "INTERNET"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "extra": {
+      "apiUrl": "https://latinbien.com",
+      "eas": {
+        "projectId": "bba5d4aa-08f8-4cea-9438-44a4223b60f6"
+      }
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-notifications",
+      "expo-asset"
+    ],
+    "owner": "latinbien"
+  }
+}

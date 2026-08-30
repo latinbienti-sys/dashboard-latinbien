@@ -1,0 +1,23 @@
+{
+  "partnerName": "YARLEY CAROLINA CARMONA HIDALGO",
+  "partnerId": 18047,
+  "contractCount": 1,
+  "totalBilling": 1595.33,
+  "totalPaid": 505.82,
+  "totalPending": 1089.51,
+  "hasOverduePayments": false,
+  "overdueCount": 0,
+  "tierName": "Sin rango",
+  "tierIcon": "[-]",
+  "contracts": [
+    {
+      "name": "FACTU/2024/03/0001-1338",
+      "total": 1595.33,
+      "paid": 505.82,
+      "residual": 1089.51,
+      "date": "2026-05-20",
+      "status": "6"
+    }
+  ],
+  "fetchedAt": "2026-07-29 20:32:04"
+}

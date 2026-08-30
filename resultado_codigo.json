@@ -1,0 +1,37 @@
+{
+  "101": {
+    "name": "BUSCAR_PRODUCTO",
+    "text_match": false,
+    "bot_key": "#BUSCAR_PRODUCTO",
+    "code": "\ntry:\n    conv = mess_id.contact_id\n    note = conv.note or ''\n    menu_key = '#MENU_RECOMPRA'\n    if 'return_menu=' in note:\n        menu_key = note.split('return_menu=')[1].strip().split('\\n')[0]\n    \n    query = mess_id.text.strip()\n    Product = env['product.template']\n    products = Product.search([('name', 'ilike', '%' + query + '%')], limit=3)\n    \n    if products:\n        lines = ['Resultados para: ' + query + '\\n']\n        for p in products:\n            precio = p.list_price\n            if precio and precio > 0:\n                inicial = round(precio * 0.30, 2)\n                cuota = round((precio - inicial) / 20, 2)\n                lines.append(p.name)\n                lines.append('Precio: $' + '{:.2f}'.format(precio))\n                lines.append('Inicial (30%): $' + '{:.2f}'.format(inicial))\n                lines.append('20 cuotas de: $' + '{:.2f}'.format(cuota))\n                lines.append('')\n            else:\n                lines.append(p.name + ' - Consultar precio en tienda')\n                lines.append('')\n        lines.append('Catalogo completo: https://latinbien.com/shop/')\n        msg = '\\n'.join(lines)\n    else:\n        msg = 'No encontre productos con \"' + query + '\".\\nIntenta con otras palabras o revisa nuestro catalogo:\\nhttps://latinbien.com/shop/'\nexcept Exception as e:\n    msg = 'Error al buscar el producto: ' + str(e)\n\nconv.write({'note': False})\nret = [{'send_text': msg}, {'goto_and_wait': menu_key}]\n",
+    "body_whatsapp": false
+  },
+  "102": {
+    "name": "RECOMPRA_CONSULTA",
+    "text_match": "6",
+    "bot_key": false,
+    "code": "conv = mess_id.contact_id\nconv.write({'note': 'return_menu=#MENU_RECOMPRA'})\nret = [{'send_text': 'Escribe el nombre del producto que deseas consultar (ej: televisor 32\\\")'}, {'goto_and_wait': '#BUSCAR_PRODUCTO'}]",
+    "body_whatsapp": false
+  },
+  "103": {
+    "name": "LC_CONSULTA",
+    "text_match": "6",
+    "bot_key": false,
+    "code": "conv = mess_id.contact_id\nconv.write({'note': 'return_menu=#MENU_LC_APROBADA'})\nret = [{'send_text': 'Escribe el nombre del producto que deseas consultar (ej: televisor 32\\\")'}, {'goto_and_wait': '#BUSCAR_PRODUCTO'}]",
+    "body_whatsapp": false
+  },
+  "104": {
+    "name": "REG_CONSULTA",
+    "text_match": "6",
+    "bot_key": false,
+    "code": "conv = mess_id.contact_id\nconv.write({'note': 'return_menu=#No tienes linea'})\nret = [{'send_text': 'Escribe el nombre del producto que deseas consultar (ej: televisor 32\\\")'}, {'goto_and_wait': '#BUSCAR_PRODUCTO'}]",
+    "body_whatsapp": false
+  },
+  "105": {
+    "name": "NR_CONSULTA",
+    "text_match": "5",
+    "bot_key": false,
+    "code": "conv = mess_id.contact_id\nconv.write({'note': 'return_menu=#Registro'})\nret = [{'send_text': 'Escribe el nombre del producto que deseas consultar (ej: televisor 32\\\")'}, {'goto_and_wait': '#BUSCAR_PRODUCTO'}]",
+    "body_whatsapp": false
+  }
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>JSON.parse test</title>
+</head>
+<body>
+<h2>Test JSON.parse con datos embebidos</h2>
+<div id="result">Cargando...</div>
+<script>
+// Datos pequeños para probar JSON.parse
+var json = '{"total": 3, "items": [{"name": "Cliente A", "value": 100}, {"name": "Cliente B", "value": 200}, {"name": "O\'Brien Test", "value": 300}]}';
+var DATA;
+try { DATA = JSON.parse(json); } catch(e) { DATA = null; alert("PARSE ERROR: " + e.message); }
+
+if (DATA) {
+  var html = "<p>OK! Total: " + DATA.total + "</p><ul>";
+  for (var i = 0; i < DATA.items.length; i++) {
+    html += "<li>" + DATA.items[i].name + " = $" + DATA.items[i].value + "</li>";
+  }
+  html += "</ul>";
+  document.getElementById("result").innerHTML = html;
+} else {
+  document.getElementById("result").innerHTML = "<p style=color:red>ERROR: DATA es null</p>";
+}
+</script>
+</body>
+</html>

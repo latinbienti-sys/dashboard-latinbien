@@ -1,0 +1,7898 @@
+{
+  "status_summary": {
+    "": 2814,
+    "8. CANCELACION TOTAL": 1440,
+    "6. CVG - ENTREGADO": 766,
+    "11. CAMBIO DE PLAN": 124,
+    "7. RETIRADO DEVOLUCION REALIZADA": 69,
+    "10. ANULADO": 64,
+    "9. EXCLUSIÓN POR MORA, DEVOLUCIÓN NS": 27,
+    "12. CONGELADO": 26,
+    "0. SAV - PRESUPUESTO": 7,
+    "4. SAV - APROBADO - ESPERA ENTREGA": 2
+  },
+  "active_count": 918,
+  "cancelled_count": 1440,
+  "total_rows": 5339,
+  "active_client_count": 692,
+  "total_facturado": 806503.0799999989,
+  "total_cobrado": 420710.0100000001,
+  "clients": [
+    {
+      "nombre": "GERARDO JOSE RAMIREZ F.",
+      "contratos": 14,
+      "facturado": 11031.67,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-02-07",
+        "2025-02-19",
+        "2025-02-20",
+        "2025-02-25",
+        "2025-05-03",
+        "2025-05-29",
+        "2025-06-10",
+        "2025-06-10",
+        "2025-09-09",
+        "2025-09-13"
+      ]
+    },
+    {
+      "nombre": "FELIX EDEL LIMA DE LA SOTA",
+      "contratos": 8,
+      "facturado": 6321.58,
+      "cobrado": 2198.69,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-11-19",
+        "2025-11-19",
+        "2025-11-21",
+        "2025-12-13",
+        "2026-02-20",
+        "2026-02-28",
+        "2026-03-25",
+        "2026-06-14"
+      ]
+    },
+    {
+      "nombre": "YONATHAN JOSE VIVAS CARRERO",
+      "contratos": 7,
+      "facturado": 7535.81,
+      "cobrado": 3755.78,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-03-20",
+        "2026-04-11",
+        "2026-04-16",
+        "2026-04-29",
+        "2026-05-17",
+        "2026-06-25",
+        "2026-06-27"
+      ]
+    },
+    {
+      "nombre": "SORELIS DEL CARMEN MORAN BOLAÑO",
+      "contratos": 6,
+      "facturado": 17269.02,
+      "cobrado": 13741.2,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-29",
+        "2024-12-11",
+        "2025-03-21",
+        "2025-03-27",
+        "2025-04-02",
+        "2025-04-12"
+      ]
+    },
+    {
+      "nombre": "JESUS MANUEL GUTIERREZ PEREIRA",
+      "contratos": 4,
+      "facturado": 4474.96,
+      "cobrado": 679.68,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-07-01",
+        "2026-07-02",
+        "2026-07-16",
+        "2026-07-16"
+      ]
+    },
+    {
+      "nombre": "ERIKA DEL CARMEN ORTEGA MORALES",
+      "contratos": 4,
+      "facturado": 1523.56,
+      "cobrado": 732.42,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-03-19",
+        "2026-04-16",
+        "2026-04-16",
+        "2026-07-15"
+      ]
+    },
+    {
+      "nombre": "JHOSABANELA DE LOS ANGELES CONTRERAS BRICEÑO",
+      "contratos": 4,
+      "facturado": 3612.27,
+      "cobrado": 1852.85,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-09-16",
+        "2025-09-17",
+        "2026-07-01",
+        "2026-07-03"
+      ]
+    },
+    {
+      "nombre": "EDUARDO JOSE BRAVO BRAVO",
+      "contratos": 4,
+      "facturado": 7578.49,
+      "cobrado": 2273.85,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-10-03",
+        "2026-02-22",
+        "2026-06-01",
+        "2026-06-29"
+      ]
+    },
+    {
+      "nombre": "EVELYN YEANINE QUINTERO UZCATEGUI",
+      "contratos": 4,
+      "facturado": 1803.62,
+      "cobrado": 246.85,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-08",
+        "2026-06-11",
+        "2026-06-12",
+        "2026-06-12"
+      ]
+    },
+    {
+      "nombre": "CIPRIANO ENRIJESUS ALVARADO BLANCO",
+      "contratos": 4,
+      "facturado": 1812.82,
+      "cobrado": 1182.95,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-03-19",
+        "2025-04-09",
+        "2026-04-18",
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "JUHENDIS VALLADARES",
+      "contratos": 4,
+      "facturado": 2104.75,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-09-30",
+        "2025-11-08",
+        "2026-04-25",
+        "2026-05-06"
+      ]
+    },
+    {
+      "nombre": "HOMERO JAVIER RIVAS VARELA",
+      "contratos": 4,
+      "facturado": 2480.4,
+      "cobrado": 1419.96,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-29",
+        "2026-02-22",
+        "2026-03-04",
+        "2026-04-07"
+      ]
+    },
+    {
+      "nombre": "YAHVEH ELIANGE MARQUEZ CANCINE",
+      "contratos": 4,
+      "facturado": 1307.02,
+      "cobrado": 597.95,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-30",
+        "2025-11-30",
+        "2026-01-05",
+        "2026-03-01"
+      ]
+    },
+    {
+      "nombre": "RUBISELA DEL VALLE MOYA GONZALEZ",
+      "contratos": 4,
+      "facturado": 21429.97,
+      "cobrado": 8453.22,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-11",
+        "2024-11-12",
+        "2024-11-14",
+        "2025-12-12"
+      ]
+    },
+    {
+      "nombre": "BIRNA JANETT AVENDAÑO",
+      "contratos": 3,
+      "facturado": 1585.35,
+      "cobrado": 736.78,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-17",
+        "2026-02-06",
+        "2026-07-10"
+      ]
+    },
+    {
+      "nombre": "PAOLA MARGARITA VILLAVICENCIO FLORES",
+      "contratos": 3,
+      "facturado": 1100.48,
+      "cobrado": 260.47,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-05",
+        "2026-07-03",
+        "2026-07-04"
+      ]
+    },
+    {
+      "nombre": "MARISELA DEL CARMEN CEBALLOS SALAS",
+      "contratos": 3,
+      "facturado": 1786.67,
+      "cobrado": 686.33,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-01-29",
+        "2026-03-29",
+        "2026-07-02"
+      ]
+    },
+    {
+      "nombre": "ELIO JUAN CHAMATE RODRIGUEZ",
+      "contratos": 3,
+      "facturado": 899.39,
+      "cobrado": 283.32,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-06-06",
+        "2026-06-14",
+        "2026-06-24"
+      ]
+    },
+    {
+      "nombre": "JUAN CARLOS GUERRA FERNANDEZ",
+      "contratos": 3,
+      "facturado": 1741.08,
+      "cobrado": 646.93,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-31",
+        "2026-05-30",
+        "2026-06-19"
+      ]
+    },
+    {
+      "nombre": "ROSAURA ELENA PORRAS CARRERO",
+      "contratos": 3,
+      "facturado": 669.65,
+      "cobrado": 271.48,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-04-30",
+        "2026-04-30",
+        "2026-06-17"
+      ]
+    },
+    {
+      "nombre": "YUSMARY DEL VALLE PEÑA DUGARTE",
+      "contratos": 3,
+      "facturado": 4059.22,
+      "cobrado": 1541.65,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-21",
+        "2026-04-11",
+        "2026-06-13"
+      ]
+    },
+    {
+      "nombre": "LUIS ANDRES DE J. ROJAS RODRIGUEZ",
+      "contratos": 3,
+      "facturado": 328.6,
+      "cobrado": 166.31,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-09",
+        "2026-03-13",
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "BEATRIZ JOSEFINA ARAQUE PEDROZA",
+      "contratos": 3,
+      "facturado": 3710.39,
+      "cobrado": 595.85,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-31",
+        "2026-05-31",
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "DIEGO ARMANDO SALAZAR UZCATEGUI",
+      "contratos": 3,
+      "facturado": 2477.67,
+      "cobrado": 513.34,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-27",
+        "2026-05-30",
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "KARINA MOLINA VEGA",
+      "contratos": 3,
+      "facturado": 922.23,
+      "cobrado": 563.2,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-30",
+        "2026-03-28",
+        "2026-05-22"
+      ]
+    },
+    {
+      "nombre": "DARVI REENE DUGARTE DUGARTE",
+      "contratos": 3,
+      "facturado": 849.87,
+      "cobrado": 521.1,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-12-02",
+        "2026-03-29",
+        "2026-05-16"
+      ]
+    },
+    {
+      "nombre": "ANDREA ESTEFANIA ACEVEDO SANTIAGO",
+      "contratos": 3,
+      "facturado": 1987.33,
+      "cobrado": 839.36,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-23",
+        "2026-03-31",
+        "2026-05-15"
+      ]
+    },
+    {
+      "nombre": "JOSE DAVID SOSA",
+      "contratos": 3,
+      "facturado": 517.84,
+      "cobrado": 454.98,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-09-15",
+        "2026-05-03",
+        "2026-05-03"
+      ]
+    },
+    {
+      "nombre": "PEDRO MANUEL ACEVEDO SANTIAGO",
+      "contratos": 3,
+      "facturado": 2160.6,
+      "cobrado": 1446.42,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-09-19",
+        "2025-10-30",
+        "2026-03-30"
+      ]
+    },
+    {
+      "nombre": "ALEXIS Y LA VENEZUELA DE ANTIER C.A.",
+      "contratos": 3,
+      "facturado": 3568.78,
+      "cobrado": 2383.5,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-09",
+        "2025-11-18",
+        "2026-03-26"
+      ]
+    },
+    {
+      "nombre": "LEOMAR MAYELA VALERO RODRIGUEZ",
+      "contratos": 3,
+      "facturado": 1153.76,
+      "cobrado": 775.51,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-25",
+        "2026-01-23",
+        "2026-03-10"
+      ]
+    },
+    {
+      "nombre": "YOSELIN DEL VALLE ALBORNOZ JUAREZ",
+      "contratos": 3,
+      "facturado": 2907.51,
+      "cobrado": 2367.89,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-09-28",
+        "2025-09-28",
+        "2026-02-22"
+      ]
+    },
+    {
+      "nombre": "AUTOPERIQUITOS Y REPUESTOS BALDERIS, DE CHRISTIAN ORLANDO UZCATEGUI AVENDAÑO",
+      "contratos": 3,
+      "facturado": 6197.4,
+      "cobrado": 3456.52,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-01-31",
+        "2026-02-01",
+        "2026-02-20"
+      ]
+    },
+    {
+      "nombre": "MAYERLY ARENAS CACERES",
+      "contratos": 3,
+      "facturado": 7468.79,
+      "cobrado": 4010.38,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-12-16",
+        "2026-01-31",
+        "2026-02-03"
+      ]
+    },
+    {
+      "nombre": "ENRIQUE JOSE GONZALEZ SAAVEDRA",
+      "contratos": 3,
+      "facturado": 983.82,
+      "cobrado": 391.16,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-01-18",
+        "2026-01-19",
+        "2026-01-25"
+      ]
+    },
+    {
+      "nombre": "PUEBLO MUSEO LOS ALEROS C. A.",
+      "contratos": 3,
+      "facturado": 1648.81,
+      "cobrado": 1103.62,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-09",
+        "2025-10-18",
+        "2026-01-19"
+      ]
+    },
+    {
+      "nombre": "FRANK ALBERTO VELASQUEZ HERNANDEZ",
+      "contratos": 3,
+      "facturado": 875.17,
+      "cobrado": 767.59,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-09-02",
+        "2025-10-14",
+        "2025-11-20"
+      ]
+    },
+    {
+      "nombre": "JASMIN  RITSELI SULBARAN ARAQUE",
+      "contratos": 3,
+      "facturado": 1065.92,
+      "cobrado": 576.27,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-07-30",
+        "2025-07-30",
+        "2025-09-23"
+      ]
+    },
+    {
+      "nombre": "RONALD  JOSUUEE DIAZ ROJO",
+      "contratos": 3,
+      "facturado": 1877.61,
+      "cobrado": 1626.84,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-05",
+        "2025-08-22",
+        "2025-08-22"
+      ]
+    },
+    {
+      "nombre": "ALBA COROMOTO  RODRIGUEZ RIVERO",
+      "contratos": 3,
+      "facturado": 1885.98,
+      "cobrado": 1885.98,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-10-23",
+        "2025-03-06",
+        "2025-03-06"
+      ]
+    },
+    {
+      "nombre": "MEY WANAD ZOILYN PARRA",
+      "contratos": 3,
+      "facturado": 2591.14,
+      "cobrado": 2591.14,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-01-25",
+        "2025-01-29",
+        "2025-01-29"
+      ]
+    },
+    {
+      "nombre": "LINDA ESTHER PALENCIA DE BUSTAMANTE",
+      "contratos": 3,
+      "facturado": 1032.9,
+      "cobrado": 1032.9,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-22",
+        "2025-01-14",
+        "2025-01-21"
+      ]
+    },
+    {
+      "nombre": "LUIS EDUARDO UZCATEGUI",
+      "contratos": 3,
+      "facturado": 2313.3,
+      "cobrado": 1393.05,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-12",
+        "2024-11-23",
+        "2024-11-29"
+      ]
+    },
+    {
+      "nombre": "LUIS ALEJANDRO ROJAS ARAQUE",
+      "contratos": 3,
+      "facturado": 1041.15,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-08-17",
+        "2024-10-31",
+        "2024-11-13"
+      ]
+    },
+    {
+      "nombre": "JORGE ENRRIQUE BECERRA FLORES",
+      "contratos": 2,
+      "facturado": 2699.43,
+      "cobrado": 377.87,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-07-16",
+        "2026-07-16"
+      ]
+    },
+    {
+      "nombre": "ANGELA RUIZ VIELMA",
+      "contratos": 2,
+      "facturado": 589.36,
+      "cobrado": 40.15,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-07-15",
+        "2026-07-15"
+      ]
+    },
+    {
+      "nombre": "YOLMER ALEXIS ROMERO SOSA",
+      "contratos": 2,
+      "facturado": 862.9,
+      "cobrado": 484.29,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-12-05",
+        "2026-07-15"
+      ]
+    },
+    {
+      "nombre": "ROSA CAROLINA ALBORNOZ GUIRIGAY",
+      "contratos": 2,
+      "facturado": 1707.92,
+      "cobrado": 1039.49,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-01",
+        "2026-07-11"
+      ]
+    },
+    {
+      "nombre": "DAVID JOSE PEREZ ZERPA",
+      "contratos": 2,
+      "facturado": 1071.91,
+      "cobrado": 232.25,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-18",
+        "2026-07-07"
+      ]
+    },
+    {
+      "nombre": "JUAN DE LA CRUZ RIOS RONDON",
+      "contratos": 2,
+      "facturado": 878.55,
+      "cobrado": 294.24,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-19",
+        "2026-07-05"
+      ]
+    },
+    {
+      "nombre": "ASOCIACION PRODUCTORES DE CAFE DON ARTURO (APROARCA), C.A",
+      "contratos": 2,
+      "facturado": 1487.33,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-02-25",
+        "2026-07-03"
+      ]
+    },
+    {
+      "nombre": "MARIA PATRICIA CHOURIO",
+      "contratos": 2,
+      "facturado": 682.75,
+      "cobrado": 367.63,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-31",
+        "2026-07-03"
+      ]
+    },
+    {
+      "nombre": "LUIS EDWIN ARAQUE GONZALEZ",
+      "contratos": 2,
+      "facturado": 856.76,
+      "cobrado": 358.62,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-11",
+        "2026-07-02"
+      ]
+    },
+    {
+      "nombre": "LUIS ADOLFO LOBO SIVOLI",
+      "contratos": 2,
+      "facturado": 3561.94,
+      "cobrado": 1122.29,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-23",
+        "2026-07-01"
+      ]
+    },
+    {
+      "nombre": "JOSE RAMON GONZALEZ AVENDAÑO",
+      "contratos": 2,
+      "facturado": 1138.72,
+      "cobrado": 252.81,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-06-24",
+        "2026-06-24"
+      ]
+    },
+    {
+      "nombre": "MARIA EUGENIA VERA VERA",
+      "contratos": 2,
+      "facturado": 1327.38,
+      "cobrado": 480.97,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-01-17",
+        "2026-06-23"
+      ]
+    },
+    {
+      "nombre": "MARINO PEÑA MUÑOZ",
+      "contratos": 2,
+      "facturado": 1229.64,
+      "cobrado": 441.9,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-19",
+        "2026-06-22"
+      ]
+    },
+    {
+      "nombre": "CLARA SURAIMA GONZALEZ GONZALEZ",
+      "contratos": 2,
+      "facturado": 965.82,
+      "cobrado": 387.1,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-16",
+        "2026-06-20"
+      ]
+    },
+    {
+      "nombre": "FRANK ARGENIS PEREZ LAGUADO",
+      "contratos": 2,
+      "facturado": 428.3,
+      "cobrado": 80.94,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-28",
+        "2026-06-19"
+      ]
+    },
+    {
+      "nombre": "KENETH JEREMIAS MARQUINA ANTOINE",
+      "contratos": 2,
+      "facturado": 511.19,
+      "cobrado": 202.71,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-13",
+        "2026-06-19"
+      ]
+    },
+    {
+      "nombre": "REINALDO JOSE GUERRA AMARIS",
+      "contratos": 2,
+      "facturado": 2369.14,
+      "cobrado": 411.52,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-10",
+        "2026-06-16"
+      ]
+    },
+    {
+      "nombre": "FERNANDO JOSE RONDON ARAUJO",
+      "contratos": 2,
+      "facturado": 1080.46,
+      "cobrado": 146.45,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-29",
+        "2026-06-15"
+      ]
+    },
+    {
+      "nombre": "DALIA YIRALDY GALVIS MARQUEZ",
+      "contratos": 2,
+      "facturado": 1914.36,
+      "cobrado": 294.1,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-11",
+        "2026-06-14"
+      ]
+    },
+    {
+      "nombre": "JESUS FRANCISCO SOTO GONZALEZ",
+      "contratos": 2,
+      "facturado": 812.05,
+      "cobrado": 292.21,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-03-31",
+        "2026-06-13"
+      ]
+    },
+    {
+      "nombre": "OSMARA SOTO G",
+      "contratos": 2,
+      "facturado": 155.66,
+      "cobrado": 48.69,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-07",
+        "2026-06-13"
+      ]
+    },
+    {
+      "nombre": "MARLIN YULEIDY GUILLEN GONZALES",
+      "contratos": 2,
+      "facturado": 2631.34,
+      "cobrado": 465.09,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-28",
+        "2026-06-13"
+      ]
+    },
+    {
+      "nombre": "YAILEANA WILZA URDANETA DE RINCON",
+      "contratos": 2,
+      "facturado": 1284.04,
+      "cobrado": 456.09,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-11-22",
+        "2026-06-12"
+      ]
+    },
+    {
+      "nombre": "GERARDO ATILIO BONAGURO GAMBOA",
+      "contratos": 2,
+      "facturado": 414.96,
+      "cobrado": 52.52,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-29",
+        "2026-06-12"
+      ]
+    },
+    {
+      "nombre": "FRANK REINALDO PEÑA SANCHEZ",
+      "contratos": 2,
+      "facturado": 641.1,
+      "cobrado": 217.84,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-06-05",
+        "2026-06-11"
+      ]
+    },
+    {
+      "nombre": "NIKOLASA DEL CARMEN HERNANDEZ DE RIVERA",
+      "contratos": 2,
+      "facturado": 336.23,
+      "cobrado": 74.77,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-06",
+        "2026-06-11"
+      ]
+    },
+    {
+      "nombre": "JOSETH DE JESUS PLAZA RINCON",
+      "contratos": 2,
+      "facturado": 1113.77,
+      "cobrado": 516.8,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-28",
+        "2026-06-09"
+      ]
+    },
+    {
+      "nombre": "OMAR GABRIEL GUERRA  FERNANDEZ",
+      "contratos": 2,
+      "facturado": 853.25,
+      "cobrado": 179.71,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-31",
+        "2026-06-01"
+      ]
+    },
+    {
+      "nombre": "ROYMIR DAVID MOLINA PEREIRA",
+      "contratos": 2,
+      "facturado": 1443.7,
+      "cobrado": 458.59,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2024-12-26",
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "LENNYS ALEXANDRA NAVA SILGUERO",
+      "contratos": 2,
+      "facturado": 648.77,
+      "cobrado": 105.28,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-31",
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "JAIRLEY NAZARETH DEL CARMEN AMAYA MEZA",
+      "contratos": 2,
+      "facturado": 1804.3,
+      "cobrado": 172.28,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-29",
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "ANTHONY JOSUE REY QUINTERO",
+      "contratos": 2,
+      "facturado": 773.23,
+      "cobrado": 754.89,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-30",
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "MARCO TULIO DAVILA DAVILA",
+      "contratos": 2,
+      "facturado": 1220.78,
+      "cobrado": 285.3,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-04-30",
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "ROSMILA CHIQUINQUIRA VALLADARES LOPEZ",
+      "contratos": 2,
+      "facturado": 1585.64,
+      "cobrado": 685.4,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-22",
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "KELLYS ROXANA CASTILLO LEAL",
+      "contratos": 2,
+      "facturado": 2944.95,
+      "cobrado": 1351.75,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-30",
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "YORGE ALEXANDER PEDRAZA COLMENARES",
+      "contratos": 2,
+      "facturado": 1117.86,
+      "cobrado": 344.37,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-19",
+        "2026-05-29"
+      ]
+    },
+    {
+      "nombre": "DAMAG LIDUCA DIAZ MENDEZ",
+      "contratos": 2,
+      "facturado": 1506.56,
+      "cobrado": 613.44,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-05-07",
+        "2026-05-29"
+      ]
+    },
+    {
+      "nombre": "KATERIN DANIELA TOVAR SOTILLET",
+      "contratos": 2,
+      "facturado": 1285.13,
+      "cobrado": 392.89,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-16",
+        "2026-05-28"
+      ]
+    },
+    {
+      "nombre": "BETANIA YERALDINE MOLINA ROSALES",
+      "contratos": 2,
+      "facturado": 1326.54,
+      "cobrado": 673.64,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-01",
+        "2026-05-27"
+      ]
+    },
+    {
+      "nombre": "YENNY LORENA RANGEL",
+      "contratos": 2,
+      "facturado": 1931.56,
+      "cobrado": 401.22,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-25",
+        "2026-05-26"
+      ]
+    },
+    {
+      "nombre": "EDUARDO RAMIREZ MORA",
+      "contratos": 2,
+      "facturado": 3021.53,
+      "cobrado": 1248.3,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-09",
+        "2026-05-25"
+      ]
+    },
+    {
+      "nombre": "LOYDA EUNICE MARTINEZ DE RIVAS",
+      "contratos": 2,
+      "facturado": 2727.66,
+      "cobrado": 1658.63,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-01-21",
+        "2026-05-24"
+      ]
+    },
+    {
+      "nombre": "MARBETT MARQUEZ MEJIAS",
+      "contratos": 2,
+      "facturado": 1190.07,
+      "cobrado": 524.95,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-29",
+        "2026-05-22"
+      ]
+    },
+    {
+      "nombre": "YARLEY CAROLINA CARMONA HIDALGO",
+      "contratos": 2,
+      "facturado": 1917.91,
+      "cobrado": 437.73,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-04",
+        "2026-05-20"
+      ]
+    },
+    {
+      "nombre": "ADOLFO ALEXANDER RONDON RONDON",
+      "contratos": 2,
+      "facturado": 1009.83,
+      "cobrado": 444.32,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-02-19",
+        "2026-05-12"
+      ]
+    },
+    {
+      "nombre": "MANUEL ANTONIO SPINA MARIÑO",
+      "contratos": 2,
+      "facturado": 7537.25,
+      "cobrado": 2707.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-12",
+        "2026-05-12"
+      ]
+    },
+    {
+      "nombre": "MARIOLY COROMOTO BALZA DE PAREDES",
+      "contratos": 2,
+      "facturado": 261.13,
+      "cobrado": 90.8,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-04",
+        "2026-05-11"
+      ]
+    },
+    {
+      "nombre": "HOTEL BAR RESTAURANT LAS LOMAS, C.A",
+      "contratos": 2,
+      "facturado": 10734.21,
+      "cobrado": 3346.12,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-05",
+        "2026-05-07"
+      ]
+    },
+    {
+      "nombre": "ANDY YERLIQUE SUAREZ MORET",
+      "contratos": 2,
+      "facturado": 1538.56,
+      "cobrado": 731.16,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-17",
+        "2026-05-05"
+      ]
+    },
+    {
+      "nombre": "JULIO CESAR OSUNA ARAQUE",
+      "contratos": 2,
+      "facturado": 962.41,
+      "cobrado": 733.39,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-08",
+        "2026-05-03"
+      ]
+    },
+    {
+      "nombre": "LUIS ARTURO FERNANDEZ CARRILLO",
+      "contratos": 2,
+      "facturado": 1465.96,
+      "cobrado": 1018.21,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-11-14",
+        "2026-04-24"
+      ]
+    },
+    {
+      "nombre": "JESUS EDUARDO CHOURIO VIELMA",
+      "contratos": 2,
+      "facturado": 1041.59,
+      "cobrado": 614.16,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-11-14",
+        "2026-04-21"
+      ]
+    },
+    {
+      "nombre": "YESSICA KARINA PEÑA DE MORA",
+      "contratos": 2,
+      "facturado": 1186.98,
+      "cobrado": 709.59,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-02",
+        "2026-04-18"
+      ]
+    },
+    {
+      "nombre": "JOHAN ANTONIO MONTES PALMERA",
+      "contratos": 2,
+      "facturado": 1108.44,
+      "cobrado": 107.25,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-10-31",
+        "2026-04-18"
+      ]
+    },
+    {
+      "nombre": "ALEXANDER JESUS GUTIERREZ VELIZ",
+      "contratos": 2,
+      "facturado": 329.37,
+      "cobrado": 176.12,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-15",
+        "2026-03-31"
+      ]
+    },
+    {
+      "nombre": "GENESIS PAOLA RIVERA RIVERA",
+      "contratos": 2,
+      "facturado": 1083.5,
+      "cobrado": 583.32,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-01-30",
+        "2026-03-31"
+      ]
+    },
+    {
+      "nombre": "ANGEL ALEXANDER GUANIPA ALBARRAN",
+      "contratos": 2,
+      "facturado": 803.92,
+      "cobrado": 449.87,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-03-25",
+        "2026-03-31"
+      ]
+    },
+    {
+      "nombre": "KAIRELI DEL CARMEN MARQUINA MORENO",
+      "contratos": 2,
+      "facturado": 986.81,
+      "cobrado": 511.17,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-12-03",
+        "2026-03-26"
+      ]
+    },
+    {
+      "nombre": "CORY ESTEFANNY REINOZA MORENO",
+      "contratos": 2,
+      "facturado": 526.08,
+      "cobrado": 289.04,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-11",
+        "2026-03-25"
+      ]
+    },
+    {
+      "nombre": "MANUEL ALFREDO CHACON VALERO",
+      "contratos": 2,
+      "facturado": 695.89,
+      "cobrado": 517.35,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-02",
+        "2026-03-21"
+      ]
+    },
+    {
+      "nombre": "MARBELLYS RAMIREZ ROJAS",
+      "contratos": 2,
+      "facturado": 1524.3,
+      "cobrado": 1103.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-08-22",
+        "2026-03-16"
+      ]
+    },
+    {
+      "nombre": "EDGAR ALEXANDER SOTO VERA",
+      "contratos": 2,
+      "facturado": 893.62,
+      "cobrado": 394.26,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-03-10",
+        "2026-03-10"
+      ]
+    },
+    {
+      "nombre": "OSMARY JOSEFINA CERRADA",
+      "contratos": 2,
+      "facturado": 1059.65,
+      "cobrado": 484.38,
+      "worker_type": "infdependiente_informal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-03-08",
+        "2026-03-08"
+      ]
+    },
+    {
+      "nombre": "PAULA ESTEFANIA UZCATEGUI CAMPOS",
+      "contratos": 2,
+      "facturado": 1478.98,
+      "cobrado": 994.55,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-02",
+        "2026-03-05"
+      ]
+    },
+    {
+      "nombre": "JUNIOR DEYBIS QUINTERO LEON",
+      "contratos": 2,
+      "facturado": 697.22,
+      "cobrado": 372.06,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-01-30",
+        "2026-02-27"
+      ]
+    },
+    {
+      "nombre": "DARLYNE MARIA NAVA RONDON",
+      "contratos": 2,
+      "facturado": 713.69,
+      "cobrado": 474.06,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-28",
+        "2026-02-27"
+      ]
+    },
+    {
+      "nombre": "MAURIZIO ALLEXANDRO OCHOA BLANCO",
+      "contratos": 2,
+      "facturado": 2038.47,
+      "cobrado": 1276.38,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-30",
+        "2026-02-26"
+      ]
+    },
+    {
+      "nombre": "MARIELA JOSEFINA CASTILLO DE BARRIOS",
+      "contratos": 2,
+      "facturado": 1210.81,
+      "cobrado": 533.93,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-02-18",
+        "2026-02-20"
+      ]
+    },
+    {
+      "nombre": "SANDRA ELIZABETH MORENO LABRADOR",
+      "contratos": 2,
+      "facturado": 2576.02,
+      "cobrado": 1868.21,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-09",
+        "2026-02-18"
+      ]
+    },
+    {
+      "nombre": "RONALD JOSE GUILLEN RANGEL",
+      "contratos": 2,
+      "facturado": 3885.49,
+      "cobrado": 2183.89,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-02-13",
+        "2026-02-17"
+      ]
+    },
+    {
+      "nombre": "CARLOS HILARIO CONTRERAS GAVIDIA",
+      "contratos": 2,
+      "facturado": 1058.2,
+      "cobrado": 815.43,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-02-03",
+        "2026-01-29"
+      ]
+    },
+    {
+      "nombre": "FAUSTINO RAMON MARTIN DOMINGUEZ",
+      "contratos": 2,
+      "facturado": 1126.29,
+      "cobrado": 810.79,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-11-30",
+        "2026-01-29"
+      ]
+    },
+    {
+      "nombre": "DANIEL J. RODRIGUEZ V.",
+      "contratos": 2,
+      "facturado": 955.39,
+      "cobrado": 884.66,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-30",
+        "2026-01-27"
+      ]
+    },
+    {
+      "nombre": "NERIO ALEJANDRO MORENO  CASANOVA",
+      "contratos": 2,
+      "facturado": 1540.12,
+      "cobrado": 1173.41,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-10-27",
+        "2026-01-23"
+      ]
+    },
+    {
+      "nombre": "DANIELA GARCIA DURAN",
+      "contratos": 2,
+      "facturado": 1644.39,
+      "cobrado": 1150.28,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-12",
+        "2026-01-19"
+      ]
+    },
+    {
+      "nombre": "MARY GABRIELA VILLAVICENCIO MACHADO",
+      "contratos": 2,
+      "facturado": 1158.22,
+      "cobrado": 752.57,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-11-05",
+        "2026-01-15"
+      ]
+    },
+    {
+      "nombre": "REBECA MILAGROS MORENO CASTILLO",
+      "contratos": 2,
+      "facturado": 978.74,
+      "cobrado": 558.13,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-01-13",
+        "2026-01-13"
+      ]
+    },
+    {
+      "nombre": "ANTONIO WILMER CUCCHIA D´RENZO",
+      "contratos": 2,
+      "facturado": 1242.93,
+      "cobrado": 761.89,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-01-12",
+        "2026-01-12"
+      ]
+    },
+    {
+      "nombre": "OSCAR ANTONIO PARRA FLORIDA",
+      "contratos": 2,
+      "facturado": 1213.18,
+      "cobrado": 910.43,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-25",
+        "2025-12-27"
+      ]
+    },
+    {
+      "nombre": "BRENDA YAZMIN MARQUEZ VEGA",
+      "contratos": 2,
+      "facturado": 1132.29,
+      "cobrado": 108.45,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-01-30",
+        "2025-12-27"
+      ]
+    },
+    {
+      "nombre": "OMAR ABRAHAM SALCEDO",
+      "contratos": 2,
+      "facturado": 743.74,
+      "cobrado": 352.16,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-16",
+        "2025-12-22"
+      ]
+    },
+    {
+      "nombre": "JESUS ALEJANDRO PUENTES VARELA",
+      "contratos": 2,
+      "facturado": 1179.79,
+      "cobrado": 901.69,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-08",
+        "2025-12-18"
+      ]
+    },
+    {
+      "nombre": "JHOSEP DANIEL GUTIERREZ MARTINEZ",
+      "contratos": 2,
+      "facturado": 3707.9,
+      "cobrado": 684.03,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-19",
+        "2025-12-17"
+      ]
+    },
+    {
+      "nombre": "JOSE GREGORIO VILLASMIL GUILLEN",
+      "contratos": 2,
+      "facturado": 591.02,
+      "cobrado": 494.38,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-18",
+        "2025-12-04"
+      ]
+    },
+    {
+      "nombre": "JESUS ALEXANDER LOBO MONSALVE",
+      "contratos": 2,
+      "facturado": 826.76,
+      "cobrado": 691.46,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-01",
+        "2025-12-02"
+      ]
+    },
+    {
+      "nombre": "MILDRED GIOVANNA ERAZO TORO",
+      "contratos": 2,
+      "facturado": 1215.92,
+      "cobrado": 925.94,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-14",
+        "2025-11-29"
+      ]
+    },
+    {
+      "nombre": "MARY CARMEN MARCHAN GUTIERREZ",
+      "contratos": 2,
+      "facturado": 1018.6,
+      "cobrado": 799.75,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-21",
+        "2025-11-29"
+      ]
+    },
+    {
+      "nombre": "MARIA VIRGINIA MURILLO AGUILAR",
+      "contratos": 2,
+      "facturado": 951.65,
+      "cobrado": 784.96,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-09-30",
+        "2025-11-28"
+      ]
+    },
+    {
+      "nombre": "MARIA CAROLINA SANCHEZ QUINTERO",
+      "contratos": 2,
+      "facturado": 2970.7,
+      "cobrado": 2770.36,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-05-16",
+        "2025-11-28"
+      ]
+    },
+    {
+      "nombre": "SAYRA ANAIS BECERRA GUERRERO",
+      "contratos": 2,
+      "facturado": 593.26,
+      "cobrado": 440.25,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-11-28",
+        "2025-11-28"
+      ]
+    },
+    {
+      "nombre": "DARCY COROMOTO GUERRERO VILLASMIL",
+      "contratos": 2,
+      "facturado": 966.74,
+      "cobrado": 873.87,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-10-03",
+        "2025-11-15"
+      ]
+    },
+    {
+      "nombre": "RUBEN DARIO YEMES QUINTERO",
+      "contratos": 2,
+      "facturado": 3515.72,
+      "cobrado": 3214.55,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-01",
+        "2025-10-17"
+      ]
+    },
+    {
+      "nombre": "ANGELA ANTONIETA RONDON GAVIDIA",
+      "contratos": 2,
+      "facturado": 2049.19,
+      "cobrado": 1735.1,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-08-13",
+        "2025-08-18"
+      ]
+    },
+    {
+      "nombre": "YOLEIDY LUCELY HERNANDEZ PEÑA",
+      "contratos": 2,
+      "facturado": 1209.45,
+      "cobrado": 1209.45,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-05-23",
+        "2025-05-28"
+      ]
+    },
+    {
+      "nombre": "ANGI ALEXANDRA PEREZ REALE",
+      "contratos": 2,
+      "facturado": 869.13,
+      "cobrado": 869.13,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-07",
+        "2025-04-09"
+      ]
+    },
+    {
+      "nombre": "OMAR ANTONIO RODRIGUEZ PIÑERO",
+      "contratos": 2,
+      "facturado": 1337.76,
+      "cobrado": 128.37,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-01",
+        "2025-04-05"
+      ]
+    },
+    {
+      "nombre": "MIRLA MILDRED INCIARTE OCANDO",
+      "contratos": 2,
+      "facturado": 2323.2,
+      "cobrado": 2323.2,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-07",
+        "2025-03-24"
+      ]
+    },
+    {
+      "nombre": "MARITZA DEL CARMEN CONDE HERRERA",
+      "contratos": 2,
+      "facturado": 1715.18,
+      "cobrado": 857.59,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-01",
+        "2025-03-10"
+      ]
+    },
+    {
+      "nombre": "MIGUEL ANTONIO VELASCO PIRELA",
+      "contratos": 2,
+      "facturado": 1128.54,
+      "cobrado": 1128.54,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-09-26",
+        "2025-01-28"
+      ]
+    },
+    {
+      "nombre": "STEFANY DANIELA CALDERON VALERO",
+      "contratos": 2,
+      "facturado": 922.84,
+      "cobrado": 922.84,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-10-15",
+        "2025-01-14"
+      ]
+    },
+    {
+      "nombre": "NELSON HERRERA GIL",
+      "contratos": 2,
+      "facturado": 622.05,
+      "cobrado": 260.7,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-30",
+        "2024-12-18"
+      ]
+    },
+    {
+      "nombre": "JEAN CARLOS LUZARDO RIVAS",
+      "contratos": 2,
+      "facturado": 2527.8,
+      "cobrado": 835.11,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-01",
+        "2024-12-10"
+      ]
+    },
+    {
+      "nombre": "IRLANDA ANDREA RODRIGUEZ GUERRERO",
+      "contratos": 2,
+      "facturado": 6966.3,
+      "cobrado": 2222.94,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-10-28",
+        "2024-11-05"
+      ]
+    },
+    {
+      "nombre": "BRUNO ALESSANDRO DE LUCA ENRIQUEZ",
+      "contratos": 2,
+      "facturado": 264.12,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-10-08",
+        "2024-10-11"
+      ]
+    },
+    {
+      "nombre": "YOSMER DANIEL SOLER SALCEDO",
+      "contratos": 2,
+      "facturado": 1158.24,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-08-01",
+        "2024-10-07"
+      ]
+    },
+    {
+      "nombre": "GENESIS ROMALY PAIVA MENDOZA",
+      "contratos": 1,
+      "facturado": 707.55,
+      "cobrado": 47.62,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-07-16"
+      ]
+    },
+    {
+      "nombre": "LATINBIEN MOTORS, C.A",
+      "contratos": 1,
+      "facturado": 2627.75,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-07-14"
+      ]
+    },
+    {
+      "nombre": "JUAN JOSE MARTINEZ DE LIMA",
+      "contratos": 1,
+      "facturado": 1327.93,
+      "cobrado": 286.85,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-07-12"
+      ]
+    },
+    {
+      "nombre": "PATRICIA CAROLINA FLORES PAREDES",
+      "contratos": 1,
+      "facturado": 666.53,
+      "cobrado": 148.32,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-07-12"
+      ]
+    },
+    {
+      "nombre": "LIRIO DEL CARMEN CHUECOS PRIETO",
+      "contratos": 1,
+      "facturado": 1215.35,
+      "cobrado": 306.65,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-07-09"
+      ]
+    },
+    {
+      "nombre": "ALECNY HERNANDEZ JEREZ",
+      "contratos": 1,
+      "facturado": 218.13,
+      "cobrado": 54.6,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-07-07"
+      ]
+    },
+    {
+      "nombre": "MARIA ELENA DUGARTE RIVAS",
+      "contratos": 1,
+      "facturado": 850.94,
+      "cobrado": 217.31,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-07-06"
+      ]
+    },
+    {
+      "nombre": "AGROPECUARIA LA PAÑUELETA, C.A",
+      "contratos": 1,
+      "facturado": 631.83,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-07-06"
+      ]
+    },
+    {
+      "nombre": "ZORAYDA DEL CARMEN VILLAREAL",
+      "contratos": 1,
+      "facturado": 338.01,
+      "cobrado": 338.01,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-07-04"
+      ]
+    },
+    {
+      "nombre": "YELENDI JACQUELINE MARQUEZ RAMIREZ",
+      "contratos": 1,
+      "facturado": 992.26,
+      "cobrado": 214.82,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-07-03"
+      ]
+    },
+    {
+      "nombre": "ARNOLDO JOSE PARRA MORA",
+      "contratos": 1,
+      "facturado": 1502.68,
+      "cobrado": 385.92,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-07-02"
+      ]
+    },
+    {
+      "nombre": "MIGUEL ALFREDO MORENO TORRES",
+      "contratos": 1,
+      "facturado": 128.36,
+      "cobrado": 60.39,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-07-02"
+      ]
+    },
+    {
+      "nombre": "JEREMY JESUS DIAZ UZCATEGUI",
+      "contratos": 1,
+      "facturado": 563.44,
+      "cobrado": 130.58,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-07-02"
+      ]
+    },
+    {
+      "nombre": "JAIRO JAVIER SANCHEZ MORA",
+      "contratos": 1,
+      "facturado": 784.62,
+      "cobrado": 198.97,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-07-01"
+      ]
+    },
+    {
+      "nombre": "YNIRIDA DEL VALLE CASTRO NADALES",
+      "contratos": 1,
+      "facturado": 530.98,
+      "cobrado": 136.37,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-07-01"
+      ]
+    },
+    {
+      "nombre": "FACTO ESTUDIO CREATIVO, C.A",
+      "contratos": 1,
+      "facturado": 724.85,
+      "cobrado": 119.22,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-07-01"
+      ]
+    },
+    {
+      "nombre": "JESUS LEONARDO VILLAMIZAR HERNANDEZ",
+      "contratos": 1,
+      "facturado": 233.26,
+      "cobrado": 48.44,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-07-01"
+      ]
+    },
+    {
+      "nombre": "JHON KENIDE BUSTOS DIAZ",
+      "contratos": 1,
+      "facturado": 209.48,
+      "cobrado": 68.54,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-30"
+      ]
+    },
+    {
+      "nombre": "RUBEN DARIO AZUAJE AVILA",
+      "contratos": 1,
+      "facturado": 3541.12,
+      "cobrado": 726.9,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-30"
+      ]
+    },
+    {
+      "nombre": "JESUS MANUEL AVILA BRICEÑO",
+      "contratos": 1,
+      "facturado": 469.7,
+      "cobrado": 106.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-30"
+      ]
+    },
+    {
+      "nombre": "MARIA DEL CARMEN MALDONADO BARRIOS",
+      "contratos": 1,
+      "facturado": 960.33,
+      "cobrado": 134.83,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-06-30"
+      ]
+    },
+    {
+      "nombre": "DENNY ENRIQUE PACHECO TERAN",
+      "contratos": 1,
+      "facturado": 306.24,
+      "cobrado": 87.24,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-30"
+      ]
+    },
+    {
+      "nombre": "YLINIZA DEL VALLE MARQUINA RANGEL",
+      "contratos": 1,
+      "facturado": 548.69,
+      "cobrado": 140.91,
+      "worker_type": "infdependiente_informal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-06-29"
+      ]
+    },
+    {
+      "nombre": "JESUS MANUEL MARQUEZ",
+      "contratos": 1,
+      "facturado": 632.51,
+      "cobrado": 88.34,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-06-29"
+      ]
+    },
+    {
+      "nombre": "EDILSA YARLIN CARRILLO RUIZ",
+      "contratos": 1,
+      "facturado": 658.6,
+      "cobrado": 121.16,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-29"
+      ]
+    },
+    {
+      "nombre": "EMMA LUDIANA MARQUINA RANGEL",
+      "contratos": 1,
+      "facturado": 916.78,
+      "cobrado": 128.7,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-29"
+      ]
+    },
+    {
+      "nombre": "JOHAN JOSE JIMENEZ RODRIGUEZ",
+      "contratos": 1,
+      "facturado": 760.38,
+      "cobrado": 205.42,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-06-28"
+      ]
+    },
+    {
+      "nombre": "CARLOS LUIS SARMIENTO FERNANDEZ",
+      "contratos": 1,
+      "facturado": 846.68,
+      "cobrado": 272.46,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-06-27"
+      ]
+    },
+    {
+      "nombre": "JUAN CARLOS TORRES LINARES",
+      "contratos": 1,
+      "facturado": 523.06,
+      "cobrado": 134.32,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-06-25"
+      ]
+    },
+    {
+      "nombre": "JUAN JOSE QUINTERO CARDENAS",
+      "contratos": 1,
+      "facturado": 815.03,
+      "cobrado": 241.19,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-06-24"
+      ]
+    },
+    {
+      "nombre": "SULAY LISBET BALZA RIVERA",
+      "contratos": 1,
+      "facturado": 483.52,
+      "cobrado": 143.4,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-06-23"
+      ]
+    },
+    {
+      "nombre": "ADRIAN MICHEL MANRIQUE CONTRERAS",
+      "contratos": 1,
+      "facturado": 534.96,
+      "cobrado": 152.37,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-19"
+      ]
+    },
+    {
+      "nombre": "MARIA GABRIELA BRICEÑO SALCEDO",
+      "contratos": 1,
+      "facturado": 978.81,
+      "cobrado": 278.78,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-18"
+      ]
+    },
+    {
+      "nombre": "JOSE ANTONIO MARQUEZ MONSALVE",
+      "contratos": 1,
+      "facturado": 960.27,
+      "cobrado": 359.62,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-06-18"
+      ]
+    },
+    {
+      "nombre": "RICHARD DANIEL PUENTES RODRIGUEZ",
+      "contratos": 1,
+      "facturado": 481.34,
+      "cobrado": 137.45,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-18"
+      ]
+    },
+    {
+      "nombre": "TERESA MONROY DE HERNANDEZ",
+      "contratos": 1,
+      "facturado": 641.48,
+      "cobrado": 103.01,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-18"
+      ]
+    },
+    {
+      "nombre": "YAJAIRA VIELMA DUGARTE",
+      "contratos": 1,
+      "facturado": 217.91,
+      "cobrado": 56.41,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-06-17"
+      ]
+    },
+    {
+      "nombre": "YULEIMA CAROLINA ROA RUJANO",
+      "contratos": 1,
+      "facturado": 1818.83,
+      "cobrado": 372.31,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-17"
+      ]
+    },
+    {
+      "nombre": "GABRIELA DEL VALLE CASTRO VIELMA",
+      "contratos": 1,
+      "facturado": 107.36,
+      "cobrado": 26.63,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-17"
+      ]
+    },
+    {
+      "nombre": "OSCAR ANTONIO PEÑA LEON",
+      "contratos": 1,
+      "facturado": 953.05,
+      "cobrado": 281.68,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-06-16"
+      ]
+    },
+    {
+      "nombre": "CARLOS RAFAEL PAEZ ARAY",
+      "contratos": 1,
+      "facturado": 748.25,
+      "cobrado": 192.17,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-16"
+      ]
+    },
+    {
+      "nombre": "LILIANA JEORGINA MORENO BARRIOS",
+      "contratos": 1,
+      "facturado": 302.92,
+      "cobrado": 34.45,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-15"
+      ]
+    },
+    {
+      "nombre": "MARTINA DE LOS SANTOS RIVAS ALVARADO",
+      "contratos": 1,
+      "facturado": 997.5,
+      "cobrado": 284.11,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-06-15"
+      ]
+    },
+    {
+      "nombre": "JESUS DAVID GAMBOA CASTILLO",
+      "contratos": 1,
+      "facturado": 505.52,
+      "cobrado": 58.72,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-06-15"
+      ]
+    },
+    {
+      "nombre": "NADIA ELIZABETH RAMIREZ ARELLANO",
+      "contratos": 1,
+      "facturado": 565.93,
+      "cobrado": 66.97,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-15"
+      ]
+    },
+    {
+      "nombre": "MARILY ORTEGA UZCATEGUI",
+      "contratos": 1,
+      "facturado": 963.57,
+      "cobrado": 109.84,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-06-15"
+      ]
+    },
+    {
+      "nombre": "OMAR ZADDIEL PEREZ RAMIREZ",
+      "contratos": 1,
+      "facturado": 1329.22,
+      "cobrado": 378.59,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-15"
+      ]
+    },
+    {
+      "nombre": "OSCAR JUNIOR CUEVAS GUILLEN",
+      "contratos": 1,
+      "facturado": 324.56,
+      "cobrado": 36.98,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-14"
+      ]
+    },
+    {
+      "nombre": "GRUPO LA COROMOTANA C.A",
+      "contratos": 1,
+      "facturado": 271.22,
+      "cobrado": 80.31,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-06-14"
+      ]
+    },
+    {
+      "nombre": "AURA MARTINA ARAUJO PARRA",
+      "contratos": 1,
+      "facturado": 395.94,
+      "cobrado": 105.62,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-06-14"
+      ]
+    },
+    {
+      "nombre": "LAURA MARINA GOMEZ DE GUTIERREZ",
+      "contratos": 1,
+      "facturado": 1173.7,
+      "cobrado": 132.49,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-14"
+      ]
+    },
+    {
+      "nombre": "ENDER YORMAN RIVAS PEREZ",
+      "contratos": 1,
+      "facturado": 587.0,
+      "cobrado": 70.13,
+      "worker_type": "infdependiente_informal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-06-14"
+      ]
+    },
+    {
+      "nombre": "YAMILE GREGORIA VALECILLOS TOVILA",
+      "contratos": 1,
+      "facturado": 785.62,
+      "cobrado": 89.9,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-06-14"
+      ]
+    },
+    {
+      "nombre": "JESUS RAFAEL CASTRO VELASQUEZ",
+      "contratos": 1,
+      "facturado": 3754.91,
+      "cobrado": 428.96,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-14"
+      ]
+    },
+    {
+      "nombre": "YAMILE ANDREINA ANGEL COGOLLO",
+      "contratos": 1,
+      "facturado": 989.21,
+      "cobrado": 205.0,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-06-13"
+      ]
+    },
+    {
+      "nombre": "CLAUDIA MILENA UPEGUI DE PAREDES",
+      "contratos": 1,
+      "facturado": 488.66,
+      "cobrado": 56.98,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-13"
+      ]
+    },
+    {
+      "nombre": "MEY LING URDANETA RIVAS",
+      "contratos": 1,
+      "facturado": 1048.4,
+      "cobrado": 119.45,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-13"
+      ]
+    },
+    {
+      "nombre": "INGRID SOLEDY RODRIGUEZ DE COELLO",
+      "contratos": 1,
+      "facturado": 1165.31,
+      "cobrado": 187.19,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-06-13"
+      ]
+    },
+    {
+      "nombre": "MARIANNY LISBETH UZCATEGUI RAMIREZ",
+      "contratos": 1,
+      "facturado": 1684.68,
+      "cobrado": 626.46,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-13"
+      ]
+    },
+    {
+      "nombre": "EYRA RAMIREZ MERCADO",
+      "contratos": 1,
+      "facturado": 178.59,
+      "cobrado": 88.92,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-13"
+      ]
+    },
+    {
+      "nombre": "JOSE GARVEY PEÑA PEÑA",
+      "contratos": 1,
+      "facturado": 690.22,
+      "cobrado": 80.13,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-13"
+      ]
+    },
+    {
+      "nombre": "RONALD ALFREDO PLAZA BONILLA",
+      "contratos": 1,
+      "facturado": 785.62,
+      "cobrado": 164.27,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-13"
+      ]
+    },
+    {
+      "nombre": "YUMELY  ANTONIETA CARRERO MOLINA",
+      "contratos": 1,
+      "facturado": 432.76,
+      "cobrado": 58.46,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-06-12"
+      ]
+    },
+    {
+      "nombre": "YENIFER MARIA SANCHEZ GONZALEZ",
+      "contratos": 1,
+      "facturado": 962.68,
+      "cobrado": 189.51,
+      "worker_type": "infdependiente_informal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-06-12"
+      ]
+    },
+    {
+      "nombre": "ATILIO RAFAEL ARTEAGA QUINTANILLO",
+      "contratos": 1,
+      "facturado": 278.31,
+      "cobrado": 112.03,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-12"
+      ]
+    },
+    {
+      "nombre": "JORGE GUILLERMO SALAZAR TIMMER",
+      "contratos": 1,
+      "facturado": 471.35,
+      "cobrado": 92.79,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-11"
+      ]
+    },
+    {
+      "nombre": "FARMACIA FARMACEUTICALS C.A",
+      "contratos": 1,
+      "facturado": 1188.5,
+      "cobrado": 464.95,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-06-10"
+      ]
+    },
+    {
+      "nombre": "KATIUSKA VIRGINIA MORALES BLOCDOON",
+      "contratos": 1,
+      "facturado": 98.3,
+      "cobrado": 38.49,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-10"
+      ]
+    },
+    {
+      "nombre": "ROSSNARY FRANNAYDA CALDERON MARQUEZ",
+      "contratos": 1,
+      "facturado": 208.24,
+      "cobrado": 115.04,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-06-09"
+      ]
+    },
+    {
+      "nombre": "YANEICI YSABEL PAREDES GONZALEZ",
+      "contratos": 1,
+      "facturado": 1002.94,
+      "cobrado": 296.8,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-08"
+      ]
+    },
+    {
+      "nombre": "AMARANTHA JOSEFINA HERNANDEZ RIVAS",
+      "contratos": 1,
+      "facturado": 1613.13,
+      "cobrado": 414.29,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-06-08"
+      ]
+    },
+    {
+      "nombre": "MAYRA ALEJANDRA VILLEGAS RUIZ",
+      "contratos": 1,
+      "facturado": 457.46,
+      "cobrado": 188.63,
+      "worker_type": "desconocido",
+      "segmento": "No clasificado",
+      "fechas": [
+        "2026-06-08"
+      ]
+    },
+    {
+      "nombre": "YURAIMA SOSA GARCIA",
+      "contratos": 1,
+      "facturado": 697.47,
+      "cobrado": 179.13,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-08"
+      ]
+    },
+    {
+      "nombre": "ANDREA NATHALY VIZCAYA ALBARRAN",
+      "contratos": 1,
+      "facturado": 150.69,
+      "cobrado": 139.22,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-06"
+      ]
+    },
+    {
+      "nombre": "ANDREA SOSA GARCIA",
+      "contratos": 1,
+      "facturado": 1042.24,
+      "cobrado": 246.55,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-05"
+      ]
+    },
+    {
+      "nombre": "ELY JOSE BARRIOS",
+      "contratos": 1,
+      "facturado": 350.24,
+      "cobrado": 159.57,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-04"
+      ]
+    },
+    {
+      "nombre": "GUSTAVO ALBERTO ROJAS CABRERA",
+      "contratos": 1,
+      "facturado": 628.88,
+      "cobrado": 258.32,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-06-03"
+      ]
+    },
+    {
+      "nombre": "LADY DIANA TORO RIVERA",
+      "contratos": 1,
+      "facturado": 14.8,
+      "cobrado": 8.74,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-03"
+      ]
+    },
+    {
+      "nombre": "BELKIS DEL VALLE VALERA RUIZ",
+      "contratos": 1,
+      "facturado": 1201.71,
+      "cobrado": 192.95,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-02"
+      ]
+    },
+    {
+      "nombre": "JESUS ANTONIO RANGEL SAAVEDRA",
+      "contratos": 1,
+      "facturado": 478.3,
+      "cobrado": 99.63,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-06-02"
+      ]
+    },
+    {
+      "nombre": "GILENY DEL VALLE ZERPA VELAZCO",
+      "contratos": 1,
+      "facturado": 302.92,
+      "cobrado": 76.84,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-06-02"
+      ]
+    },
+    {
+      "nombre": "MARIA EUGENIA RAMIREZ TERAN",
+      "contratos": 1,
+      "facturado": 302.92,
+      "cobrado": 62.59,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-06-02"
+      ]
+    },
+    {
+      "nombre": "ROSA YAQUELIN PEÑA APARICIO",
+      "contratos": 1,
+      "facturado": 1675.12,
+      "cobrado": 424.47,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-06-01"
+      ]
+    },
+    {
+      "nombre": "VERONICA MARGARITA RINCON BAPTISTA",
+      "contratos": 1,
+      "facturado": 619.35,
+      "cobrado": 99.44,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "MOISES LEONARDO MONSALVE MORA",
+      "contratos": 1,
+      "facturado": 302.92,
+      "cobrado": 48.64,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "KATHERIN DEL CARMEN ERAZO ANGULO",
+      "contratos": 1,
+      "facturado": 997.98,
+      "cobrado": 163.7,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "JHON KLEIBER GRABINNY ALBARRAN CARRILLO",
+      "contratos": 1,
+      "facturado": 869.67,
+      "cobrado": 181.25,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "LAURIMAR RONDON PIMENTEL",
+      "contratos": 1,
+      "facturado": 1165.31,
+      "cobrado": 187.1,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "MARILYN DIAZ",
+      "contratos": 1,
+      "facturado": 1538.16,
+      "cobrado": 302.86,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "YANIRA LISBETH MOLINA DE GUERRA",
+      "contratos": 1,
+      "facturado": 173.85,
+      "cobrado": 27.92,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "OMAR GUILLERMO GALVIS RUBIO",
+      "contratos": 1,
+      "facturado": 347.69,
+      "cobrado": 72.03,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "DUNIA CARLEIDY SANCHEZ MOGOLLON",
+      "contratos": 1,
+      "facturado": 1224.12,
+      "cobrado": 310.74,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-31"
+      ]
+    },
+    {
+      "nombre": "BRAULIO JOSE PINO CARRILLO",
+      "contratos": 1,
+      "facturado": 418.68,
+      "cobrado": 107.32,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "ISAIAS ANTONIO RUIZ GARCIA",
+      "contratos": 1,
+      "facturado": 1166.64,
+      "cobrado": 195.82,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "YENIFER RAMIREZ URDANETA",
+      "contratos": 1,
+      "facturado": 1131.05,
+      "cobrado": 303.92,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "YOHAN GABRIEL SANCHEZ GAMBOA",
+      "contratos": 1,
+      "facturado": 568.71,
+      "cobrado": 112.12,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "JOSE GREGORIO PARRA RAMIREZ",
+      "contratos": 1,
+      "facturado": 173.86,
+      "cobrado": 27.93,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "DINORAH ISELEN SALAS OSORIO",
+      "contratos": 1,
+      "facturado": 2347.4,
+      "cobrado": 376.91,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "JASMIN ALEJANDRA HERNANDEZ ROJAS",
+      "contratos": 1,
+      "facturado": 835.71,
+      "cobrado": 177.48,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "MARIA ANDREINA RINCON VALERO",
+      "contratos": 1,
+      "facturado": 414.97,
+      "cobrado": 85.98,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "MARTHA CAROLINA ESCORCIA ANDRADE",
+      "contratos": 1,
+      "facturado": 471.3,
+      "cobrado": 75.68,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "ENDER EDUARDO RIOS RODRIGUEZ",
+      "contratos": 1,
+      "facturado": 302.92,
+      "cobrado": 91.02,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-30"
+      ]
+    },
+    {
+      "nombre": "MARIAN SARAY ARAQUE DAVILA",
+      "contratos": 1,
+      "facturado": 1173.16,
+      "cobrado": 188.3,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-29"
+      ]
+    },
+    {
+      "nombre": "LENY ORLANGEL SILGUERO VILLAMIZAR",
+      "contratos": 1,
+      "facturado": 714.23,
+      "cobrado": 346.15,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-29"
+      ]
+    },
+    {
+      "nombre": "ANA MARIA RIVAS RANGEL",
+      "contratos": 1,
+      "facturado": 1289.85,
+      "cobrado": 268.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-29"
+      ]
+    },
+    {
+      "nombre": "NELSON JESUS CHAVEZ VELAZCO",
+      "contratos": 1,
+      "facturado": 2146.42,
+      "cobrado": 344.65,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-05-29"
+      ]
+    },
+    {
+      "nombre": "JOSE IVAN CARRILLO SULBARAN",
+      "contratos": 1,
+      "facturado": 675.37,
+      "cobrado": 108.37,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-29"
+      ]
+    },
+    {
+      "nombre": "JULAYNE NAZARETH RANGEL CONTRERAS",
+      "contratos": 1,
+      "facturado": 308.13,
+      "cobrado": 49.48,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-29"
+      ]
+    },
+    {
+      "nombre": "CARYOLY ENDRINA GUILLEN LOBO",
+      "contratos": 1,
+      "facturado": 607.67,
+      "cobrado": 125.94,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-05-29"
+      ]
+    },
+    {
+      "nombre": "ALEXIS MIGUEL GIL OSUNA",
+      "contratos": 1,
+      "facturado": 619.35,
+      "cobrado": 99.68,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-28"
+      ]
+    },
+    {
+      "nombre": "AZTILEY DEL VALLE PINZON HERNANDEZ",
+      "contratos": 1,
+      "facturado": 997.98,
+      "cobrado": 206.78,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-28"
+      ]
+    },
+    {
+      "nombre": "MIRIAN DEL VALLE VASQUEZ PAREDES",
+      "contratos": 1,
+      "facturado": 835.71,
+      "cobrado": 173.15,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-28"
+      ]
+    },
+    {
+      "nombre": "NELSON ORANGEL GUERRERO PEÑA",
+      "contratos": 1,
+      "facturado": 516.58,
+      "cobrado": 179.3,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-28"
+      ]
+    },
+    {
+      "nombre": "RUBEN DARIO MENDEZ BLANCO",
+      "contratos": 1,
+      "facturado": 477.56,
+      "cobrado": 259.63,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-28"
+      ]
+    },
+    {
+      "nombre": "MAURO JOSE RAMIREZ SANCHEZ",
+      "contratos": 1,
+      "facturado": 995.71,
+      "cobrado": 207.34,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-28"
+      ]
+    },
+    {
+      "nombre": "MARCOS TULIO ALISCANO RANGEL",
+      "contratos": 1,
+      "facturado": 1122.22,
+      "cobrado": 180.79,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-28"
+      ]
+    },
+    {
+      "nombre": "DAYANNA DEL VALLE ANDRADE PARRA",
+      "contratos": 1,
+      "facturado": 418.68,
+      "cobrado": 107.24,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-05-28"
+      ]
+    },
+    {
+      "nombre": "DIONNY ALBERTO SUAREZ ARAQUE",
+      "contratos": 1,
+      "facturado": 159.65,
+      "cobrado": 31.42,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-27"
+      ]
+    },
+    {
+      "nombre": "BLENDIMAR DEL VALLE DUGARTE PEÑA",
+      "contratos": 1,
+      "facturado": 505.51,
+      "cobrado": 82.46,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-05-27"
+      ]
+    },
+    {
+      "nombre": "MARIA VIRGINIA GONZALEZ VILORIA",
+      "contratos": 1,
+      "facturado": 1366.03,
+      "cobrado": 821.39,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-27"
+      ]
+    },
+    {
+      "nombre": "MARIA DE JESUS PEREZ BITRIAGO",
+      "contratos": 1,
+      "facturado": 302.92,
+      "cobrado": 62.78,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-27"
+      ]
+    },
+    {
+      "nombre": "JORGE LUIS RAMIREZ MARQUEZ",
+      "contratos": 1,
+      "facturado": 619.35,
+      "cobrado": 99.44,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-26"
+      ]
+    },
+    {
+      "nombre": "VLADIMIR AMADO RODRIGUEZ ZAMBRANO",
+      "contratos": 1,
+      "facturado": 714.3,
+      "cobrado": 114.66,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-26"
+      ]
+    },
+    {
+      "nombre": "MARY JAQUELINE DAVILA UZCATEGUI",
+      "contratos": 1,
+      "facturado": 278.15,
+      "cobrado": 170.78,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-26"
+      ]
+    },
+    {
+      "nombre": "EMERITH KRISEL PEÑA PAREDES",
+      "contratos": 1,
+      "facturado": 903.8,
+      "cobrado": 145.09,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-26"
+      ]
+    },
+    {
+      "nombre": "MARIA SANDRIS RIVERA AVENDAÑO",
+      "contratos": 1,
+      "facturado": 516.45,
+      "cobrado": 106.83,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-26"
+      ]
+    },
+    {
+      "nombre": "EDGAR ALBERTO ROMERO MARQUINA",
+      "contratos": 1,
+      "facturado": 516.45,
+      "cobrado": 83.15,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-26"
+      ]
+    },
+    {
+      "nombre": "MARIA SONIA GUERRERO DE SEGOVIA",
+      "contratos": 1,
+      "facturado": 516.45,
+      "cobrado": 83.14,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-26"
+      ]
+    },
+    {
+      "nombre": "NANCY ESTHER RODRIGUEZ CALDERON",
+      "contratos": 1,
+      "facturado": 1165.31,
+      "cobrado": 187.1,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-26"
+      ]
+    },
+    {
+      "nombre": "ANNY GRACIELA REY MONTOYA",
+      "contratos": 1,
+      "facturado": 1142.9,
+      "cobrado": 182.81,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-26"
+      ]
+    },
+    {
+      "nombre": "AUDRIMAR DEL CARMEN PEÑA MARQUEZ",
+      "contratos": 1,
+      "facturado": 37.36,
+      "cobrado": 25.78,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-25"
+      ]
+    },
+    {
+      "nombre": "ANGELO ENRIQUE SALAS ZERPA",
+      "contratos": 1,
+      "facturado": 505.91,
+      "cobrado": 105.21,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-25"
+      ]
+    },
+    {
+      "nombre": "ADRIANA DUGARTE RINCON",
+      "contratos": 1,
+      "facturado": 302.92,
+      "cobrado": 48.65,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-25"
+      ]
+    },
+    {
+      "nombre": "LESLIE ALESSANDRA MOROS VILORIA",
+      "contratos": 1,
+      "facturado": 996.52,
+      "cobrado": 207.34,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-25"
+      ]
+    },
+    {
+      "nombre": "URIEL ANTONIO ASCANIO PRIETO",
+      "contratos": 1,
+      "facturado": 293.8,
+      "cobrado": 47.17,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-25"
+      ]
+    },
+    {
+      "nombre": "CRISTIAN LEONARDO BRICEÑO SALAZAR",
+      "contratos": 1,
+      "facturado": 786.02,
+      "cobrado": 163.24,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-25"
+      ]
+    },
+    {
+      "nombre": "CARLOS  JOSE CASTELLANO MORALES",
+      "contratos": 1,
+      "facturado": 607.67,
+      "cobrado": 97.58,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-25"
+      ]
+    },
+    {
+      "nombre": "ROSIO SULBARAN SOSA",
+      "contratos": 1,
+      "facturado": 1173.7,
+      "cobrado": 297.95,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-25"
+      ]
+    },
+    {
+      "nombre": "LUIS DAVID HERRERA BASTARDO",
+      "contratos": 1,
+      "facturado": 1117.76,
+      "cobrado": 374.51,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-23"
+      ]
+    },
+    {
+      "nombre": "ALICIA MAITE QUINONES NUCETE",
+      "contratos": 1,
+      "facturado": 70.92,
+      "cobrado": 53.67,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-23"
+      ]
+    },
+    {
+      "nombre": "HILLARY VIRGINIA MARQUEZ QUINTERO",
+      "contratos": 1,
+      "facturado": 2835.36,
+      "cobrado": 763.06,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-21"
+      ]
+    },
+    {
+      "nombre": "HEIDI GABRIELA GRAU GALINDO",
+      "contratos": 1,
+      "facturado": 283.12,
+      "cobrado": 83.91,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-20"
+      ]
+    },
+    {
+      "nombre": "JUAN CARLOS PAZ VILLASMIL",
+      "contratos": 1,
+      "facturado": 408.19,
+      "cobrado": 259.2,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-05-18"
+      ]
+    },
+    {
+      "nombre": "NERIO JUNIOR LUQUE CASTELLANOS",
+      "contratos": 1,
+      "facturado": 1552.5,
+      "cobrado": 702.37,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-18"
+      ]
+    },
+    {
+      "nombre": "LEONARDO JESUS CACERES VARELA",
+      "contratos": 1,
+      "facturado": 200.62,
+      "cobrado": 127.35,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-17"
+      ]
+    },
+    {
+      "nombre": "LEYDA ROSA PERDOMO MOLINA",
+      "contratos": 1,
+      "facturado": 1753.13,
+      "cobrado": 656.01,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-16"
+      ]
+    },
+    {
+      "nombre": "ANA VIRGINIA GONZALEZ",
+      "contratos": 1,
+      "facturado": 280.91,
+      "cobrado": 116.1,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-16"
+      ]
+    },
+    {
+      "nombre": "KEVIN JOSUE CAMACHO ROMERO",
+      "contratos": 1,
+      "facturado": 504.7,
+      "cobrado": 195.57,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-16"
+      ]
+    },
+    {
+      "nombre": "MARYULLY ESTHEFANIA PERNIA CONTRERAS",
+      "contratos": 1,
+      "facturado": 565.51,
+      "cobrado": 269.7,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-16"
+      ]
+    },
+    {
+      "nombre": "FRANK LUIS SALAZAR VILLARROEL",
+      "contratos": 1,
+      "facturado": 1018.54,
+      "cobrado": 317.2,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-16"
+      ]
+    },
+    {
+      "nombre": "ROMERY EVANDANY MONTILLA PEREZ",
+      "contratos": 1,
+      "facturado": 3385.87,
+      "cobrado": 1002.01,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-15"
+      ]
+    },
+    {
+      "nombre": "LILIANA ISABEL CARRILLO BARRIOS",
+      "contratos": 1,
+      "facturado": 310.7,
+      "cobrado": 104.5,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-15"
+      ]
+    },
+    {
+      "nombre": "YADIRA COROMOTO BRICEÑO GUILLEN",
+      "contratos": 1,
+      "facturado": 526.38,
+      "cobrado": 197.35,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-15"
+      ]
+    },
+    {
+      "nombre": "GABRIELA VALENTINA BELANDRIA VALLADARES",
+      "contratos": 1,
+      "facturado": 879.87,
+      "cobrado": 128.94,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-14"
+      ]
+    },
+    {
+      "nombre": "MARIEL YOHANA QUIÑONEZ VALLES",
+      "contratos": 1,
+      "facturado": 927.39,
+      "cobrado": 249.39,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-13"
+      ]
+    },
+    {
+      "nombre": "ALEK DAVID ALBORNOZ MANRIQUE",
+      "contratos": 1,
+      "facturado": 677.71,
+      "cobrado": 429.36,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-13"
+      ]
+    },
+    {
+      "nombre": "ZULAY RIVAS ROJAS",
+      "contratos": 1,
+      "facturado": 524.65,
+      "cobrado": 175.78,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-13"
+      ]
+    },
+    {
+      "nombre": "ZAYDA MARIA RONDON PEÑA",
+      "contratos": 1,
+      "facturado": 679.46,
+      "cobrado": 227.33,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-12"
+      ]
+    },
+    {
+      "nombre": "JUAN PEDRO ORTIZ ARIAS",
+      "contratos": 1,
+      "facturado": 1049.62,
+      "cobrado": 351.69,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-09"
+      ]
+    },
+    {
+      "nombre": "VALENTINA FLORES AGUILAR",
+      "contratos": 1,
+      "facturado": 802.21,
+      "cobrado": 351.69,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-05-09"
+      ]
+    },
+    {
+      "nombre": "DIMAS DE JESUS PEREZ",
+      "contratos": 1,
+      "facturado": 428.17,
+      "cobrado": 78.21,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-05-08"
+      ]
+    },
+    {
+      "nombre": "JOSE ANTONIO ALARCON GUERRERO",
+      "contratos": 1,
+      "facturado": 252.3,
+      "cobrado": 124.45,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-08"
+      ]
+    },
+    {
+      "nombre": "MAYRA LILIANA ANDRADE PARRA",
+      "contratos": 1,
+      "facturado": 252.3,
+      "cobrado": 110.53,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-08"
+      ]
+    },
+    {
+      "nombre": "JOSE ALONSO SANCHEZ MEJIAS",
+      "contratos": 1,
+      "facturado": 1049.62,
+      "cobrado": 392.75,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-08"
+      ]
+    },
+    {
+      "nombre": "JOSMAR ALFONSO DUGARTE FLORES",
+      "contratos": 1,
+      "facturado": 807.24,
+      "cobrado": 267.47,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-08"
+      ]
+    },
+    {
+      "nombre": "MARBELLA DEL CARMEN DAVILA PEREZ",
+      "contratos": 1,
+      "facturado": 553.83,
+      "cobrado": 207.21,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-08"
+      ]
+    },
+    {
+      "nombre": "MARTHA GABRIELA VERA FLORES",
+      "contratos": 1,
+      "facturado": 191.92,
+      "cobrado": 53.84,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-07"
+      ]
+    },
+    {
+      "nombre": "AIMARI CELESTE REBETE BARROSO",
+      "contratos": 1,
+      "facturado": 524.65,
+      "cobrado": 216.82,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-05"
+      ]
+    },
+    {
+      "nombre": "DECCY RAMONA CADENAS TORO",
+      "contratos": 1,
+      "facturado": 860.85,
+      "cobrado": 322.45,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-05-05"
+      ]
+    },
+    {
+      "nombre": "ALEX MANUEL CONTRERAS RAMOS",
+      "contratos": 1,
+      "facturado": 735.22,
+      "cobrado": 303.86,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-05-03"
+      ]
+    },
+    {
+      "nombre": "DAYANA COROMOTO UZCATEGUI PEÑA",
+      "contratos": 1,
+      "facturado": 1878.79,
+      "cobrado": 706.77,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-05-02"
+      ]
+    },
+    {
+      "nombre": "MARIANGEL YOCELY CASTAÑEDA PEREZ",
+      "contratos": 1,
+      "facturado": 519.16,
+      "cobrado": 214.57,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-04-30"
+      ]
+    },
+    {
+      "nombre": "MIRTHA DEL VALLE GONZALEZ PEÑA",
+      "contratos": 1,
+      "facturado": 739.88,
+      "cobrado": 305.95,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-29"
+      ]
+    },
+    {
+      "nombre": "ALEXIS SOSA FERNANDEZ",
+      "contratos": 1,
+      "facturado": 282.78,
+      "cobrado": 124.16,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-04-28"
+      ]
+    },
+    {
+      "nombre": "GLADIMAR MORA MOLINA",
+      "contratos": 1,
+      "facturado": 230.81,
+      "cobrado": 135.45,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-28"
+      ]
+    },
+    {
+      "nombre": "JHEFERSON ISIDRO DAVILA QUINTERO",
+      "contratos": 1,
+      "facturado": 385.49,
+      "cobrado": 188.69,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-27"
+      ]
+    },
+    {
+      "nombre": "NELSON AYALA TORRES",
+      "contratos": 1,
+      "facturado": 203.69,
+      "cobrado": 96.26,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-27"
+      ]
+    },
+    {
+      "nombre": "ROALD EDUARDO GOMEZ PEREZ",
+      "contratos": 1,
+      "facturado": 2805.33,
+      "cobrado": 998.54,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-27"
+      ]
+    },
+    {
+      "nombre": "MARIANGELES MAIBETH MONCADA SANCHEZ",
+      "contratos": 1,
+      "facturado": 1753.66,
+      "cobrado": 734.24,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-26"
+      ]
+    },
+    {
+      "nombre": "DIONICIO GOMEZ MORA",
+      "contratos": 1,
+      "facturado": 6785.79,
+      "cobrado": 1995.32,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-26"
+      ]
+    },
+    {
+      "nombre": "NORELYS DEL CARMEN PACHECO DUARTE",
+      "contratos": 1,
+      "facturado": 520.25,
+      "cobrado": 162.05,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-25"
+      ]
+    },
+    {
+      "nombre": "ADRIANA NEGRIN ROA",
+      "contratos": 1,
+      "facturado": 4908.46,
+      "cobrado": 2401.03,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-04-25"
+      ]
+    },
+    {
+      "nombre": "DIOSMEL ALBERTO MOLINA VIANA",
+      "contratos": 1,
+      "facturado": 553.83,
+      "cobrado": 229.3,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-24"
+      ]
+    },
+    {
+      "nombre": "JESUS ANIBAL FIGUEREDO SANCHEZ",
+      "contratos": 1,
+      "facturado": 606.91,
+      "cobrado": 227.48,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-04-23"
+      ]
+    },
+    {
+      "nombre": "REPRESENTACIONES LMR DE LUCIANO MICHELE ROMANO VASSALLO",
+      "contratos": 1,
+      "facturado": 1061.24,
+      "cobrado": 743.87,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-23"
+      ]
+    },
+    {
+      "nombre": "EDUARDO ALFONSO BARON JAIMES",
+      "contratos": 1,
+      "facturado": 1181.74,
+      "cobrado": 521.98,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-21"
+      ]
+    },
+    {
+      "nombre": "EDDY SULAY MORA DELGADO",
+      "contratos": 1,
+      "facturado": 856.66,
+      "cobrado": 197.66,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-20"
+      ]
+    },
+    {
+      "nombre": "YECSIEL JOSE ZERPA MORA",
+      "contratos": 1,
+      "facturado": 955.17,
+      "cobrado": 432.73,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-20"
+      ]
+    },
+    {
+      "nombre": "ZAIDA MARIA SALAS CONTRERAS",
+      "contratos": 1,
+      "facturado": 885.1,
+      "cobrado": 653.07,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-19"
+      ]
+    },
+    {
+      "nombre": "ANDERSON ALEJANDRO UZCATEGUI RAMIREZ",
+      "contratos": 1,
+      "facturado": 1544.2,
+      "cobrado": 964.98,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-19"
+      ]
+    },
+    {
+      "nombre": "JOSE ANTONIO ALBARRAN PEÑA",
+      "contratos": 1,
+      "facturado": 428.17,
+      "cobrado": 151.9,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-17"
+      ]
+    },
+    {
+      "nombre": "JOSE RAFAEL CAMACHO REYES",
+      "contratos": 1,
+      "facturado": 8743.41,
+      "cobrado": 3613.49,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-04-17"
+      ]
+    },
+    {
+      "nombre": "BAUDIMAR DURAN DUGARTE",
+      "contratos": 1,
+      "facturado": 447.86,
+      "cobrado": 189.36,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-04-16"
+      ]
+    },
+    {
+      "nombre": "YORMAN AGUSTO ARAQUE FERNANDEZ",
+      "contratos": 1,
+      "facturado": 749.91,
+      "cobrado": 312.63,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-16"
+      ]
+    },
+    {
+      "nombre": "JESUS ALBERTO TORO HERNANDEZ",
+      "contratos": 1,
+      "facturado": 378.41,
+      "cobrado": 171.77,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-14"
+      ]
+    },
+    {
+      "nombre": "ARLEY DE JESUS GIL CASTILLO",
+      "contratos": 1,
+      "facturado": 577.97,
+      "cobrado": 261.79,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-04-13"
+      ]
+    },
+    {
+      "nombre": "ELVIA MARIA VARELA ALBARRAN",
+      "contratos": 1,
+      "facturado": 807.17,
+      "cobrado": 442.4,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-12"
+      ]
+    },
+    {
+      "nombre": "DAIVINSON NAZIR COFFI TROMPIZ",
+      "contratos": 1,
+      "facturado": 1124.44,
+      "cobrado": 730.63,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-04-12"
+      ]
+    },
+    {
+      "nombre": "JOSMARY RAISGE SANCHEZ GODOY",
+      "contratos": 1,
+      "facturado": 548.18,
+      "cobrado": 237.5,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-09"
+      ]
+    },
+    {
+      "nombre": "OMAR ALEJANDRO LOPEZ ARAUJO",
+      "contratos": 1,
+      "facturado": 1145.59,
+      "cobrado": 618.91,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-04-07"
+      ]
+    },
+    {
+      "nombre": "LUSMILA TERESA HERNANDEZ CEBALLOS",
+      "contratos": 1,
+      "facturado": 459.08,
+      "cobrado": 182.58,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-04-07"
+      ]
+    },
+    {
+      "nombre": "JOSE ROSARIO PUENTES ARAQUE",
+      "contratos": 1,
+      "facturado": 146.32,
+      "cobrado": 71.78,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-06"
+      ]
+    },
+    {
+      "nombre": "JOSE RAFAEL RAMIREZ HERNANDEZ",
+      "contratos": 1,
+      "facturado": 1142.13,
+      "cobrado": 561.34,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-04-06"
+      ]
+    },
+    {
+      "nombre": "JOSE ISIDRO ZERPA",
+      "contratos": 1,
+      "facturado": 721.93,
+      "cobrado": 390.46,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-04-01"
+      ]
+    },
+    {
+      "nombre": "ANA LUZ ZAMBRANO DE MOLINA",
+      "contratos": 1,
+      "facturado": 577.97,
+      "cobrado": 307.01,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-03-31"
+      ]
+    },
+    {
+      "nombre": "MARIA OLGA MEZA",
+      "contratos": 1,
+      "facturado": 1366.6,
+      "cobrado": 564.48,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-03-31"
+      ]
+    },
+    {
+      "nombre": "IRMA PEÑA ARAQUE",
+      "contratos": 1,
+      "facturado": 609.1,
+      "cobrado": 323.89,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-03-29"
+      ]
+    },
+    {
+      "nombre": "DANNY RAFAEL RODRIGUEZ GUERRERO",
+      "contratos": 1,
+      "facturado": 607.2,
+      "cobrado": 298.05,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-03-28"
+      ]
+    },
+    {
+      "nombre": "DANIEL ALI ALVAREZ GARCIA",
+      "contratos": 1,
+      "facturado": 1037.51,
+      "cobrado": 492.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-03-28"
+      ]
+    },
+    {
+      "nombre": "YACKSON WLADIMIR OVALLES VILLASMIL",
+      "contratos": 1,
+      "facturado": 972.66,
+      "cobrado": 630.78,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-03-28"
+      ]
+    },
+    {
+      "nombre": "OSWARD ARGELVIS SALAS MENDEZ",
+      "contratos": 1,
+      "facturado": 542.15,
+      "cobrado": 245.63,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-03-26"
+      ]
+    },
+    {
+      "nombre": "MARIA CLAUDIA DEL ROSARIO PEREZ PEREZ",
+      "contratos": 1,
+      "facturado": 479.1,
+      "cobrado": 289.26,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-03-26"
+      ]
+    },
+    {
+      "nombre": "FRANCISCO GERONIMO AUGUST MARQUEZ",
+      "contratos": 1,
+      "facturado": 1977.53,
+      "cobrado": 820.9,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-03-25"
+      ]
+    },
+    {
+      "nombre": "JOSE ALEXIS AVILA BRICEÑO",
+      "contratos": 1,
+      "facturado": 413.84,
+      "cobrado": 219.56,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-03-23"
+      ]
+    },
+    {
+      "nombre": "JONAL ALEXANDER DUGARTE RINCON",
+      "contratos": 1,
+      "facturado": 470.49,
+      "cobrado": 235.55,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-03-22"
+      ]
+    },
+    {
+      "nombre": "ANGELICA MARIA MENDEZ DAVILA",
+      "contratos": 1,
+      "facturado": 699.15,
+      "cobrado": 413.39,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-03-22"
+      ]
+    },
+    {
+      "nombre": "CARLOS EDUARDO BRICEÑO ARAUJO",
+      "contratos": 1,
+      "facturado": 657.7,
+      "cobrado": 327.6,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-03-21"
+      ]
+    },
+    {
+      "nombre": "ENYERBER ENRIQUE GOVEA LOPEZ",
+      "contratos": 1,
+      "facturado": 773.25,
+      "cobrado": 380.39,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-03-21"
+      ]
+    },
+    {
+      "nombre": "PIERA MANUELA ROJAS LA MANTIA",
+      "contratos": 1,
+      "facturado": 400.84,
+      "cobrado": 300.43,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-03-20"
+      ]
+    },
+    {
+      "nombre": "JORGE GIOVANNY MARQUINA DUGARTE",
+      "contratos": 1,
+      "facturado": 428.17,
+      "cobrado": 207.13,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-03-19"
+      ]
+    },
+    {
+      "nombre": "CARLOS GUSTAVO NIEVES CONTRERAS",
+      "contratos": 1,
+      "facturado": 365.41,
+      "cobrado": 208.27,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-03-19"
+      ]
+    },
+    {
+      "nombre": "MARISOL LOBO RODRIGUEZ",
+      "contratos": 1,
+      "facturado": 334.54,
+      "cobrado": 268.72,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-03-18"
+      ]
+    },
+    {
+      "nombre": "YANEIDY SOSSIRET ANGULO ANGULO",
+      "contratos": 1,
+      "facturado": 974.43,
+      "cobrado": 666.21,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-03-17"
+      ]
+    },
+    {
+      "nombre": "VICTOR ALFONSO MEJIA MENDEZ",
+      "contratos": 1,
+      "facturado": 632.97,
+      "cobrado": 279.01,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-03-16"
+      ]
+    },
+    {
+      "nombre": "MAURY DEL CARMEN VERA SEVILLA",
+      "contratos": 1,
+      "facturado": 268.75,
+      "cobrado": 226.2,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-03-16"
+      ]
+    },
+    {
+      "nombre": "ANA ANDREINA COLLS FERNANDEZ",
+      "contratos": 1,
+      "facturado": 609.1,
+      "cobrado": 299.45,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-03-15"
+      ]
+    },
+    {
+      "nombre": "YIDRIS MARIAANA BARON JAIMES",
+      "contratos": 1,
+      "facturado": 3426.3,
+      "cobrado": 2026.3,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-03-14"
+      ]
+    },
+    {
+      "nombre": "JOSUE CALED LEAL MANTILLA",
+      "contratos": 1,
+      "facturado": 1019.17,
+      "cobrado": 673.09,
+      "worker_type": "infdependiente_informal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-03-13"
+      ]
+    },
+    {
+      "nombre": "LEONORA NATHALY SANCHEZ",
+      "contratos": 1,
+      "facturado": 805.71,
+      "cobrado": 521.8,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-03-12"
+      ]
+    },
+    {
+      "nombre": "JHOVANNY JOSE LOZADA LOZADA",
+      "contratos": 1,
+      "facturado": 750.62,
+      "cobrado": 339.58,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-03-12"
+      ]
+    },
+    {
+      "nombre": "LEONARDI DAVID SANCHEZ RONDON",
+      "contratos": 1,
+      "facturado": 637.34,
+      "cobrado": 435.66,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-03-08"
+      ]
+    },
+    {
+      "nombre": "JOSE GREGORIO MORENO  MORENO",
+      "contratos": 1,
+      "facturado": 1174.78,
+      "cobrado": 999.1,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-03-06"
+      ]
+    },
+    {
+      "nombre": "YOHANNA JOSEFINA DORANTE",
+      "contratos": 1,
+      "facturado": 632.97,
+      "cobrado": 333.77,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-03-06"
+      ]
+    },
+    {
+      "nombre": "JOSE HECTOR HERNANDEZ AVILA",
+      "contratos": 1,
+      "facturado": 450.52,
+      "cobrado": 289.45,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-03-05"
+      ]
+    },
+    {
+      "nombre": "MAHOLY JOISGREC JORGE ANZOLA",
+      "contratos": 1,
+      "facturado": 1066.24,
+      "cobrado": 684.95,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-03-04"
+      ]
+    },
+    {
+      "nombre": "YOHANA ISABEL BECERRA DE RODRIGUEZ",
+      "contratos": 1,
+      "facturado": 884.95,
+      "cobrado": 504.46,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-03-01"
+      ]
+    },
+    {
+      "nombre": "DANIELA NOHEMY VALERO CARRILLO",
+      "contratos": 1,
+      "facturado": 747.47,
+      "cobrado": 361.79,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-28"
+      ]
+    },
+    {
+      "nombre": "TONY ALEXIS PEÑA PEÑA",
+      "contratos": 1,
+      "facturado": 632.97,
+      "cobrado": 333.44,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-28"
+      ]
+    },
+    {
+      "nombre": "MIGUEL DAVID MORET AGUANA",
+      "contratos": 1,
+      "facturado": 632.97,
+      "cobrado": 349.38,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-28"
+      ]
+    },
+    {
+      "nombre": "GREYSHY ENDRINA MONSALVE RIVERO",
+      "contratos": 1,
+      "facturado": 884.95,
+      "cobrado": 504.46,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-28"
+      ]
+    },
+    {
+      "nombre": "ASHLY EMPERATRIZ ZAMBRANO LOBO",
+      "contratos": 1,
+      "facturado": 840.63,
+      "cobrado": 546.11,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-27"
+      ]
+    },
+    {
+      "nombre": "SOLTAN ZEIN NARCH",
+      "contratos": 1,
+      "facturado": 565.65,
+      "cobrado": 249.87,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-02-27"
+      ]
+    },
+    {
+      "nombre": "PATRICIO ANTONIO FIGUEROA NAVAS",
+      "contratos": 1,
+      "facturado": 827.92,
+      "cobrado": 436.32,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-02-26"
+      ]
+    },
+    {
+      "nombre": "ERNESTO DARIO SANCHEZ SANCHEZ",
+      "contratos": 1,
+      "facturado": 416.61,
+      "cobrado": 201.81,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-02-25"
+      ]
+    },
+    {
+      "nombre": "SAIRIMAR DEL CARMEN MONTILLA RONDON",
+      "contratos": 1,
+      "facturado": 1409.34,
+      "cobrado": 1215.72,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-02-25"
+      ]
+    },
+    {
+      "nombre": "HECTOR JOAQUIN ROJAS GALVIS",
+      "contratos": 1,
+      "facturado": 2392.61,
+      "cobrado": 1157.57,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-02-24"
+      ]
+    },
+    {
+      "nombre": "SOFIA CAROLINA MESA LOPEZ",
+      "contratos": 1,
+      "facturado": 1206.36,
+      "cobrado": 479.83,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-24"
+      ]
+    },
+    {
+      "nombre": "KESYA KAROLINA MISSEL MORALES",
+      "contratos": 1,
+      "facturado": 369.93,
+      "cobrado": 195.03,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-02-23"
+      ]
+    },
+    {
+      "nombre": "MARINA DEL CARMEN MALDONADO RIVAS",
+      "contratos": 1,
+      "facturado": 1070.65,
+      "cobrado": 501.91,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-23"
+      ]
+    },
+    {
+      "nombre": "ANDRES EDUARDO RODRIGUEZ ROSALES",
+      "contratos": 1,
+      "facturado": 418.26,
+      "cobrado": 252.54,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-23"
+      ]
+    },
+    {
+      "nombre": "MILAGROS ARELIS CARRILLO VALERO",
+      "contratos": 1,
+      "facturado": 422.61,
+      "cobrado": 279.09,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-22"
+      ]
+    },
+    {
+      "nombre": "WILGEN ALCIDES GOMEZ DURAN",
+      "contratos": 1,
+      "facturado": 440.3,
+      "cobrado": 179.77,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-02-22"
+      ]
+    },
+    {
+      "nombre": "BETTY BEATRIZ DELGADO NAVA",
+      "contratos": 1,
+      "facturado": 569.66,
+      "cobrado": 300.15,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-22"
+      ]
+    },
+    {
+      "nombre": "VICTOR MANUEL MISSEL MORALES",
+      "contratos": 1,
+      "facturado": 284.84,
+      "cobrado": 125.59,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-02-21"
+      ]
+    },
+    {
+      "nombre": "ROSA ELENA PERRICONE PAREDES",
+      "contratos": 1,
+      "facturado": 591.09,
+      "cobrado": 312.36,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-02-21"
+      ]
+    },
+    {
+      "nombre": "LUIS ALEJANDRO MARQUEZ GUILLEN",
+      "contratos": 1,
+      "facturado": 608.0,
+      "cobrado": 346.6,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-21"
+      ]
+    },
+    {
+      "nombre": "DANIEL DE JESUS BRICEÑO CABELLO",
+      "contratos": 1,
+      "facturado": 369.93,
+      "cobrado": 195.03,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-20"
+      ]
+    },
+    {
+      "nombre": "JESUS GERARDO GARCIA MARQUEZ",
+      "contratos": 1,
+      "facturado": 369.93,
+      "cobrado": 195.03,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-20"
+      ]
+    },
+    {
+      "nombre": "ALBERTO ELIAS RUBIO GOMEZ",
+      "contratos": 1,
+      "facturado": 741.89,
+      "cobrado": 390.99,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-20"
+      ]
+    },
+    {
+      "nombre": "NIGDIA MAGNOLIA MORAN PARRA",
+      "contratos": 1,
+      "facturado": 1516.33,
+      "cobrado": 864.75,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-02-20"
+      ]
+    },
+    {
+      "nombre": "MANUEL FELIPE PINEDA GRATEROL",
+      "contratos": 1,
+      "facturado": 301.59,
+      "cobrado": 159.05,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-20"
+      ]
+    },
+    {
+      "nombre": "MARLY DEL VALLE MARTOS GARCIA",
+      "contratos": 1,
+      "facturado": 301.59,
+      "cobrado": 171.89,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-19"
+      ]
+    },
+    {
+      "nombre": "USLAR MARQUINA MORA",
+      "contratos": 1,
+      "facturado": 1097.46,
+      "cobrado": 625.36,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-02-18"
+      ]
+    },
+    {
+      "nombre": "MARIA EVANGELINA INFANTE NUÑEZ",
+      "contratos": 1,
+      "facturado": 613.43,
+      "cobrado": 354.23,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-17"
+      ]
+    },
+    {
+      "nombre": "YAMIL CAMAL RADOINE ZAMBRANO",
+      "contratos": 1,
+      "facturado": 2973.13,
+      "cobrado": 2236.36,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-02-17"
+      ]
+    },
+    {
+      "nombre": "RUDY ALEJANDRA DAVILA DAVILA",
+      "contratos": 1,
+      "facturado": 469.49,
+      "cobrado": 336.74,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-17"
+      ]
+    },
+    {
+      "nombre": "MARELIS COROMOTO MANRIQUE PEREIRA",
+      "contratos": 1,
+      "facturado": 980.16,
+      "cobrado": 558.56,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-16"
+      ]
+    },
+    {
+      "nombre": "ELI JAVIER MEDINA PUENTES",
+      "contratos": 1,
+      "facturado": 980.16,
+      "cobrado": 516.4,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-15"
+      ]
+    },
+    {
+      "nombre": "REIMER STEVEN TORO ARAQUE",
+      "contratos": 1,
+      "facturado": 980.16,
+      "cobrado": 509.24,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-15"
+      ]
+    },
+    {
+      "nombre": "YELITZABETH CARRERO DE OSORIO",
+      "contratos": 1,
+      "facturado": 266.06,
+      "cobrado": 140.33,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-15"
+      ]
+    },
+    {
+      "nombre": "ZULAY ALICIA VARELA",
+      "contratos": 1,
+      "facturado": 618.09,
+      "cobrado": 325.6,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-02-15"
+      ]
+    },
+    {
+      "nombre": "RICHARD JOSE QUINTERO UZCATEGUI",
+      "contratos": 1,
+      "facturado": 440.3,
+      "cobrado": 251.1,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-15"
+      ]
+    },
+    {
+      "nombre": "MILAGRO JACKSELI MARTINEZ PEÑA",
+      "contratos": 1,
+      "facturado": 618.09,
+      "cobrado": 325.43,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-15"
+      ]
+    },
+    {
+      "nombre": "VANESSA KAROLINA ALBARRACIN",
+      "contratos": 1,
+      "facturado": 549.2,
+      "cobrado": 289.49,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-14"
+      ]
+    },
+    {
+      "nombre": "DAMARYS LISETH RANGEL ARAUJO",
+      "contratos": 1,
+      "facturado": 591.09,
+      "cobrado": 336.99,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-14"
+      ]
+    },
+    {
+      "nombre": "ANAIS VANESA TORRES RANGEL",
+      "contratos": 1,
+      "facturado": 1382.28,
+      "cobrado": 728.22,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-02-13"
+      ]
+    },
+    {
+      "nombre": "MARYORI DEL VALLE GARCIA",
+      "contratos": 1,
+      "facturado": 737.21,
+      "cobrado": 420.11,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-02-12"
+      ]
+    },
+    {
+      "nombre": "LILIBETH ANDREINA SALAS",
+      "contratos": 1,
+      "facturado": 256.1,
+      "cobrado": 234.7,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-10"
+      ]
+    },
+    {
+      "nombre": "HECTOR JOSE VERGARA MORALES",
+      "contratos": 1,
+      "facturado": 5274.44,
+      "cobrado": 2782.45,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-02-10"
+      ]
+    },
+    {
+      "nombre": "ANGEL MANUEL SUBERO CARDOZO",
+      "contratos": 1,
+      "facturado": 1097.46,
+      "cobrado": 628.81,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-08"
+      ]
+    },
+    {
+      "nombre": "RAMON IGNACIO SAAVEDRA AYALA",
+      "contratos": 1,
+      "facturado": 1591.73,
+      "cobrado": 509.58,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-06"
+      ]
+    },
+    {
+      "nombre": "YANPABLO JOSE RANGEL ALBARRAN",
+      "contratos": 1,
+      "facturado": 488.4,
+      "cobrado": 309.06,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-02-05"
+      ]
+    },
+    {
+      "nombre": "YOHANNA ELIZABETH PALMERA MUÑOZ",
+      "contratos": 1,
+      "facturado": 762.63,
+      "cobrado": 543.53,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-05"
+      ]
+    },
+    {
+      "nombre": "YURIS ADRIANA LOBO",
+      "contratos": 1,
+      "facturado": 547.46,
+      "cobrado": 423.54,
+      "worker_type": "desconocido",
+      "segmento": "No clasificado",
+      "fechas": [
+        "2026-02-04"
+      ]
+    },
+    {
+      "nombre": "SEBASTIAN ALEJANDRO DE LA SANTISIMA TRINIDAD MORALES LUGO",
+      "contratos": 1,
+      "facturado": 170.74,
+      "cobrado": 74.24,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-04"
+      ]
+    },
+    {
+      "nombre": "GLEMIS FRANCISCA APARICIO NAVA",
+      "contratos": 1,
+      "facturado": 1151.2,
+      "cobrado": 745.93,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-04"
+      ]
+    },
+    {
+      "nombre": "HEIDY CAROLINA MARQUEZ",
+      "contratos": 1,
+      "facturado": 1724.43,
+      "cobrado": 908.45,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-02"
+      ]
+    },
+    {
+      "nombre": "CONSUELO GARCIA DIAZ",
+      "contratos": 1,
+      "facturado": 787.49,
+      "cobrado": 448.69,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-02-02"
+      ]
+    },
+    {
+      "nombre": "YILIANA JOSEFINA SANCHEZ VALERO",
+      "contratos": 1,
+      "facturado": 495.94,
+      "cobrado": 282.64,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-02-01"
+      ]
+    },
+    {
+      "nombre": "ELIESER DANIEL ALTUVE SALAS",
+      "contratos": 1,
+      "facturado": 64.93,
+      "cobrado": 37.03,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-31"
+      ]
+    },
+    {
+      "nombre": "ROLANDO JOSE URBINA",
+      "contratos": 1,
+      "facturado": 1179.82,
+      "cobrado": 570.35,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-01-31"
+      ]
+    },
+    {
+      "nombre": "RONY ANGEL BASABE TELLEZ",
+      "contratos": 1,
+      "facturado": 407.53,
+      "cobrado": 292.34,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-31"
+      ]
+    },
+    {
+      "nombre": "YESICA JOSEFINA SANTIAGO PLAZA",
+      "contratos": 1,
+      "facturado": 536.16,
+      "cobrado": 305.56,
+      "worker_type": "infdependiente_informal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-01-31"
+      ]
+    },
+    {
+      "nombre": "KRISNEY ROSMEILY ARAQUE VIVAS",
+      "contratos": 1,
+      "facturado": 2580.92,
+      "cobrado": 1581.83,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-01-31"
+      ]
+    },
+    {
+      "nombre": "ANTONIO JOSE MEZA VERA",
+      "contratos": 1,
+      "facturado": 1354.46,
+      "cobrado": 831.96,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-30"
+      ]
+    },
+    {
+      "nombre": "WUILBERTO JOSE MONCADA PICO",
+      "contratos": 1,
+      "facturado": 1122.59,
+      "cobrado": 692.18,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-01-29"
+      ]
+    },
+    {
+      "nombre": "RONAL ALONSO ROMERO ARAQUE",
+      "contratos": 1,
+      "facturado": 817.28,
+      "cobrado": 572.09,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-01-28"
+      ]
+    },
+    {
+      "nombre": "DAYIRA BEATRIZ QUINTERO DE RONDON",
+      "contratos": 1,
+      "facturado": 429.77,
+      "cobrado": 281.66,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-01-27"
+      ]
+    },
+    {
+      "nombre": "DIDDYER JOSE ZAMBRANO VILORIA",
+      "contratos": 1,
+      "facturado": 524.43,
+      "cobrado": 321.41,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-01-26"
+      ]
+    },
+    {
+      "nombre": "GENESIS BEATRIZ GUERRERO GUERRERO",
+      "contratos": 1,
+      "facturado": 677.89,
+      "cobrado": 388.1,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-24"
+      ]
+    },
+    {
+      "nombre": "ELSY YAMILE ALBARRACIN SUA",
+      "contratos": 1,
+      "facturado": 986.68,
+      "cobrado": 604.72,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-24"
+      ]
+    },
+    {
+      "nombre": "YUXELA YUDITH VALERO MORALES",
+      "contratos": 1,
+      "facturado": 600.39,
+      "cobrado": 367.58,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2026-01-24"
+      ]
+    },
+    {
+      "nombre": "RAFAEL ANTONIO RAMIREZ DAVILA",
+      "contratos": 1,
+      "facturado": 1316.28,
+      "cobrado": 807.21,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-01-23"
+      ]
+    },
+    {
+      "nombre": "YULIMA FIGUEREDO CADENA",
+      "contratos": 1,
+      "facturado": 260.26,
+      "cobrado": 216.07,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-23"
+      ]
+    },
+    {
+      "nombre": "DENISE ALEXANDRA CALLEJA PEREIRA",
+      "contratos": 1,
+      "facturado": 715.08,
+      "cobrado": 499.9,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-01-22"
+      ]
+    },
+    {
+      "nombre": "JESUS MANUEL RODRIGUEZ MONSALVE",
+      "contratos": 1,
+      "facturado": 978.49,
+      "cobrado": 557.46,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-01-22"
+      ]
+    },
+    {
+      "nombre": "YOLEIDY ANDREINA BRICEÑO RAMIREZ",
+      "contratos": 1,
+      "facturado": 1103.0,
+      "cobrado": 723.4,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-21"
+      ]
+    },
+    {
+      "nombre": "SUGEY DEL VALLE PAREDES GARCIA",
+      "contratos": 1,
+      "facturado": 501.69,
+      "cobrado": 437.01,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-21"
+      ]
+    },
+    {
+      "nombre": "MIRIAM DEL CARMEN TORO SULBARAN",
+      "contratos": 1,
+      "facturado": 721.24,
+      "cobrado": 415.14,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-20"
+      ]
+    },
+    {
+      "nombre": "ANDREA PAOLA MOGOLLON SANCHEZ",
+      "contratos": 1,
+      "facturado": 479.86,
+      "cobrado": 282.39,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-01-20"
+      ]
+    },
+    {
+      "nombre": "RANNDY JESUS MOLINA ALARCON",
+      "contratos": 1,
+      "facturado": 460.28,
+      "cobrado": 302.04,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-01-19"
+      ]
+    },
+    {
+      "nombre": "JUAN JESUS ONTIVEROS GUILLEN",
+      "contratos": 1,
+      "facturado": 515.49,
+      "cobrado": 316.05,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-19"
+      ]
+    },
+    {
+      "nombre": "LUIS ALFREDO NUCETE MANSILLA",
+      "contratos": 1,
+      "facturado": 3519.27,
+      "cobrado": 2469.37,
+      "worker_type": "infdependiente_informal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-01-19"
+      ]
+    },
+    {
+      "nombre": "DORYS DEL VALLE VILORIA OLMOS",
+      "contratos": 1,
+      "facturado": 1387.32,
+      "cobrado": 850.24,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-18"
+      ]
+    },
+    {
+      "nombre": "ANDYS JOSE ROMERO COLMENAREZ",
+      "contratos": 1,
+      "facturado": 1474.07,
+      "cobrado": 919.24,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-01-17"
+      ]
+    },
+    {
+      "nombre": "OSWAL DAVID KOWALYSZYN PEÑA",
+      "contratos": 1,
+      "facturado": 472.52,
+      "cobrado": 289.73,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-17"
+      ]
+    },
+    {
+      "nombre": "EZEQUIEL JOSE TORRES SUNIAGA",
+      "contratos": 1,
+      "facturado": 1363.87,
+      "cobrado": 894.51,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-17"
+      ]
+    },
+    {
+      "nombre": "MARIA GABRIELA RIVAS VIELMA",
+      "contratos": 1,
+      "facturado": 330.63,
+      "cobrado": 188.43,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-01-17"
+      ]
+    },
+    {
+      "nombre": "NATHALIA GISELL PARRA CASTILLO",
+      "contratos": 1,
+      "facturado": 1155.93,
+      "cobrado": 709.53,
+      "worker_type": "infdependiente_informal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2026-01-16"
+      ]
+    },
+    {
+      "nombre": "ROBERTO ANTONIO LINARES INFANTE",
+      "contratos": 1,
+      "facturado": 696.94,
+      "cobrado": 461.63,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-16"
+      ]
+    },
+    {
+      "nombre": "MARIA EUGENIA HUGGINES",
+      "contratos": 1,
+      "facturado": 513.85,
+      "cobrado": 323.15,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2026-01-15"
+      ]
+    },
+    {
+      "nombre": "VLADIMIR ERNESTO COLMENARES AVENDAÑO",
+      "contratos": 1,
+      "facturado": 75.87,
+      "cobrado": 46.39,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-15"
+      ]
+    },
+    {
+      "nombre": "OSCAR ALEJANDRO MARQUEZ ROJAS",
+      "contratos": 1,
+      "facturado": 83.92,
+      "cobrado": 64.92,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-14"
+      ]
+    },
+    {
+      "nombre": "NEECOLL THAIS ALTUVE SALAS",
+      "contratos": 1,
+      "facturado": 1963.83,
+      "cobrado": 1205.89,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-12"
+      ]
+    },
+    {
+      "nombre": "JAVIER ALBERTO VIVAS PARRA",
+      "contratos": 1,
+      "facturado": 556.24,
+      "cobrado": 382.16,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2026-01-06"
+      ]
+    },
+    {
+      "nombre": "SAUL ENRIQUE GONZALEZ  MOLERO",
+      "contratos": 1,
+      "facturado": 797.72,
+      "cobrado": 610.64,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-29"
+      ]
+    },
+    {
+      "nombre": "ERIBER GUILLEN HERNANDEZ",
+      "contratos": 1,
+      "facturado": 581.93,
+      "cobrado": 400.01,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-12-28"
+      ]
+    },
+    {
+      "nombre": "MARIA DEL ROSARIO MARTINEZ DIAZ",
+      "contratos": 1,
+      "facturado": 683.83,
+      "cobrado": 470.07,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-12-27"
+      ]
+    },
+    {
+      "nombre": "AMANDA GABRIELA PRIETO CEDEÑO",
+      "contratos": 1,
+      "facturado": 3672.01,
+      "cobrado": 2810.23,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-27"
+      ]
+    },
+    {
+      "nombre": "DISTRIBUIDORA CENTRO-OCCIDENTE CA",
+      "contratos": 1,
+      "facturado": 4751.25,
+      "cobrado": 4213.53,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-12-24"
+      ]
+    },
+    {
+      "nombre": "DAYANA RUDTH PEÑA",
+      "contratos": 1,
+      "facturado": 857.93,
+      "cobrado": 857.93,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-12-24"
+      ]
+    },
+    {
+      "nombre": "MARIA FERNANDA GONZALEZ BENITEZ",
+      "contratos": 1,
+      "facturado": 494.85,
+      "cobrado": 359.54,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-23"
+      ]
+    },
+    {
+      "nombre": "JUAN CARLOS BUSTOS DAVILA",
+      "contratos": 1,
+      "facturado": 520.08,
+      "cobrado": 385.25,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-23"
+      ]
+    },
+    {
+      "nombre": "WALESKA CAROLINA SALAS PERAZA",
+      "contratos": 1,
+      "facturado": 427.39,
+      "cobrado": 269.95,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-23"
+      ]
+    },
+    {
+      "nombre": "VIRGILIO RAFAEL CASTILLO BLANCO",
+      "contratos": 1,
+      "facturado": 2280.42,
+      "cobrado": 1495.65,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-22"
+      ]
+    },
+    {
+      "nombre": "MARIALEJANDRA VARGAS BASTIDAS",
+      "contratos": 1,
+      "facturado": 1569.01,
+      "cobrado": 1076.01,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-12-21"
+      ]
+    },
+    {
+      "nombre": "JOSE ALEXIS SANCHEZ UZCATEGUI",
+      "contratos": 1,
+      "facturado": 1321.34,
+      "cobrado": 705.53,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-20"
+      ]
+    },
+    {
+      "nombre": "BRAULIO JOSE CHOURIO FEREIRA",
+      "contratos": 1,
+      "facturado": 677.07,
+      "cobrado": 607.95,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-12-19"
+      ]
+    },
+    {
+      "nombre": "HUGO BARRIOS ARANGUREN",
+      "contratos": 1,
+      "facturado": 500.18,
+      "cobrado": 382.94,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-19"
+      ]
+    },
+    {
+      "nombre": "EDGAR ALEXANDER CERRADA ARAQUE",
+      "contratos": 1,
+      "facturado": 1381.05,
+      "cobrado": 965.18,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-12-19"
+      ]
+    },
+    {
+      "nombre": "DEISY KARINA PEÑA RANGEL",
+      "contratos": 1,
+      "facturado": 1036.92,
+      "cobrado": 712.44,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-12-19"
+      ]
+    },
+    {
+      "nombre": "JEAN CARLOS RANGEL ALTUVE",
+      "contratos": 1,
+      "facturado": 714.06,
+      "cobrado": 677.58,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-19"
+      ]
+    },
+    {
+      "nombre": "GERMALIS AMELIA ROJAS CHARMELL",
+      "contratos": 1,
+      "facturado": 377.35,
+      "cobrado": 263.74,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-18"
+      ]
+    },
+    {
+      "nombre": "LUIS GERARDO SOTO IBARRA",
+      "contratos": 1,
+      "facturado": 469.55,
+      "cobrado": 449.59,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-12-18"
+      ]
+    },
+    {
+      "nombre": "MARISOL DAVILA MARTINEZ",
+      "contratos": 1,
+      "facturado": 367.25,
+      "cobrado": 316.01,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-18"
+      ]
+    },
+    {
+      "nombre": "DORIS JOSEFINA QUINTERO GONZALEZ",
+      "contratos": 1,
+      "facturado": 811.03,
+      "cobrado": 621.13,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-17"
+      ]
+    },
+    {
+      "nombre": "LUIS ALBERTO PEÑA AVENDAÑO",
+      "contratos": 1,
+      "facturado": 697.93,
+      "cobrado": 518.99,
+      "worker_type": "infdependiente_informal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-12-16"
+      ]
+    },
+    {
+      "nombre": "LUIS DANIEL GONZALEZ MORA",
+      "contratos": 1,
+      "facturado": 4989.67,
+      "cobrado": 1471.82,
+      "worker_type": "infdependiente_informal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-12-12"
+      ]
+    },
+    {
+      "nombre": "JOHEINY ELIAN RANGEL MONTIEL",
+      "contratos": 1,
+      "facturado": 2503.43,
+      "cobrado": 2123.38,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-11"
+      ]
+    },
+    {
+      "nombre": "CRISTHIAN PAREDES RODRIGUEZ",
+      "contratos": 1,
+      "facturado": 728.32,
+      "cobrado": 545.55,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-11"
+      ]
+    },
+    {
+      "nombre": "JESUS LEANDRO LOBO PARRA",
+      "contratos": 1,
+      "facturado": 799.13,
+      "cobrado": 611.75,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-08"
+      ]
+    },
+    {
+      "nombre": "ANA ROSA SANCHEZ CASTILLO",
+      "contratos": 1,
+      "facturado": 971.46,
+      "cobrado": 752.23,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-12-07"
+      ]
+    },
+    {
+      "nombre": "GABRIEL A. PARRA MOLINA",
+      "contratos": 1,
+      "facturado": 941.44,
+      "cobrado": 702.33,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-07"
+      ]
+    },
+    {
+      "nombre": "JHOSER LEANDRO RANGEL RAMIREZ",
+      "contratos": 1,
+      "facturado": 590.24,
+      "cobrado": 451.88,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-06"
+      ]
+    },
+    {
+      "nombre": "CARLOS ALFREDO PEREZ PEREZ",
+      "contratos": 1,
+      "facturado": 250.5,
+      "cobrado": 190.11,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-05"
+      ]
+    },
+    {
+      "nombre": "MARIA CECILIA SAAVEDRA BRICEÑO",
+      "contratos": 1,
+      "facturado": 952.37,
+      "cobrado": 706.55,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-12-04"
+      ]
+    },
+    {
+      "nombre": "IVETTE VANESSA URDANETA SOTO",
+      "contratos": 1,
+      "facturado": 1202.92,
+      "cobrado": 1000.09,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-12-04"
+      ]
+    },
+    {
+      "nombre": "ROBERLY ROSANNA RONDON PAREDES",
+      "contratos": 1,
+      "facturado": 1301.04,
+      "cobrado": 797.31,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-12-04"
+      ]
+    },
+    {
+      "nombre": "JEAN JAIR FERNANDEZ CASTELLANO",
+      "contratos": 1,
+      "facturado": 783.45,
+      "cobrado": 581.37,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-03"
+      ]
+    },
+    {
+      "nombre": "LUIS ANGEL CASTILLO CONTRERAS",
+      "contratos": 1,
+      "facturado": 857.9,
+      "cobrado": 759.95,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-12-03"
+      ]
+    },
+    {
+      "nombre": "IVAN DANIEL MARQUEZ SUAREZ",
+      "contratos": 1,
+      "facturado": 6245.91,
+      "cobrado": 4724.91,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-03"
+      ]
+    },
+    {
+      "nombre": "ARIS CELIS GIL RANGEL",
+      "contratos": 1,
+      "facturado": 252.57,
+      "cobrado": 195.44,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-02"
+      ]
+    },
+    {
+      "nombre": "YANN MANUEL RIVAS VELAZQUEZ",
+      "contratos": 1,
+      "facturado": 209.66,
+      "cobrado": 152.53,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-02"
+      ]
+    },
+    {
+      "nombre": "ENMY MARIEL RONDON BUITRAGO",
+      "contratos": 1,
+      "facturado": 451.49,
+      "cobrado": 355.35,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-01"
+      ]
+    },
+    {
+      "nombre": "MINELVA TORO GARCIA",
+      "contratos": 1,
+      "facturado": 921.88,
+      "cobrado": 763.32,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-12-01"
+      ]
+    },
+    {
+      "nombre": "MARIA LILIANA SALAS BENITEZ",
+      "contratos": 1,
+      "facturado": 854.33,
+      "cobrado": 632.95,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-30"
+      ]
+    },
+    {
+      "nombre": "ROSA ELENA JAIMES GUERRERO",
+      "contratos": 1,
+      "facturado": 233.96,
+      "cobrado": 220.74,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-30"
+      ]
+    },
+    {
+      "nombre": "DARWIN JOSUE CONTRERAS RODRIGUEZ",
+      "contratos": 1,
+      "facturado": 123.48,
+      "cobrado": 116.59,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-11-30"
+      ]
+    },
+    {
+      "nombre": "LILIA MARBIOLI GIL CONTRERAS",
+      "contratos": 1,
+      "facturado": 431.03,
+      "cobrado": 323.57,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-11-30"
+      ]
+    },
+    {
+      "nombre": "LEONEL PARRA BRICEÑO",
+      "contratos": 1,
+      "facturado": 883.45,
+      "cobrado": 655.51,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-11-30"
+      ]
+    },
+    {
+      "nombre": "YLDEJOSSETH RICARLEX DAVILA TORO",
+      "contratos": 1,
+      "facturado": 921.88,
+      "cobrado": 810.96,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-30"
+      ]
+    },
+    {
+      "nombre": "LAURIS CAROLINA BRACHO DURAN",
+      "contratos": 1,
+      "facturado": 4748.63,
+      "cobrado": 3738.37,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-11-30"
+      ]
+    },
+    {
+      "nombre": "MANUEL EDUARDO DELGADO MORA",
+      "contratos": 1,
+      "facturado": 1163.04,
+      "cobrado": 1031.54,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-29"
+      ]
+    },
+    {
+      "nombre": "WILMER YONATHAN RODRIGUEZ GARCIA",
+      "contratos": 1,
+      "facturado": 697.1,
+      "cobrado": 577.14,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-11-29"
+      ]
+    },
+    {
+      "nombre": "LEIDY JOSEFINA TORRES RIVAS",
+      "contratos": 1,
+      "facturado": 646.41,
+      "cobrado": 480.17,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-11-29"
+      ]
+    },
+    {
+      "nombre": "PEDRO RAFAEL MENDEZ BELANDRIA",
+      "contratos": 1,
+      "facturado": 1848.77,
+      "cobrado": 1487.52,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-28"
+      ]
+    },
+    {
+      "nombre": "ENCANTA MONTAÑA C.A",
+      "contratos": 1,
+      "facturado": 909.82,
+      "cobrado": 758.12,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-28"
+      ]
+    },
+    {
+      "nombre": "ANGELICA ELENA LEAL ESTRADA",
+      "contratos": 1,
+      "facturado": 1144.91,
+      "cobrado": 957.13,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-26"
+      ]
+    },
+    {
+      "nombre": "JOSE JUAN CHACON  MOLINA",
+      "contratos": 1,
+      "facturado": 491.06,
+      "cobrado": 463.27,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-11-24"
+      ]
+    },
+    {
+      "nombre": "YLEANA KAROLINA CEDEÑO ROJAS",
+      "contratos": 1,
+      "facturado": 612.52,
+      "cobrado": 492.87,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-22"
+      ]
+    },
+    {
+      "nombre": "SONIA COROMOTO CHABASQUEN FIGUEREDO",
+      "contratos": 1,
+      "facturado": 624.81,
+      "cobrado": 592.89,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-11-21"
+      ]
+    },
+    {
+      "nombre": "MIGUEL ANGEL OSUNA HERNANDEZ",
+      "contratos": 1,
+      "facturado": 615.05,
+      "cobrado": 494.9,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-11-21"
+      ]
+    },
+    {
+      "nombre": "LEONARDO DAVID CALDERON CASTILLO",
+      "contratos": 1,
+      "facturado": 1731.33,
+      "cobrado": 1367.03,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-11-21"
+      ]
+    },
+    {
+      "nombre": "MARLENE DUGARTE CONTRERAS",
+      "contratos": 1,
+      "facturado": 848.99,
+      "cobrado": 683.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-16"
+      ]
+    },
+    {
+      "nombre": "IVAN ALONSO ROMERO VIVAS",
+      "contratos": 1,
+      "facturado": 1367.2,
+      "cobrado": 1099.52,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-11-16"
+      ]
+    },
+    {
+      "nombre": "NELSON OMAR ARIAS MARQUEZ",
+      "contratos": 1,
+      "facturado": 645.58,
+      "cobrado": 468.76,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-11-14"
+      ]
+    },
+    {
+      "nombre": "EVERISTNIER NAZARETH ZERPA OTALBORA",
+      "contratos": 1,
+      "facturado": 174.14,
+      "cobrado": 151.73,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-10"
+      ]
+    },
+    {
+      "nombre": "JOSE EDUARDO RAMOS GARCIA",
+      "contratos": 1,
+      "facturado": 330.97,
+      "cobrado": 295.29,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-11-08"
+      ]
+    },
+    {
+      "nombre": "SANTIAGO ENRIQUE PRIETO PEREIRA",
+      "contratos": 1,
+      "facturado": 456.0,
+      "cobrado": 358.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-08"
+      ]
+    },
+    {
+      "nombre": "MARIA EMILCE ANGULO ALTUVE",
+      "contratos": 1,
+      "facturado": 1045.62,
+      "cobrado": 882.22,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-07"
+      ]
+    },
+    {
+      "nombre": "MARVY YUALY HERNANDEZ MANRIQUE",
+      "contratos": 1,
+      "facturado": 740.05,
+      "cobrado": 636.77,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-11-07"
+      ]
+    },
+    {
+      "nombre": "JOSE GREGORIO SALCEDO DAVILA",
+      "contratos": 1,
+      "facturado": 800.58,
+      "cobrado": 632.94,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-11-07"
+      ]
+    },
+    {
+      "nombre": "FRANCESCO AURELIO COMUNIELLO GALLINA",
+      "contratos": 1,
+      "facturado": 2675.37,
+      "cobrado": 1875.18,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-11-06"
+      ]
+    },
+    {
+      "nombre": "ELI SAUL PARRAGA LOPEZ",
+      "contratos": 1,
+      "facturado": 554.8,
+      "cobrado": 165.37,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-03"
+      ]
+    },
+    {
+      "nombre": "JULIO CESAR UZCATEGUI CHACON",
+      "contratos": 1,
+      "facturado": 539.51,
+      "cobrado": 476.27,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-11-01"
+      ]
+    },
+    {
+      "nombre": "JULIO CESAR SANDOVAL SANDOVAL",
+      "contratos": 1,
+      "facturado": 1628.57,
+      "cobrado": 1458.08,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-10-31"
+      ]
+    },
+    {
+      "nombre": "HEVERLY MARIA MURILLO SANCHEZ",
+      "contratos": 1,
+      "facturado": 1256.96,
+      "cobrado": 1217.57,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-10-26"
+      ]
+    },
+    {
+      "nombre": "ROSSY ALEJANDRA SANCHEZ ALBARRAN",
+      "contratos": 1,
+      "facturado": 867.89,
+      "cobrado": 766.04,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-23"
+      ]
+    },
+    {
+      "nombre": "JESUS MANUEL DUGARTE MARQUEZ",
+      "contratos": 1,
+      "facturado": 440.5,
+      "cobrado": 406.08,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-23"
+      ]
+    },
+    {
+      "nombre": "JOSE ELEAZAR PEREZ UZCATEGUI",
+      "contratos": 1,
+      "facturado": 655.05,
+      "cobrado": 543.2,
+      "worker_type": "infdependiente_informal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-10-21"
+      ]
+    },
+    {
+      "nombre": "MELIDA ZULEIMA HURTADO VASQUEZ",
+      "contratos": 1,
+      "facturado": 672.37,
+      "cobrado": 578.53,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-20"
+      ]
+    },
+    {
+      "nombre": "PAMELA VANESSA VIVAS MENDEZ",
+      "contratos": 1,
+      "facturado": 916.69,
+      "cobrado": 880.86,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-10-20"
+      ]
+    },
+    {
+      "nombre": "DELFINA CONTRERAS TORRES",
+      "contratos": 1,
+      "facturado": 856.04,
+      "cobrado": 678.32,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-19"
+      ]
+    },
+    {
+      "nombre": "KEREN FIGUEROA SOSA",
+      "contratos": 1,
+      "facturado": 620.28,
+      "cobrado": 578.75,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-10-19"
+      ]
+    },
+    {
+      "nombre": "ALBERTO DE JESUS ACEVEDO SANTIAGO",
+      "contratos": 1,
+      "facturado": 525.03,
+      "cobrado": 463.47,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-18"
+      ]
+    },
+    {
+      "nombre": "ROMNY JESUS SANTAELLA SANTAMARIA",
+      "contratos": 1,
+      "facturado": 522.59,
+      "cobrado": 506.76,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-10-17"
+      ]
+    },
+    {
+      "nombre": "WILFREDO JOSE VELASQUEZ ZAMORA",
+      "contratos": 1,
+      "facturado": 490.54,
+      "cobrado": 433.06,
+      "worker_type": "dependiente_publico",
+      "segmento": "Sector público",
+      "fechas": [
+        "2025-10-17"
+      ]
+    },
+    {
+      "nombre": "LUIS GUILLERMO HERNANDEZ BLANCO",
+      "contratos": 1,
+      "facturado": 771.31,
+      "cobrado": 680.86,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-10-17"
+      ]
+    },
+    {
+      "nombre": "JOSE ALEJANDRO ANGULO ULLOQUE",
+      "contratos": 1,
+      "facturado": 489.16,
+      "cobrado": 447.09,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-17"
+      ]
+    },
+    {
+      "nombre": "MARIA DANIELA VIELMA USECHE",
+      "contratos": 1,
+      "facturado": 626.82,
+      "cobrado": 553.29,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-11"
+      ]
+    },
+    {
+      "nombre": "LA MONTAÑA DE LOS SUEÑOS, C.A",
+      "contratos": 1,
+      "facturado": 374.1,
+      "cobrado": 341.94,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-09"
+      ]
+    },
+    {
+      "nombre": "WILL GREGORI CAMINO PEREZ",
+      "contratos": 1,
+      "facturado": 2904.2,
+      "cobrado": 2029.69,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-07"
+      ]
+    },
+    {
+      "nombre": "DAVID CASTILLO DUGARTE",
+      "contratos": 1,
+      "facturado": 713.4,
+      "cobrado": 662.34,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-04"
+      ]
+    },
+    {
+      "nombre": "JOSE OSWALDO ESMIR CARRILLO SULBARAN",
+      "contratos": 1,
+      "facturado": 422.29,
+      "cobrado": 405.8,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-02"
+      ]
+    },
+    {
+      "nombre": "ROCIO LEONELA BASTO PABON",
+      "contratos": 1,
+      "facturado": 1205.94,
+      "cobrado": 1011.96,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-10-02"
+      ]
+    },
+    {
+      "nombre": "JOSE JAVIER RIVAS RANGEL",
+      "contratos": 1,
+      "facturado": 1255.12,
+      "cobrado": 1107.85,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-10-02"
+      ]
+    },
+    {
+      "nombre": "ENEIVIS DALIANA RUIZ LOPEZ",
+      "contratos": 1,
+      "facturado": 1453.8,
+      "cobrado": 1301.61,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-10-01"
+      ]
+    },
+    {
+      "nombre": "ERIHANA ANDREINA ANGULO PIRELA",
+      "contratos": 1,
+      "facturado": 538.13,
+      "cobrado": 517.01,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-09-30"
+      ]
+    },
+    {
+      "nombre": "ANDREA LUCIA DOMINGUEZ DOMINGUEZ",
+      "contratos": 1,
+      "facturado": 2088.66,
+      "cobrado": 1766.26,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-09-29"
+      ]
+    },
+    {
+      "nombre": "MARYURI DEL CARMEN GARCIA MONSALVE",
+      "contratos": 1,
+      "facturado": 1559.55,
+      "cobrado": 1559.55,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-09-28"
+      ]
+    },
+    {
+      "nombre": "DIANELA YARIBEL DELGADO FERNANDEZ",
+      "contratos": 1,
+      "facturado": 614.49,
+      "cobrado": 575.92,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-09-27"
+      ]
+    },
+    {
+      "nombre": "ANDREA ZORAI MARQUINA QUINTERO",
+      "contratos": 1,
+      "facturado": 1800.84,
+      "cobrado": 1730.4,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-09-27"
+      ]
+    },
+    {
+      "nombre": "RICARDO JESUS ROJAS RODRIGUEZ",
+      "contratos": 1,
+      "facturado": 614.91,
+      "cobrado": 566.87,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-09-25"
+      ]
+    },
+    {
+      "nombre": "FABIANA INES PERALTA VALETS",
+      "contratos": 1,
+      "facturado": 1446.96,
+      "cobrado": 1333.76,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-09-25"
+      ]
+    },
+    {
+      "nombre": "JOSE HUMBERTO RUJANO GUILLEN",
+      "contratos": 1,
+      "facturado": 490.95,
+      "cobrado": 452.0,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-09-25"
+      ]
+    },
+    {
+      "nombre": "CARLOS ALBERTO PEÑA PARRA",
+      "contratos": 1,
+      "facturado": 335.1,
+      "cobrado": 291.84,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-09-20"
+      ]
+    },
+    {
+      "nombre": "ANGE NATHALY RAMIREZ FERNANDEZ",
+      "contratos": 1,
+      "facturado": 1368.3,
+      "cobrado": 914.72,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-09-09"
+      ]
+    },
+    {
+      "nombre": "DAYANA IBELITCE VERA GUILLEN",
+      "contratos": 1,
+      "facturado": 480.87,
+      "cobrado": 458.99,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-08-30"
+      ]
+    },
+    {
+      "nombre": "FRANCISCO MIGUEL SOTO ORAA",
+      "contratos": 1,
+      "facturado": 272.49,
+      "cobrado": 251.32,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-08-25"
+      ]
+    },
+    {
+      "nombre": "GLENDY MARIANA CAMACHO PEREZ",
+      "contratos": 1,
+      "facturado": 11967.95,
+      "cobrado": 11440.37,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-08-25"
+      ]
+    },
+    {
+      "nombre": "YANIN ALEJANDRA DEL CARMEN CASTILLO TORRES",
+      "contratos": 1,
+      "facturado": 508.14,
+      "cobrado": 508.14,
+      "worker_type": "dependiente_privado",
+      "segmento": "Sector privado",
+      "fechas": [
+        "2025-08-21"
+      ]
+    },
+    {
+      "nombre": "ROBINSON YOADMER DURAN AZUAJE",
+      "contratos": 1,
+      "facturado": 156.46,
+      "cobrado": 156.46,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-08-21"
+      ]
+    },
+    {
+      "nombre": "GREYSY KARINA ROJAS MADRID",
+      "contratos": 1,
+      "facturado": 759.1,
+      "cobrado": 758.97,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-08-20"
+      ]
+    },
+    {
+      "nombre": "RICARDO DANIEL SAAVEDRA GUILLEN",
+      "contratos": 1,
+      "facturado": 396.95,
+      "cobrado": 396.95,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-08-18"
+      ]
+    },
+    {
+      "nombre": "JENNIFER ALEJANDRA BASTOS ALBARRAN",
+      "contratos": 1,
+      "facturado": 2724.2,
+      "cobrado": 2724.2,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-08-17"
+      ]
+    },
+    {
+      "nombre": "KAREM ANDREINA ESCALANTE LOPEZ",
+      "contratos": 1,
+      "facturado": 2457.31,
+      "cobrado": 2457.31,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-08-12"
+      ]
+    },
+    {
+      "nombre": "ANDREA ESTEFANIA PAREDES",
+      "contratos": 1,
+      "facturado": 544.45,
+      "cobrado": 263.41,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-08-11"
+      ]
+    },
+    {
+      "nombre": "ABIGAIL RUIZ GARCIA",
+      "contratos": 1,
+      "facturado": 452.56,
+      "cobrado": 452.56,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-08-09"
+      ]
+    },
+    {
+      "nombre": "GLADYMAR DE LOURDES GONZALEZ ROJO",
+      "contratos": 1,
+      "facturado": 43.57,
+      "cobrado": 43.57,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-08-06"
+      ]
+    },
+    {
+      "nombre": "MANUEL ALBERTO RANGEL ANGULO",
+      "contratos": 1,
+      "facturado": 561.87,
+      "cobrado": 561.87,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-08-06"
+      ]
+    },
+    {
+      "nombre": "EDGAR OSWALDO RODRIGUEZ ZAMBRANO",
+      "contratos": 1,
+      "facturado": 128.35,
+      "cobrado": 128.35,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-08-04"
+      ]
+    },
+    {
+      "nombre": "DORA MAYELA PAREDES DUGARTE",
+      "contratos": 1,
+      "facturado": 296.92,
+      "cobrado": 296.92,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-07-31"
+      ]
+    },
+    {
+      "nombre": "BEIKER RODRIGO LEAL LACRUZ",
+      "contratos": 1,
+      "facturado": 729.35,
+      "cobrado": 729.35,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-07-31"
+      ]
+    },
+    {
+      "nombre": "ANDREA ELIZABETH ZERPA VILLASMIL",
+      "contratos": 1,
+      "facturado": 296.92,
+      "cobrado": 291.76,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-07-31"
+      ]
+    },
+    {
+      "nombre": "CECYL GERALDYN ACEVEDO RODRIGUEZ",
+      "contratos": 1,
+      "facturado": 788.85,
+      "cobrado": 629.3,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-07-28"
+      ]
+    },
+    {
+      "nombre": "FRANCIS YANELLY ROSALES LABRADOR",
+      "contratos": 1,
+      "facturado": 577.88,
+      "cobrado": 577.88,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-07-10"
+      ]
+    },
+    {
+      "nombre": "NORAIMA MARYELIN ALVAREZ GUILLEN",
+      "contratos": 1,
+      "facturado": 719.36,
+      "cobrado": 719.36,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-07-01"
+      ]
+    },
+    {
+      "nombre": "AMOR HOLANDA SANCHEZ MORA",
+      "contratos": 1,
+      "facturado": 733.14,
+      "cobrado": 733.14,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-06-26"
+      ]
+    },
+    {
+      "nombre": "MARIA ELENA SALINAS",
+      "contratos": 1,
+      "facturado": 1722.6,
+      "cobrado": 1109.2,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-06-08"
+      ]
+    },
+    {
+      "nombre": "JOSE CENON ANGEL ALBARRAN",
+      "contratos": 1,
+      "facturado": 405.0,
+      "cobrado": 405.0,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-06-03"
+      ]
+    },
+    {
+      "nombre": "CORAIMAR NEIZOL ROJAS DIAZ",
+      "contratos": 1,
+      "facturado": 495.0,
+      "cobrado": 495.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-05-30"
+      ]
+    },
+    {
+      "nombre": "MARIA ROSSANA HERNADEZ CONTRERAS",
+      "contratos": 1,
+      "facturado": 898.8,
+      "cobrado": 898.8,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-05-15"
+      ]
+    },
+    {
+      "nombre": "PROYECTO ERP",
+      "contratos": 1,
+      "facturado": 495.72,
+      "cobrado": 495.72,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-04-24"
+      ]
+    },
+    {
+      "nombre": "SORYRAM ANGUELITA CHACON OCHOA",
+      "contratos": 1,
+      "facturado": 544.8,
+      "cobrado": 544.8,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-31"
+      ]
+    },
+    {
+      "nombre": "ANTONIO JOSE SUAREZ SANCHEZ",
+      "contratos": 1,
+      "facturado": 5341.5,
+      "cobrado": 5341.5,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-03-26"
+      ]
+    },
+    {
+      "nombre": "JONNATHAN RAFAEL MONTILLA RIVAS",
+      "contratos": 1,
+      "facturado": 782.18,
+      "cobrado": 782.18,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-26"
+      ]
+    },
+    {
+      "nombre": "WILLIAM RAMON VILLAREAL VOLCANES",
+      "contratos": 1,
+      "facturado": 592.35,
+      "cobrado": 592.35,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-03-25"
+      ]
+    },
+    {
+      "nombre": "ANGELA LUISA AMESTY PERNIA",
+      "contratos": 1,
+      "facturado": 267.3,
+      "cobrado": 267.3,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-23"
+      ]
+    },
+    {
+      "nombre": "PEDRO LUIS ZAPATA URDANETA",
+      "contratos": 1,
+      "facturado": 132.0,
+      "cobrado": 132.0,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-03-21"
+      ]
+    },
+    {
+      "nombre": "ANDREA DE LOS ANGELES DAVILA SALINAS",
+      "contratos": 1,
+      "facturado": 592.35,
+      "cobrado": 592.35,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-03-19"
+      ]
+    },
+    {
+      "nombre": "WLADIMIR ALEJANDRO BOADA COLMENARES",
+      "contratos": 1,
+      "facturado": 321.75,
+      "cobrado": 321.75,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-17"
+      ]
+    },
+    {
+      "nombre": "MARIA DE LAS MERCEDES MOLINA MENDEZ",
+      "contratos": 1,
+      "facturado": 313.44,
+      "cobrado": 224.92,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-03-15"
+      ]
+    },
+    {
+      "nombre": "GIUSEPPE DE JESUS MODICA SUAREZ",
+      "contratos": 1,
+      "facturado": 2263.47,
+      "cobrado": 2263.47,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-14"
+      ]
+    },
+    {
+      "nombre": "JOSE JESUS BONT PRIETO",
+      "contratos": 1,
+      "facturado": 516.48,
+      "cobrado": 486.27,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-03-14"
+      ]
+    },
+    {
+      "nombre": "COME, C.A. (COMECA)",
+      "contratos": 1,
+      "facturado": 1023.0,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-12"
+      ]
+    },
+    {
+      "nombre": "EDWARD ALTURO ROJAS MARQUEZ",
+      "contratos": 1,
+      "facturado": 377.85,
+      "cobrado": 377.85,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-09"
+      ]
+    },
+    {
+      "nombre": "SANDRA YANETT RAMIREZ FLORES",
+      "contratos": 1,
+      "facturado": 387.75,
+      "cobrado": 387.75,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-07"
+      ]
+    },
+    {
+      "nombre": "DIOSMAN ANTHONIO GOMEZ OMAÑA",
+      "contratos": 1,
+      "facturado": 366.3,
+      "cobrado": 361.25,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-03-06"
+      ]
+    },
+    {
+      "nombre": "LAUCO HERNANDEZ ANGULO",
+      "contratos": 1,
+      "facturado": 377.85,
+      "cobrado": 377.85,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-06"
+      ]
+    },
+    {
+      "nombre": "CESAR HUMBERTO PAPARONI ALTUVE",
+      "contratos": 1,
+      "facturado": 554.4,
+      "cobrado": 554.4,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-03-05"
+      ]
+    },
+    {
+      "nombre": "CHAMPIONS FOOD BAR C.A",
+      "contratos": 1,
+      "facturado": 3000.0,
+      "cobrado": 1738.94,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-02-27"
+      ]
+    },
+    {
+      "nombre": "DEXSI COROMOTO PERNIA DE SANTIAGO",
+      "contratos": 1,
+      "facturado": 790.35,
+      "cobrado": 790.35,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-02-21"
+      ]
+    },
+    {
+      "nombre": "GINA YOSELIN SEMPRUM MALDONADO",
+      "contratos": 1,
+      "facturado": 272.25,
+      "cobrado": 272.25,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-02-19"
+      ]
+    },
+    {
+      "nombre": "MARISELA DEL CARMEN NAVEA LABARCA",
+      "contratos": 1,
+      "facturado": 646.8,
+      "cobrado": 646.8,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2025-02-11"
+      ]
+    },
+    {
+      "nombre": "LUIS EDUARDO MORENO NIETO",
+      "contratos": 1,
+      "facturado": 790.35,
+      "cobrado": 790.35,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-02-10"
+      ]
+    },
+    {
+      "nombre": "MADELEINE STEFY TOTO TORO",
+      "contratos": 1,
+      "facturado": 542.85,
+      "cobrado": 542.85,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-02-10"
+      ]
+    },
+    {
+      "nombre": "DANIEL RIGOBERTO VIÑA CHACON",
+      "contratos": 1,
+      "facturado": 1147.54,
+      "cobrado": 1147.54,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-02-10"
+      ]
+    },
+    {
+      "nombre": "EDUARDO JOSE RANGEL RIVAS",
+      "contratos": 1,
+      "facturado": 427.35,
+      "cobrado": 427.35,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2025-02-07"
+      ]
+    },
+    {
+      "nombre": "MIGUEL ANGEL GUZMAN LOBO",
+      "contratos": 1,
+      "facturado": 107.28,
+      "cobrado": 107.28,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-28"
+      ]
+    },
+    {
+      "nombre": "ALEXANDER ANTONIO RODRIGUEZ LIENDO",
+      "contratos": 1,
+      "facturado": 724.32,
+      "cobrado": 724.32,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-27"
+      ]
+    },
+    {
+      "nombre": "ARIANA DESSIRE SEGOVIA BRICEÑO",
+      "contratos": 1,
+      "facturado": 844.88,
+      "cobrado": 844.88,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-23"
+      ]
+    },
+    {
+      "nombre": "ZENAIDA MOLINA BRICEÑO",
+      "contratos": 1,
+      "facturado": 889.35,
+      "cobrado": 889.35,
+      "worker_type": "infdependiente_informal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-12-21"
+      ]
+    },
+    {
+      "nombre": "RAFAEL EDUARDO BORGES PEÑA",
+      "contratos": 1,
+      "facturado": 343.6,
+      "cobrado": 343.6,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-20"
+      ]
+    },
+    {
+      "nombre": "LYNA NAYLET SIERRA RAMIREZ",
+      "contratos": 1,
+      "facturado": 799.43,
+      "cobrado": 799.43,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-12"
+      ]
+    },
+    {
+      "nombre": "VIRGINIA SAAVEDRA DIAZ",
+      "contratos": 1,
+      "facturado": 240.9,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-10"
+      ]
+    },
+    {
+      "nombre": "NERIO JOSE QUINTERO ANGULO",
+      "contratos": 1,
+      "facturado": 1155.0,
+      "cobrado": 1155.0,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-12-04"
+      ]
+    },
+    {
+      "nombre": "JOSE ALEXANDER BRICEÑO",
+      "contratos": 1,
+      "facturado": 567.6,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-02"
+      ]
+    },
+    {
+      "nombre": "JEISON JESUS BELTRAN MANRIQUE",
+      "contratos": 1,
+      "facturado": 347.82,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-01"
+      ]
+    },
+    {
+      "nombre": "MARCIAL RIVAS PEÑA",
+      "contratos": 1,
+      "facturado": 909.15,
+      "cobrado": 909.15,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-12-01"
+      ]
+    },
+    {
+      "nombre": "ADRIAN JOSE UZCATEGUI CHACON",
+      "contratos": 1,
+      "facturado": 2108.85,
+      "cobrado": 0.0,
+      "worker_type": "independiente_formal",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-11-30"
+      ]
+    },
+    {
+      "nombre": "GABRIEL EMILIO DAVILA DURAN",
+      "contratos": 1,
+      "facturado": 567.6,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-30"
+      ]
+    },
+    {
+      "nombre": "VLADIMIR SALAZAR VARGAS",
+      "contratos": 1,
+      "facturado": 577.5,
+      "cobrado": 577.5,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-30"
+      ]
+    },
+    {
+      "nombre": "NURY MARIA RAMIREZ GUERRERO",
+      "contratos": 1,
+      "facturado": 379.5,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-29"
+      ]
+    },
+    {
+      "nombre": "JEAN CARLOS PUENTES GUILLEN",
+      "contratos": 1,
+      "facturado": 287.1,
+      "cobrado": 0.0,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-11-25"
+      ]
+    },
+    {
+      "nombre": "CLAUDIA ALEXANDRA RAMIREZ GUILLEN",
+      "contratos": 1,
+      "facturado": 344.85,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-22"
+      ]
+    },
+    {
+      "nombre": "YOLY BEATRIZ PEÑA MENDEZ",
+      "contratos": 1,
+      "facturado": 363.12,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-21"
+      ]
+    },
+    {
+      "nombre": "EXITO UNO C.A, VINCE FEDERICO SULBARAN RODRIGUEZ",
+      "contratos": 1,
+      "facturado": 295.35,
+      "cobrado": 295.35,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-21"
+      ]
+    },
+    {
+      "nombre": "DAURIS YURIANI ESPINOZA CASTILLO",
+      "contratos": 1,
+      "facturado": 333.12,
+      "cobrado": 333.12,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-18"
+      ]
+    },
+    {
+      "nombre": "ANTHONY LEONARDO ALTUVE RUIZ",
+      "contratos": 1,
+      "facturado": 433.95,
+      "cobrado": 433.95,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-11-08"
+      ]
+    },
+    {
+      "nombre": "MARLEY ALEJANDRA DEL CASTILLO UZCATEGUI",
+      "contratos": 1,
+      "facturado": 495.0,
+      "cobrado": 495.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-10-31"
+      ]
+    },
+    {
+      "nombre": "YAMILE DEL CARMEN CERRADA MENDEZ",
+      "contratos": 1,
+      "facturado": 549.45,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-10-27"
+      ]
+    },
+    {
+      "nombre": "ZENAIDA MENDEZ DE ARAQUE",
+      "contratos": 1,
+      "facturado": 1039.44,
+      "cobrado": 0.0,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-10-26"
+      ]
+    },
+    {
+      "nombre": "WILSON RIVAS SANCHEZ",
+      "contratos": 1,
+      "facturado": 488.4,
+      "cobrado": 488.4,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-10-15"
+      ]
+    },
+    {
+      "nombre": "SOILI COROMOTO GONZALES HOYO",
+      "contratos": 1,
+      "facturado": 785.76,
+      "cobrado": 564.18,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-10-11"
+      ]
+    },
+    {
+      "nombre": "LIZ YOHANA ANDRADE RUIZ",
+      "contratos": 1,
+      "facturado": 542.85,
+      "cobrado": 492.95,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-10-09"
+      ]
+    },
+    {
+      "nombre": "NADIA ROMANIA PIRELA VERA",
+      "contratos": 1,
+      "facturado": 1097.25,
+      "cobrado": 0.0,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-10-04"
+      ]
+    },
+    {
+      "nombre": "CARLOS ALBERTO AGUIRRE MARIN",
+      "contratos": 1,
+      "facturado": 491.7,
+      "cobrado": 451.74,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-10-04"
+      ]
+    },
+    {
+      "nombre": "MARIA SALOME GOMEZ VEGA",
+      "contratos": 1,
+      "facturado": 371.25,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-09-30"
+      ]
+    },
+    {
+      "nombre": "JANETH MERCEDES PEÑA SULBARAN",
+      "contratos": 1,
+      "facturado": 498.3,
+      "cobrado": 498.3,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-09-26"
+      ]
+    },
+    {
+      "nombre": "JERIMON JESUS RIVAS DUGARTE",
+      "contratos": 1,
+      "facturado": 2341.35,
+      "cobrado": 846.77,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-09-13"
+      ]
+    },
+    {
+      "nombre": "OSWALDO VLADIMIR GONZALEZ CASTILLO",
+      "contratos": 1,
+      "facturado": 2341.35,
+      "cobrado": 666.97,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-09-13"
+      ]
+    },
+    {
+      "nombre": "KARIBIK DEL VALLE DAVILA MUÑOZ",
+      "contratos": 1,
+      "facturado": 288.72,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-09-12"
+      ]
+    },
+    {
+      "nombre": "YESENIA AVENDAÑO RAMIREZ",
+      "contratos": 1,
+      "facturado": 396.0,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-09-08"
+      ]
+    },
+    {
+      "nombre": "JOSE GREGORIO RAMIREZ RONDON",
+      "contratos": 1,
+      "facturado": 371.25,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-09-05"
+      ]
+    },
+    {
+      "nombre": "JOSE ALEJANDRO BELLO RODRIGUEZ",
+      "contratos": 1,
+      "facturado": 531.3,
+      "cobrado": 381.79,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-09-04"
+      ]
+    },
+    {
+      "nombre": "JOEL ENRIQUE ALVAREZ MENDEZ",
+      "contratos": 1,
+      "facturado": 288.72,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-09-02"
+      ]
+    },
+    {
+      "nombre": "JOHEINYS KATERINE DIAZ UZCATEGUI",
+      "contratos": 1,
+      "facturado": 273.9,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-09-01"
+      ]
+    },
+    {
+      "nombre": "ROSA VIRGINIA BAEZ DIAZ",
+      "contratos": 1,
+      "facturado": 2341.35,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-08-31"
+      ]
+    },
+    {
+      "nombre": "MILUZ COROMOTO ALVAREZ PEROZO",
+      "contratos": 1,
+      "facturado": 363.12,
+      "cobrado": 318.52,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-08-26"
+      ]
+    },
+    {
+      "nombre": "MARIA OMAIRA OVIEDO MONTILLA",
+      "contratos": 1,
+      "facturado": 577.5,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-08-16"
+      ]
+    },
+    {
+      "nombre": "ABDEL AZAEL TAFUR TAFUR",
+      "contratos": 1,
+      "facturado": 394.35,
+      "cobrado": 375.11,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-07-12"
+      ]
+    },
+    {
+      "nombre": "JAVIER ARMANDO MENDEZ DUARTE",
+      "contratos": 1,
+      "facturado": 862.28,
+      "cobrado": 0.0,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-07-10"
+      ]
+    },
+    {
+      "nombre": "ALBEIRO MONTAÑO UZCATEGUI",
+      "contratos": 1,
+      "facturado": 394.35,
+      "cobrado": 277.74,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-06-22"
+      ]
+    },
+    {
+      "nombre": "MARIA FERNANDA ROJAS ESQUERRE",
+      "contratos": 1,
+      "facturado": 3350.4,
+      "cobrado": 2927.19,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-06-22"
+      ]
+    },
+    {
+      "nombre": "ROBINSON REYES",
+      "contratos": 1,
+      "facturado": 661.68,
+      "cobrado": 538.84,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-06-22"
+      ]
+    },
+    {
+      "nombre": "ANDREA ESTEFANIA DAVILA ARIAS",
+      "contratos": 1,
+      "facturado": 435.12,
+      "cobrado": 304.33,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-06-21"
+      ]
+    },
+    {
+      "nombre": "JOHN DENNIS DUGARTE BALZA",
+      "contratos": 1,
+      "facturado": 767.52,
+      "cobrado": 726.22,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2024-06-19"
+      ]
+    },
+    {
+      "nombre": "LA VIUDA NEGRA",
+      "contratos": 1,
+      "facturado": 822.4,
+      "cobrado": 272.46,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-06-18"
+      ]
+    },
+    {
+      "nombre": "PEDRO GEOVANNY CHACON SANCHEZ",
+      "contratos": 1,
+      "facturado": 625.44,
+      "cobrado": 176.36,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-06-14"
+      ]
+    },
+    {
+      "nombre": "MORAYMA DEL CARMEN SOSA SOSA",
+      "contratos": 1,
+      "facturado": 460.32,
+      "cobrado": 460.32,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-06-11"
+      ]
+    },
+    {
+      "nombre": "LAUDY LORENA GONZALEZ SALAS",
+      "contratos": 1,
+      "facturado": 329.18,
+      "cobrado": 260.6,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-05-29"
+      ]
+    },
+    {
+      "nombre": "NIGDIO LEONARDO PIRELA DIAZ",
+      "contratos": 1,
+      "facturado": 1433.76,
+      "cobrado": 1433.76,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-05-29"
+      ]
+    },
+    {
+      "nombre": "XIOLISMAR TANETH CORDERO TUA",
+      "contratos": 1,
+      "facturado": 989.99,
+      "cobrado": 939.09,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-04-26"
+      ]
+    },
+    {
+      "nombre": "DIANA CAROLINA ROMERO BONILLA",
+      "contratos": 1,
+      "facturado": 627.0,
+      "cobrado": 0.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2024-02-13"
+      ]
+    },
+    {
+      "nombre": "EWDUAR ERICK GUTIERREZ FERNANDEZ",
+      "contratos": 1,
+      "facturado": 928.32,
+      "cobrado": 775.63,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2023-12-18"
+      ]
+    },
+    {
+      "nombre": "FRANCI CAROLINA REINOZA GALVIS",
+      "contratos": 1,
+      "facturado": 528.0,
+      "cobrado": 0.0,
+      "worker_type": "independiente",
+      "segmento": "Independiente",
+      "fechas": [
+        "2023-10-18"
+      ]
+    },
+    {
+      "nombre": "ISAURA ELENA RODRIGUEZ MORENO",
+      "contratos": 1,
+      "facturado": 397.8,
+      "cobrado": 397.8,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2023-08-25"
+      ]
+    },
+    {
+      "nombre": "GUSTAVO ADOLFO CARDOZO BRICEÑO",
+      "contratos": 1,
+      "facturado": 360.0,
+      "cobrado": 165.81,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2023-07-31"
+      ]
+    },
+    {
+      "nombre": "GUSTAVO ENRIQUE HERNANDEZ ZAMBRANO",
+      "contratos": 1,
+      "facturado": 425.52,
+      "cobrado": 212.63,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2023-06-09"
+      ]
+    },
+    {
+      "nombre": "JESUS ANTONIO LOBO VIELMA",
+      "contratos": 1,
+      "facturado": 629.39,
+      "cobrado": 581.89,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2023-01-18"
+      ]
+    },
+    {
+      "nombre": "FRANCY COROMOTO AVENDAÑO",
+      "contratos": 1,
+      "facturado": 510.0,
+      "cobrado": 233.79,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2022-12-13"
+      ]
+    },
+    {
+      "nombre": "NATHAN ALI BARILLAS RAMIREZ",
+      "contratos": 1,
+      "facturado": 2400.0,
+      "cobrado": 1900.0,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2022-11-24"
+      ]
+    },
+    {
+      "nombre": "ADHEMAR RAMON RANGEL VITTO",
+      "contratos": 1,
+      "facturado": 1506.0,
+      "cobrado": 1129.5,
+      "worker_type": "bajo_dependencia",
+      "segmento": "Dependientes",
+      "fechas": [
+        "2022-10-31"
+      ]
+    }
+  ],
+  "segment_stats": {
+    "Dependientes": {
+      "clientes": 397,
+      "contratos": 534,
+      "facturado": 462274.9899999997,
+      "cobrado": 239886.89000000007
+    },
+    "Independiente": {
+      "clientes": 136,
+      "contratos": 177,
+      "facturado": 198667.05,
+      "cobrado": 111687.65999999999
+    },
+    "Sector público": {
+      "clientes": 106,
+      "contratos": 142,
+      "facturado": 93532.24,
+      "cobrado": 41037.51000000001
+    },
+    "Sector privado": {
+      "clientes": 51,
+      "contratos": 63,
+      "facturado": 51023.88000000001,
+      "cobrado": 27485.779999999995
+    },
+    "No clasificado": {
+      "clientes": 2,
+      "contratos": 2,
+      "facturado": 1004.9200000000001,
+      "cobrado": 612.1700000000001
+    }
+  },
+  "last_200": {
+    "total": 200,
+    "by_segment": {
+      "Dependientes": 108,
+      "Sector público": 43,
+      "Independiente": 32,
+      "Sector privado": 16,
+      "No clasificado": 1
+    }
+  }
+}

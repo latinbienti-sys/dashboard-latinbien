@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test con DATA real</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body style="background:#f0f2f5;font-family:sans-serif;padding:20px;">
+    <div style="background:#213C83;color:white;padding:20px;border-radius:12px;margin-bottom:20px;">
+        <h1>TEST CON DATA REAL</h1>
+    </div>
+    <div id="info" style="background:white;padding:20px;border-radius:12px;margin-bottom:20px;"></div>
+    <div id="charts" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;"></div>
+    
+    <script>
+    // Attempt to load the same DATA from the main file via fetch
+    // Since this might not work with file://, let me just try
+    const info = document.getElementById('info');
+    info.innerHTML = '<p>Cargando DATA...</p>';
+    
+    fetch('index.html')
+        .then(r => r.text())
+        .then(html => {
+            // Extract DATA
+            const match = html.match(/const DATA = ({.*?});/s);
+            if (match) {
+                try {
+                    const DATA = JSON.parse(match[1]);
+                    info.innerHTML = `
+                        <h2>DATA cargada ✓</h2>
+                        <p>Clientes: ${DATA.clients.length}</p>
+                        <p>Facturado: $${DATA.total_facturado.toFixed(2)}</p>
+                        <p>Segmentos: ${Object.keys(DATA.segment_stats).join(', ')}</p>
+                        <p>VIP (5+ contratos): ${DATA.vip.length}</p>
+                    `;
+                } catch(e) {
+                    info.innerHTML = '<h2 style="color:red">Error parseando JSON: ' + e.message + '</h2>';
+                }
+            } else {
+                info.innerHTML = '<h2 style="color:red">No se encontró DATA en index.html</h2>';
+            }
+        })
+        .catch(err => {
+            info.innerHTML = '<h2 style="color:orange">No se pudo cargar index.html via fetch: ' + err.message + 
+                '<br>Esto es normal con file:// en algunos navegadores.</h2>';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test mínimo - LATINBIEN</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body style="background:#f0f2f5;font-family:sans-serif;padding:20px;">
+    <div style="background:#213C83;color:white;padding:20px;border-radius:12px;margin-bottom:20px;">
+        <h1>TEST - Análisis de Cartera</h1>
+        <p>Si ves esto, el HTML base funciona</p>
+    </div>
+    <div id="status" style="background:white;padding:20px;border-radius:12px;margin-bottom:20px;">
+        <h2>Verificaciones:</h2>
+        <ul id="checks"></ul>
+    </div>
+    <div style="background:white;padding:20px;border-radius:12px;">
+        <h2>Chart.js test</h2>
+        <canvas id="testChart" height="200"></canvas>
+    </div>
+    <script>
+        const ul = document.getElementById('checks');
+        function add(msg, ok) {
+            const li = document.createElement('li');
+            li.textContent = (ok ? '✓ ' : '✗ ') + msg;
+            li.style.color = ok ? 'green' : 'red';
+            ul.appendChild(li);
+        }
+        add('HTML básico cargado', true);
+        add('Chart.js disponible', typeof Chart !== 'undefined');
+        
+        try {
+            const ctx = document.getElementById('testChart');
+            new Chart(ctx, {
+                type: 'bar',
+                data: { labels: ['A','B','C'], datasets: [{ data: [1,2,3] }] },
+                options: { responsive: true }
+            });
+            add('Chart.js crea gráfico', true);
+        } catch(e) {
+            add('Chart.js error: ' + e.message, false);
+        }
+
+        // Check large data
+        add('localStorage disponible', typeof localStorage !== 'undefined');
+        add('fetch disponible', typeof fetch !== 'undefined');
+        
+        document.getElementById('status').innerHTML += 
+            '<p style="margin-top:10px;color:#666;font-size:12px;">Navigator: ' + navigator.userAgent.substring(0,80) + '</p>';
+    </script>
+</body>
+</html>
