@@ -309,8 +309,8 @@ html = f'''<!DOCTYPE html>
         .footer {{ text-align: center; padding: 18px; color: #aaa; font-size: 11px; }}
         .footer strong {{ color: var(--primary); }}
 
-        .tabs {{ display: flex; gap: 4px; margin-bottom: 20px; background: #e8eaf0; border-radius: 12px; padding: 4px; overflow-x: auto; }}
-        .tab-btn {{ padding: 9px 20px; border: none; background: transparent; border-radius: 10px; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; transition: all 0.2s; white-space: nowrap; }}
+        .tabs {{ display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; background: #e8eaf0; border-radius: 12px; padding: 4px; max-height: 600px; overflow-y: auto; }}
+        .tab-btn {{ padding: 9px 16px; border: none; background: transparent; border-radius: 10px; font-size: 12px; font-weight: 600; color: #666; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: left; }}
         .tab-btn:hover {{ color: var(--primary); }}
         .tab-btn.active {{ background: var(--white); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }}
         .tab-content {{ display: none; }}
