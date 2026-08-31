@@ -239,6 +239,7 @@ def fetch_data():
         'expedientes': expedientes,
         'ventas_motos': fetch_ventas_motos(sess),
         'pago_proveedor_moto': fetch_pagoProveedorMoto(sess),
+        'agosto_operativo': fetch_agosto_operativo(),
     }
 
 # ── Expedientes (Credit Lines Aprobadas) ─────────────────────────────────────
@@ -2003,6 +2004,122 @@ def fetch_facturacion_julio(sess):
         'colaboradores': colaboradores,
         'cancelaciones_count': len(cancelaciones),
         'cancelaciones_monto': round(sum(f['total'] for f in cancelaciones), 2),
+    }
+
+# ── Análisis Operativo Agosto 2026 (Google Sheets) ──────────────────────────
+def fetch_agosto_operativo():
+    """Descarga y procesa tareas de agosto 2026 desde Google Sheets (CSV).
+    Genera estadísticas de desempeño: % completadas, por prioridad, por estado."""
+    import csv as _csv
+    import io
+    try:
+        import urllib.request
+        url = 'https://docs.google.com/spreadsheets/d/14YvQPXEqqqnioc5chfAxWqpGe8jnXneYnHq82Vs2iR4/export?format=csv&gid=1881944744'
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        resp = urllib.request.urlopen(req, timeout=30)
+        raw = resp.read().decode('utf-8-sig')
+        reader = _csv.DictReader(io.StringIO(raw))
+        rows = list(reader)
+    except Exception as e:
+        print(f'Error descargando Google Sheets agosto operativo: {e}', file=sys.stderr)
+        return {'tareas': [], 'resumen': {}, 'por_prioridad': {}, 'por_estado': {}, 'total': 0}
+
+    if not rows:
+        return {'tareas': [], 'resumen': {}, 'por_prioridad': {}, 'por_estado': {}, 'total': 0}
+
+    total = len(rows)
+    completadas = 0
+    en_curso = 0
+    bloqueadas = 0
+    no_iniciadas = 0
+    por_prioridad = {}
+    por_estado = {}
+    tareas = []
+
+    for r in rows:
+        tarea = r.get('Tarea', '').strip()
+        prioridad = r.get('Prioridad', '').strip()
+        estado = r.get('Estado', '').strip()
+        propietario = r.get('Propietario', '').strip()
+        fecha_inicio = r.get('Fecha de inicio', '').strip()
+        fecha_fin = r.get('Fecha de finalización', '').strip()
+        notas = r.get('Notas', '').strip()
+        en_curso_pct = r.get('% en curso', '').strip().replace('%', '')
+        hito = r.get('Hito', '').strip()
+        distribuible = r.get('Distribuible', '').strip()
+
+        # Parse % en curso
+        try:
+            pct = float(en_curso_pct) if en_curso_pct else 0
+        except:
+            pct = 0
+
+        # Clasificar estado
+        estado_lower = estado.lower()
+        if 'completada' in estado_lower:
+            completadas += 1
+        elif 'en curso' in estado_lower:
+            en_curso += 1
+        elif 'bloqueada' in estado_lower:
+            bloqueadas += 1
+        elif 'no iniciada' in estado_lower:
+            no_iniciadas += 1
+
+        # Contar por prioridad
+        if prioridad:
+            if prioridad not in por_prioridad:
+                por_prioridad[prioridad] = {'total': 0, 'completadas': 0, 'en_curso': 0, 'bloqueadas': 0, 'no_iniciadas': 0}
+            por_prioridad[prioridad]['total'] += 1
+            if 'completada' in estado_lower:
+                por_prioridad[prioridad]['completadas'] += 1
+            elif 'en curso' in estado_lower:
+                por_prioridad[prioridad]['en_curso'] += 1
+            elif 'bloqueada' in estado_lower:
+                por_prioridad[prioridad]['bloqueadas'] += 1
+            elif 'no iniciada' in estado_lower:
+                por_prioridad[prioridad]['no_iniciadas'] += 1
+
+        # Contar por estado
+        if estado:
+            por_estado[estado] = por_estado.get(estado, 0) + 1
+
+        tareas.append({
+            'tarea': tarea,
+            'prioridad': prioridad,
+            'propietario': propietario,
+            'estado': estado,
+            'fecha_inicio': fecha_inicio,
+            'fecha_fin': fecha_fin,
+            'notas': notas,
+            'pct': pct,
+            'hito': hito,
+            'distribuible': distribuible,
+        })
+
+    # Calcular porcentajes de desempeño
+    resumen = {
+        'total': total,
+        'completadas': completadas,
+        'en_curso': en_curso,
+        'bloqueadas': bloqueadas,
+        'no_iniciadas': no_iniciadas,
+        'pct_completadas': round(completadas / total * 100, 1) if total else 0,
+        'pct_en_curso': round(en_curso / total * 100, 1) if total else 0,
+        'pct_bloqueadas': round(bloqueadas / total * 100, 1) if total else 0,
+        'pct_no_iniciadas': round(no_iniciadas / total * 100, 1) if total else 0,
+    }
+
+    # Agregar % a por_prioridad
+    for pri in por_prioridad:
+        p = por_prioridad[pri]
+        p['pct_completadas'] = round(p['completadas'] / p['total'] * 100, 1) if p['total'] else 0
+
+    return {
+        'tareas': tareas,
+        'resumen': resumen,
+        'por_prioridad': por_prioridad,
+        'por_estado': por_estado,
+        'total': total,
     }
 
 def build_html(data):

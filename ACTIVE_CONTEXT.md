@@ -92,3 +92,20 @@
 8. 🗂️ Expedientes
 9. ⚡ Pronto Pago (KPIs, flags oro/plata/bronce, Top 10)
 10. 📅 Ciclos
+11. 📋 Fact. Agosto
+12. 📊 Análisis Agosto (NUEVO)
+
+## New Feature: Análisis Operativo Agosto 2026 (Google Sheets)
+- Nueva pestaña "📊 Análisis Agosto" con datos desde Google Sheets (gid=1881944744)
+- Fuente: hoja de cálculo de tareas/proyectos de TI LATINBIEN - Agosto 2026
+- Datos: 42 tareas con prioridad, estado, propietario, fechas, notas y % avance
+- KPIs: Total tareas, Completadas, En Curso, Bloqueadas, No Iniciadas + porcentajes
+- Gráficos: 
+  - Doughnut: Distribución por estado (Completadas/En Curso/Bloqueadas/No Iniciadas)
+  - Bar stacked: Desempeño por prioridad
+  - Bar horizontal 100%: Relación porcentual por prioridad
+  - Line: Timeline de fechas de inicio
+- Tablas: Análisis detallado por prioridad con barra de progreso + Listado completo de tareas
+- En server.py: `fetch_agosto_operativo()` descarga CSV del Google Sheet
+- En generar_html.py: tab button, tab-content HTML, tabMap entry, JS rendering completo
+- Datos embebidos en DATA.agosto_operativo del JSON

@@ -386,6 +386,7 @@ html = f'''<!DOCTYPE html>
         <button class="tab-btn" onclick="switchTab('tabla')">📋 Listado</button>
         <button class="tab-btn" onclick="switchTab('factjulio')">📋 Fact. Julio</button>
         <button class="tab-btn" onclick="switchTab('factagosto')">📋 Fact. Agosto</button>
+        <button class="tab-btn" onclick="switchTab('ago_operativo')">📊 Análisis Agosto</button>
     </div>
 
     <!-- TAB 1: RESUMEN -->
@@ -937,6 +938,105 @@ html = f'''<!DOCTYPE html>
                     </thead>
                     <tbody id="tablaFactAgosto"></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: ANÁLISIS OPERATIVO AGOSTO 2026 -->
+    <div class="tab-content" id="tab-ago_operativo">
+        <!-- KPIs RESUMEN -->
+        <div class="kpi-row">
+            <div class="kpi-card success"><div class="number" id="aoTotal">—</div><div class="label">Total Tareas</div></div>
+            <div class="kpi-card accent"><div class="number" id="aoCompletadas">—</div><div class="label">Completadas</div></div>
+            <div class="kpi-card warning"><div class="number" id="aoEnCurso">—</div><div class="label">En Curso</div></div>
+            <div class="kpi-card danger"><div class="number" id="aoBloqueadas">—</div><div class="label">Bloqueadas</div></div>
+            <div class="kpi-card"><div class="number" id="aoNoIniciadas">—</div><div class="label">No Iniciadas</div></div>
+            <div class="kpi-card success"><div class="number" id="aoPctCompletadas">—</div><div class="label">% Completadas</div></div>
+            <div class="kpi-card accent"><div class="number" id="aoPctEnCurso">—</div><div class="label">% En Curso</div></div>
+            <div class="kpi-card danger"><div class="number" id="aoPctBloqueadas">—</div><div class="label">% Bloqueadas</div></div>
+        </div>
+
+        <!-- GRÁFICO DESEMPENO GENERAL -->
+        <div class="results-section">
+            <h3>📈 Informe de Desempeño — Agosto 2026</h3>
+            <div class="charts-row">
+                <div class="chart-card">
+                    <h3>🎯 Distribución por Estado</h3>
+                    <div class="chart-container"><canvas id="chartAoEstado"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <h3>⚡ Desempeño por Prioridad</h3>
+                    <div class="chart-container"><canvas id="chartAoPrioridad"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRÁFICO PORCENTUAL DE PRIORIDAD -->
+        <div class="results-section">
+            <h3>📊 Relación Porcentual por Prioridad</h3>
+            <div class="charts-row">
+                <div class="chart-card full-width">
+                    <h3>📋 % Completadas vs En Curso vs Bloqueadas por Prioridad</h3>
+                    <div class="chart-container"><canvas id="chartAoPriBar"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANÁLISIS OPERATIVO DETALLADO -->
+        <div class="results-section">
+            <h3>🔍 Análisis Operativo Detallado</h3>
+            <div style="margin:8px 0;font-size:13px;color:#666">Desglose de tareas por estado y prioridad con porcentajes de avance.</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Prioridad</th>
+                            <th class="text-right">Total</th>
+                            <th class="text-right">Completadas</th>
+                            <th class="text-right">% Comp.</th>
+                            <th class="text-right">En Curso</th>
+                            <th class="text-right">Bloqueadas</th>
+                            <th class="text-right">No Iniciadas</th>
+                            <th>Avance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaAoPrioridad"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- LISTADO DE TAREAS -->
+        <div class="results-section">
+            <h3>📋 Listado de Tareas — Agosto 2026</h3>
+            <div style="margin:8px 0;font-size:13px;color:#666">Todas las tareas del mes con su estado, prioridad y porcentaje de avance.</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tarea</th>
+                            <th>Prioridad</th>
+                            <th>Propietario</th>
+                            <th>Estado</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th class="text-right">Avance</th>
+                            <th>Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaAoTareas"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- GRÁFICO LÍNEA DE TIEMPO -->
+        <div class="results-section">
+            <h3>📅 Línea de Tiempo — Inicios y Finalizaciones</h3>
+            <div class="charts-row">
+                <div class="chart-card full-width">
+                    <h3>📆 Tareas por Fecha de Inicio</h3>
+                    <div class="chart-container"><canvas id="chartAoTimeline"></canvas></div>
+                </div>
             </div>
         </div>
     </div>
@@ -1882,7 +1982,7 @@ function renderTable() {{
 function switchTab(tab) {{
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', factagosto:'Fact. Agosto', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza', ventas_motos:'Ventas Motos', pago_proveedor:'Pago Proveedor'}};
+    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', factagosto:'Fact. Agosto', ago_operativo:'Análisis Agosto', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza', ventas_motos:'Ventas Motos', pago_proveedor:'Pago Proveedor'}};
     const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes(tabMap[tab]));
     if (btn) btn.classList.add('active');
     document.getElementById('tab-'+tab).classList.add('active');
@@ -3111,6 +3211,230 @@ try {{
         }}).join('');
     }}
 }} catch(e) {{ console.error('Fact Agosto error:', e); }}
+
+// ── Análisis Operativo Agosto 2026 (Google Sheets) ──
+try {{
+    var ao = DATA.agosto_operativo || {{}};
+    var aoRes = ao.resumen || {{}};
+    var aoPri = ao.por_prioridad || {{}};
+    var aoEst = ao.por_estado || {{}};
+    var aoTareas = ao.tareas || [];
+
+    // KPIs
+    document.getElementById('aoTotal').textContent = (aoRes.total||0).toLocaleString();
+    document.getElementById('aoCompletadas').textContent = (aoRes.completadas||0).toLocaleString();
+    document.getElementById('aoEnCurso').textContent = (aoRes.en_curso||0).toLocaleString();
+    document.getElementById('aoBloqueadas').textContent = (aoRes.bloqueadas||0).toLocaleString();
+    document.getElementById('aoNoIniciadas').textContent = (aoRes.no_iniciadas||0).toLocaleString();
+    document.getElementById('aoPctCompletadas').textContent = (aoRes.pct_completadas||0) + '%';
+    document.getElementById('aoPctEnCurso').textContent = (aoRes.pct_en_curso||0) + '%';
+    document.getElementById('aoPctBloqueadas').textContent = (aoRes.pct_bloqueadas||0) + '%';
+
+    // ── Gráfico: Distribución por Estado (Doughnut) ──
+    var ctxEstado = document.getElementById('chartAoEstado');
+    if (ctxEstado && typeof Chart !== 'undefined') {{
+        new Chart(ctxEstado, {{
+            type: 'doughnut',
+            data: {{
+                labels: ['Completadas', 'En Curso', 'Bloqueadas', 'No Iniciadas'],
+                datasets: [{{
+                    data: [aoRes.completadas||0, aoRes.en_curso||0, aoRes.bloqueadas||0, aoRes.no_iniciadas||0],
+                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444', '#6b7280'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }}]
+            }},
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {{
+                    legend: {{ position: 'bottom', labels: {{ font: {{ size: 12 }} }} }},
+                    datalabels: {{
+                        color: '#fff',
+                        font: {{ weight: 'bold', size: 14 }},
+                        formatter: function(v, ctx) {{
+                            var total = ctx.dataset.data.reduce(function(a,b) {{ return a+b; }}, 0);
+                            var pct = total > 0 ? (v/total*100).toFixed(1) : 0;
+                            return v > 0 ? pct + '%' : '';
+                        }}
+                    }}
+                }}
+            }}
+        }});
+    }}
+
+    // ── Gráfico: Desempeño por Prioridad (Bar) ──
+    var priLabels = Object.keys(aoPri);
+    var priComp = priLabels.map(function(p) {{ return aoPri[p].completadas || 0; }});
+    var priCurso = priLabels.map(function(p) {{ return aoPri[p].en_curso || 0; }});
+    var priBloq = priLabels.map(function(p) {{ return aoPri[p].bloqueadas || 0; }});
+
+    var ctxPri = document.getElementById('chartAoPrioridad');
+    if (ctxPri && typeof Chart !== 'undefined' && priLabels.length) {{
+        new Chart(ctxPri, {{
+            type: 'bar',
+            data: {{
+                labels: priLabels,
+                datasets: [
+                    {{ label: 'Completadas', data: priComp, backgroundColor: '#10b981' }},
+                    {{ label: 'En Curso', data: priCurso, backgroundColor: '#f59e0b' }},
+                    {{ label: 'Bloqueadas', data: priBloq, backgroundColor: '#ef4444' }}
+                ]
+            }},
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {{
+                    x: {{ stacked: true }},
+                    y: {{ stacked: true, beginAtZero: true }}
+                }},
+                plugins: {{
+                    legend: {{ position: 'bottom' }},
+                    datalabels: {{ display: false }}
+                }}
+            }}
+        }});
+    }}
+
+    // ── Gráfico: Relación Porcentual por Prioridad (100% Bar) ──
+    var ctxPriBar = document.getElementById('chartAoPriBar');
+    if (ctxPriBar && typeof Chart !== 'undefined' && priLabels.length) {{
+        var priTotal = priLabels.map(function(p) {{ return aoPri[p].total || 1; }});
+        var priPctComp = priLabels.map(function(p, i) {{ return Math.round((aoPri[p].completadas||0) / priTotal[i] * 100); }});
+        var priPctCurso = priLabels.map(function(p, i) {{ return Math.round((aoPri[p].en_curso||0) / priTotal[i] * 100); }});
+        var priPctBloq = priLabels.map(function(p, i) {{ return Math.round((aoPri[p].bloqueadas||0) / priTotal[i] * 100); }});
+        var priPctNo = priLabels.map(function(p, i) {{ return Math.round((aoPri[p].no_iniciadas||0) / priTotal[i] * 100); }});
+
+        new Chart(ctxPriBar, {{
+            type: 'bar',
+            data: {{
+                labels: priLabels,
+                datasets: [
+                    {{ label: '% Completadas', data: priPctComp, backgroundColor: '#10b981' }},
+                    {{ label: '% En Curso', data: priPctCurso, backgroundColor: '#f59e0b' }},
+                    {{ label: '% Bloqueadas', data: priPctBloq, backgroundColor: '#ef4444' }},
+                    {{ label: '% No Iniciadas', data: priPctNo, backgroundColor: '#6b7280' }}
+                ]
+            }},
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {{
+                    x: {{ stacked: true, max: 100, ticks: {{ callback: function(v) {{ return v + '%'; }} }} }},
+                    y: {{ stacked: true }}
+                }},
+                plugins: {{
+                    legend: {{ position: 'bottom' }},
+                    datalabels: {{
+                        color: '#fff',
+                        font: {{ size: 10, weight: 'bold' }},
+                        formatter: function(v) {{ return v > 5 ? v + '%' : ''; }}
+                    }}
+                }}
+            }}
+        }});
+    }}
+
+    // ── Tabla: Análisis por Prioridad ──
+    var aoPriBody = document.getElementById('tablaAoPrioridad');
+    if (aoPriBody && priLabels.length) {{
+        aoPriBody.innerHTML = priLabels.map(function(p) {{
+            var d = aoPri[p];
+            var pctBar = d.pct_completadas || 0;
+            var barColor = pctBar >= 80 ? '#10b981' : (pctBar >= 50 ? '#f59e0b' : '#ef4444');
+            return '<tr>' +
+                '<td><strong>' + p + '</strong></td>' +
+                '<td class="text-right">' + (d.total||0) + '</td>' +
+                '<td class="text-right" style="color:#10b981;font-weight:600">' + (d.completadas||0) + '</td>' +
+                '<td class="text-right" style="font-weight:700">' + (d.pct_completadas||0) + '%</td>' +
+                '<td class="text-right" style="color:#f59e0b">' + (d.en_curso||0) + '</td>' +
+                '<td class="text-right" style="color:#ef4444">' + (d.bloqueadas||0) + '</td>' +
+                '<td class="text-right" style="color:#6b7280">' + (d.no_iniciadas||0) + '</td>' +
+                '<td style="width:120px"><div style="background:#e5e7eb;border-radius:4px;height:18px;overflow:hidden">' +
+                    '<div style="background:' + barColor + ';width:' + pctBar + '%;height:100%;border-radius:4px;text-align:center;color:#fff;font-size:11px;line-height:18px;font-weight:600">' + pctBar + '%</div></div></td>' +
+                '</tr>';
+        }}).join('');
+    }}
+
+    // ── Tabla: Listado de Tareas ──
+    var aoTBody = document.getElementById('tablaAoTareas');
+    if (aoTBody && aoTareas.length) {{
+        aoTBody.innerHTML = aoTareas.map(function(t, i) {{
+            var stCls = t.estado.toLowerCase().indexOf('completada') >= 0 ? 'status-entregado' :
+                        (t.estado.toLowerCase().indexOf('bloqueada') >= 0 ? 'status-cancelado' :
+                        (t.estado.toLowerCase().indexOf('en curso') >= 0 ? 'status-aprobado' : 'status-congelado'));
+            var priCls = t.prioridad.indexOf('Inmediata') >= 0 ? 'background:#fef2f2;color:#991b1b' :
+                         (t.prioridad.indexOf('Media') >= 0 ? 'background:#fffbeb;color:#92400e' :
+                         'background:#f0fdf4;color:#166534');
+            var barW = t.pct || 0;
+            var barC = barW >= 100 ? '#10b981' : (barW >= 50 ? '#f59e0b' : '#6b7280');
+            return '<tr>' +
+                '<td style="font-size:12px;color:#888">' + (i+1) + '</td>' +
+                '<td><strong style="font-size:12px">' + (t.tarea||'') + '</strong></td>' +
+                '<td><span style="padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;' + priCls + '">' + (t.prioridad||'') + '</span></td>' +
+                '<td style="font-size:12px">' + (t.propietario||'') + '</td>' +
+                '<td><span class="' + stCls + '">' + (t.estado||'') + '</span></td>' +
+                '<td style="font-size:11px;color:#666">' + (t.fecha_inicio||'') + '</td>' +
+                '<td style="font-size:11px;color:#666">' + (t.fecha_fin||'') + '</td>' +
+                '<td style="width:100px"><div style="background:#e5e7eb;border-radius:4px;height:16px;overflow:hidden">' +
+                    '<div style="background:' + barC + ';width:' + barW + '%;height:100%;border-radius:4px;text-align:center;color:#fff;font-size:10px;line-height:16px;font-weight:600">' + barW + '%</div></div></td>' +
+                '<td style="font-size:11px;color:#666;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="' + (t.notas||'').replace(/"/g, '&quot;') + '">' + (t.notas||'').substring(0,60) + '</td>' +
+                '</tr>';
+        }}).join('');
+    }}
+
+    // ── Gráfico: Timeline de Inicios ──
+    var fechaMap = {{}};
+    aoTareas.forEach(function(t) {{
+        var f = t.fecha_inicio;
+        if (f) {{
+            // Extraer solo el mes/día si está en formato DD/MM/YYYY
+            var parts = f.split('/');
+            var key = parts.length >= 3 ? parts[0] + '/' + parts[1] : f;
+            fechaMap[key] = (fechaMap[key] || 0) + 1;
+        }}
+    }});
+    var fechaLabels = Object.keys(fechaMap).sort();
+    var fechaVals = fechaLabels.map(function(k) {{ return fechaMap[k]; }});
+
+    var ctxTimeline = document.getElementById('chartAoTimeline');
+    if (ctxTimeline && typeof Chart !== 'undefined' && fechaLabels.length) {{
+        new Chart(ctxTimeline, {{
+            type: 'line',
+            data: {{
+                labels: fechaLabels,
+                datasets: [{{
+                    label: 'Tareas iniciadas',
+                    data: fechaVals,
+                    borderColor: '#213C83',
+                    backgroundColor: 'rgba(33,60,131,0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointBackgroundColor: '#F98B10',
+                    pointRadius: 5,
+                    borderWidth: 2
+                }}]
+            }},
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {{
+                    y: {{ beginAtZero: true, ticks: {{ stepSize: 1 }} }}
+                }},
+                plugins: {{
+                    legend: {{ display: false }},
+                    datalabels: {{
+                        color: '#213C83',
+                        font: {{ weight: 'bold', size: 12 }},
+                        anchor: 'end',
+                        align: 'top'
+                    }}
+                }}
+            }}
+        }});
+    }}
+}} catch(e) {{ console.error('Análisis Operativo Agosto error:', e); }}
 
 renderTable();
 switchTab('gestion');
