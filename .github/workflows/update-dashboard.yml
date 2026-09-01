@@ -2,8 +2,8 @@ name: Actualizar Dashboard
 
 on:
   schedule:
-    # Cada hora (minuto 0)
-    - cron: '0 * * * *'
+    # Cada 3 horas (minuto 0)
+    - cron: '0 */3 * * *'
   workflow_dispatch:  # También se puede ejecutar manualmente desde GitHub
 
 permissions:
