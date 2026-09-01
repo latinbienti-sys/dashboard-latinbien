@@ -385,8 +385,6 @@ html = f'''<!DOCTYPE html>
         <button class="tab-btn" onclick="switchTab('temporal')">⏱ Temporal VIP</button>
         <button class="tab-btn" onclick="switchTab('tabla')">📋 Listado</button>
         <button class="tab-btn" onclick="switchTab('factjulio')">📋 Fact. Julio</button>
-        <button class="tab-btn" onclick="switchTab('factagosto')">📋 Fact. Agosto</button>
-        <button class="tab-btn" onclick="switchTab('ago_operativo')">📊 Análisis Agosto</button>
     </div>
 
     <!-- TAB 1: RESUMEN -->
@@ -1982,7 +1980,24 @@ function renderTable() {{
 function switchTab(tab) {{
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', factagosto:'Fact. Agosto', ago_operativo:'Análisis Agosto', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza', ventas_motos:'Ventas Motos', pago_proveedor:'Pago Proveedor'}};
+    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza', ventas_motos:'Ventas Motos', pago_proveedor:'Pago Proveedor'}};
+
+    // Arreglo de opciones del menú de navegación
+    const menuItems = [
+        {{ id: 'gestion', label: 'Gestión Cobranza', icon: '📋' }},
+        {{ id: 'expedientes', label: 'Expedientes', icon: '📂' }},
+        {{ id: 'prontopago', label: 'Pronto Pago', icon: '⚡' }},
+        {{ id: 'ventas_motos', label: 'Ventas Motos', icon: '🏍️' }},
+        {{ id: 'pago_proveedor', label: 'Pago Proveedor', icon: '💰' }},
+        {{ id: 'resumen', label: 'Resumen', icon: '📊' }},
+        {{ id: 'pagos', label: 'Plan de Pagos', icon: '💳' }},
+        {{ id: 'ciclos', label: 'Ciclos', icon: '📅' }},
+        {{ id: 'montos', label: 'Montos', icon: '💰' }},
+        {{ id: 'segmentos', label: 'Segmentos', icon: '👥' }},
+        {{ id: 'temporal', label: 'Temporal VIP', icon: '⏱️' }},
+        {{ id: 'tabla', label: 'Listado', icon: '📋' }},
+        {{ id: 'factjulio', label: 'Fact. Julio', icon: '📑' }},
+    ];
     const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes(tabMap[tab]));
     if (btn) btn.classList.add('active');
     document.getElementById('tab-'+tab).classList.add('active');
