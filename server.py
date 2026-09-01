@@ -392,165 +392,106 @@ def fetch_expedientes(sess):
 
 # ── Pago Proveedor MOTO CITY PRO ─────────────────────────
 def fetch_pagoProveedorMoto(sess):
-    """Pago a proveedor MOTO CITY PRO por Pedido de compra P01382.
-    40% inicial al momento de facturación + 60% en 8 cuotas quincenales."""
-    from datetime import date, timedelta
-    proveedor = 'MOTO CITY PRO, C.A.'
-    orden_compra = 'P01382'
-
-    # Buscar la orden de compra P01382
+    """Pago a proveedor MOTO CITY PRO: 40% inicial + 60% en 8 cuotas quincenales."""
+    from datetime import date
+    import calendar
+    proveedor = "MOTO CITY PRO, C.A."
     purchase = json_execute(sess, 'purchase.order', 'search_read', [
-        [['name', 'ilike', 'P01382']],
+        [['partner_id.name', 'ilike', 'MOTO CITY PRO'], ['state', '=', 'purchase']],
         ['id', 'name', 'partner_ref', 'date_order', 'amount_total', 'partner_id', 'state', 'order_line']
     ])
-
     if not purchase:
-        return {'items': [], 'proveedor': proveedor, 'orden_compra': orden_compra,
-                'total_ordenes': 0, 'total_pagoInicial': 0, 'total_financiado': 0}
-
-    p = purchase[0]
-    pid = p.get('partner_id')
-    proveedor_nombre = pid[1] if isinstance(pid, list) and len(pid) > 1 else proveedor
-    fecha_compra = str(p.get('date_order') or '')[:10]
-    monto_total_compra = float(p.get('amount_total', 0) or 0)
-
-    # Obtener líneas de la compra para separar moto vs gasto
-    line_ids = p.get('order_line', [])
-    precio_moto = 0
-    gasto_admin = 0
-    modelo = ''
-    if line_ids:
-        lines = json_execute(sess, 'purchase.order.line', 'read',
-                             [line_ids, ['product_id', 'price_unit', 'price_subtotal', 'name', 'product_qty']])
-        for l in lines:
-            pname = l.get('name', '')
-            if 'Gasto Administrativo' in pname or 'gasto' in pname.lower():
-                gasto_admin += float(l.get('price_subtotal', 0) or 0)
-            else:
-                precio_moto = float(l.get('price_unit', 0) or 0)
-                prod = l.get('product_id')
-                modelo = prod[1] if isinstance(prod, list) and len(prod) > 1 else pname
-
-    # Si no hay precio_moto, usar el total de la compra
-    if precio_moto <= 0:
-        precio_moto = monto_total_compra
-
-    inicial_40 = round(precio_moto * 0.40, 2)
-    restante_60 = round(precio_moto * 0.60, 2)
-    cuota_quincenal = round(restante_60 / 8, 2)
-
-    # Buscar ciclo del cliente y orden de venta asociada (via partner_ref)
-    partner_id = pid[0] if isinstance(pid, list) and len(pid) > 1 else 0
-    ciclo_cliente = '03-18'
-    cliente_venta = 'Sin asignar'
-    orden_venta = p.get('partner_ref', '')  # LB-ORDEN-XXXXX
-
-    # Buscar la orden de venta por nombre
-    if orden_venta:
-        try:
-            so = json_execute(sess, 'sale.order', 'search_read', [
-                [['name', '=', orden_venta]], ['id', 'name', 'partner_id']
-            ])
-            if so:
-                so_pid = so[0].get('partner_id')
-                cliente_venta = so_pid[1] if isinstance(so_pid, list) and len(so_pid) > 1 else 'Sin asignar'
-        except:
-            pass
-
-    # Determinar ciclo desde las cuotas del cliente de la venta
-    if cliente_venta != 'Sin asignar':
-        try:
-            # Buscar partner_id del cliente de venta
-            vp = json_execute(sess, 'res.partner', 'search_read', [
-                [['name', '=', cliente_venta]], ['id']
-            ])
-            if vp:
-                vpid = vp[0]['id']
-                inst_ids = json_execute(sess, 'account.move', 'search', [
-                    [['partner_id', '=', vpid], ['state', '=', 'posted'],
-                     ['move_type', '=', 'out_invoice']]
-                ])
-                for iid in inst_ids[:3]:
-                    moves = json_execute(sess, 'account.move.line', 'search_read', [
-                        [['move_id', '=', iid]], ['payment_date']
-                    ])
-                    for m in moves:
-                        pd = str(m.get('payment_date', ''))[:10]
-                        if pd:
-                            try:
-                                dia = int(pd.split('-')[2])
-                                if 10 <= dia <= 25:
-                                    ciclo_cliente = '10-25'
-                                    break
-                            except:
-                                pass
-        except:
-            pass
-
-    # Generar 8 cuotas quincenales según ciclo del cliente
-    # Opción A (03-18): días 5 y 20 de cada mes
-    # Opción B (10-25): días 12 y 27 de cada mes
-    if ciclo_cliente == '03-18':
-        dias_pago = [5, 20]  # Opción A
-    else:
-        dias_pago = [12, 27]  # Opción B
-    
-    pagos = []
-    mes_actual = 9  # Septiembre 2026
-    anio_actual = 2026
-    for cuota_num in range(1, 9):
-        dia_pago = dias_pago[(cuota_num - 1) % 2]
-        try:
-            fecha_pago = date(anio_actual, mes_actual, dia_pago)
-        except:
-            # Si el día no existe en el mes (ej: 30 en febrero), usar último día
-            import calendar
-            ultimo_dia = calendar.monthrange(anio_actual, mes_actual)[1]
-            fecha_pago = date(anio_actual, mes_actual, min(dia_pago, ultimo_dia))
-        
-        pagos.append({
-            'cuota': cuota_num,
-            'fecha_pago': str(fecha_pago)[:10],
-            'monto': cuota_quincenal,
-            'estado': 'pendiente',
+        return {"items": [], "proveedor": proveedor, "orden_compra": "", "total_ordenes": 0, "total_pagoInicial": 0, "total_financiado": 0}
+    items = []
+    for p in purchase:
+        pid = p.get('partner_id')
+        proveedor_nombre = pid[1] if isinstance(pid, list) and len(pid) > 1 else proveedor
+        fecha_compra = str(p.get('date_order') or '')[:10]
+        monto_total_compra = float(p.get('amount_total', 0) or 0)
+        orden_compra = p.get('name', '')
+        orden_venta = p.get('partner_ref', '')
+        cliente_venta = 'Sin asignar'
+        if orden_venta:
+            try:
+                so = json_execute(sess, 'sale.order', 'search_read', [['name', '=', orden_venta]], ['id', 'partner_id'])
+                if so:
+                    so_pid = so[0].get('partner_id')
+                    cliente_venta = so_pid[1] if isinstance(so_pid, list) and len(so_pid) > 1 else 'Sin asignar'
+            except:
+                pass
+        line_ids = p.get('order_line', [])
+        precio_moto = 0
+        gasto_admin = 0
+        modelo = ''
+        if line_ids:
+            lines = json_execute(sess, 'purchase.order.line', 'read', [line_ids, ['product_id', 'price_unit', 'price_subtotal', 'name']])
+            for l in lines:
+                pname = l.get('name', '')
+                if 'Gasto Administrativo' in pname or 'gasto' in pname.lower():
+                    gasto_admin += float(l.get('price_subtotal', 0) or 0)
+                else:
+                    precio_moto = float(l.get('price_unit', 0) or 0)
+                    prod = l.get('product_id')
+                    modelo = prod[1] if isinstance(prod, list) and len(prod) > 1 else pname
+        if precio_moto <= 0:
+            precio_moto = monto_total_compra
+        inicial_40 = round(precio_moto * 0.40, 2)
+        restante_60 = round(precio_moto * 0.60, 2)
+        cuota_quincenal = round(restante_60 / 8, 2)
+        ciclo_cliente = '03-18'
+        if cliente_venta != 'Sin asignar':
+            try:
+                vp = json_execute(sess, 'res.partner', 'search_read', [['name', '=', cliente_venta]], ['id'])
+                if vp:
+                    vpid = vp[0]['id']
+                    inst_ids = json_execute(sess, 'account.move', 'search', [['partner_id', '=', vpid], ['state', '=', 'posted'], ['move_type', '=', 'out_invoice']])
+                    for iid in inst_ids[:3]:
+                        moves = json_execute(sess, 'account.move.line', 'search_read', [['move_id', '=', iid]], ['payment_date'])
+                        for m in moves:
+                            pd = str(m.get('payment_date', ''))[:10]
+                            if pd:
+                                try:
+                                    dia = int(pd.split('-')[2])
+                                    if 10 <= dia <= 25:
+                                        ciclo_cliente = '10-25'
+                                        break
+                                except: pass
+            except: pass
+        if ciclo_cliente == '03-18':
+            dias_pago = [5, 20]
+        else:
+            dias_pago = [12, 27]
+        pagos = []
+        mes_actual = 9
+        anio_actual = 2026
+        for cuota_num in range(1, 9):
+            dia_pago = dias_pago[(cuota_num - 1) % 2]
+            try:
+                fecha_pago = date(anio_actual, mes_actual, dia_pago)
+            except:
+                ultimo_dia = calendar.monthrange(anio_actual, mes_actual)[1]
+                fecha_pago = date(anio_actual, mes_actual, min(dia_pago, ultimo_dia))
+            pagos.append({'cuota': cuota_num, 'fecha_pago': str(fecha_pago)[:10], 'monto': cuota_quincenal, 'estado': 'pendiente'})
+            if cuota_num % 2 == 0:
+                mes_actual += 1
+                if mes_actual > 12: mes_actual = 1; anio_actual += 1
+        items.append({
+            'purchase_order_id': p['id'], 'orden_compra': orden_compra, 'orden_venta': orden_venta,
+            'proveedor': proveedor_nombre, 'cliente': cliente_venta, 'modelo': modelo,
+            'fecha_compra': fecha_compra, 'monto_total_compra': round(monto_total_compra, 2),
+            'precio_moto': round(precio_moto, 2), 'gasto_admin': round(gasto_admin, 2),
+            'inicial_40': inicial_40, 'restante_60': restante_60, 'cuota_quincenal': cuota_quincenal,
+            'ciclo': ciclo_cliente, 'opcion': 'A' if ciclo_cliente == '03-18' else 'B', 'pagos': pagos,
         })
-        
-        # Avanzar al siguiente mes después de cada par de cuotas
-        if cuota_num % 2 == 0:
-            mes_actual += 1
-            if mes_actual > 12:
-                mes_actual = 1
-                anio_actual += 1
-
-    items = [{
-        'purchase_order_id': p['id'],
-        'orden_compra': orden_compra,
-        'orden_venta': orden_venta,
-        'proveedor': proveedor_nombre,
-        'cliente': cliente_venta,
-        'modelo': modelo,
-        'fecha_compra': fecha_compra,
-        'monto_total_compra': round(monto_total_compra, 2),
-        'precio_moto': round(precio_moto, 2),
-        'gasto_admin': round(gasto_admin, 2),
-        'inicial_40': inicial_40,
-        'restante_60': restante_60,
-        'cuota_quincenal': cuota_quincenal,
-        'ciclo': ciclo_cliente,
-        'opcion': 'A' if ciclo_cliente == '03-18' else 'B',
-        'pagos': pagos,
-    }]
-
     return {
-        'items': items,
-        'proveedor': proveedor,
-        'orden_compra': orden_compra,
+        'items': items, 'proveedor': proveedor,
+        'orden_compra': ', '.join(it['orden_compra'] for it in items),
         'total_ordenes': len(items),
-        'total_pagoInicial': inicial_40,
-        'total_financiado': restante_60,
+        'total_pagoInicial': round(sum(it['inicial_40'] for it in items), 2),
+        'total_financiado': round(sum(it['restante_60'] for it in items), 2),
     }
 
-# ── Plan de Pagos (Cuotas Fraccionadas) ──────────────────────────
+
 def fetch_payment_plan(sess):
     """Obtiene resumen del plan de pagos fraccionado desde invoice.installment.line.
     Usa JSON-RPC para evitar bug de website_sale_wishlist."""
