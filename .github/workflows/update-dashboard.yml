@@ -4,10 +4,10 @@ on:
   schedule:
     # Cada 3 horas (minuto 0)
     - cron: '0 */3 * * *'
-  workflow_dispatch:  # También se puede ejecutar manualmente desde GitHub
+  workflow_dispatch:
 
 permissions:
-  contents: write  # Necesario para hacer commit y push del index.html generado
+  contents: write
 
 jobs:
   generate:
@@ -36,16 +36,17 @@ jobs:
         run: |
           python server.py --generate
 
-      - name: Commit y push
+      - name: Configurar git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit y push
+        run: |
           git add index.html
           if git diff --cached --quiet; then
-            echo "No hay cambios en index.html, omitiendo commit"
+            echo "No hay cambios en index.html"
           else
-            git commit -m "Dashboard actualizado $(date -u '+%Y-%m-%d %H:00 UTC')"
-            git push
+            git commit -m "Dashboard actualizado $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/latinbienti-sys/profesional.git HEAD:main
           fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
