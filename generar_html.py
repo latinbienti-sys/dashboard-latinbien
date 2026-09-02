@@ -309,8 +309,12 @@ html = f'''<!DOCTYPE html>
         .footer {{ text-align: center; padding: 18px; color: #aaa; font-size: 11px; }}
         .footer strong {{ color: var(--primary); }}
 
-        .tabs {{ display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; background: #e8eaf0; border-radius: 12px; padding: 4px; max-height: 600px; overflow-y: auto; }}
-        .tab-btn {{ padding: 9px 16px; border: none; background: transparent; border-radius: 10px; font-size: 12px; font-weight: 600; color: #666; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: left; }}
+        .tabs {{ display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; background: #e8eaf0; border-radius: 14px; padding: 8px; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }}
+        .tab-btn {{ padding: 10px 18px; border: none; background: transparent; border-radius: 10px; font-size: 12.5px; font-weight: 600; color: #555; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; text-align: center; position: relative; }}
+        .tab-btn:hover {{ color: var(--primary); background: rgba(255,255,255,0.5); }}
+        .tab-btn.active {{ background: var(--white); color: var(--primary); box-shadow: 0 3px 10px rgba(33,60,131,0.15); }}
+        .tab-btn.active::after {{ content: ''; position: absolute; bottom: -2px; left: 20%; width: 60%; height: 3px; background: var(--accent); border-radius: 3px; }}
+        @media (max-width: 900px) {{ .tabs {{ flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }} .tab-btn {{ flex: 0 0 auto; }} }}
         .tab-btn:hover {{ color: var(--primary); }}
         .tab-btn.active {{ background: var(--white); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }}
         .tab-content {{ display: none; }}
@@ -1085,6 +1089,25 @@ html = f'''<!DOCTYPE html>
                         </tr>
                     </thead>
                     <tbody id="tablaExpedientes"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MEDIO DE CONOCIMIENTO -->
+        <div class="results-section">
+            <h3>📣 ¿Por qué medio conoció a Latinbien C.A.?</h3>
+            <p style="color:#666;margin:0 0 12px">Distribución de clientes según el medio por el cual conocieron la empresa.</p>
+            <div class="charts-row">
+                <div class="chart-card full-width">
+                    <div class="chart-container"><canvas id="chartMedios"></canvas></div>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr><th>Medio</th><th class="text-right">Cantidad</th><th class="text-right">% del Total</th></tr>
+                    </thead>
+                    <tbody id="tablaMedios"></tbody>
                 </table>
             </div>
         </div>
@@ -2785,6 +2808,44 @@ try {{
         }} catch(e) {{ console.error('Expedientes chart error:', e); }}
     }}
 }} catch(e) {{ console.error('Expedientes error:', e); }}
+
+// ── Medio de Conocimiento ──
+try {{
+    var expData = DATA.expedientes || {{}};
+    var medios = expData.medios_conocimiento || {{}};
+    var medioKeys = Object.keys(medios);
+    if (medioKeys.length > 0) {{
+        var labels = medioKeys;
+        var values = medioKeys.map(function(k) {{ return medios[k]; }});
+        var total = values.reduce(function(a, b) {{ return a + b; }}, 0);
+        var colors = ['#213C83','#F98B10','#10b981','#ef4444','#8b5cf6','#06b6d4','#f59e0b','#ec4899','#14b8a6'];
+        safeChart('chartMedios', {{
+            type: 'bar',
+            data: {{
+                labels: labels,
+                datasets: [{{ label: 'Clientes', data: values, backgroundColor: colors.slice(0, labels.length), borderWidth: 0, borderRadius: 4 }}]
+            }},
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {{ legend: {{ display: false }} }},
+                scales: {{
+                    x: {{ beginAtZero: true, ticks: {{ precision: 0 }}, grid: {{ color: 'rgba(0,0,0,0.05)' }} }},
+                    y: {{ grid: {{ display: false }} }}
+                }}
+            }}
+        }});
+        // Tabla
+        var tmBody = document.getElementById('tablaMedios');
+        if (tmBody) {{
+            tmBody.innerHTML = labels.map(function(m, i) {{
+                var pct = total > 0 ? ((values[i] / total) * 100).toFixed(1) : 0;
+                return '<tr><td><strong>' + m + '</strong></td><td class="text-right">' + values[i] + '</td><td class="text-right">' + pct + '%</td></tr>';
+            }}).join('');
+        }}
+    }}
+}} catch(e) {{ console.error('Medios conocimiento error:', e); }}
 
 // ── Pronto Pago: clientes que pagan antes del vencimiento ──
 try {{
