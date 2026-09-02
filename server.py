@@ -458,23 +458,22 @@ def fetch_pagoProveedorMoto(sess):
         inicial_40 = round(precio_moto * 0.40, 2)
         restante_60 = round(precio_moto * 0.60, 2)
         cuota_quincenal = round(restante_60 / 8, 2)
-        ciclo_cliente = '10-25'  # Default 10-25 cuando no se detecta ciclo
+        ciclo_cliente = '10-25'  # Default 10-25 si no se detecta ciclo desde cuotas
         if cliente_venta != 'Sin asignar':
             try:
                 vp = json_execute(sess, 'res.partner', 'search_read', [['name', '=', cliente_venta]], ['id'])
                 if vp:
                     vpid = vp[0]['id']
-                    # Buscar cuotas del cliente en invoice.installment.line
-                    inst_ids = json_execute(sess, 'account.move', 'search', [
+                    inv_ids = json_execute(sess, 'account.move', 'search', [
                         ['partner_id', '=', vpid], ['state', '=', 'posted'], ['move_type', '=', 'out_invoice']
                     ])
-                    if inst_ids:
-                        # Leer payment_date desde las cuotas
-                        inv_data = json_execute(sess, 'account.move', 'read', [
-                            inst_ids[:10], ['invoice_date']
+                    if inv_ids:
+                        # Buscar en invoice.installment.line por payment_date
+                        inst_lines = json_execute(sess, 'invoice.installment.line', 'search_read', [
+                            [['invoice_id', 'in', inv_ids]], ['payment_date']
                         ])
-                        for inv in inv_data:
-                            pd = str(inv.get('invoice_date', ''))[:10]
+                        for il in inst_lines:
+                            pd = str(il.get('payment_date', ''))[:10]
                             if pd:
                                 try:
                                     dia = int(pd.split('-')[2])
