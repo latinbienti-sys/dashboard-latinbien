@@ -1,16 +1,11 @@
-import requests, json, sys
+﻿from odoo_conn import get_session
+
+s = get_session()
+
 sys.stdout = open(sys.stdout.fileno(), 'w', encoding='utf-8', buffering=1)
 
-s = requests.Session()
-s.headers.update({'Content-Type': 'application/json'})
-
-# Re-authenticate
-resp = s.post('https://latinbien.com/web/session/authenticate', json={
-    'jsonrpc': '2.0', 'method': 'call',
-    'params': {'db': 'erp_production', 'login': 'latinbienti@latinbien.com', 'password': 'z+cakaSe2805*'}
-})
-uid = resp.json().get('result', {}).get('uid', 0)
-print(f"User ID: {uid}")
+# Simple test: get any conversation
+print("Session OK, testing...")
 
 # Simple test: get any conversation
 resp = s.post('https://latinbien.com/web/dataset/search_read', json={

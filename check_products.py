@@ -1,14 +1,9 @@
-import requests, json
+﻿from odoo_conn import get_session
 
-session = requests.Session()
-session.post('https://latinbien.com/web/session/authenticate', json={
-    'jsonrpc': '2.0', 'method': 'call',
-    'params': {'db': 'erp_production', 'login': 'latinbienti@latinbien.com', 'password': 'z+cakaSe2805*'}
-})
-session.headers['Content-Type'] = 'application/json'
+s = get_session()
 
 # Read VALIDAR_CEDULA code - show the split part
-resp = session.post('https://latinbien.com/web/dataset/call_kw/acrux.chat.bot/read', json={
+resp = s.post('https://latinbien.com/web/dataset/call_kw/acrux.chat.bot/read', json={
     'jsonrpc':'2.0','method':'call',
     'params':{'model':'acrux.chat.bot','method':'read',
         'args':[[62]],
@@ -22,7 +17,7 @@ print(code[idx:idx+200])
 print()
 
 # Check if there are any products with 'nevera' in name
-resp2 = session.post('https://latinbien.com/web/dataset/call_kw/product.template/search_read', json={
+resp2 = s.post('https://latinbien.com/web/dataset/call_kw/product.template/search_read', json={
     'jsonrpc':'2.0','method':'call',
     'params':{'model':'product.template','method':'search_read',
         'args':[[['name','ilike','%nevera%']]],
@@ -37,7 +32,7 @@ if prods:
 else:
     print('  No products found with "nevera" in name')
     # Show some products for reference
-    resp3 = session.post('https://latinbien.com/web/dataset/call_kw/product.template/search_read', json={
+    resp3 = s.post('https://latinbien.com/web/dataset/call_kw/product.template/search_read', json={
         'jsonrpc':'2.0','method':'call',
         'params':{'model':'product.template','method':'search_read',
             'args':[[]],

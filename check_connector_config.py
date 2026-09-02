@@ -1,12 +1,8 @@
-import requests, json, sys
-sys.stdout = open(sys.stdout.fileno(), 'w', encoding='utf-8', buffering=1)
+﻿from odoo_conn import get_session
 
-s = requests.Session()
-s.headers.update({'Content-Type': 'application/json'})
-s.post('https://latinbien.com/web/session/authenticate', json={
-    'jsonrpc': '2.0', 'method': 'call',
-    'params': {'db': 'erp_production', 'login': 'latinbienti@latinbien.com', 'password': 'z+cakaSe2805*'}
-})
+s = get_session()
+
+sys.stdout = open(sys.stdout.fileno(), 'w', encoding='utf-8', buffering=1)
 
 # Check connector 2 configuration
 resp = s.post('https://latinbien.com/web/dataset/search_read', json={

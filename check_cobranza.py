@@ -1,11 +1,7 @@
-import requests, json
+﻿from odoo_conn import get_session
 
-s = requests.Session()
-s.post('https://latinbien.com/web/session/authenticate', json={
-    'jsonrpc': '2.0', 'method': 'call',
-    'params': {'db': 'erp_production', 'login': 'latinbienti@latinbien.com', 'password': 'z+cakaSe2805*'}
-})
-s.headers['Content-Type'] = 'application/json'
+s = get_session()
+
 
 # Read bot 34 (CATCHER COBRANZA)
 resp = s.post('https://latinbien.com/web/dataset/call_kw/acrux.chat.bot/read', json={

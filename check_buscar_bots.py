@@ -1,11 +1,7 @@
-import requests, json
+﻿from odoo_conn import get_session
 
-s = requests.Session()
-s.post('https://latinbien.com/web/session/authenticate', json={
-    'jsonrpc': '2.0', 'method': 'call',
-    'params': {'db': 'erp_production', 'login': 'latinbienti@latinbien.com', 'password': 'z+cakaSe2805*'}
-})
-s.headers['Content-Type'] = 'application/json'
+s = get_session()
+
 
 # Check all BUSCAR_EN bots + CONSULTA_PRECIO bots
 bots = [122, 123, 124, 125, 118, 119, 120, 121]

@@ -1,12 +1,8 @@
-import requests, json, sys, re
-sys.stdout = open(sys.stdout.fileno(), 'w', encoding='utf-8', buffering=1)
+﻿from odoo_conn import get_session
 
-s = requests.Session()
-s.headers.update({'Content-Type': 'application/json'})
-s.post('https://latinbien.com/web/session/authenticate', json={
-    'jsonrpc': '2.0', 'method': 'call',
-    'params': {'db': 'erp_production', 'login': 'latinbienti@latinbien.com', 'password': 'z+cakaSe2805*'}
-})
+s = get_session()
+
+sys.stdout = open(sys.stdout.fileno(), 'w', encoding='utf-8', buffering=1)
 
 # Read all cobranza bots (34, 40-47) + comercial bots (61, 62)
 bids = [34, 40, 41, 42, 43, 44, 45, 46, 47, 61, 62]
