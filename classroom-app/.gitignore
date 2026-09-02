@@ -1,0 +1,26 @@
+# Dependencias
+node_modules/
+
+# Base de datos
+server/db/*.db
+server/db/*.db-journal
+server/db/*.db-wal
+server/db/*.db-shm
+
+# Archivos subidos
+server/uploads/*
+
+# Variables de entorno
+.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Diagnósticos temporales
+diag.js
+cleanup.js

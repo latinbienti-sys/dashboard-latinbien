@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CreditScorer - Analisis de Estados de Cuenta Bancarios</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; margin: 0; background: #020617; color: #e2e8f0; }
+    .slot { border: 2px dashed #475569; border-radius: 12px; padding: 24px; text-align: center; transition: all .2s; cursor: pointer; position: relative; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .slot:hover, .slot.dragover { border-color: #818cf8; background: rgba(129,140,248,.08); }
+    .slot.filled { border-color: #34d399; background: rgba(52,211,153,.06); }
+    .slot.filled .slot-placeholder { display: none; }
+    .slot .file-info { display: none; }
+    .slot.filled .file-info { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .slot .remove-btn { display: none; position: absolute; top: 8px; right: 8px; background: #ef4444; color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer; line-height: 22px; text-align: center; }
+    .slot.filled .remove-btn { display: block; }
+    .progress-bar { height: 4px; background: #1e293b; border-radius: 2px; overflow: hidden; margin-top: 12px; }
+    .progress-bar .fill { height: 100%; background: linear-gradient(90deg, #818cf8, #34d399); width: 0%; transition: width .3s; border-radius: 2px; }
+    .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 24px; }
+    .metric { text-align: center; }
+    .metric .value { font-size: 1.75rem; font-weight: 800; line-height: 1.2; }
+    .metric .label { font-size: .75rem; color: #94a3b8; margin-top: 4px; text-transform: uppercase; letter-spacing: .05em; }
+    .month-card { background: #1e293b; border-radius: 12px; padding: 16px; }
+    .slider-track { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: #334155; outline: none; }
+    .slider-track::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #818cf8; cursor: pointer; border: 2px solid #0f172a; }
+    .debug-table { width: 100%; border-collapse: collapse; font-size: .75rem; }
+    .debug-table th, .debug-table td { padding: 6px 10px; border-bottom: 1px solid #1e293b; text-align: left; }
+    .debug-table th { color: #94a3b8; font-weight: 600; position: sticky; top: 0; background: #1e293b; }
+    .debug-table td { color: #cbd5e1; }
+    .debug-wrap { max-height: 400px; overflow: auto; border-radius: 8px; border: 1px solid #1e293b; }
+    .btn { padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: .875rem; cursor: pointer; border: none; transition: all .15s; }
+    .btn-primary { background: #6366f1; color: #fff; }
+    .btn-primary:hover { background: #818cf8; }
+    .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-secondary { background: #1e293b; color: #e2e8f0; border: 1px solid #334155; }
+    .btn-secondary:hover { background: #334155; }
+    .btn-success { background: #059669; color: #fff; }
+    .btn-success:hover { background: #10b981; }
+    .btn-danger { background: #dc2626; color: #fff; }
+    .btn-danger:hover { background: #ef4444; }
+    .fade-in { animation: fadeIn .4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,.2); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 9999px; font-size: .7rem; font-weight: 600; }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            slate: { 950: '#020617' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen">
+
+<!-- HEADER -->
+<header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      </div>
+      <h1 class="text-xl font-bold tracking-tight">CreditScorer</h1>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="badge bg-emerald-500/15 text-emerald-400">100% Gratis</span>
+      <span class="badge bg-indigo-500/15 text-indigo-400">Sin API key</span>
+      <span class="badge bg-amber-500/15 text-amber-400">Resultados al instante</span>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-8">
+
+  <!-- INTRO -->
+  <div class="text-center mb-10">
+    <h2 class="text-3xl font-extrabold mb-2 bg-gradient-to-r from-indigo-400 to-emerald-400 bg-clip-text text-transparent">Analisis de Credit Score</h2>
+    <p class="text-slate-400 max-w-xl mx-auto text-sm">Sube tus estados de cuenta bancarios en PDF y obtene un analisis completo de tus ingresos, gastos y capacidad de endeudamiento.</p>
+  </div>
+
+  <!-- UPLOAD SECTION -->
+  <section id="uploadSection">
+    <div class="card">
+      <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+        Subir Estados de Cuenta (PDF)
+      </h3>
+      <p class="text-slate-400 text-sm mb-6">Arrastra y suelta hasta 3 archivos PDF. Se procesaran automaticamente.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="slot" id="slot0" data-index="0" onclick="document.getElementById('fileInput0').click()">
+          <input type="file" id="fileInput0" accept=".pdf" class="hidden" onchange="handleFile(0, this.files[0])">
+          <div class="slot-placeholder">
+            <svg class="w-8 h-8 text-slate-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span class="text-slate-400 text-sm">Archivo 1</span>
+          </div>
+          <div class="file-info">
+            <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span class="text-sm font-medium text-emerald-300 fileName"></span>
+            <span class="text-xs text-slate-500 fileSize"></span>
+          </div>
+          <button class="remove-btn" onclick="event.stopPropagation(); removeFile(0)">&times;</button>
+        </div>
+
+        <div class="slot" id="slot1" data-index="1" onclick="document.getElementById('fileInput1').click()">
+          <input type="file" id="fileInput1" accept=".pdf" class="hidden" onchange="handleFile(1, this.files[0])">
+          <div class="slot-placeholder">
+            <svg class="w-8 h-8 text-slate-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span class="text-slate-400 text-sm">Archivo 2</span>
+          </div>
+          <div class="file-info">
+            <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span class="text-sm font-medium text-emerald-300 fileName"></span>
+            <span class="text-xs text-slate-500 fileSize"></span>
+          </div>
+          <button class="remove-btn" onclick="event.stopPropagation(); removeFile(1)">&times;</button>
+        </div>
+
+        <div class="slot" id="slot2" data-index="2" onclick="document.getElementById('fileInput2').click()">
+          <input type="file" id="fileInput2" accept=".pdf" class="hidden" onchange="handleFile(2, this.files[0])">
+          <div class="slot-placeholder">
+            <svg class="w-8 h-8 text-slate-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span class="text-slate-400 text-sm">Archivo 3</span>
+          </div>
+          <div class="file-info">
+            <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span class="text-sm font-medium text-emerald-300 fileName"></span>
+            <span class="text-xs text-slate-500 fileSize"></span>
+          </div>
+          <button class="remove-btn" onclick="event.stopPropagation(); removeFile(2)">&times;</button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button class="btn btn-primary" id="analyzeBtn" disabled onclick="runAnalysis()">
+          <span id="analyzeBtnText">Analizar</span>
+        </button>
+        <span id="fileCount" class="text-sm text-slate-500">0 archivos seleccionados</span>
+      </div>
+
+      <div class="progress-bar mt-4" id="progressBar" style="display:none">
+        <div class="fill" id="progressFill"></div>
+      </div>
+      <p id="statusText" class="text-xs text-slate-500 mt-2 hidden"></p>
+    </div>
+  </section>
+
+  <!-- DASHBOARD SECTION -->
+  <section id="dashboardSection" class="hidden mt-8 fade-in">
+
+    <!-- Summary Row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div class="card metric">
+        <div class="value text-indigo-400" id="mBank">-</div>
+        <div class="label">Banco Detectado</div>
+      </div>
+      <div class="card metric">
+        <div class="value text-amber-400" id="mCurrency">-</div>
+        <div class="label">Moneda</div>
+      </div>
+      <div class="card metric">
+        <div class="value text-slate-200" id="mRows">-</div>
+        <div class="label">Transacciones</div>
+      </div>
+      <div class="card metric">
+        <div class="value text-slate-200" id="mMonths">-</div>
+        <div class="label">Meses Analizados</div>
+      </div>
+    </div>
+
+    <!-- Monthly Breakdown -->
+    <div class="card mb-6">
+      <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        Desglose Mensual
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="monthlyGrid"></div>
+    </div>
+
+    <!-- Editable Amounts -->
+    <div class="card mb-6">
+      <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        Montos Editables
+      </h3>
+      <p class="text-slate-400 text-sm mb-4">Puedes ajustar los montos manualmente para corregir errores de extraccion.</p>
+      <div class="overflow-x-auto">
+        <table class="debug-table" id="editableTable">
+          <thead>
+            <tr>
+              <th>Mes</th>
+              <th>Ingresos (Abonos)</th>
+              <th>Gastos (Cargos)</th>
+              <th>Neto</th>
+            </tr>
+          </thead>
+          <tbody id="editableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Capacity Slider -->
+    <div class="card mb-6">
+      <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Porcentaje de Capacidad de Pago
+      </h3>
+      <div class="flex items-center gap-4">
+        <span class="text-sm text-slate-400">10%</span>
+        <input type="range" min="10" max="50" value="30" id="capacitySlider" class="slider-track flex-1" oninput="updateCapacity()">
+        <span class="text-sm text-slate-400">50%</span>
+        <span class="text-lg font-bold text-indigo-400 ml-2" id="sliderValue">30%</span>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div class="card metric">
+        <div class="value text-indigo-400" id="rPromedio">-</div>
+        <div class="label">Promedio Mensual Neto</div>
+      </div>
+      <div class="card metric">
+        <div class="value text-emerald-400" id="rCapacidad">-</div>
+        <div class="label">Capacidad de Pago</div>
+      </div>
+      <div class="card metric">
+        <div class="value text-amber-400" id="rLimite">-</div>
+        <div class="label">Limite Credito Global</div>
+      </div>
+      <div class="card metric">
+        <div class="value text-rose-400" id="rCuota">-</div>
+        <div class="label">Cuota Quincenal</div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-3 mb-6">
+      <button class="btn btn-success" onclick="copyReport()">
+        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        Copiar Reporte
+      </button>
+      <button class="btn btn-secondary" onclick="toggleDebug()">
+        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+        Datos Extraidos
+      </button>
+      <button class="btn btn-danger" onclick="resetAll()">
+        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        Reiniciar
+      </button>
+    </div>
+
+    <!-- Debug Section -->
+    <div class="card hidden" id="debugSection">
+      <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+        Datos Extraidos (Debug)
+      </h3>
+      <div class="debug-wrap" id="debugContent"></div>
+    </div>
+
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-slate-800 mt-12 py-6 text-center text-xs text-slate-600">
+  CreditScorer &mdash; Analisis local. Tus datos nunca salen de tu navegador.
+</footer>
+
+<script>
+// ============================================
+// STATE
+// ============================================
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const STATE = {
+  files: [null, null, null],
+  allRows: [],
+  monthlyData: [],
+  bank: '',
+  currency: '',
+  capacityPct: 30
+};
+
+// ============================================
+// FILE HANDLING
+// ============================================
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+function handleFile(idx, file) {
+  if (!file || file.type !== 'application/pdf') {
+    alert('Solo se aceptan archivos PDF.');
+    return;
+  }
+  STATE.files[idx] = file;
+  const slot = document.getElementById('slot' + idx);
+  slot.classList.add('filled');
+  slot.querySelector('.fileName').textContent = file.name;
+  slot.querySelector('.fileSize').textContent = formatSize(file.size);
+  updateAnalyzeBtn();
+}
+
+function removeFile(idx) {
+  STATE.files[idx] = null;
+  const slot = document.getElementById('slot' + idx);
+  slot.classList.remove('filled');
+  slot.querySelector('.fileName').textContent = '';
+  slot.querySelector('.fileSize').textContent = '';
+  document.getElementById('fileInput' + idx).value = '';
+  updateAnalyzeBtn();
+}
+
+function updateAnalyzeBtn() {
+  const count = STATE.files.filter(f => f !== null).length;
+  document.getElementById('fileCount').textContent = count + ' archivo' + (count !== 1 ? 's' : '') + ' seleccionado' + (count !== 1 ? 's' : '');
+  document.getElementById('analyzeBtn').disabled = count === 0;
+}
+
+// Drag and drop
+document.querySelectorAll('.slot').forEach(slot => {
+  slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('dragover'); });
+  slot.addEventListener('dragleave', () => slot.classList.remove('dragover'));
+  slot.addEventListener('drop', e => {
+    e.preventDefault();
+    slot.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file) handleFile(parseInt(slot.dataset.index), file);
+  });
+});
+
+// ============================================
+// PDF EXTRACTION using X-POSITION
+// ============================================
+async function extractStructured(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const allRows = [];
+
+  for (let p = 1; p <= pdf.numPages; p++) {
+    const page = await pdf.getPage(p);
+    const tc = await page.getTextContent();
+
+    // Group by Y coordinate
+    const rows = {};
+    for (const item of tc.items) {
+      const y = Math.round(item.transform[5]);
+      const x = Math.round(item.transform[4]);
+      if (!rows[y]) rows[y] = [];
+      rows[y].push({ x, str: (item.str || '').trim() });
+    }
+
+    // Process each row sorted top-to-bottom (descending Y)
+    const sortedY = Object.keys(rows).map(Number).sort((a, b) => b - a);
+    for (const y of sortedY) {
+      const items = rows[y].sort((a, b) => a.x - b.x);
+
+      // Check if this is a data row (has 5-digit REF number)
+      const refItem = items.find(it => /^\d{5}$/.test(it.str));
+      if (!refItem) continue;
+
+      const concept = items.find(it => it.x >= 100 && it.x < 340 && it.str.length > 2);
+
+      // Find amounts by X position
+      let cargo = 0, abono = 0, saldo = 0;
+      for (const it of items) {
+        if (!/^\d[\d,]*\.\d{2}$/.test(it.str)) continue;
+        const val = parseFloat(it.str.replace(/,/g, ''));
+        if (val === 0 || isNaN(val)) continue;
+        if (it.x >= 540) saldo = val;
+        else if (it.x >= 400 && it.x < 470) cargo = val;
+        else if (it.x >= 470 && it.x < 540) abono = val;
+      }
+
+      // Find date
+      const dateItem = items.find(it => /^\d{2}-\d{2}-\d{4}$/.test(it.str));
+
+      allRows.push({
+        page: p,
+        ref: refItem.str,
+        concept: concept ? concept.str : '',
+        date: dateItem ? dateItem.str : '',
+        cargo, abono, saldo
+      });
+    }
+  }
+  return allRows;
+}
+
+// ============================================
+// BANK DETECTION
+// ============================================
+async function detectBank(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const page = await pdf.getPage(1);
+  const tc = await page.getTextContent();
+  const text = tc.items.map(i => i.str).join(' ').substring(0, 3000).toUpperCase();
+
+  if (text.includes('PROVINCIAL') || text.includes('BBVA')) return 'Banco Provincial (BBVA)';
+  if (text.includes('BANCO DE VENEZUELA')) return 'Banco de Venezuela';
+  if (text.includes('BANCARIBE')) return 'Bancaribe';
+  if (text.includes('BANCO EXTERIOR')) return 'Banco Exterior';
+  if (text.includes('BANCAMIGA')) return 'Bancamiga';
+  if (text.includes('BANCO NACIONAL')) return 'Banco Nacional de Cr\u00e9dito';
+  if (text.includes('BANCO PLAZA')) return 'Banco Plaza';
+  if (text.includes('TESORO')) return 'Banco del Tesoro';
+  if (text.includes('BANCO ACTIVO')) return 'Banco Activo';
+  if (text.includes('BANCO MERCANTIL')) return 'Banco Mercantil';
+  if (text.includes('BANCO VENEZOLANO DE CR')) return 'Banco Venezolano de Cr\u00e9dito';
+  return 'Banco Desconocido';
+}
+
+// ============================================
+// CURRENCY DETECTION
+// ============================================
+function detectCurrency(rows, fullText) {
+  // Check if text mentions BS or VES
+  if (fullText && (fullText.includes('BS') || fullText.includes('VES') || fullText.includes('BOLIVARES'))) {
+    return 'VES';
+  }
+  // Check if average transaction is large
+  const amounts = rows.filter(r => r.abono > 0 || r.cargo > 0).map(r => Math.max(r.abono, r.cargo));
+  if (amounts.length > 0) {
+    const avg = amounts.reduce((a, b) => a + b, 0) / amounts.length;
+    if (avg > 5000) return 'VES';
+  }
+  return 'USD';
+}
+
+// ============================================
+// BCV EXCHANGE RATES (hardcoded table)
+// ============================================
+const BCV_RATES = {
+  '01-2025': 36.50, '02-2025': 37.00, '03-2025': 37.50, '04-2025': 38.00,
+  '05-2025': 38.50, '06-2025': 39.00, '07-2025': 39.50, '08-2025': 40.00,
+  '09-2025': 40.50, '10-2025': 41.00, '11-2025': 41.50, '12-2025': 42.00,
+  '01-2026': 42.50, '02-2026': 43.00, '03-2026': 43.50, '04-2026': 44.00,
+  '05-2026': 44.50, '06-2026': 45.00, '07-2026': 45.50, '08-2026': 46.00,
+  '09-2026': 46.50, '10-2026': 47.00, '11-2026': 47.50, '12-2026': 48.00
+};
+
+function getRate(monthKey) {
+  return BCV_RATES[monthKey] || 46.00;
+}
+
+// ============================================
+// MONTH GROUPING
+// ============================================
+function parseDate(dateStr) {
+  // DD-MM-YYYY
+  const parts = dateStr.split('-');
+  if (parts.length !== 3) return null;
+  return { day: parseInt(parts[0]), month: parseInt(parts[1]), year: parseInt(parts[2]) };
+}
+
+function groupByMonth(rows) {
+  const groups = {};
+  for (const row of rows) {
+    if (!row.date) continue;
+    const d = parseDate(row.date);
+    if (!d) continue;
+    const key = String(d.month).padStart(2, '0') + '-' + d.year;
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(row);
+  }
+
+  // Sort by date descending and take last 3 months
+  const sorted = Object.keys(groups).sort((a, b) => {
+    const [am, ay] = a.split('-').map(Number);
+    const [bm, by] = b.split('-').map(Number);
+    return (by * 100 + bm) - (ay * 100 + am);
+  });
+
+  const last3 = sorted.slice(0, 3);
+  const result = {};
+  for (const k of last3) {
+    result[k] = groups[k];
+  }
+  return result;
+}
+
+// ============================================
+// FINANCIAL CALCULATIONS
+// ============================================
+function calculateMonthly(monthGroups, currency) {
+  const months = [];
+  for (const [key, rows] of Object.entries(monthGroups)) {
+    const [mm, yy] = key.split('-');
+    const income = rows.reduce((s, r) => s + r.abono, 0);
+    const expenses = rows.reduce((s, r) => s + r.cargo, 0);
+    const net = income - expenses;
+    const rate = currency === 'VES' ? getRate(key) : 1;
+    const incomeUSD = currency === 'VES' ? income / rate : income;
+    const expensesUSD = currency === 'VES' ? expenses / rate : expenses;
+    const netUSD = currency === 'VES' ? net / rate : net;
+
+    months.push({
+      key,
+      label: monthLabel(key),
+      income, expenses, net,
+      incomeUSD, expensesUSD, netUSD,
+      rate,
+      txCount: rows.length
+    });
+  }
+  return months;
+}
+
+function monthLabel(key) {
+  const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+  const [mm, yy] = key.split('-');
+  return months[parseInt(mm) - 1] + ' ' + yy;
+}
+
+function calculateResults(monthlyData, capacityPct) {
+  if (monthlyData.length === 0) return { promedio: 0, capacidad: 0, limite: 0, cuota: 0 };
+
+  const totalNet = monthlyData.reduce((s, m) => s + m.netUSD, 0);
+  const promedio = totalNet / monthlyData.length;
+  const capacidad = promedio * (capacityPct / 100);
+  const limite = capacidad * 2;
+  const cuota = capacidad / 2;
+
+  return { promedio, capacidad, limite, cuota };
+}
+
+// ============================================
+// UI RENDERING
+// ============================================
+function formatUSD(val) {
+  return '$' + val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function renderDashboard() {
+  document.getElementById('uploadSection').classList.add('hidden');
+  document.getElementById('dashboardSection').classList.remove('hidden');
+  document.getElementById('dashboardSection').classList.add('fade-in');
+
+  // Summary
+  document.getElementById('mBank').textContent = STATE.bank;
+  document.getElementById('mCurrency').textContent = STATE.currency;
+  document.getElementById('mRows').textContent = STATE.allRows.length;
+  document.getElementById('mMonths').textContent = STATE.monthlyData.length;
+
+  renderMonthlyGrid();
+  renderEditableTable();
+  updateCapacity();
+}
+
+function renderMonthlyGrid() {
+  const grid = document.getElementById('monthlyGrid');
+  grid.innerHTML = '';
+
+  for (const m of STATE.monthlyData) {
+    const colorClass = m.netUSD >= 0 ? 'text-emerald-400' : 'text-rose-400';
+    const rateInfo = STATE.currency === 'VES'
+      ? `<div class="text-xs text-slate-500 mt-1">Tasa BCV: ${m.rate} Bs/$</div>`
+      : '';
+
+    grid.innerHTML += `
+      <div class="month-card">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="font-semibold text-sm">${m.label}</h4>
+          <span class="text-xs text-slate-500">${m.txCount} tx</span>
+        </div>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-slate-400">Ingresos</span>
+            <span class="text-emerald-400 font-medium">${formatUSD(m.incomeUSD)}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Gastos</span>
+            <span class="text-rose-400 font-medium">${formatUSD(m.expensesUSD)}</span>
+          </div>
+          <hr class="border-slate-700">
+          <div class="flex justify-between">
+            <span class="text-slate-400">Neto</span>
+            <span class="${colorClass} font-bold">${formatUSD(m.netUSD)}</span>
+          </div>
+          ${rateInfo}
+        </div>
+      </div>
+    `;
+  }
+}
+
+function renderEditableTable() {
+  const body = document.getElementById('editableBody');
+  body.innerHTML = '';
+  for (const m of STATE.monthlyData) {
+    const colorClass = m.netUSD >= 0 ? 'text-emerald-400' : 'text-rose-400';
+    body.innerHTML += `
+      <tr>
+        <td class="font-medium">${m.label}</td>
+        <td>
+          <input type="text" value="${m.incomeUSD.toFixed(2)}"
+            class="bg-transparent border border-slate-700 rounded px-2 py-1 w-32 text-right text-sm focus:border-indigo-500 focus:outline-none"
+            onchange="editAmount('${m.key}','income',this.value)">
+        </td>
+        <td>
+          <input type="text" value="${m.expensesUSD.toFixed(2)}"
+            class="bg-transparent border border-slate-700 rounded px-2 py-1 w-32 text-right text-sm focus:border-indigo-500 focus:outline-none"
+            onchange="editAmount('${m.key}','expense',this.value)">
+        </td>
+        <td class="font-bold ${colorClass}">${formatUSD(m.netUSD)}</td>
+      </tr>
+    `;
+  }
+}
+
+function editAmount(key, type, val) {
+  const num = parseFloat(val.replace(/[^0-9.\-]/g, ''));
+  if (isNaN(num)) return;
+  const m = STATE.monthlyData.find(m => m.key === key);
+  if (!m) return;
+  if (type === 'income') m.incomeUSD = num;
+  else m.expensesUSD = num;
+  m.netUSD = m.incomeUSD - m.expensesUSD;
+  renderMonthlyGrid();
+  updateCapacity();
+}
+
+function updateCapacity() {
+  STATE.capacityPct = parseInt(document.getElementById('capacitySlider').value);
+  document.getElementById('sliderValue').textContent = STATE.capacityPct + '%';
+
+  const r = calculateResults(STATE.monthlyData, STATE.capacityPct);
+  document.getElementById('rPromedio').textContent = formatUSD(r.promedio);
+  document.getElementById('rCapacidad').textContent = formatUSD(r.capacidad);
+  document.getElementById('rLimite').textContent = formatUSD(r.limite);
+  document.getElementById('rCuota').textContent = formatUSD(r.cuota);
+}
+
+function toggleDebug() {
+  const el = document.getElementById('debugSection');
+  el.classList.toggle('hidden');
+  if (!el.classList.contains('hidden')) renderDebug();
+}
+
+function renderDebug() {
+  const wrap = document.getElementById('debugContent');
+  let html = '<table class="debug-table"><thead><tr><th>Pagina</th><th>REF</th><th>Fecha</th><th>Concepto</th><th>Cargo</th><th>Abono</th><th>Saldo</th></tr></thead><tbody>';
+
+  for (const row of STATE.allRows) {
+    html += `<tr>
+      <td>${row.page}</td>
+      <td>${row.ref}</td>
+      <td>${row.date || '-'}</td>
+      <td>${row.concept || '-'}</td>
+      <td class="text-rose-400">${row.cargo ? formatUSD(row.cargo) : '-'}</td>
+      <td class="text-emerald-400">${row.abono ? formatUSD(row.abono) : '-'}</td>
+      <td>${row.saldo ? formatUSD(row.saldo) : '-'}</td>
+    </tr>`;
+  }
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+// ============================================
+// REPORT
+// ============================================
+function copyReport() {
+  const r = calculateResults(STATE.monthlyData, STATE.capacityPct);
+  let report = `=== CREDIT SCORE REPORT ===\n`;
+  report += `Banco: ${STATE.bank}\n`;
+  report += `Moneda: ${STATE.currency}\n`;
+  report += `Transacciones: ${STATE.allRows.length}\n`;
+  report += `Meses: ${STATE.monthlyData.length}\n\n`;
+
+  for (const m of STATE.monthlyData) {
+    report += `${m.label}:\n`;
+    report += `  Ingresos: ${formatUSD(m.incomeUSD)}\n`;
+    report += `  Gastos: ${formatUSD(m.expensesUSD)}\n`;
+    report += `  Neto: ${formatUSD(m.netUSD)}\n`;
+    if (STATE.currency === 'VES') report += `  Tasa BCV: ${m.rate}\n`;
+    report += '\n';
+  }
+
+  report += `--- RESULTADOS ---\n`;
+  report += `Promedio Mensual: ${formatUSD(r.promedio)}\n`;
+  report += `Capacidad (${STATE.capacityPct}%): ${formatUSD(r.capacidad)}\n`;
+  report += `Limite Credito: ${formatUSD(r.limite)}\n`;
+  report += `Cuota Quincenal: ${formatUSD(r.cuota)}\n`;
+
+  navigator.clipboard.writeText(report).then(() => {
+    const btn = event.target.closest('button');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '&#10003; Copiado!';
+    btn.classList.add('bg-emerald-700');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('bg-emerald-700'); }, 1500);
+  }).catch(() => {
+    alert('No se pudo copiar. Selecciona manualmente el texto.');
+  });
+}
+
+function resetAll() {
+  STATE.files = [null, null, null];
+  STATE.allRows = [];
+  STATE.monthlyData = [];
+  STATE.bank = '';
+  STATE.currency = '';
+  STATE.capacityPct = 30;
+
+  for (let i = 0; i < 3; i++) {
+    removeFile(i);
+  }
+
+  document.getElementById('dashboardSection').classList.add('hidden');
+  document.getElementById('uploadSection').classList.remove('hidden');
+  document.getElementById('progressBar').style.display = 'none';
+  document.getElementById('statusText').classList.add('hidden');
+  document.getElementById('debugSection').classList.add('hidden');
+  document.getElementById('capacitySlider').value = 30;
+  document.getElementById('sliderValue').textContent = '30%';
+}
+
+// ============================================
+// MAIN ANALYSIS
+// ============================================
+async function runAnalysis() {
+  const btn = document.getElementById('analyzeBtn');
+  const btnText = document.getElementById('analyzeBtnText');
+  const progressBar = document.getElementById('progressBar');
+  const progressFill = document.getElementById('progressFill');
+  const statusText = document.getElementById('statusText');
+
+  btn.disabled = true;
+  btnText.innerHTML = '<span class="spinner"></span> Analizando...';
+  progressBar.style.display = 'block';
+  statusText.classList.remove('hidden');
+
+  try {
+    const files = STATE.files.filter(f => f !== null);
+    const totalSteps = files.length + 2; // extract + detect + process
+    let step = 0;
+
+    const allRows = [];
+    let fullText = '';
+
+    // Extract from each file
+    for (const file of files) {
+      step++;
+      statusText.textContent = `Extrayendo texto de ${file.name}...`;
+      progressFill.style.width = (step / totalSteps * 100) + '%';
+
+      const rows = await extractStructured(file);
+      allRows.push(...rows);
+
+      // Get first 3000 chars for bank detection
+      if (!fullText) {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        const page = await pdf.getPage(1);
+        const tc = await page.getTextContent();
+        fullText = tc.items.map(i => i.str).join(' ').substring(0, 3000);
+      }
+    }
+
+    // Detect bank
+    step++;
+    statusText.textContent = 'Detectando banco...';
+    progressFill.style.width = (step / totalSteps * 100) + '%';
+    STATE.bank = await detectBank(files[0]);
+
+    // Detect currency
+    STATE.currency = detectCurrency(allRows, fullText);
+    STATE.allRows = allRows;
+
+    // Process
+    step++;
+    statusText.textContent = 'Calculando metricas...';
+    progressFill.style.width = (step / totalSteps * 100) + '%';
+
+    const monthGroups = groupByMonth(allRows);
+    STATE.monthlyData = calculateMonthly(monthGroups, STATE.currency);
+
+    // Done
+    progressFill.style.width = '100%';
+    statusText.textContent = 'Analisis completo.';
+
+    setTimeout(() => renderDashboard(), 400);
+
+  } catch (err) {
+    console.error(err);
+    statusText.textContent = 'Error: ' + err.message;
+    statusText.classList.add('text-rose-400');
+    btn.disabled = false;
+    btnText.textContent = 'Analizar';
+  }
+}
+</script>
+
+</body>
+</html>

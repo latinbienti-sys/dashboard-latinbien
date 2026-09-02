@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es-VE">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#213C83">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LatinBien">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="description" content="LatinBien App — Tu tienda a crédito. Tecnología, hogar, línea blanca y más.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <link rel="icon" type="image/svg+xml" sizes="192x192" href="icons/icon-192.svg">
+  <link rel="mask-icon" href="icons/icon-192.svg" color="#213C83">
+  <title>LatinBien App</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+  <!-- ===== LOGIN SCREEN ===== -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-logo">
+      <h1>Latin<span>Bien</span></h1>
+      <p>Tu tienda a crédito</p>
+    </div>
+    <div class="login-card">
+      <h2>Iniciar sesión</h2>
+      <p class="login-subtitle">Usa tu cuenta de LatinBien.com</p>
+      <form id="loginForm" autocomplete="on">
+        <div class="form-group">
+          <input type="email" id="loginEmail" class="form-input" placeholder="Correo electrónico" required autocomplete="email" inputmode="email">
+        </div>
+        <div class="form-group">
+          <input type="password" id="loginPassword" class="form-input" placeholder="Contraseña" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="loginBtn">
+          Ingresar
+        </button>
+      </form>
+      <div class="login-divider">o</div>
+      <a href="https://latinbien.com/web/signup" class="btn btn-outline btn-block" target="_blank" rel="noopener">
+        Crear cuenta nueva
+      </a>
+      <p style="text-align:center;margin-top:16px;font-size:12px;color:var(--gray-400);">
+        <a href="https://latinbien.com/web/login?redirect=/my" style="color:var(--gray-500);text-decoration:none;" target="_blank" rel="noopener">
+          ¿Olvidaste tu contraseña?
+        </a>
+      </p>
+    </div>
+    <div class="login-footer">
+      <p>¿Eres nuevo? <a href="https://latinbien.com/web/signup" target="_blank" rel="noopener">Regístrate aquí</a></p>
+    </div>
+  </div>
+
+  <!-- ===== APP SHELL ===== -->
+  <div id="appShell" style="display:none;">
+
+    <!-- Header -->
+    <header class="app-header" id="appHeader">
+      <a href="#" class="logo" id="headerLogo">
+        <span>Latin<span class="accent">Bien</span></span>
+      </a>
+      <div class="header-actions">
+        <button class="btn btn-icon btn-ghost" id="btnCart" aria-label="Carrito" onclick="APP.navigate('cart')" style="position:relative;">
+          🛒
+          <span class="cart-badge" id="headerCartBadge">0</span>
+        </button>
+        <button class="btn btn-icon btn-ghost" id="btnProfile" aria-label="Perfil" onclick="APP.navigate('profile')">
+          👤
+        </button>
+      </div>
+    </header>
+
+    <!-- Pages -->
+    <main id="appContent">
+
+      <!-- HOME -->
+      <div id="pageHome" class="page active">
+        <div class="container">
+          <!-- Banner -->
+          <div class="banner" style="margin:0 0 16px;">
+            <h3>🏆 ¡Bienvenido a LatinBien!</h3>
+            <p>Compra a crédito con iniciales desde 20% y hasta 20 cuotas. Financia sin complicaciones.</p>
+            <a href="https://latinbien.com/shop" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Ver catálogo</a>
+            <div class="banner-icon">🛍️</div>
+          </div>
+
+          <!-- Credit Card Summary -->
+          <div id="creditSummary" style="display:none;">
+            <div class="credit-card-display">
+              <div class="card-type">💳 Crédito Disponible</div>
+              <div class="card-balance" id="availableCredit">$0</div>
+              <div class="card-label">Límite total</div>
+              <div class="card-footer">
+                <div>
+                  <div class="num" id="totalLimit">$0</div>
+                  <div class="lbl">Límite</div>
+                </div>
+                <div>
+                  <div class="num" id="usedCredit">$0</div>
+                  <div class="lbl">Usado</div>
+                </div>
+                <div>
+                  <div class="num" id="creditStatus">--</div>
+                  <div class="lbl">Estado</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Categories -->
+          <div class="section-title">
+            <h2>Categorías</h2>
+            <a href="https://latinbien.com/shop" target="_blank" rel="noopener">Ver todo →</a>
+          </div>
+          <div class="category-pills" id="homeCategories">
+            <button class="category-pill active">Todo</button>
+          </div>
+
+          <!-- Featured Products -->
+          <div class="section-title">
+            <h2>Destacados</h2>
+            <a href="https://latinbien.com/shop" target="_blank" rel="noopener">Ver más →</a>
+          </div>
+          <div class="product-grid" id="featuredProducts">
+            <div class="loading-spinner">
+              <div class="spinner"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATALOG -->
+      <div id="pageCatalog" class="page">
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Buscar productos..." autocomplete="off">
+          <button class="btn btn-primary btn-sm" id="searchBtn">Buscar</button>
+        </div>
+        <div class="section-title" style="padding-top:12px;">
+          <h2>Productos</h2>
+        </div>
+        <div id="catalogCategories" class="category-pills" style="padding-bottom:12px;"></div>
+        <div class="product-grid" id="catalogProducts">
+          <div class="loading-spinner">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CREDIT -->
+      <div id="pageCredit" class="page">
+        <div class="container">
+          <div class="section-title" style="padding-left:0;">
+            <h2>💳 Líneas de Crédito</h2>
+          </div>
+          <!-- Plans -->
+          <div id="creditPlans">
+            <div class="plan-card featured">
+              <span class="plan-badge popular">⭐ Más popular</span>
+              <div class="plan-name">Credi Clásico</div>
+              <div class="plan-initial">Inicial desde <strong>50%</strong></div>
+              <div class="plan-details">
+                <span>6 a 20 cuotas</span>
+                <span>Sin aval</span>
+              </div>
+            </div>
+            <div class="plan-card">
+              <div class="plan-name">Credi Más</div>
+              <div class="plan-initial">Inicial desde <strong>40%</strong></div>
+              <div class="plan-details">
+                <span>6 a 20 cuotas</span>
+                <span>Sin aval</span>
+              </div>
+            </div>
+            <div class="plan-card">
+              <div class="plan-name">Credi Pro</div>
+              <div class="plan-initial">Inicial desde <strong>30%</strong></div>
+              <div class="plan-details">
+                <span>6 a 20 cuotas</span>
+                <span>Sin aval</span>
+              </div>
+            </div>
+            <div class="plan-card">
+              <span class="plan-badge vip">👑 VIP</span>
+              <div class="plan-name">Credi Club Premium</div>
+              <div class="plan-initial">Inicial desde <strong>20%</strong></div>
+              <div class="plan-details">
+                <span>6 a 20 cuotas</span>
+                <span>Sin aval</span>
+                <span>Beneficios exclusivos</span>
+              </div>
+            </div>
+          </div>
+          <a href="https://latinbien.com/lineas-de-credito" class="btn btn-secondary btn-block" target="_blank" rel="noopener" style="margin-top:8px;">
+            Más información →
+          </a>
+          <div id="myCreditLines" style="margin-top:20px;display:none;">
+            <div class="section-title" style="padding-left:0;">
+              <h3 style="font-size:16px;color:var(--primary);">Mis líneas activas</h3>
+            </div>
+            <div id="creditLinesList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLUB -->
+      <div id="pageClub" class="page">
+        <div class="container">
+          <div class="section-title" style="padding-left:0;">
+            <h2>⭐ Club LatinBien</h2>
+          </div>
+          <div class="banner" style="margin:0 0 16px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));">
+            <h3>🎉 Beneficios exclusivos</h3>
+            <p>Descuentos en comercios afiliados, crédito preferencial y programa de puntos.</p>
+            <div class="banner-icon">🏆</div>
+          </div>
+          <div id="clubContent">
+            <div class="loading-spinner">
+              <div class="spinner"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div id="pageProfile" class="page">
+        <div class="container">
+          <div id="profileContent">
+            <div class="profile-header" style="margin:0 -16px 16px;">
+              <div class="avatar" id="profileAvatar">👤</div>
+              <h2 id="profileName">Cargando...</h2>
+              <p id="profileEmail"></p>
+            </div>
+            <div class="profile-menu">
+              <button class="profile-menu-item" onclick="APP.navigate('orders')">
+                <span class="menu-icon" style="background:var(--primary-ultra);">📋</span>
+                Mis contratos
+                <span class="menu-arrow">›</span>
+              </button>
+              <button class="profile-menu-item" onclick="APP.navigate('credit')">
+                <span class="menu-icon" style="background:var(--accent-light);">💳</span>
+                Líneas de crédito
+                <span class="menu-arrow">›</span>
+              </button>
+              <button class="profile-menu-item" onclick="APP.navigate('club')">
+                <span class="menu-icon" style="background:#fce7f3;">⭐</span>
+                Club de membresía
+                <span class="menu-arrow">›</span>
+              </button>
+              <a href="https://latinbien.com/my" class="profile-menu-item" target="_blank" rel="noopener">
+                <span class="menu-icon" style="background:#dbeafe;">🌐</span>
+                Ir al sitio web
+                <span class="menu-arrow">›</span>
+              </a>
+              <button class="profile-menu-item" onclick="APP.navigate('payment')">
+                <span class="menu-icon" style="background:#d1fae5;">💰</span>
+                Reportar pago
+                <span class="menu-arrow">›</span>
+              </button>
+              <button class="profile-menu-item" id="btnLogout" style="color:var(--danger);">
+                <span class="menu-icon" style="background:#fee2e2;color:var(--danger);">🚪</span>
+                Cerrar sesión
+                <span class="menu-arrow" style="color:var(--danger);">›</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CART -->
+      <div id="pageCart" class="page">
+        <div class="container">
+          <div class="section-title" style="padding-left:0;">
+            <h2>🛒 Mi Carrito</h2>
+          </div>
+          <div id="cartContent">
+            <div class="empty-state" id="cartEmpty">
+              <div class="empty-icon">🛒</div>
+              <h3>Tu carrito está vacío</h3>
+              <p>Explora el catálogo y agrega productos</p>
+              <button class="btn btn-primary btn-sm" style="margin-top:12px;" onclick="APP.navigate('catalog')">Ir al catálogo</button>
+            </div>
+            <div id="cartItems" style="display:none;"></div>
+            <div id="cartSummary" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div id="pageOrders" class="page">
+        <div class="container">
+          <div class="section-title" style="padding-left:0;">
+            <h2>📋 Mis Contratos</h2>
+          </div>
+          <div id="ordersList">
+            <div class="loading-spinner">
+              <div class="spinner"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAYMENT -->
+      <div id="pagePayment" class="page">
+        <div class="container">
+          <div class="section-title" style="padding-left:0;">
+            <h2>💰 Reportar Pago</h2>
+            <p style="font-size:13px;color:var(--gray-500);padding:0 16px 8px;">
+              Reporta el pago de tu cuota o anticipo para que sea registrado en tu cuenta.
+            </p>
+          </div>
+          <div id="paymentContent">
+            <form id="paymentForm" class="payment-form">
+              <div class="form-group">
+                <label class="form-label">Número de contrato</label>
+                <input type="text" class="form-input" id="payContract" placeholder="Ej: S000123" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Monto pagado ($)</label>
+                <input type="number" class="form-input" id="payAmount" placeholder="0.00" step="0.01" min="0.01" required inputmode="decimal">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Referencia / N° de depósito</label>
+                <input type="text" class="form-input" id="payReference" placeholder="Ej: 123456789" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Banco / Método de pago</label>
+                <select class="form-input" id="payMethod">
+                  <option value="">Selecciona...</option>
+                  <option value="Transferencia">Transferencia bancaria</option>
+                  <option value="Depósito">Depósito en efectivo</option>
+                  <option value="Punto de venta">Punto de venta (débito/crédito)</option>
+                  <option value="Pago móvil">Pago móvil</option>
+                  <option value="Zelle">Zelle / Internacional</option>
+                  <option value="Efectivo">Efectivo en tienda</option>
+                  <option value="Otro">Otro</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Fecha del pago</label>
+                <input type="date" class="form-input" id="payDate" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Notas adicionales (opcional)</label>
+                <input type="text" class="form-input" id="payNotes" placeholder="Cualquier detalle adicional...">
+              </div>
+              <button type="submit" class="btn btn-primary btn-block btn-lg" id="payBtn">
+                📩 Enviar reporte de pago
+              </button>
+            </form>
+            <div id="paymentSuccess" class="payment-success" style="display:none;">
+              <div class="success-icon">✅</div>
+              <h3>¡Pago reportado con éxito!</h3>
+              <p>Hemos recibido tu reporte. El equipo de LatinBien lo verificará y lo aplicará a tu cuenta.</p>
+              <button class="btn btn-primary" style="margin-top:16px;" onclick="APP.navigate('home')">Volver al inicio</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Tab Bar -->
+    <nav class="tab-bar" id="tabBar">
+      <button class="tab-item active" data-page="home" onclick="APP.navigate('home')">
+        <span class="tab-icon">🏠</span>
+        <span class="tab-label">Inicio</span>
+      </button>
+      <button class="tab-item" data-page="catalog" onclick="APP.navigate('catalog')">
+        <span class="tab-icon">🛍️</span>
+        <span class="tab-label">Catálogo</span>
+      </button>
+      <button class="tab-item" data-page="cart" onclick="APP.navigate('cart')">
+        <span class="tab-icon">
+          🛒
+          <span class="cart-badge" id="cartBadge">0</span>
+        </span>
+        <span class="tab-label">Carrito</span>
+      </button>
+      <button class="tab-item" data-page="profile" onclick="APP.navigate('profile')">
+        <span class="tab-icon">👤</span>
+        <span class="tab-label">Perfil</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

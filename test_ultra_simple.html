@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Ultra Simple</title>
+</head>
+<body>
+    <h1>TEST ULTRA SIMPLE</h1>
+    <p>Si ves esto, el HTML se renderiza.</p>
+    <p>Fecha actual: <span id="fecha"></span></p>
+    
+    <table border="1" style="border-collapse:collapse;width:100%">
+        <tr><th>#</th><th>Cliente</th><th>Contratos</th></tr>
+        <tr><td>1</td><td>GERARDO JOSE RAMIREZ F.</td><td>14</td></tr>
+        <tr><td>2</td><td>FELIX EDEL LIMA DE LA SOTA</td><td>8</td></tr>
+        <tr><td>3</td><td>YONATHAN JOSE VIVAS CARRERO</td><td>7</td></tr>
+    </table>
+
+    <script>
+        document.getElementById('fecha').textContent = new Date().toLocaleString();
+        console.log('JS funcionando!');
+    </script>
+</body>
+</html>

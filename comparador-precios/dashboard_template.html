@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparador de Precios - Mérida, Venezuela</title>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --success: #0d9488;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #6366f1;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #1a73e8 100%);
+            color: white; padding: 2rem; text-align: center;
+        }
+        .header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .header p { opacity: 0.9; font-size: 1.1rem; }
+        
+        .stats-bar {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem; padding: 1.5rem 2rem; max-width: 1400px; margin: 0 auto;
+        }
+        .stat-card {
+            background: var(--card); border-radius: 12px; padding: 1.2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center;
+        }
+        .stat-card .number { font-size: 2rem; font-weight: 700; }
+        .stat-card .label { color: var(--muted); font-size: 0.85rem; margin-top: 0.3rem; }
+        .stat-card.best .number { color: var(--success); }
+        .stat-card.good .number { color: var(--info); }
+        .stat-card.competitive .number { color: var(--warning); }
+        .stat-card.expensive .number { color: var(--danger); }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 2rem 2rem; }
+        
+        .controls {
+            display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0;
+            align-items: center;
+        }
+        .controls input, .controls select {
+            padding: 0.7rem 1rem; border: 1px solid var(--border); border-radius: 8px;
+            font-size: 0.95rem; background: white;
+        }
+        .controls input { flex: 1; min-width: 250px; }
+        .controls select { min-width: 180px; }
+        
+        .filter-chips {
+            display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;
+        }
+        .chip {
+            padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem;
+            border: 1px solid var(--border); cursor: pointer; background: white;
+            transition: all 0.2s;
+        }
+        .chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .chip:hover { border-color: var(--primary); }
+        
+        .product-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 1.2rem;
+        }
+        
+        .product-card {
+            background: var(--card); border-radius: 12px; overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .product-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        
+        .card-header {
+            padding: 1rem 1.2rem; display: flex; justify-content: space-between;
+            align-items: center; border-bottom: 1px solid var(--border);
+        }
+        .card-header .brand { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .card-header .category { font-size: 0.7rem; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px; }
+        
+        .status-badge {
+            padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.75rem;
+            font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;
+        }
+        .status-badge.best_deal { background: #d1fae5; color: #065f46; }
+        .status-badge.good_deal { background: #dbeafe; color: #1e40af; }
+        .status-badge.competitive { background: #fef3c7; color: #92400e; }
+        .status-badge.expensive { background: #fee2e2; color: #991b1b; }
+        
+        .card-body { padding: 1.2rem; }
+        .product-name { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; line-height: 1.4; }
+        
+        .price-comparison { margin: 1rem 0; }
+        .price-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.6rem 0; border-bottom: 1px solid #f1f5f9;
+        }
+        .price-row:last-child { border-bottom: none; }
+        .price-row .store { font-size: 0.85rem; color: var(--muted); }
+        .price-row .price { font-weight: 700; font-size: 1.1rem; }
+        .price-row .price.best { color: var(--success); }
+        .price-row .price.worst { color: var(--danger); }
+        
+        .diff-bar {
+            margin-top: 0.8rem; padding: 0.8rem; background: #f8fafc; border-radius: 8px;
+        }
+        .diff-bar .label { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem; }
+        .diff-bar .bar-track {
+            height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;
+        }
+        .diff-bar .bar-fill {
+            height: 100%; border-radius: 4px; transition: width 0.5s;
+        }
+        .diff-bar .bar-fill.positive { background: var(--danger); }
+        .diff-bar .bar-fill.negative { background: var(--success); }
+        .diff-bar .bar-fill.neutral { background: var(--warning); }
+        
+        .ml-links {
+            margin-top: 0.8rem; font-size: 0.8rem;
+        }
+        .ml-links a {
+            color: var(--primary); text-decoration: none; display: inline-block;
+            margin-right: 0.8rem;
+        }
+        .ml-links a:hover { text-decoration: underline; }
+        
+        .card-footer {
+            padding: 0.8rem 1.2rem; background: #f8fafc; border-top: 1px solid var(--border);
+            font-size: 0.8rem; color: var(--muted); display: flex; justify-content: space-between;
+        }
+        
+        .other-stores {
+            background: var(--card); border-radius: 12px; padding: 1.5rem; margin-top: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .other-stores h2 { font-size: 1.3rem; margin-bottom: 1rem; }
+        .store-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+        .store-link {
+            display: flex; align-items: center; gap: 0.8rem; padding: 1rem;
+            border: 1px solid var(--border); border-radius: 8px; text-decoration: none;
+            color: var(--text); transition: all 0.2s;
+        }
+        .store-link:hover { border-color: var(--primary); background: #f0f7ff; }
+        .store-link .icon { font-size: 1.5rem; }
+        .store-link .info h3 { font-size: 0.95rem; }
+        .store-link .info p { font-size: 0.8rem; color: var(--muted); }
+        
+        .footer {
+            text-align: center; padding: 2rem; color: var(--muted); font-size: 0.85rem;
+        }
+        
+        @media (max-width: 768px) {
+            .product-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 1.5rem; }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Comparador de Precios - Mérida, Venezuela</h1>
+        <p>Análisis comparativo de precios entre LatinBien y competidores</p>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.8;">Actualizado: Aug 2026 | Fuente: LatinBien.com + MercadoLibre VE</p>
+    </div>
+    
+    <div class="stats-bar" id="statsBar"></div>
+    
+    <div class="container">
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Buscar producto...">
+            <select id="categoryFilter">
+                <option value="">Todas las categorías</option>
+            </select>
+            <select id="statusFilter">
+                <option value="">Todos los estados</option>
+                <option value="best_deal">Mejor Precio</option>
+                <option value="good_deal">Buen Precio</option>
+                <option value="competitive">Competitivo</option>
+                <option value="expensive">Más Caro</option>
+            </select>
+            <select id="sortBy">
+                <option value="diff_asc">Mayor ahorro primero</option>
+                <option value="diff_desc">Menor ahorro primero</option>
+                <option value="price_asc">Precio más bajo</option>
+                <option value="price_desc">Precio más alto</option>
+                <option value="name_asc">Nombre A-Z</option>
+            </select>
+        </div>
+        
+        <div class="filter-chips" id="brandChips"></div>
+        
+        <div class="product-grid" id="productGrid"></div>
+        
+        <div class="other-stores">
+            <h2>Otras Tiendas en Mérida - Verificar Precios Manualmente</h2>
+            <p style="color: var(--muted); margin-bottom: 1rem; font-size: 0.9rem;">
+                Estas tiendas no tienen tienda online pública accesible. Te recomendamos contactarlas directamente o visitar sus locales:
+            </p>
+            <div class="store-links">
+                <a href="https://www.damasco.com.ve" target="_blank" class="store-link">
+                    <span class="icon">🏪</span>
+                    <div class="info">
+                        <h3>Damasco</h3>
+                        <p>Tienda de tecnología en Mérida</p>
+                    </div>
+                </a>
+                <a href="https://multimax.store" target="_blank" class="store-link">
+                    <span class="icon">🏬</span>
+                    <div class="info">
+                        <h3>Multimax Store</h3>
+                        <p>Electrónica y electrodomésticos</p>
+                    </div>
+                </a>
+                <a href="https://www.soytechno.com.ve" target="_blank" class="store-link">
+                    <span class="icon">💻</span>
+                    <div class="info">
+                        <h3>Soy Techno</h3>
+                        <p> Tecnología y accesorios</p>
+                    </div>
+                </a>
+                <a href="https://www.ivoo.com.ve" target="_blank" class="store-link">
+                    <span class="icon">📱</span>
+                    <div class="info">
+                        <h3>Ivoo</h3>
+                        <p>Celulares y accesorios</p>
+                    </div>
+                </a>
+                <a href="https://www.mercadolibre.com.ve" target="_blank" class="store-link">
+                    <span class="icon">🛒</span>
+                    <div class="info">
+                        <h3>MercadoLibre Venezuela</h3>
+                        <p>Marketplace - Miles de vendedores</p>
+                    </div>
+                </a>
+                <a href="https://latinbien.com/shop" target="_blank" class="store-link">
+                    <span class="icon">⭐</span>
+                    <div class="info">
+                        <h3>LatinBien (Base)</h3>
+                        <p>Tienda de referencia con financiamiento</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Comparador de Precios Mérida | Datos recopilados de fuentes públicas</p>
+        <p>Los precios pueden variar. Verificar disponibilidad directamente con cada tienda.</p>
+    </div>
+
+    <script>
+    // DATA - Comparisons will be loaded here
+    const DATA = COMPARISON_DATA_PLACEHOLDER;
+    
+    let currentFilters = { search: '', category: '', status: '', brand: '', sort: 'diff_asc' };
+    
+    function init() {
+        renderStats();
+        renderBrandChips();
+        populateCategories();
+        renderProducts();
+        
+        document.getElementById('searchInput').addEventListener('input', e => {
+            currentFilters.search = e.target.value.toLowerCase();
+            renderProducts();
+        });
+        document.getElementById('categoryFilter').addEventListener('change', e => {
+            currentFilters.category = e.target.value;
+            renderProducts();
+        });
+        document.getElementById('statusFilter').addEventListener('change', e => {
+            currentFilters.status = e.target.value;
+            renderProducts();
+        });
+        document.getElementById('sortBy').addEventListener('change', e => {
+            currentFilters.sort = e.target.value;
+            renderProducts();
+        });
+    }
+    
+    function renderStats() {
+        const summary = DATA.summary;
+        document.getElementById('statsBar').innerHTML = `
+            <div class="stat-card">
+                <div class="number">${summary.total_products}</div>
+                <div class="label">Productos Comparados</div>
+            </div>
+            <div class="stat-card best">
+                <div class="number">${summary.best_deals}</div>
+                <div class="label">Buenos/Mejores Precios</div>
+            </div>
+            <div class="stat-card competitive">
+                <div class="number">${summary.competitive}</div>
+                <div class="label">Precios Competitivos</div>
+            </div>
+            <div class="stat-card expensive">
+                <div class="number">${summary.expensive}</div>
+                <div class="label">Más Caros que ML</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">${summary.avg_diff_pct > 0 ? '+' : ''}${summary.avg_diff_pct}%</div>
+                <div class="label">Diferencia Promedio vs ML</div>
+            </div>
+        `;
+    }
+    
+    function renderBrandChips() {
+        const brands = [...new Set(DATA.comparisons.map(c => c.brand))].sort();
+        document.getElementById('brandChips').innerHTML = brands.map(b =>
+            `<span class="chip" onclick="toggleBrand('${b}')">${b}</span>`
+        ).join('');
+    }
+    
+    function toggleBrand(brand) {
+        currentFilters.brand = currentFilters.brand === brand ? '' : brand;
+        document.querySelectorAll('.chip').forEach(c => {
+            c.classList.toggle('active', c.textContent === currentFilters.brand);
+        });
+        renderProducts();
+    }
+    
+    function populateCategories() {
+        const cats = [...new Set(DATA.comparisons.map(c => c.category))].sort();
+        const sel = document.getElementById('categoryFilter');
+        cats.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c; opt.textContent = c;
+            sel.appendChild(opt);
+        });
+    }
+    
+    function getFilteredProducts() {
+        let products = [...DATA.comparisons];
+        
+        if (currentFilters.search) {
+            products = products.filter(p =>
+                p.latinbien.name.toLowerCase().includes(currentFilters.search) ||
+                p.brand.toLowerCase().includes(currentFilters.search) ||
+                p.category.toLowerCase().includes(currentFilters.search)
+            );
+        }
+        if (currentFilters.category) {
+            products = products.filter(p => p.category === currentFilters.category);
+        }
+        if (currentFilters.status) {
+            products = products.filter(p => p.comparison.status === currentFilters.status);
+        }
+        if (currentFilters.brand) {
+            products = products.filter(p => p.brand === currentFilters.brand);
+        }
+        
+        switch (currentFilters.sort) {
+            case 'diff_asc': products.sort((a, b) => b.comparison.diff_pct_vs_avg - a.comparison.diff_pct_vs_avg); break;
+            case 'diff_desc': products.sort((a, b) => a.comparison.diff_pct_vs_avg - b.comparison.diff_pct_vs_avg); break;
+            case 'price_asc': products.sort((a, b) => a.latinbien.price_usd - b.latinbien.price_usd); break;
+            case 'price_desc': products.sort((a, b) => b.latinbien.price_usd - a.latinbien.price_usd); break;
+            case 'name_asc': products.sort((a, b) => a.latinbien.name.localeCompare(b.latinbien.name)); break;
+        }
+        
+        return products;
+    }
+    
+    function renderProducts() {
+        const products = getFilteredProducts();
+        const grid = document.getElementById('productGrid');
+        
+        if (products.length === 0) {
+            grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);">No se encontraron productos con los filtros seleccionados.</p>';
+            return;
+        }
+        
+        grid.innerHTML = products.map(p => {
+            const cmp = p.comparison;
+            const ml = p.mercadolibre;
+            const lb = p.latinbien;
+            
+            const maxDiff = Math.max(...products.map(x => Math.abs(x.comparison.diff_pct_vs_avg)));
+            const barWidth = Math.min(Math.abs(cmp.diff_pct_vs_avg) / (maxDiff || 1) * 100, 100);
+            const barClass = cmp.diff_pct_vs_avg > 5 ? 'positive' : cmp.diff_pct_vs_avg < -5 ? 'negative' : 'neutral';
+            
+            const mlLinks = ml.top_results.map(r =>
+                `<a href="${r.url}" target="_blank">Ver en ML ($${r.price_usd.toFixed(2)})</a>`
+            ).join('');
+            
+            const bestPrice = Math.min(lb.price_usd, ml.min_price);
+            const worstPrice = Math.max(lb.price_usd, ml.max_price);
+            
+            return `
+                <div class="product-card">
+                    <div class="card-header">
+                        <div>
+                            <span class="brand">${p.brand}</span>
+                            <span class="category">${p.category}</span>
+                        </div>
+                        <span class="status-badge ${cmp.status}">${cmp.status_text}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="product-name">${lb.name}</div>
+                        
+                        <div class="price-comparison">
+                            <div class="price-row">
+                                <span class="store">LatinBien (Referencia)</span>
+                                <span class="price ${lb.price_usd === bestPrice ? 'best' : ''} ${lb.price_usd === worstPrice ? 'worst' : ''}">$${lb.price_usd.toFixed(2)}</span>
+                            </div>
+                            <div class="price-row">
+                                <span class="store">MercadoLibre (Mín.)</span>
+                                <span class="price ${ml.min_price === bestPrice ? 'best' : ''} ${ml.min_price === worstPrice ? 'worst' : ''}">$${ml.min_price.toFixed(2)}</span>
+                            </div>
+                            <div class="price-row">
+                                <span class="store">MercadoLibre (Prom.)</span>
+                                <span class="price">$${ml.avg_price.toFixed(2)}</span>
+                            </div>
+                            <div class="price-row">
+                                <span class="store">MercadoLibre (Máx.)</span>
+                                <span class="price ${ml.max_price === worstPrice ? 'worst' : ''}">$${ml.max_price.toFixed(2)}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="diff-bar">
+                            <div class="label">
+                                Diferencia: ${cmp.diff_vs_avg > 0 ? '+' : ''}$${cmp.diff_vs_avg.toFixed(2)} 
+                                (${cmp.diff_pct_vs_avg > 0 ? '+' : ''}${cmp.diff_pct_vs_avg}%) vs promedio ML
+                                — ${ml.count} ofertas en ML
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill ${barClass}" style="width: ${barWidth}%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="ml-links">${mlLinks}</div>
+                    </div>
+                    <div class="card-footer">
+                        <span>LatinBien: $${lb.price_usd.toFixed(2)}</span>
+                        <span>Ahorro posible: $${Math.abs(cmp.diff_vs_avg).toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    init();
+    </script>
+</body>
+</html>

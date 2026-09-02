@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matriz de Seguimiento Honda — LatinBienMotors</title>
+<style>
+  :root{
+    --honda-red:#cc0000;
+    --honda-red-dark:#8c0000;
+    --honda-blue:#16213e;
+    --accent:#0f3460;
+    --bg:#f4f6fb;
+    --card:#ffffff;
+    --text:#1c2333;
+    --muted:#5c6b8a;
+    --border:#e3e8f2;
+    --green:#1e9e5a;
+    --yellow:#f59e0b;
+    --orange:#f97316;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ font-family:'Segoe UI', Arial, sans-serif; background:var(--bg); color:var(--text); padding:22px; }
+  .wrap{ max-width:1280px; margin:0 auto; }
+
+  /* ================= HEADER ================= */
+  header{
+    background:linear-gradient(135deg,#101b33 0%, var(--accent) 60%, #cc0000 160%);
+    color:#fff; border-radius:16px; padding:20px 26px;
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:16px; box-shadow:0 10px 26px rgba(0,0,0,.18);
+    border-bottom:4px solid var(--honda-red);
+  }
+  .brand{ display:flex; align-items:center; gap:16px; }
+  .brand .logo-circle{
+    width:52px; height:52px; border-radius:12px; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+  }
+  .brand .logo-circle svg{ width:40px; height:40px; }
+  .brand h1{ font-size:21px; font-weight:800; letter-spacing:.3px; line-height:1.15; }
+  .brand h1 span{ color:#ffd24a; }
+  .brand p{ font-size:12.5px; opacity:.85; margin-top:3px; }
+  .header-right{ text-align:right; font-size:13px; }
+  .header-right .mes-actual{ background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); padding:6px 14px; border-radius:20px; font-weight:700; }
+
+  /* ================= CONTROLES ================= */
+  .toolbar{
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:12px; margin:18px 0 14px;
+  }
+  .toolbar .grp{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  label.lbl{ font-size:12.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; }
+  select, input, textarea, button{
+    font-family:inherit; font-size:13px; border-radius:8px; border:1px solid var(--border);
+    padding:8px 10px; background:#fff; color:var(--text); outline:none;
+  }
+  select:focus, input:focus, textarea:focus{ border-color:var(--honda-red); box-shadow:0 0 0 3px rgba(204,0,0,.08); }
+  select, input, textarea{ transition:border-color .2s, box-shadow .2s; }
+  .btn{
+    border:none; cursor:pointer; font-weight:700; color:#fff; padding:9px 18px;
+    border-radius:8px; transition:transform .15s, box-shadow .2s, opacity .2s;
+    box-shadow:0 3px 8px rgba(0,0,0,.12); display:inline-flex; align-items:center; gap:6px;
+  }
+  .btn:hover{ transform:translateY(-1px); box-shadow:0 6px 14px rgba(0,0,0,.16); }
+  .btn:active{ transform:translateY(0); }
+  .btn-red{ background:linear-gradient(135deg,var(--honda-red),var(--honda-red-dark)); }
+  .btn-blue{ background:linear-gradient(135deg,#1d4ed8,#1e3a8a); }
+  .btn-green{ background:linear-gradient(135deg,#16a34a,#15803d); }
+  .btn-gray{ background:linear-gradient(135deg,#64748b,#475569); }
+  .btn-outline{ background:#fff; color:var(--accent); border:1px solid var(--border); box-shadow:none; }
+  .btn-sm{ padding:5px 10px; font-size:12px; box-shadow:none; }
+  .btn-xs{ padding:4px 8px; font-size:11px; box-shadow:none; }
+
+  /* ================= KPIs ================= */
+  .kpis{ display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin:18px 0; }
+  .kpi{ background:var(--card); border-radius:12px; padding:16px 18px; box-shadow:0 3px 10px rgba(0,0,0,.05); border-top:4px solid var(--accent); }
+  .kpi .v{ font-size:26px; font-weight:800; color:var(--accent); }
+  .kpi .l{ font-size:11.5px; color:var(--muted); margin-top:4px; text-transform:uppercase; letter-spacing:.4px; }
+  .kpi.green{ border-top-color:var(--green);} .kpi.green .v{ color:var(--green);}
+  .kpi.yellow{ border-top-color:var(--yellow);} .kpi.yellow .v{ color:#b45309;}
+  .kpi.red{ border-top-color:var(--honda-red);} .kpi.red .v{ color:var(--honda-red);}
+  .kpi.orange{ border-top-color:var(--orange);} .kpi.orange .v{ color:#c2410c;}
+
+  /* ================= CARDS / GRID ================= */
+  .grid{ display:grid; gap:16px; margin-bottom:16px; }
+  .grid.cols-2{ grid-template-columns:1fr 1fr; }
+  .grid.cols-3{ grid-template-columns:1fr 1fr 1fr; }
+  @media(max-width:960px){ .grid.cols-2, .grid.cols-3{ grid-template-columns:1fr; } }
+  .card{ background:var(--card); border-radius:14px; padding:18px; box-shadow:0 3px 12px rgba(0,0,0,.05); }
+  .card h3{ font-size:14.5px; color:var(--accent); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .card h3::before{ content:''; width:6px; height:18px; background:var(--honda-red); border-radius:3px; }
+  .card h3 .hint{ margin-left:auto; font-size:11px; color:var(--muted); font-weight:400; }
+
+  /* ================= FORM ================= */
+  .form-grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:12px; }
+  .form-grid .full{ grid-column:span 6; }
+  .form-grid .c2{ grid-column:span 3; }
+  .form-grid .c3{ grid-column:span 2; }
+  @media(max-width:900px){ .form-grid .c2, .form-grid .c3, .form-grid .full{ grid-column:span 6; } }
+  .fld label{ display:block; font-size:11.5px; font-weight:700; color:var(--muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:.3px; }
+  .fld input, .fld select, .fld textarea{ width:100%; }
+  .fld .req::after{ content:' *'; color:var(--honda-red); }
+  .fld .chips{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .form-actions{ grid-column:span 6; display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
+
+  /* ================= CHART BARS ================= */
+  .bars{ width:100%; height:230px; display:flex; align-items:flex-end; gap:12px; }
+  .bar-col{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; min-width:0; }
+  .bar-col .bar{
+    width:100%; max-width:64px; border-radius:8px 8px 0 0;
+    position:relative; transition:height .6s ease; min-height:2px;
+  }
+  .bar-col .bar .cnt{ position:absolute; top:-24px; left:0; right:0; text-align:center; font-weight:800; color:#222; font-size:15px; }
+  .bar-col .lab{ margin-top:8px; font-size:11px; color:var(--muted); text-align:center; word-break:break-word; }
+  .bar-col .pct{ font-size:10px; color:var(--muted); margin-top:2px; }
+
+  /* Horizontal progress bars (aprobado por cliente) */
+  .h-list{ display:flex; flex-direction:column; gap:10px; max-height:280px; overflow:auto; padding-right:4px; }
+  .h-item{ display:grid; grid-template-columns:150px 1fr 52px; align-items:center; gap:10px; }
+  .h-item .name{ font-size:11.5px; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .h-track{ height:16px; background:#eef1f8; border-radius:10px; overflow:hidden; }
+  .h-fill{ height:100%; border-radius:10px; transition:width .7s ease; }
+  .h-val{ font-size:12px; font-weight:800; text-align:right; }
+
+  /* ================= TABLA ================= */
+  .table-scroll{ overflow-x:auto; }
+  table{ width:100%; border-collapse:collapse; font-size:12.5px; min-width:1100px; }
+  th,td{ padding:8px 9px; text-align:left; border-bottom:1px solid var(--border); vertical-align:middle; }
+  th{ background:var(--honda-blue); color:#fff; font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.3px; position:sticky; top:0; }
+  tr:nth-child(even){ background:#f8faff; }
+  tr:hover td{ background:#eef3fd; }
+  .badge{ display:inline-block; padding:2px 9px; border-radius:20px; font-size:10.5px; font-weight:700; color:#fff; white-space:nowrap; }
+  .b-pivca{ background:#7c3aed; } .b-banesco{ background:#0e7490; } .b-provincial{ background:#be123c; } .b-arca{ background:#166534; } .b-sinbanco{ background:#94a3b8; }
+  .estado{ display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; padding:2px 9px; border-radius:20px; }
+  .e-liq{ background:#dcfce7; color:#166534; } .e-apr{ background:#dbeafe; color:#1e40af; }
+  .e-pen{ background:#fef3c7; color:#92400e; } .e-sin{ background:#f1f5f9; color:#475569; }
+  .dot{ width:7px; height:7px; border-radius:50%; display:inline-block; }
+  .e-liq .dot{ background:#16a34a; } .e-apr .dot{ background:#2563eb; } .e-pen .dot{ background:#d97706; } .e-sin .dot{ background:#94a3b8; }
+  .sw{ width:11px; height:11px; border-radius:3px; display:inline-block; border:1px solid rgba(0,0,0,.14); vertical-align:middle; margin-right:5px; }
+  .num{ font-weight:800; color:var(--accent); }
+  .actions-cell{ white-space:nowrap; }
+  .actions-cell button{ margin-right:4px; }
+
+  .empty{ text-align:center; padding:30px 10px; color:var(--muted); font-size:13px; }
+  .footer{ text-align:center; margin-top:20px; font-size:12px; color:var(--muted); }
+  .toast{
+    position:fixed; bottom:22px; right:22px; background:var(--honda-blue); color:#fff;
+    padding:12px 18px; border-radius:10px; font-size:13px; font-weight:600;
+    box-shadow:0 8px 20px rgba(0,0,0,.25); opacity:0; transform:translateY(10px);
+    transition:opacity .3s, transform .3s; z-index:999; max-width:320px;
+  }
+  .toast.show{ opacity:1; transform:translateY(0); }
+  .legend{ display:flex; flex-wrap:wrap; gap:12px; margin-top:10px; font-size:11px; color:var(--muted); }
+  .legend span{ display:inline-flex; align-items:center; gap:5px; }
+  .legend i{ width:10px; height:10px; border-radius:3px; display:inline-block; }
+
+  /* chips de colores del vehículo */
+  .color-chip{
+    display:inline-flex; align-items:center; gap:5px; background:#fff;
+    border:1px solid var(--border); border-radius:16px; padding:3px 9px; font-size:11px; cursor:pointer;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .color-chip.active{ border-color:var(--honda-red); box-shadow:0 0 0 2px rgba(204,0,0,.15); }
+  .color-chip .sw{ width:12px; height:12px; border-radius:50%; }
+  .hidden{ display:none !important; }
+  .msg{ font-size:12px; font-weight:600; }
+  .msg.err{ color:var(--honda-red); }
+  .msg.ok{ color:var(--green); }
+
+  /* ============ FILTROS ============ */
+  .filtro-bar{
+    display:flex; align-items:flex-end; gap:8px; flex-wrap:wrap;
+    background:#f8faff; border:1px solid var(--border); border-radius:10px;
+    padding:10px 12px; margin-bottom:12px;
+  }
+  .filtro-bar .lbl{ font-size:10.5px; margin-bottom:3px; display:block; }
+  .filtro-bar select{ padding:6px 9px; font-size:12px; max-width:200px; }
+
+  /* ============ IMPORTAR ============ */
+  .import-row{ display:flex; gap:14px; flex-wrap:wrap; align-items:stretch; }
+  .import-row .fld{ flex:1; }
+  .import-row textarea{ font-family:Consolas, monospace; font-size:11px; resize:vertical; width:100%; }
+  #impMsg{ align-self:center; }
+
+  /* ============ PESTAÑAS ============ */
+  .tabs-nav{
+    display:flex; gap:8px; margin:18px 0 0; padding:0;
+    background:var(--card); border-radius:14px 14px 0 0;
+    padding:10px 10px 0 10px; box-shadow:0 -3px 10px rgba(0,0,0,.03);
+  }
+  .tab-btn{
+    border:none; background:#eef1f8; color:var(--muted); font-weight:700; font-size:13px;
+    padding:11px 20px; border-radius:10px 10px 0 0; cursor:pointer; transition:all .2s;
+    display:inline-flex; align-items:center; gap:7px;
+  }
+  .tab-btn:hover{ background:#e3e8f2; color:var(--accent); }
+  .tab-btn.active{ background:var(--honda-blue); color:#fff; }
+  .tab-content{
+    background:var(--card); border-radius:0 0 14px 14px;
+    padding:20px 20px 24px; box-shadow:0 4px 14px rgba(0,0,0,.05);
+    margin-bottom:18px;
+  }
+
+  /* ============ CHECKLIST ============ */
+  .check-head{ font-size:14px; color:var(--accent); margin:18px 0 4px; }
+  .check-head::before{ content:none; }
+  .check-sub{ font-size:12px; color:var(--muted); margin-bottom:10px; }
+  .check-cat{ margin-bottom:12px; }
+  .check-cat .cat-name{
+    font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.5px;
+    color:var(--honda-blue); background:#eef2fb; border-radius:8px; padding:5px 10px; margin-bottom:6px;
+  }
+  .check-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:6px; }
+  .check-item{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    background:#f8faff; border:1px solid var(--border); border-radius:8px; padding:6px 9px;
+  }
+  .check-item .ci-name{ font-size:12.5px; color:var(--text); }
+  .check-opts{ display:flex; gap:4px; }
+  .ck-btn{
+    border:1px solid var(--border); background:#fff; font-size:10px; font-weight:800;
+    padding:4px 7px; border-radius:6px; cursor:pointer; color:var(--muted); transition:all .15s; min-width:38px; text-align:center;
+  }
+  .ck-btn:hover{ transform:translateY(-1px); }
+  .ck-btn.sel-ok{ background:#dcfce7; border-color:#16a34a; color:#166534; }
+  .ck-btn.sel-reg{ background:#fef3c7; border-color:#f59e0b; color:#92400e; }
+  .ck-btn.sel-dan{ background:#fee2e2; border-color:#dc2626; color:#b91c1c; }
+  .ck-btn.sel-na{ background:#f1f5f9; border-color:#94a3b8; color:#475569; }
+
+  .resumen-check{ display:flex; gap:6px; flex-wrap:wrap; }
+  .mini-badge{ font-size:10px; font-weight:800; padding:2px 7px; border-radius:12px; }
+  .mini-ok{ background:#dcfce7; color:#166534; } .mini-reg{ background:#fef3c7; color:#92400e; }
+  .mini-dan{ background:#fee2e2; color:#b91c1c; } .mini-na{ background:#f1f5f9; color:#475569; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ HEADER ============ -->
+  <header>
+    <div class="brand">
+      <div class="logo-circle">
+        <!-- Honda "H" wordmark (SVG estilizado) -->
+        <svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Honda">
+          <text x="50" y="47" font-family="Arial Black, Arial, sans-serif" font-size="46" font-weight="900" fill="#cc0000" text-anchor="middle" letter-spacing="-3">HONDA</text>
+        </svg>
+      </div>
+      <div>
+        <h1>Matriz de Control y Seguimiento <span>HONDA</span></h1>
+        <p>Honda Mérida / LatinBienMotors, C.A.</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="mes-actual" id="mesHeader">Mes: —</div>
+      <div style="margin-top:6px;opacity:.8;">Financiamiento vehicular</div>
+    </div>
+  </header>
+
+  <!-- ============ NAVEGACIÓN / PESTAÑAS ============ -->
+  <nav class="tabs-nav">
+    <button class="tab-btn active" data-tab="matriz">📋 Matriz / Financiamiento</button>
+    <button class="tab-btn" data-tab="servicios">🔧 Servicios / Checklist</button>
+  </nav>
+
+  <!-- ============ CONTENIDO: MATRIZ ============ -->
+  <div class="tab-content" id="tab-matriz">
+
+  <!-- ============ TOOLBAR ============ -->
+  <div class="toolbar">
+    <div class="grp">
+      <label class="lbl">Matriz del mes:</label>
+      <select id="selMes"></select>
+      <input type="month" id="inpNuevoMes" title="Crear / ir a un mes">
+      <button class="btn btn-outline btn-sm" id="btnIrMes">Ir al mes</button>
+    </div>
+    <div class="grp">
+      <button class="btn btn-green btn-sm" id="btnExportar">⬇ Exportar CSV</button>
+      <button class="btn btn-blue btn-sm" id="btnImportar">⬆ Importar de Sheets</button>
+      <button class="btn btn-gray btn-sm" id="btnNueva">➕ Nuevo registro</button>
+      <button class="btn btn-outline btn-sm" id="btnFiltroBanco">🏦 Por banco</button>
+    </div>
+  </div>
+
+  <!-- ============ PANEL IMPORTAR (Google Sheets) ============ -->
+  <div class="card hidden" id="panelImportar" style="margin-bottom:16px;border:2px dashed var(--honda-blue);">
+    <h3>Importar datos desde Google Sheets
+      <span class="hint">Exporta tu hoja → Archivo → Descargar → CSV</span>
+    </h3>
+    <div class="import-row">
+      <div class="fld" style="min-width:180px;">
+        <label class="lbl">Mes destino</label>
+        <input type="month" id="impMes" value="2026-07">
+      </div>
+      <div class="fld" style="flex:1;min-width:260px;">
+        <label class="lbl">Pega aquí el CSV (copiar/pegar)</label>
+        <textarea id="impTexto" rows="6" placeholder="Pega el contenido del CSV exportado de tu hoja de cálculo..."></textarea>
+      </div>
+      <div class="fld" style="min-width:200px;">
+        <label class="lbl">Ejemplo del formato (Jul 2026)</label>
+        <textarea id="impEjemplo" rows="6" readonly style="background:#f5f7fb;font-size:11px;">,Nº,CLIENTE,Nº DE CEDULA,VEHICULO,MONTO TOTAL,MONTO APROBADO,FECHA DE APROBACION,PLAZO,% APROBADO,FINANCIERA BANCO,Nº DE SOLICITUD,...
+,1,MARIA ANDREINA MORENO,V16199070,HONDA CITY - EXL,34158.32,17079.16,46171,36,50,PIVCA,5463,,46196,913,,PENDIENTE POR LIQUIDAR</textarea>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;">
+      <label style="font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;">
+        <input type="checkbox" id="impReemplazar"> Reemplazar los datos de este mes (borra antes)
+      </label>
+      <button class="btn btn-blue btn-sm" id="btnImportarProcesar">⚙ Procesar e importar</button>
+      <button class="btn btn-outline btn-sm" id="btnImportarCerrar">Cerrar</button>
+      <span class="msg" id="impMsg"></span>
+    </div>
+  </div>
+
+  <!-- ============ KPIs ============ -->
+  <div class="kpis" id="kpis"></div>
+
+  <!-- ============ FORMULARIO ============ -->
+  <div class="card" id="cardForm" style="margin-bottom:16px;">
+    <h3 id="formTitle">Registrar solicitud de financiamiento <span class="hint" id="formHint"></span></h3>
+    <div class="form-grid">
+      <div class="fld full">
+        <label class="req">Cliente</label>
+        <input type="text" id="fCliente" placeholder="Nombre y apellido del cliente">
+      </div>
+      <div class="fld c2">
+        <label class="req">Nº de cédula</label>
+        <input type="text" id="fCedula" placeholder="V12345678">
+      </div>
+      <div class="fld c3">
+        <label>Nº (consecutivo del mes)</label>
+        <input type="number" id="fNum" min="1" placeholder="Auto">
+      </div>
+
+      <div class="fld c2">
+        <label class="req">Vehículo (modelo)</label>
+        <select id="fVehiculo">
+          <option value="">— Seleccionar modelo —</option>
+          <option value="HONDA CITY 1.5L A/T EXL 2026">HONDA CITY 1.5L A/T EXL 2026</option>
+          <option value="HONDA HR-V 1.5L A/T EXL 2026">HONDA HR-V 1.5L A/T EXL 2026</option>
+          <option value="HONDA HR-V 1.5L A/T LX 2026">HONDA HR-V 1.5L A/T LX 2026</option>
+          <option value="HONDA WR-V 1.5L A/T EXL 2026">HONDA WR-V 1.5L A/T EXL 2026</option>
+        </select>
+      </div>
+      <div class="fld c2">
+        <label class="req">Color</label>
+        <select id="fColor"><option value="">— Primero el modelo —</option></select>
+      </div>
+      <div class="fld c2">
+        <label class="req">Financiera / Banco</label>
+        <select id="fBanco">
+          <option value="">— Seleccionar —</option>
+          <option value="PIVCA">PIVCA</option>
+          <option value="BANESCO">BANESCO</option>
+          <option value="PROVINCIAL">PROVINCIAL</option>
+          <option value="ARCA">ARCA</option>
+        </select>
+      </div>
+
+      <div class="fld c3">
+        <label>Monto total</label>
+        <input type="number" id="fMontoTotal" step="0.01" min="0" placeholder="0.00">
+      </div>
+      <div class="fld c3">
+        <label>Monto aprobado</label>
+        <input type="number" id="fMontoAprobado" step="0.01" min="0" placeholder="0.00">
+      </div>
+
+      <div class="fld c3">
+        <label>% aprobado (automático)</label>
+        <input type="number" id="fPct" step="0.01" readonly style="background:#f1f5f9;">
+      </div>
+      <div class="fld c3">
+        <label>Plazo (meses)</label>
+        <input type="number" id="fPlazo" min="1" placeholder="24 / 36 / 48">
+      </div>
+
+      <div class="fld c2">
+        <label>Fecha de aprobación</label>
+        <input type="date" id="fFechaAprobacion">
+      </div>
+      <div class="fld c2">
+        <label>Nº de solicitud</label>
+        <input type="text" id="fSolicitud" placeholder="Ej: 5463">
+      </div>
+      <div class="fld c2">
+        <label>Vencimiento de aprobación</label>
+        <input type="date" id="fVencimiento">
+      </div>
+
+      <div class="fld c2">
+        <label>Fecha de facturación</label>
+        <input type="date" id="fFacturacion">
+      </div>
+      <div class="fld c2">
+        <label>Nº de factura</label>
+        <input type="text" id="fFactura" placeholder="Ej: 913">
+      </div>
+      <div class="fld c2">
+        <label>Fecha de liquidación</label>
+        <input type="date" id="fLiquidacion">
+      </div>
+
+      <div class="fld full">
+        <label>Observación</label>
+        <textarea id="fObservacion" rows="2" placeholder="PENDIENTE POR LIQUIDAR, por pago de pólizas, firma de reserva de dominio, etc."></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-red" id="btnGuardar">💾 Guardar registro</button>
+        <button class="btn btn-outline btn-gray" id="btnCancelar">Cancelar edición</button>
+        <span class="msg" id="formMsg"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ GRÁFICOS ============ -->
+  <div class="grid cols-3">
+    <div class="card">
+      <h3>Financiera / Banco <span class="hint">solicitudes del mes</span></h3>
+      <div class="bars" id="chartBanco"></div>
+      <div class="legend">
+        <span><i style="background:#7c3aed"></i>PIVCA</span>
+        <span><i style="background:#0e7490"></i>BANESCO</span>
+        <span><i style="background:#be123c"></i>PROVINCIAL</span>
+        <span><i style="background:#166534"></i>ARCA</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Monto financiado por banco <span class="hint">$ del mes</span></h3>
+      <div class="bars" id="chartBancoMonto"></div>
+    </div>
+    <div class="card">
+      <h3>% aprobado por cliente <span class="hint">del mes</span></h3>
+      <div class="h-list" id="chartClientes"></div>
+    </div>
+  </div>
+
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>Relación por mes <span class="hint">monto total vs aprobado</span></h3>
+      <div class="bars" id="chartMeses"></div>
+      <div class="legend">
+        <span><i style="background:#0f3460"></i>Monto total</span>
+        <span><i style="background:#16a34a"></i>Monto aprobado</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Solicitudes por mes <span class="hint">cantidad</span></h3>
+      <div class="bars" id="chartMesesCount"></div>
+    </div>
+  </div>
+
+  <!-- ============ MATRIZ ============ -->
+  <div class="card">
+    <h3>Matriz de seguimiento — <span id="matrizMesTitulo">—</span>
+      <span class="hint"><b id="matrizCount">0</b> registros encontrados</span>
+    </h3>
+    <div class="filtro-bar" id="filtroBar">
+      <label class="lbl">Filtrar por plan/vehículo:</label>
+      <select id="filtroPlan">
+        <option value="">Todos los planes</option>
+        <option value="HONDA CITY 1.5L A/T EXL 2026">HONDA CITY EXL 2026</option>
+        <option value="HONDA HR-V 1.5L A/T EXL 2026">HONDA HR-V EXL 2026</option>
+        <option value="HONDA HR-V 1.5L A/T LX 2026">HONDA HR-V LX 2026</option>
+        <option value="HONDA WR-V 1.5L A/T EXL 2026">HONDA WR-V EXL 2026</option>
+      </select>
+      <label class="lbl">Banco:</label>
+      <select id="filtroBanco">
+        <option value="">Todos</option>
+        <option>PIVCA</option>
+        <option>BANESCO</option>
+        <option>PROVINCIAL</option>
+        <option>ARCA</option>
+      </select>
+      <label class="lbl">Plazo:</label>
+      <select id="filtroPlazo">
+        <option value="">Todos</option>
+        <option>12</option>
+        <option>24</option>
+        <option>36</option>
+        <option>48</option>
+        <option>60</option>
+      </select>
+      <label class="lbl">Estado:</label>
+      <select id="filtroEstado">
+        <option value="">Todos</option>
+        <option>APROBADO</option>
+        <option>LIQUIDADO</option>
+        <option>PENDIENTE</option>
+      </select>
+      <button class="btn btn-outline btn-xs" id="btnLimpiarFiltros">Limpiar filtros</button>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Cliente</th><th>Cédula</th><th>Vehículo</th><th>Color</th>
+            <th>Monto total</th><th>Monto aprobado</th><th>% Apr.</th><th>Plazo</th>
+            <th>Banco</th><th>Nº Solic.</th><th>Fecha aprob.</th><th>Factura</th>
+            <th>Liquidac.</th><th>Estado</th><th>Observación</th><th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tblBody"></tbody>
+      </table>
+    </div>
+  </div><!-- fin tabla matriz -->
+
+  </div><!-- fin tab-matriz -->
+
+  <!-- ============ CONTENIDO: SERVICIOS / CHECKLIST ============ -->
+  <div class="tab-content hidden" id="tab-servicios">
+
+    <div class="toolbar">
+      <div class="grp">
+        <label class="lbl">Servicios / Recepción de vehículos</label>
+      </div>
+      <div class="grp">
+        <button class="btn btn-green btn-sm" id="btnNuevoServicio">➕ Nuevo servicio</button>
+        <button class="btn btn-blue btn-sm" id="btnExportarServicios">⬇ Exportar CSV</button>
+      </div>
+    </div>
+
+    <!-- KPIs de servicios -->
+    <div class="kpis" id="kpisServicios"></div>
+
+    <!-- Formulario de recepción / checklist -->
+    <div class="card hidden" id="cardServicio" style="margin-bottom:16px;border:2px solid var(--honda-blue);">
+      <h3 id="servicioTitle">CONTROL DE RECEPCIÓN E INVENTARIO <span class="hint" id="servicioHint"></span></h3>
+
+      <!-- 1. INFORMACIÓN GENERAL -->
+      <h3 class="check-head">1. INFORMACIÓN GENERAL</h3>
+      <div class="form-grid">
+        <div class="fld c2">
+          <label class="req">Nombre del Cliente</label>
+          <input type="text" id="sCliente" placeholder="Nombre del cliente">
+        </div>
+        <div class="fld c2">
+          <label>Teléfono</label>
+          <input type="text" id="sTelefono" placeholder="0412-0000000">
+        </div>
+        <div class="fld c2">
+          <label>Email</label>
+          <input type="text" id="sEmail" placeholder="cliente@correo.com">
+        </div>
+        <div class="fld c2">
+          <label>Placa</label>
+          <input type="text" id="sPlaca" placeholder="AB123CD">
+        </div>
+        <div class="fld c3">
+          <label class="req">Vehículo (modelo)</label>
+          <select id="sVehiculo">
+            <option value="">— Seleccionar modelo —</option>
+            <option value="HONDA CITY 1.5L A/T EXL 2026">HONDA CITY 1.5L A/T EXL 2026</option>
+            <option value="HONDA HR-V 1.5L A/T EXL 2026">HONDA HR-V 1.5L A/T EXL 2026</option>
+            <option value="HONDA HR-V 1.5L A/T LX 2026">HONDA HR-V 1.5L A/T LX 2026</option>
+            <option value="HONDA WR-V 1.5L A/T EXL 2026">HONDA WR-V 1.5L A/T EXL 2026</option>
+          </select>
+        </div>
+        <div class="fld c3">
+          <label>Color</label>
+          <select id="sColor"><option value="">— Primero el modelo —</option></select>
+        </div>
+        <div class="fld c3">
+          <label>VIN / Chasis</label>
+          <input type="text" id="sVin" placeholder="93HRV...">
+        </div>
+        <div class="fld c2">
+          <label>Nº de Requisición</label>
+          <input type="text" id="sReq" placeholder="Requisición">
+        </div>
+        <div class="fld c2">
+          <label>Kilometraje</label>
+          <input type="number" id="sKm" min="0" placeholder="0">
+        </div>
+        <div class="fld c2">
+          <label>Fecha de entrada / recepción</label>
+          <input type="date" id="sFechaIngreso">
+        </div>
+        <div class="fld c2">
+          <label>Fecha salida / entrega</label>
+          <input type="date" id="sFechaSalida">
+        </div>
+        <div class="fld c2">
+          <label>Estado del servicio</label>
+          <select id="sEstado">
+            <option value="RECIBIDO">🟡 Recibido (en taller)</option>
+            <option value="EN PROCESO">🔵 En proceso</option>
+            <option value="ENTREGADO">🟢 Entregado</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 2. DESCRIPCIÓN DEL TRABAJO -->
+      <h3 class="check-head">2. DESCRIPCIÓN DEL TRABAJO / MANTENIMIENTO</h3>
+      <div class="form-grid">
+        <div class="fld c4">
+          <label>Descripción del trabajo / mantenimiento</label>
+          <input type="text" id="sTrabajo" placeholder="Ej: Mantenimiento 15.000 km, cambio de aceite, alineación...">
+        </div>
+        <div class="fld c2">
+          <label>Costo estimado ($)</label>
+          <input type="number" id="sCosto" step="0.01" min="0" placeholder="0.00">
+        </div>
+      </div>
+
+      <!-- 3 a 6: CHECKLIST -->
+      <h3 class="check-head">3 a 6. CHECKLIST DE RECEPCIÓN Y ESTADO</h3>
+      <p class="check-sub">Marca el estado de cada punto al recibir el vehículo: <b>✓ OK</b> (buen estado), <b>△ REG</b> (regular / leve), <b>✕ DAÑ</b> (dañado), <b>— N/A</b> (no aplica).</p>
+      <div id="checklist"></div>
+
+      <!-- 7. OBSERVACIONES GENERALES -->
+      <h3 class="check-head">7. OBSERVACIONES GENERALES</h3>
+      <div class="fld">
+        <label>Observaciones</label>
+        <textarea id="sObservacion" rows="2" placeholder="Observaciones adicionales, accesorios no incluidos, detalles, etc."></textarea>
+      </div>
+
+      <div class="form-grid" style="margin-top:14px;">
+        <div class="fld c3">
+          <label>Firma del Cliente</label>
+          <input type="text" id="sFirmaCliente" placeholder="Nombre / firma del cliente">
+        </div>
+        <div class="fld c3">
+          <label>Recepcionista / Asesor de Servicio</label>
+          <input type="text" id="sAsesor" placeholder="Nombre del asesor">
+        </div>
+      </div>
+
+      <div class="form-actions" style="margin-top:12px;">
+        <button class="btn btn-red" id="btnGuardarServicio">💾 Guardar servicio</button>
+        <button class="btn btn-outline btn-gray" id="btnCancelarServicio">Cancelar</button>
+        <span class="msg" id="servicioMsg"></span>
+      </div>
+    </div>
+
+    <!-- Filtros de servicios -->
+    <div class="filtro-bar" id="filtroBarServ">
+      <label class="lbl">Filtrar estado:</label>
+      <select id="filtroServEstado">
+        <option value="">Todos</option>
+        <option>RECIBIDO</option>
+        <option>EN PROCESO</option>
+        <option>ENTREGADO</option>
+      </select>
+      <label class="lbl">Vehículo:</label>
+      <select id="filtroServVehiculo">
+        <option value="">Todos</option>
+        <option value="HONDA CITY 1.5L A/T EXL 2026">HONDA CITY EXL 2026</option>
+        <option value="HONDA HR-V 1.5L A/T EXL 2026">HONDA HR-V EXL 2026</option>
+        <option value="HONDA HR-V 1.5L A/T LX 2026">HONDA HR-V LX 2026</option>
+        <option value="HONDA WR-V 1.5L A/T EXL 2026">HONDA WR-V EXL 2026</option>
+      </select>
+      <button class="btn btn-outline btn-xs" id="btnLimpiarServFiltros">Limpiar</button>
+      <span class="msg" style="margin-left:auto" id="servCount"></span>
+    </div>
+
+    <!-- Tabla servicios -->
+    <div class="card">
+      <h3>Servicios registrados <span class="hint">recepción y checklist</span></h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>F. Ingreso</th><th>Cliente</th><th>Vehículo</th><th>Color</th>
+              <th>Placa</th><th>VIN</th><th>Km</th><th>Trabajo / Mantenimiento</th><th>Costo</th><th>Estado</th>
+              <th>Checklist</th><th>F. Salida</th><th>Asesor</th><th>Obs.</th><th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tblServicios"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- fin tab-servicios -->
+
+  <div class="footer">LatinBienMotors — Honda Mérida | Matriz de control y seguimiento de financiamiento por mes</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* ================= CONFIG ================= */
+const BANCOS = ["PIVCA","BANESCO","PROVINCIAL","ARCA"];
+const BANCO_COLOR = { "PIVCA":"#7c3aed", "BANESCO":"#0e7490", "PROVINCIAL":"#be123c", "ARCA":"#166534" };
+
+const MODELOS = {
+  "HONDA CITY 1.5L A/T EXL 2026": ["Plata Metalico","Blanco Perlado","Gris Metalico","Azul Cosmico"],
+  "HONDA HR-V 1.5L A/T EXL 2026": ["Plata Metalico","Rojo Metalico","Blanco Perlado","Negro Metalico","Gris Metalico","Gris Urbano","Azul Cosmico"],
+  "HONDA HR-V 1.5L A/T LX 2026":  ["Plata Metalico","Blanco Perlado","Gris Metalico","Azul Cosmico"],
+  "HONDA WR-V 1.5L A/T EXL 2026": ["Plata Metalico","Gris Metalico","Azul Cosmico","Azul Nordico","Blanco","Blanco Metalico"]
+};
+
+const COLOR_HEX = {
+  "Plata Metalico":"#c7ccd4", "Blanco Perlado":"#f2f4f7", "Gris Metalico":"#9aa2ad",
+  "Azul Cosmico":"#1e5aa8", "Rojo Metalico":"#cc0000", "Negro Metalico":"#2b2d31",
+  "Gris Urbano":"#6b7280", "Azul Nordico":"#2e6bb0", "Blanco":"#ffffff", "Blanco Metalico":"#e8eaee"
+};
+
+const STORAGE_KEY = "honda_matriz_seguimiento_v1";
+
+/* ================= DATOS SEMILLA (matriz JULIO 2026) ================= */
+// Excel serial -> fecha ISO
+const xl = n => {
+  const d = new Date(Date.UTC(1899,11,30) + n*86400000);
+  return d.toISOString().slice(0,10);
+};
+
+function seed(){
+  const r = [];
+  const add = (o) => {
+    o.id = "seed_" + r.length;
+    o.mes = o.mes || "2026-07";
+    r.push(o);
+  };
+  // Mapeo de abreviaturas de la hoja a modelos completos
+  const M = {
+    "HONDA CITY - EXL":"HONDA CITY 1.5L A/T EXL 2026",
+    "HONDA HRV - EXL":"HONDA HR-V 1.5L A/T EXL 2026",
+    "HONDA HRV - LX":"HONDA HR-V 1.5L A/T LX 2026",
+    "HONDA WR - EXL":"HONDA WR-V 1.5L A/T EXL 2026"
+  };
+  const n = (v)=> typeof v === "string" ? parseFloat(String(v).replace(/[^\d.-]/g,"")) || 0 : (v||0);
+
+  // Datos de la hoja (gid 402500115)
+  const rows = [
+    ["MARIA ANDREINA MORENO","V16199070","HONDA CITY - EXL",34158.32,17079.16,46171,36,50,"PIVCA","5463","",46196,913,"","PENDIENTE POR LIQUIDAR"],
+    ["ANA MARIA NIGRO","V16742702","HONDA HRV - EXL",41685.56,20842.78,46174,24,50,"PIVCA","5536","",46181,829,46206,""],
+    ["LUIS ANGARITA","V12487101","HONDA HRV - LX",38162.72,19081.36,46182,24,50,"PIVCA","5556","",46184,848,46206,""],
+    ["CARLA PEÑALOZA","V20014236","HONDA WR - EXL",38937.52,19468.76,46188,36,50,"PIVCA","5540","",46192,897,"","PENDIENTE POR LIQUIDAR"],
+    ["NORELIS COLMENARES","V11502014","HONDA HRV - LX",42105.56,16842.22,46177,24,40,"PIVCA","5545","",46202,928,"","PENDIENTE POR PAGO DE POLIZAS POR PARTE DEL CLIENTE"],
+    ["LUIS MIGUEL ANGULO ARELLANO","V21330228","HONDA WR - EXL",43358.28,17343.31,46178,24,40,"PIVCA","5569","",46184,851,"","PENDIENTE POR LIQUIDAR"],
+    ["FERNANDO JOSE VERA USECHE","V14699021","HONDA HRV - LX",38937.52,19184.50,46205,12,50,"PIVCA","5694","",46213,970,"","POR PAGO DE POLIZAS POR PARTE DEL CLIENTE Y FIRMA DE RESERVA DE DOMINIO"],
+    ["GERARDO JOSE RAMIREZ FERNANDEZ","V16908745","HONDA HRV - EXL",43358.28,30350.80,46206,36,70,"ARCA","","",46232,1044,46234,""],
+    ["JUHENDIS ESTHER VALLADARES LOPEZ","V16199880","HONDA CITY - EXL",34158.32,23910.82,46218,36,70,"ARCA","","",46232,1042,46234,""],
+    ["ROBERTO CARLOS DIAZ MORANTE","V18371871","HONDA WR - EXL",38937.52,19468.76,46218,24,50,"ARCA","","",46230,1036,46232,""],
+    ["GREGORY ARCANGEL ARAQUE LOPEZ","V26274175","HONDA CITY - EXL",34158.32,17079.16,46218,24,50,"ARCA","","",46249,"","","PENDIENTE POR FACTURAR Y RESERVA DE DOMINIO"],
+    ["RAMON BENITO VALBUENA RONDON","V20529227","HONDA WR - EXL",38937.52,27256.26,46232,36,70,"ARCA","","",46234,1077,"","PENDIENTE POR SEGURO Y RESERVA DE DOMINIO"],
+    ["ANTONIO JOSE ARAQUE FERNANDEZ","V19422214","HONDA WR - EXL",38937.52,0,"","",0,"ARCA","","","","","","PENDIENTE POR RECAUDOS TRAMITE POR PIVCA"],
+    ["GERARDO JOSE RAMIREZ FERNANDEZ","V16908745","HONDA HRV - EXL",43358.28,21679.14,46223,24,50,"PIVCA","4947",46315,"","","",""],
+    ["ORLANDO JOSE ALBORNOZ RODRIGUEZ","V16655955","HONDA HRV - EXL",43358.28,0,"","",0,"BANESCO","","","","","",""],
+    ["YADIRA COROMOTO ARIZA","V15085806","HONDA WR - EXL",38937.52,22000.00,46234,48,57.72,"BANESCO","","","","","","PENDIENTE POR FACTURAR"],
+    ["ALBA JEANETTE SALAS","V11467548","HONDA WR - EXL",38937.52,0,"","",0,"PROVINCIAL","","","","","",""],
+    ["YOANA LACRUZ QUINTERO","V13803423","HONDA WR - EXL",38937.52,27256.26,46232,48,70,"BANESCO","","","","","","PENDIENTE POR FACTURAR"]
+  ];
+
+  let num = 1;
+  rows.forEach(x => {
+    add({
+      num: num++,
+      cliente: x[0], cedula: x[1],
+      vehiculo: M[x[2]] || x[2], color: "",
+      montoTotal: n(x[3]), montoAprobado: n(x[4]),
+      fechaAprobacion: x[5] ? xl(x[5]) : "", plazo: n(x[6])||"",
+      pct: n(x[7]), banco: x[8], solicitud: x[9]||"",
+      vencimiento: x[10] ? xl(x[10]) : "", facturacion: x[11] ? xl(x[11]) : "",
+      factura: x[12] ? String(x[12]).trim() : "", liquidacion: x[13] ? xl(x[13]) : "",
+      observacion: x[14]||"", mes: "2026-07"
+    });
+  });
+  return r;
+}
+
+/* ================= ESTADO ================= */
+let data = load();
+let mesActual = "2026-07";
+let editId = null;
+
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  const s = seed();
+  save(s);
+  return s;
+}
+function save(d){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }catch(e){}
+  data = d;
+}
+function fmt(n){
+  return (n||0).toLocaleString("en-US",{minimumFractionDigits:2, maximumFractionDigits:2});
+}
+function dinero(n){ return "$ " + fmt(n); }
+
+/* Estado derivado */
+function estadoOf(r){
+  if(r.liquidacion) return "LIQUIDADO";
+  if(r.montoAprobado > 0) return "APROBADO";
+  return "PENDIENTE";
+}
+function pctOf(r){
+  if(r.montoTotal > 0) return (r.montoAprobado/r.montoTotal)*100;
+  return (r.pct || 0);
+}
+
+/* ================= MESES ================= */
+function mesesDisponibles(){
+  const s = new Set(data.map(r => r.mes));
+  if(!s.has(mesActual)) s.add(mesActual);
+  return [...s].sort();
+}
+function renderSelMes(){
+  const sel = document.getElementById("selMes");
+  const meses = mesesDisponibles();
+  sel.innerHTML = meses.map(m => `<option value="${m}">${m}</option>`).join("");
+  sel.value = mesActual;
+  document.getElementById("mesHeader").textContent = "Mes: " + mesActual;
+  document.getElementById("matrizMesTitulo").textContent = mesActual;
+}
+
+/* ================= TOAST ================= */
+let toastTimer;
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove("show"), 2600);
+}
+
+/* ================= KPI ================= */
+function renderKpis(){
+  const regs = data.filter(r => r.mes === mesActual);
+  const total = regs.reduce((s,r)=>s+r.montoTotal,0);
+  const aprob = regs.reduce((s,r)=>s+r.montoAprobado,0);
+  const aprCount = regs.filter(r=>r.montoAprobado>0).length;
+  const liqCount = regs.filter(r=>r.liquidacion).length;
+  const pctGlobal = total>0 ? (aprob/total*100) : 0;
+  const el = document.getElementById("kpis");
+  el.innerHTML = `
+    <div class="kpi"><div class="v">${regs.length}</div><div class="l">Solicitudes del mes</div></div>
+    <div class="kpi"><div class="v">${dinero(total)}</div><div class="l">Monto total solicitado</div></div>
+    <div class="kpi green"><div class="v">${dinero(aprob)}</div><div class="l">Monto aprobado</div></div>
+    <div class="kpi yellow"><div class="v">${pctGlobal.toFixed(1)}%</div><div class="l">% aprobación global</div></div>
+    <div class="kpi orange"><div class="v">${aprCount}</div><div class="l">Aprobadas</div></div>
+    <div class="kpi red"><div class="v">${liqCount}</div><div class="l">Liquidadas</div></div>
+  `;
+}
+
+/* ================= FORM ================= */
+function actualizarColores(){
+  const v = document.getElementById("fVehiculo").value;
+  const sel = document.getElementById("fColor");
+  const colores = MODELOS[v] || [];
+  sel.innerHTML = `<option value="">${colores.length ? "— Seleccionar color —" : "— Primero el modelo —"}</option>`;
+  colores.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c; opt.textContent = c;
+    sel.appendChild(opt);
+  });
+}
+function calcPct(){
+  const mt = parseFloat(document.getElementById("fMontoTotal").value)||0;
+  const ma = parseFloat(document.getElementById("fMontoAprobado").value)||0;
+  const pct = mt>0 ? (ma/mt*100) : 0;
+  document.getElementById("fPct").value = pct.toFixed(2);
+}
+function limpiarForm(){
+  ["fCliente","fCedula","fVehiculo","fBanco","fMontoTotal","fMontoAprobado","fPct",
+   "fPlazo","fFechaAprobacion","fSolicitud","fVencimiento","fFacturacion","fFactura",
+   "fLiquidacion","fObservacion"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("fNum").value = "";
+  actualizarColores();
+  editId = null;
+  document.getElementById("formTitle").textContent = "Registrar solicitud de financiamiento";
+  document.getElementById("formMsg").textContent = "";
+  document.getElementById("formHint").textContent = "";
+  document.getElementById("fCliente").focus();
+}
+function cargarEnForm(r){
+  editId = r.id;
+  const $ = id => document.getElementById(id);
+  $("fNum").value = r.num || "";
+  $("fCliente").value = r.cliente || "";
+  $("fCedula").value = r.cedula || "";
+  $("fVehiculo").value = r.vehiculo || "";
+  actualizarColores();
+  $("fColor").value = r.color || "";
+  $("fBanco").value = r.banco || "";
+  $("fMontoTotal").value = r.montoTotal || "";
+  $("fMontoAprobado").value = r.montoAprobado || "";
+  $("fPct").value = (pctOf(r)).toFixed(2);
+  $("fPlazo").value = r.plazo || "";
+  $("fFechaAprobacion").value = r.fechaAprobacion || "";
+  $("fSolicitud").value = r.solicitud || "";
+  $("fVencimiento").value = r.vencimiento || "";
+  $("fFacturacion").value = r.facturacion || "";
+  $("fFactura").value = r.factura || "";
+  $("fLiquidacion").value = r.liquidacion || "";
+  $("fObservacion").value = r.observacion || "";
+  $("formTitle").textContent = "Editando: " + r.cliente;
+  $("formHint").textContent = "Registro #" + r.num + " — " + r.mes;
+  $("formMsg").textContent = "";
+  window.scrollTo({top: document.getElementById("cardForm").offsetTop - 10, behavior:"smooth"});
+}
+function validar(){
+  const msg = document.getElementById("formMsg");
+  const c = document.getElementById("fCliente").value.trim();
+  const v = document.getElementById("fVehiculo").value;
+  const b = document.getElementById("fBanco").value;
+  if(!c){ msg.textContent = "⚠ Ingresa el nombre del cliente."; msg.className = "msg err"; return false; }
+  if(!v){ msg.textContent = "⚠ Selecciona el vehículo (modelo)."; msg.className = "msg err"; return false; }
+  if(!b){ msg.textContent = "⚠ Selecciona la financiera / banco."; msg.className = "msg err"; return false; }
+  msg.className = "msg ok";
+  return true;
+}
+function guardar(){
+  const msg = document.getElementById("formMsg");
+  if(!validar()) return;
+  const $ = id => document.getElementById(id);
+  const mt = parseFloat($("fMontoTotal").value)||0;
+  const ma = parseFloat($("fMontoAprobado").value)||0;
+
+  const registro = {
+    id: editId || ("r" + Date.now() + Math.random().toString(36).slice(2,6)),
+    mes: mesActual,
+    num: parseInt($("fNum").value) || autoNum(),
+    cliente: $("fCliente").value.trim().toUpperCase(),
+    cedula: $("fCedula").value.trim(),
+    vehiculo: $("fVehiculo").value,
+    color: $("fColor").value,
+    montoTotal: mt,
+    montoAprobado: ma,
+    pct: mt>0 ? (ma/mt*100) : 0,
+    plazo: parseInt($("fPlazo").value) || "",
+    banco: $("fBanco").value,
+    solicitud: $("fSolicitud").value.trim(),
+    fechaAprobacion: $("fFechaAprobacion").value,
+    vencimiento: $("fVencimiento").value,
+    facturacion: $("fFacturacion").value,
+    factura: $("fFactura").value.trim(),
+    liquidacion: $("fLiquidacion").value,
+    observacion: $("fObservacion").value.trim()
+  };
+
+  if(editId){
+    data = data.map(r => r.id === editId ? registro : r);
+    msg.textContent = "✓ Registro actualizado.";
+    toast("Registro actualizado ✓");
+  }else{
+    data.push(registro);
+    msg.textContent = "✓ Registro guardado.";
+    toast("Registro guardado ✓");
+  }
+  save(data);
+  renderTodo();
+  limpiarForm();
+}
+function autoNum(){
+  const regs = data.filter(r => r.mes === mesActual);
+  return regs.reduce((m,r)=>Math.max(m, r.num||0),0) + 1;
+}
+function eliminar(id){
+  const r = data.find(x=>x.id===id);
+  if(!r) return;
+  if(!confirm("¿Eliminar el registro de " + r.cliente + "?")) return;
+  data = data.filter(x=>x.id!==id);
+  save(data);
+  if(editId === id) limpiarForm();
+  renderTodo();
+  toast("Registro eliminado");
+}
+
+/* ================= GRÁFICOS ================= */
+function buildBars(el, items, colorMap, formato){
+  el.innerHTML = "";
+  if(!items.length){ el.innerHTML = `<div class="empty">Sin datos</div>`; return; }
+  const max = Math.max(...items.map(i=>i.val), 1);
+  items.forEach(it => {
+    const col = document.createElement("div"); col.className = "bar-col";
+    const bar = document.createElement("div"); bar.className = "bar";
+    bar.style.height = (it.val/max*100).toFixed(1) + "%";
+    bar.style.background = colorMap[it.key] || "#cc0000";
+    const cnt = document.createElement("span"); cnt.className = "cnt";
+    cnt.textContent = formato ? formato(it.val) : it.val;
+    cnt.title = it.key;
+    bar.appendChild(cnt);
+    const lab = document.createElement("span"); lab.className = "lab"; lab.textContent = it.key;
+    col.appendChild(bar); col.appendChild(lab);
+    el.appendChild(col);
+  });
+}
+function buildClientes(el, items){
+  el.innerHTML = "";
+  if(!items.length){ el.innerHTML = `<div class="empty">Sin datos del mes</div>`; return; }
+  const sorted = [...items].sort((a,b)=>b.pct-a.pct);
+  sorted.forEach(it => {
+    const div = document.createElement("div"); div.className = "h-item";
+    const name = document.createElement("span"); name.className = "name"; name.textContent = it.cliente;
+    name.title = it.cliente + " — aprobado " + dinero(it.aprob) + " de " + dinero(it.total);
+    const track = document.createElement("div"); track.className = "h-track";
+    const fill = document.createElement("div"); fill.className = "h-fill";
+    const pct = Math.min(it.pct, 100);
+    fill.style.width = pct.toFixed(1) + "%";
+    fill.style.background = pct >= 70 ? "#16a34a" : pct >= 50 ? "#f59e0b" : pct > 0 ? "#f97316" : "#cbd5e1";
+    track.appendChild(fill);
+    const val = document.createElement("span"); val.className = "h-val";
+    val.textContent = it.pct.toFixed(1) + "%";
+    div.appendChild(name); div.appendChild(track); div.appendChild(val);
+    el.appendChild(div);
+  });
+}
+function renderGraficos(){
+  const regs = data.filter(r => r.mes === mesActual);
+
+  // 1) Solicitudes por banco
+  const porBanco = BANCOS.map(b => ({
+    key: b, val: regs.filter(r=>r.banco===b).length
+  })).filter(i=>i.val>0);
+  buildBars(document.getElementById("chartBanco"), porBanco, BANCO_COLOR);
+
+  // 2) Monto financiado por banco
+  const montoBanco = BANCOS.map(b => ({
+    key: b, val: regs.filter(r=>r.banco===b).reduce((s,r)=>s+r.montoAprobado,0)
+  })).filter(i=>i.val>0);
+  buildBars(document.getElementById("chartBancoMonto"), montoBanco, BANCO_COLOR, v=>"$"+(v/1000).toFixed(0)+"k");
+
+  // 3) % aprobado por cliente
+  const porCliente = regs
+    .filter(r=>r.cliente)
+    .map(r=>({ cliente:r.cliente.split(" ").slice(0,2).join(" ") || r.cliente, pct: pctOf(r), total:r.montoTotal, aprob:r.montoAprobado }));
+  buildClientes(document.getElementById("chartClientes"), porCliente);
+
+  // 4) Relación por mes (montos)
+  const meses = mesesDisponibles();
+  const totalMes = meses.map(m=>({ mes:m, total:data.filter(r=>r.mes===m).reduce((s,r)=>s+r.montoTotal,0), aprob:data.filter(r=>r.mes===m).reduce((s,r)=>s+r.montoAprobado,0) }));
+  const elMeses = document.getElementById("chartMeses");
+  elMeses.innerHTML = "";
+  if(!totalMes.length){ elMeses.innerHTML = `<div class="empty">Sin datos</div>`; }
+  else{
+    const max = Math.max(...totalMes.map(x=>x.total), 1);
+    const wrap = document.createElement("div");
+    wrap.style.display = "contents";
+    totalMes.forEach(x => {
+      const col = document.createElement("div"); col.className = "bar-col";
+      const grp = document.createElement("div");
+      grp.style.cssText = "display:flex;gap:3px;align-items:flex-end;height:100%;width:100%;justify-content:center;";
+      const t = document.createElement("div");
+      t.className = "bar";
+      t.style.height = (x.total/max*100).toFixed(1) + "%";
+      t.style.background = "#0f3460";
+      t.style.maxWidth = "34px";
+      const a = document.createElement("div");
+      a.className = "bar";
+      a.style.height = (x.aprob/max*100).toFixed(1) + "%";
+      a.style.background = "#16a34a";
+      a.style.maxWidth = "34px";
+      const ct = document.createElement("span"); ct.className = "cnt";
+      ct.style.fontSize = "11px"; ct.textContent = "$"+(x.total/1000).toFixed(0)+"k";
+      t.appendChild(ct);
+      grp.appendChild(t); grp.appendChild(a);
+      col.appendChild(grp);
+      const lab = document.createElement("span"); lab.className = "lab"; lab.textContent = x.mes;
+      col.appendChild(lab);
+      elMeses.appendChild(col);
+    });
+  }
+
+  // 5) Solicitudes por mes
+  const countMes = meses.map(m=>({ mes:m, val:data.filter(r=>r.mes===m).length }));
+  buildBars(document.getElementById("chartMesesCount"), countMes.map(x=>({key:x.mes,val:x.val})), {"default":"#1d4ed8"});
+}
+
+/* ================= TABLA ================= */
+function badgeBanco(b){
+  const map = { PIVCA:"b-pivca", BANESCO:"b-banesco", PROVINCIAL:"b-provincial", ARCA:"b-arca" };
+  return `<span class="badge ${map[b]||'b-sinbanco'}">${b||"—"}</span>`;
+}
+function chipColor(c){
+  if(!c) return `<span style="color:#94a3b8">—</span>`;
+  return `<span class="sw" style="background:${COLOR_HEX[c]||'#94a3b8'}"></span>${c}`;
+}
+function badgeEstado(r){
+  const e = estadoOf(r);
+  const cls = e==="LIQUIDADO" ? "e-liq" : e==="APROBADO" ? "e-apr" : "e-pen";
+  return `<span class="estado ${cls}"><span class="dot"></span>${e}</span>`;
+}
+function renderTabla(){
+  let regs = data.filter(r => r.mes === mesActual);
+  regs = aplicarFiltros(regs).sort((a,b)=>(a.num||0)-(b.num||0));
+  document.getElementById("matrizCount").textContent = regs.length;
+  const tb = document.getElementById("tblBody");
+  if(!regs.length){
+    tb.innerHTML = `<tr><td colspan="17" class="empty">No hay registros que coincidan. Usa el formulario o importa un CSV.</td></tr>`;
+    return;
+  }
+  tb.innerHTML = regs.map(r => `
+    <tr>
+      <td class="num">${r.num||""}</td>
+      <td><b>${r.cliente}</b></td>
+      <td>${r.cedula||"—"}</td>
+      <td>${r.vehiculo||"—"}</td>
+      <td>${chipColor(r.color)}</td>
+      <td>${dinero(r.montoTotal)}</td>
+      <td>${r.montoAprobado>0 ? dinero(r.montoAprobado) : "—"}</td>
+      <td><b style="color:${pctOf(r)>=70?'#166534':pctOf(r)>=50?'#b45309':'#c2410c'}">${pctOf(r).toFixed(1)}%</b></td>
+      <td>${r.plazo||"—"}</td>
+      <td>${badgeBanco(r.banco)}</td>
+      <td>${r.solicitud||"—"}</td>
+      <td>${r.fechaAprobacion||"—"}</td>
+      <td>${r.factura? "F-"+r.factura : "—"}</td>
+      <td>${r.liquidacion||"—"}</td>
+      <td>${badgeEstado(r)}</td>
+      <td style="max-width:220px;font-size:11px;color:var(--muted)">${r.observacion||"—"}</td>
+      <td class="actions-cell">
+        <button class="btn btn-blue btn-xs" onclick="cargarEnForm(data.find(x=>x.id==='${r.id}'))">Editar</button>
+        <button class="btn btn-red btn-xs" onclick="eliminar('${r.id}')">✕</button>
+      </td>
+    </tr>`).join("");
+}
+
+/* ================= RENDER TODO ================= */
+function renderTodo(){
+  renderSelMes();
+  renderKpis();
+  renderGraficos();
+  renderTabla();
+}
+
+/* ================= EXPORTAR CSV ================= */
+function exportarCSV(){
+  const regs = data.filter(r => r.mes === mesActual);
+  if(!regs.length){ toast("No hay datos para exportar"); return; }
+  const head = ["Nº","CLIENTE","Nº DE CEDULA","VEHICULO","COLOR","MONTO TOTAL","MONTO APROBADO","FECHA APROBACION","PLAZO","% APROBADO","FINANCIERA BANCO","Nº SOLICITUD","VENCIMIENTO","FECHA FACTURACION","Nº FACTURA","FECHA LIQUIDACION","ESTADO","OBSERVACION"];
+  const lines = regs.map(r => [
+    r.num, r.cliente, r.cedula, r.vehiculo, r.color, r.montoTotal, r.montoAprobado,
+    r.fechaAprobacion, r.plazo, pctOf(r).toFixed(2), r.banco, r.solicitud, r.vencimiento,
+    r.facturacion, r.factura, r.liquidacion, estadoOf(r), (r.observacion||"").replace(/\n/g," ")
+  ].map(c => `"${String(c==null?"":c).replace(/"/g,'""')}"`).join(","));
+  const csv = "\uFEFF" + [head.join(","), ...lines].join("\r\n");
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Matriz_Honda_" + mesActual + ".csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast("CSV exportado ✓");
+}
+
+/* ================= IMPORTAR GOOGLE SHEETS ================= */
+// Mapeo de modelos abreviados de la hoja -> modelos completos
+const MODELO_MAP = {
+  "HONDA CITY - EXL":"HONDA CITY 1.5L A/T EXL 2026",
+  "HONDA HRV - EXL":"HONDA HR-V 1.5L A/T EXL 2026",
+  "HONDA HRV - LX":"HONDA HR-V 1.5L A/T LX 2026",
+  "HONDA WR - EXL":"HONDA WR-V 1.5L A/T EXL 2026",
+  "CITY":"HONDA CITY 1.5L A/T EXL 2026",
+  "HRV - EXL":"HONDA HR-V 1.5L A/T EXL 2026",
+  "HRV - LX":"HONDA HR-V 1.5L A/T LX 2026",
+  "WR - EXL":"HONDA WR-V 1.5L A/T EXL 2026"
+};
+// Normalización de texto de vehículo para hacer match flexible
+function normalizarModelo(t){
+  if(!t) return "";
+  const s = String(t).toUpperCase().trim();
+  // exacto
+  if(MODELO_MAP[s]) return MODELO_MAP[s];
+  // contiene
+  const keys = Object.keys(MODELO_MAP).sort((a,b)=>b.length-a.length);
+  for(const k of keys){
+    if(s.includes(k)) return MODELO_MAP[k];
+  }
+  // búsqueda simple por palabra-clave
+  if(s.includes("CITY")) return MODELO_MAP["CITY"];
+  if(s.includes("HR-V") || s.includes("HRV")){
+    return s.includes("LX") ? MODELO_MAP["HRV - LX"] : MODELO_MAP["HRV - EXL"];
+  }
+  if(s.includes("WR-V") || s.includes("WRV") || s.includes("WR")) return MODELO_MAP["WR - EXL"];
+  return t.trim();
+}
+
+// Fecha: maneja serial de Excel (46171) o texto dd/mm/yyyy o date
+function parseFecha(v){
+  if(!v) return "";
+  const s = String(v).trim();
+  if(!s) return "";
+  // serial de Excel (5 dígitos)
+  if(/^\d{4,5}$/.test(s)){
+    const n = parseInt(s,10);
+    if(n > 40000){ return xl(n); }
+  }
+  // dd/mm/yyyy o dd-mm-yyyy
+  const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+  if(m){
+    const d = String(m[1]).padStart(2,"0");
+    const mo = String(m[2]).padStart(2,"0");
+    let y = m[3];
+    if(y.length === 2) y = "20" + y;
+    return `${y}-${mo}-${d}`;
+  }
+  return s; // ya formato ISO
+}
+// Número: maneja "34,158.32" "19.468,76" "34.158,32" etc.
+function parseNumero(v){
+  if(v === null || v === undefined || v === "") return 0;
+  let s = String(v).replace(/[^\d.,\-]/g,"");
+  if(!s) return 0;
+  // decide separador decimal según la última aparición
+  const lastComma = s.lastIndexOf(",");
+  const lastDot = s.lastIndexOf(".");
+  if(lastComma > lastDot){
+    s = s.replace(/\./g,"").replace(/,/g,".");
+  } else if(lastDot > lastComma){
+    s = s.replace(/,/g,"");
+  }
+  const n = parseFloat(s);
+  return isNaN(n) ? 0 : n;
+}
+
+function togglePanelImportar(show){
+  const p = document.getElementById("panelImportar");
+  p.classList.toggle("hidden", !show);
+  if(show){ document.getElementById("impMes").value = mesActual; document.getElementById("impMsg").textContent = ""; }
+}
+function importarCSV(){
+  const texto = document.getElementById("impTexto").value.trim();
+  const mesDest = document.getElementById("impMes").value;
+  const reemplazar = document.getElementById("impReemplazar").checked;
+  const msg = document.getElementById("impMsg");
+  if(!texto){ msg.textContent = "⚠ Pega primero el CSV exportado de Sheets."; msg.className = "msg err"; return; }
+
+  // dividir en líneas y celdas (soporta comillas)
+  const lineas = texto.split(/\r?\n/).filter(l => l.trim());
+  const filas = lineas.map(l => {
+    // parse simple entre comillas
+    const out = []; let cur = ""; let inQ = false;
+    for(let i=0;i<l.length;i++){
+      const ch = l[i];
+      if(inQ){
+        if(ch === '"' && l[i+1] === '"'){ cur += '"'; i++; }
+        else if(ch === '"'){ inQ = false; }
+        else cur += ch;
+      }else{
+        if(ch === '"'){ inQ = true; }
+        else if(ch === ","){ out.push(cur); cur = ""; }
+        else cur += ch;
+      }
+    }
+    out.push(cur);
+    return out;
+  });
+
+  // buscar línea de encabezado (que contenga CLIENTE y VEHICULO)
+  let headIdx = -1;
+  for(let i=0;i<filas.length;i++){
+    const joined = filas[i].join(",").toUpperCase();
+    if(joined.includes("CLIENTE") || joined.includes("VEHICULO")){ headIdx = i; break; }
+  }
+  if(headIdx === -1){ msg.textContent = "⚠ No encontré el encabezado (CLIENTE / VEHICULO). Verifica el CSV."; msg.className = "msg err"; return; }
+
+  const head = filas[headIdx].map(h => String(h||"").toUpperCase().replace(/\s+/g," ").trim());
+  const idx = (nombres) => {
+    const n = head.findIndex(h => nombres.some(nm => h.includes(nm)));
+    return n;
+  };
+  const iNum = idx(["Nº","NO.","NUM.", "NUMERO"]);
+  const iCliente = idx(["CLIENTE"]);
+  const iCedula = idx(["CEDULA"]);
+  const iVehiculo = idx(["VEHICULO", "MODELO"]);
+  const iMontoTotal = idx(["MONTO TOTAL", "MONTO  TOTAL"]);
+  const iMontoApr = idx(["MONTO APROBADO"]);
+  const iFechaApr = idx(["FECHA DE APROBACION"]);
+  const iPlazo = idx(["PLAZO"]);
+  const iPct = idx(["% APROBADO", "APROBADO"]);  // cuidado con monto aprobado
+  const iBanco = idx(["FINANCIERA", "BANCO"]);
+  const iSolicitud = idx(["SOLICITUD"]);
+  const iVenc = idx(["VENCIMIENTO"]);
+  const iFact = idx(["FACTURACION"]);
+  const iNumFact = idx(["Nº DE FACTURA", "NO. DE FACTURA", "FACTURA"]);
+  const iLiq = idx(["LIQUIDACION"]);
+  const iObs = idx(["OBSERV"]);
+  const iColor = idx(["COLOR"]);
+
+  if(iCliente === -1 || iVehiculo === -1){ msg.textContent = "⚠ No encontré columnas CLIENTE / VEHICULO."; msg.className = "msg err"; return; }
+
+  let nuevos = 0;
+  let registros = reemplazar ? data.filter(r => r.mes !== mesDest) : data.slice();
+
+  for(let i=headIdx+1;i<filas.length;i++){
+    const c = filas[i];
+    const cliente = (c[iCliente]||"").trim();
+    if(!cliente) continue;
+    const vehiculoRaw = c[iVehiculo]||"";
+    const fechaApr = iFechaApr>=0 ? parseFecha(c[iFechaApr]) : "";
+    const plazo = iPlazo>=0 ? (parseFloat(c[iPlazo]) || "") : "";
+    const banco = iBanco>=0 ? String(c[iBanco]||"").trim().toUpperCase() : "";
+    const color = iColor>=0 ? String(c[iColor]||"").trim() : "";
+
+    nuevos++;
+    registros.push({
+      id: "imp_" + Date.now() + "_" + nuevos + "_" + Math.random().toString(36).slice(2,5),
+      mes: mesDest,
+      num: iNum>=0 ? (parseInt(c[iNum]) || nuevos) : nuevos,
+      cliente: cliente.toUpperCase(),
+      cedula: (iCedula>=0 ? c[iCedula]||"" : "").trim(),
+      vehiculo: normalizarModelo(vehiculoRaw),
+      color: color,
+      montoTotal: iMontoTotal>=0 ? parseNumero(c[iMontoTotal]) : 0,
+      montoAprobado: iMontoApr>=0 ? parseNumero(c[iMontoApr]) : 0,
+      fechaAprobacion: fechaApr,
+      plazo: plazo,
+      pct: iPct>=0 && iPct !== iMontoApr ? (parseNumero(c[iPct])) : (iMontoTotal>=0 && iMontoApr>=0 && parseNumero(c[iMontoTotal])>0 ? parseNumero(c[iMontoApr])/parseNumero(c[iMontoTotal])*100 : 0),
+      banco: banco,
+      solicitud: iSolicitud>=0 ? (c[iSolicitud]||"").trim() : "",
+      vencimiento: iVenc>=0 ? parseFecha(c[iVenc]) : "",
+      facturacion: iFact>=0 ? parseFecha(c[iFact]) : "",
+      factura: iNumFact>=0 ? String(c[iNumFact]||"").replace(/"/g,"").trim() : "",
+      liquidacion: iLiq>=0 ? parseFecha(c[iLiq]) : "",
+      observacion: iObs>=0 ? String(c[iObs]||"").replace(/"/g,"").trim() : ""
+    });
+  }
+
+  if(!nuevos){ msg.textContent = "⚠ No se encontraron filas de datos."; msg.className = "msg err"; return; }
+  save(registros);
+  mesActual = mesDest;
+  renderTodo();
+  msg.textContent = "✓ Se importaron " + nuevos + " registros a " + mesDest + ".";
+  msg.className = "msg ok";
+  togglePanelImportar(false);
+  toast("Importados " + nuevos + " registros ✓");
+}
+
+/* ================= FILTROS ================= */
+let filtros = { plan:"", banco:"", plazo:"", estado:"" };
+function aplicarFiltros(regs){
+  if(filtros.plan) regs = regs.filter(r => r.vehiculo === filtros.plan);
+  if(filtros.banco) regs = regs.filter(r => r.banco === filtros.banco);
+  if(filtros.plazo) regs = regs.filter(r => String(r.plazo) === filtros.plazo);
+  if(filtros.estado) regs = regs.filter(r => estadoOf(r) === filtros.estado);
+  return regs;
+}
+function limpiarFiltros(){
+  filtros = { plan:"", banco:"", plazo:"", estado:"" };
+  document.getElementById("filtroPlan").value = "";
+  document.getElementById("filtroBanco").value = "";
+  document.getElementById("filtroPlazo").value = "";
+  document.getElementById("filtroEstado").value = "";
+  renderTabla();
+}
+
+/* ================= FILTRO BANCO ================= */
+let filtroBanco = false;
+function toggleFiltroBanco(){
+  filtroBanco = !filtroBanco;
+  const btn = document.getElementById("btnFiltroBanco");
+  btn.classList.toggle("btn-outline", !filtroBanco);
+  btn.classList.toggle("btn-blue", filtroBanco);
+  renderTabla();
+}
+
+/* ================= PESTAÑAS ================= */
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".tab-content").forEach(t => t.classList.add("hidden"));
+    const tab = btn.getAttribute("data-tab");
+    document.getElementById("tab-" + tab).classList.remove("hidden");
+  });
+});
+
+/* ================= SERVICIOS / CHECKLIST ================= */
+const CHECKLIST_CATS = [
+  { cat:"3. CONTROL VISUAL DEL VEHÍCULO (marque daños o imperfecciones)", items:["Rayón","Golpe","Abolladura","Rotura"] },
+  { cat:"4A. INVENTARIO Y ACCESORIOS — Electrónicos", items:["Smart Key","Llave Remota (Auto/Remoto)","Tablero Digital","Pantalla de Infoentretenimiento","Cámara de Reversa","Radio / Sistema de Audio","Aire Acondicionado","Encendedor / Puerto USB","Antena","Sensores ADAS (Asistencia)"] },
+  { cat:"4B. INVENTARIO Y ACCESORIOS — Documentos / Kits", items:["Manual del propietario","Gato","Triángulo de Seguridad","Herramientas de Bordo","Chaleco Reflectivo","Kit de Seguridad","Llanta de Repuesto","Alfombras"] },
+  { cat:"4C. VEHÍCULO — Estado general", items:["Puertas / Ventanas eléctricas","Estado de llantas","Presión de llantas","Frenos (prueba visual)","Suspensión (prueba visual)","Escape (fugas visibles)","Fugas de fluidos","Estado general de carrocería"] },
+  { cat:"5. ESTADO DE NIVELES", items:["Estado de Batería (voltaje)","Nivel de Combustible (barra digital)","Nivel Aceite Motor","Nivel de Líquido Refrigerante","Nivel de Líquido de Frenos"] },
+  { cat:"6. REVISIÓN ADICIONAL", items:["Luces interiores","Direccionales","Luces de freno","Parabrisas","Limpiaparabrisas","Espejos (central)","Bocina","Cinturones de seguridad"] }
+];
+const CK_OPTS = [
+  ["OK","sel-ok"], ["REG","sel-reg"], ["DAÑ","sel-dan"], ["N/A","sel-na"]
+];
+const SERVICIO_STORAGE = "honda_servicios_v1";
+let servicios = loadServicios();
+let editServicioId = null;
+let servFiltros = { estado:"", vehiculo:"" };
+
+function loadServicios(){
+  try{
+    const raw = localStorage.getItem(SERVICIO_STORAGE);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  const s = seedServicios();
+  try{ localStorage.setItem(SERVICIO_STORAGE, JSON.stringify(s)); }catch(e){}
+  return s;
+}
+function saveServicios(){
+  try{ localStorage.setItem(SERVICIO_STORAGE, JSON.stringify(servicios)); }catch(e){}
+}
+function seedServicios(){
+  // Ejemplo de recepción
+  const hoy = "2026-08-10";
+  return [
+    {
+      id:"svc_seed1", cliente:"FERNANDO JOSE VERA USECHE", telefono:"0412-5551234", email:"fernando.vera@mail.com", placa:"A1B23CD", vin:"93HRV3860TK304041", req:"REQ-001",
+      vehiculo:"HONDA HR-V 1.5L A/T LX 2026", color:"Blanco Perlado", km:12450, trabajo:"Mantenimiento 15.000 km + cambio de aceite", costo:185.50,
+      fechaIngreso: hoy, fechaSalida:"", estado:"EN PROCESO",
+      checklist: {"Rayón":"REG","Golpe":"OK","Abolladura":"OK","Rotura":"OK","Smart Key":"OK","Llave Remota (Auto/Remoto)":"OK","Tablero Digital":"OK","Pantalla de Infoentretenimiento":"OK","Cámara de Reversa":"OK","Radio / Sistema de Audio":"OK","Aire Acondicionado":"OK","Encendedor / Puerto USB":"OK","Antena":"OK","Sensores ADAS (Asistencia)":"OK","Manual del propietario":"OK","Gato":"OK","Triángulo de Seguridad":"OK","Herramientas de Bordo":"N/A","Chaleco Reflectivo":"OK","Kit de Seguridad":"OK","Llanta de Repuesto":"OK","Alfombras":"OK","Puertas / Ventanas eléctricas":"OK","Estado de llantas":"REG","Presión de llantas":"OK","Frenos (prueba visual)":"OK","Suspensión (prueba visual)":"OK","Escape (fugas visibles)":"OK","Fugas de fluidos":"OK","Estado general de carrocería":"OK","Estado de Batería (voltaje)":"OK","Nivel de Combustible (barra digital)":"REG","Nivel Aceite Motor":"OK","Nivel de Líquido Refrigerante":"OK","Nivel de Líquido de Frenos":"OK","Luces interiores":"OK","Direccionales":"OK","Luces de freno":"OK","Parabrisas":"OK","Limpiaparabrisas":"OK","Espejos (central)":"OK","Bocina":"OK","Cinturones de seguridad":"OK"},
+      observacion:"Rayón leve en puerta trasera derecha. Recibido con 1 juego de llaves (Smart Key) y control remoto.",
+      firmaCliente:"FERNANDO J. VERA", asesor:"YARLEYC CONTRERAS"
+    },
+    {
+      id:"svc_seed2", cliente:"ANA MARIA NIGRO", telefono:"0424-5559876", email:"anamaria@mail.com", placa:"B2C34DE", vin:"93HDG5840TK503048", req:"REQ-002",
+      vehiculo:"HONDA WR-V 1.5L A/T EXL 2026", color:"Azul Cosmico", km:8900, trabajo:"Cambio de parabrisas por impacto", costo:420.00,
+      fechaIngreso:"2026-08-08", fechaSalida:"2026-08-10", estado:"ENTREGADO",
+      checklist: {"Rayón":"OK","Golpe":"OK","Abolladura":"OK","Rotura":"DAÑ","Smart Key":"OK","Llave Remota (Auto/Remoto)":"OK","Tablero Digital":"OK","Pantalla de Infoentretenimiento":"OK","Cámara de Reversa":"OK","Radio / Sistema de Audio":"OK","Aire Acondicionado":"OK","Encendedor / Puerto USB":"OK","Antena":"OK","Sensores ADAS (Asistencia)":"OK","Manual del propietario":"OK","Gato":"OK","Triángulo de Seguridad":"OK","Herramientas de Bordo":"N/A","Chaleco Reflectivo":"OK","Kit de Seguridad":"OK","Llanta de Repuesto":"OK","Alfombras":"OK","Puertas / Ventanas eléctricas":"OK","Estado de llantas":"OK","Presión de llantas":"OK","Frenos (prueba visual)":"OK","Suspensión (prueba visual)":"OK","Escape (fugas visibles)":"OK","Fugas de fluidos":"OK","Estado general de carrocería":"OK","Estado de Batería (voltaje)":"OK","Nivel de Combustible (barra digital)":"REG","Nivel Aceite Motor":"OK","Nivel de Líquido Refrigerante":"OK","Nivel de Líquido de Frenos":"OK","Luces interiores":"OK","Direccionales":"OK","Luces de freno":"OK","Parabrisas":"DAÑ","Limpiaparabrisas":"OK","Espejos (central)":"OK","Bocina":"OK","Cinturones de seguridad":"OK"},
+      observacion:"Cambio de parabrisas por impacto. Entregado a satisfacción, sin novedades.",
+      firmaCliente:"ANA M. NIGRO", asesor:"YARLEYC CONTRERAS"
+    }
+  ];
+}
+
+function actualizarColorServicio(){
+  const v = document.getElementById("sVehiculo").value;
+  const sel = document.getElementById("sColor");
+  const colores = MODELOS[v] || [];
+  sel.innerHTML = `<option value="">${colores.length ? "— Seleccionar color —" : "— Primero el modelo —"}</option>`;
+  colores.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c; opt.textContent = c;
+    sel.appendChild(opt);
+  });
+  sel.value = sel.options.length > 1 ? sel.options[1].value : "";
+}
+function actualizarColoresConValor(modelo, colorActual){
+  const v = modelo;
+  const sel = document.getElementById("sColor");
+  const colores = MODELOS[v] || [];
+  sel.innerHTML = `<option value="">${colores.length ? "— Seleccionar color —" : "— Primero el modelo —"}</option>`;
+  colores.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c; opt.textContent = c;
+    sel.appendChild(opt);
+  });
+  sel.value = colorActual || "";
+}
+
+function renderChecklist(checklist){
+  const cont = document.getElementById("checklist");
+  cont.innerHTML = "";
+  CHECKLIST_CATS.forEach(g => {
+    const sec = document.createElement("div"); sec.className = "check-cat";
+    const name = document.createElement("div"); name.className = "cat-name"; name.textContent = g.cat;
+    sec.appendChild(name);
+    const grid = document.createElement("div"); grid.className = "check-grid";
+    (g.items||g.item||[]).forEach(item => {
+      const estado = checklist ? (checklist[item] || "") : "";
+      const row = document.createElement("div"); row.className = "check-item";
+      const nm = document.createElement("span"); nm.className = "ci-name"; nm.textContent = item;
+      const opts = document.createElement("div"); opts.className = "check-opts";
+      CK_OPTS.forEach(([val, cls]) => {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "ck-btn" + (estado === val ? " " + cls : "");
+        b.textContent = val;
+        b.setAttribute("data-item", item); b.setAttribute("data-val", val); b.setAttribute("data-cls", cls);
+        b.addEventListener("click", () => {
+          document.querySelectorAll(`.ck-btn[data-item="${CSS.escape(item)}"]`).forEach(x => x.className = "ck-btn");
+          b.className = "ck-btn " + cls;
+          b.setAttribute("data-sel", val);
+        });
+        opts.appendChild(b);
+      });
+      row.appendChild(nm); row.appendChild(opts);
+      grid.appendChild(row);
+    });
+    sec.appendChild(grid);
+    cont.appendChild(sec);
+  });
+}
+function leerChecklist(){
+  const out = {};
+  document.querySelectorAll("#checklist .ck-btn").forEach(b => {
+    const sel = b.getAttribute("data-sel");
+    if(sel){ out[b.getAttribute("data-item")] = sel; }
+  });
+  return out;
+}
+
+function limpiarFormServicio(){
+  ["sCliente","sTelefono","sEmail","sPlaca","sVin","sReq","sKm","sTrabajo","sCosto","sFechaIngreso","sFechaSalida","sObservacion","sFirmaCliente","sAsesor"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("sVehiculo").value = "";
+  actualizarColorServicio();
+  document.getElementById("sEstado").value = "RECIBIDO";
+  document.getElementById("sFechaIngreso").value = new Date().toISOString().slice(0,10);
+  renderChecklist({});
+  editServicioId = null;
+  document.getElementById("servicioTitle").textContent = "CONTROL DE RECEPCIÓN E INVENTARIO";
+  document.getElementById("servicioHint").textContent = "";
+  document.getElementById("servicioMsg").textContent = "";
+  document.getElementById("cardServicio").classList.remove("hidden");
+  window.scrollTo({top: document.getElementById("cardServicio").offsetTop - 10, behavior:"smooth"});
+}
+function cargarServicioForm(s){
+  editServicioId = s.id;
+  const $ = id => document.getElementById(id);
+  $("sCliente").value = s.cliente || "";
+  $("sTelefono").value = s.telefono || "";
+  $("sEmail").value = s.email || "";
+  $("sPlaca").value = s.placa || "";
+  $("sVin").value = s.vin || "";
+  $("sReq").value = s.req || "";
+  $("sVehiculo").value = s.vehiculo || "";
+  actualizarColoresConValor(s.vehiculo, s.color);
+  $("sKm").value = s.km || "";
+  $("sTrabajo").value = s.trabajo || "";
+  $("sCosto").value = s.costo || "";
+  $("sFechaIngreso").value = s.fechaIngreso || new Date().toISOString().slice(0,10);
+  $("sFechaSalida").value = s.fechaSalida || "";
+  $("sEstado").value = s.estado || "RECIBIDO";
+  $("sObservacion").value = s.observacion || "";
+  $("sFirmaCliente").value = s.firmaCliente || "";
+  $("sAsesor").value = s.asesor || "";
+  renderChecklist(s.checklist || {});
+  $("servicioTitle").textContent = "CONTROL DE RECEPCIÓN — " + s.cliente;
+  $("servicioHint").textContent = s.vehiculo + (s.placa ? " · Placa " + s.placa : "") + (s.req ? " · " + s.req : "");
+  $("servicioMsg").textContent = "";
+  $("cardServicio").classList.remove("hidden");
+  window.scrollTo({top: document.getElementById("cardServicio").offsetTop - 10, behavior:"smooth"});
+}
+function guardarServicio(){
+  const msg = document.getElementById("servicioMsg");
+  const c = document.getElementById("sCliente").value.trim();
+  const v = document.getElementById("sVehiculo").value;
+  if(!c){ msg.textContent = "⚠ Ingresa el cliente."; msg.className = "msg err"; return; }
+  if(!v){ msg.textContent = "⚠ Selecciona el vehículo."; msg.className = "msg err"; return; }
+  const serv = {
+    id: editServicioId || ("svc_" + Date.now() + "_" + Math.random().toString(36).slice(2,6)),
+    cliente: c.toUpperCase(),
+    telefono: document.getElementById("sTelefono").value.trim(),
+    email: document.getElementById("sEmail").value.trim(),
+    placa: document.getElementById("sPlaca").value.trim().toUpperCase(),
+    vin: document.getElementById("sVin").value.trim(),
+    req: document.getElementById("sReq").value.trim(),
+    vehiculo: v,
+    color: document.getElementById("sColor").value,
+    km: parseFloat(document.getElementById("sKm").value) || 0,
+    trabajo: document.getElementById("sTrabajo").value.trim(),
+    costo: parseFloat(document.getElementById("sCosto").value) || 0,
+    fechaIngreso: document.getElementById("sFechaIngreso").value,
+    fechaSalida: document.getElementById("sFechaSalida").value,
+    estado: document.getElementById("sEstado").value,
+    checklist: leerChecklist(),
+    observacion: document.getElementById("sObservacion").value.trim(),
+    firmaCliente: document.getElementById("sFirmaCliente").value.trim(),
+    asesor: document.getElementById("sAsesor").value.trim()
+  };
+  if(editServicioId){
+    servicios = servicios.map(x => x.id === editServicioId ? serv : x);
+    msg.textContent = "✓ Servicio actualizado.";
+  }else{
+    servicios.push(serv);
+    msg.textContent = "✓ Servicio guardado.";
+  }
+  saveServicios();
+  renderServicios();
+  msg.className = "msg ok";
+  document.getElementById("cardServicio").classList.add("hidden");
+  toast("Servicio guardado ✓");
+}
+function eliminarServicio(id){
+  const s = servicios.find(x => x.id === id);
+  if(!s) return;
+  if(!confirm("¿Eliminar el servicio de " + s.cliente + "?")) return;
+  servicios = servicios.filter(x => x.id !== id);
+  if(editServicioId === id){ editServicioId = null; document.getElementById("cardServicio").classList.add("hidden"); }
+  saveServicios();
+  renderServicios();
+  toast("Servicio eliminado");
+}
+function resumenChecklist(s){
+  const chk = s.checklist || {};
+  let ok=0, reg=0, dan=0, na=0;
+  Object.values(chk).forEach(v => {
+    if(v === "OK") ok++; else if(v === "REG") reg++; else if(v === "DAÑ") dan++; else if(v === "N/A") na++;
+  });
+  let html = "";
+  if(ok) html += `<span class="mini-badge mini-ok">✓ ${ok}</span>`;
+  if(reg) html += `<span class="mini-badge mini-reg">△ ${reg}</span>`;
+  if(dan) html += `<span class="mini-badge mini-dan">✕ ${dan}</span>`;
+  if(na) html += `<span class="mini-badge mini-na">— ${na}</span>`;
+  if(!html) html = `<span class="badge b-sinbanco">S/D</span>`;
+  return html;
+}
+function renderTablaServicios(){
+  let regs = servicios.slice().sort((a,b) => (b.fechaIngreso||"").localeCompare(a.fechaIngreso||""));
+  if(servFiltros.estado) regs = regs.filter(s => s.estado === servFiltros.estado);
+  if(servFiltros.vehiculo) regs = regs.filter(s => s.vehiculo === servFiltros.vehiculo);
+  document.getElementById("servCount").textContent = regs.length + " servicio(s)";
+  const tb = document.getElementById("tblServicios");
+  if(!regs.length){
+    tb.innerHTML = `<tr><td colspan="15" class="empty">No hay servicios registrados.</td></tr>`;
+    return;
+  }
+  tb.innerHTML = regs.map(s => {
+    const eCls = s.estado === "ENTREGADO" ? "e-liq" : s.estado === "EN PROCESO" ? "e-apr" : "e-pen";
+    return `<tr>
+      <td>${s.fechaIngreso||"—"}</td>
+      <td><b>${s.cliente}</b><br><span style="font-size:10px;color:var(--muted)">${s.telefono||""}${s.email?" · "+s.email:""}</span></td>
+      <td>${s.vehiculo||"—"}</td>
+      <td>${chipColor(s.color)}</td>
+      <td>${s.placa||"—"}</td>
+      <td style="font-family:Consolas,monospace;font-size:11px">${s.vin||"—"}</td>
+      <td>${s.km? s.km.toLocaleString() : "—"}</td>
+      <td style="max-width:180px;font-size:11px">${s.trabajo||"—"}</td>
+      <td>${s.costo? dinero(s.costo) : "—"}</td>
+      <td><span class="estado ${eCls}"><span class="dot"></span>${s.estado||"—"}</span></td>
+      <td><div class="resumen-check">${resumenChecklist(s)}</div></td>
+      <td>${s.fechaSalida||"—"}</td>
+      <td style="font-size:11px">${s.asesor||"—"}</td>
+      <td style="max-width:160px;font-size:11px;color:var(--muted)">${(s.observacion||"—")}</td>
+      <td class="actions-cell">
+        <button class="btn btn-blue btn-xs" onclick="cargarServicioForm(servicios.find(x=>x.id==='${s.id}'))">Ver/Editar</button>
+        <button class="btn btn-red btn-xs" onclick="eliminarServicio('${s.id}')">✕</button>
+      </td>
+    </tr>`;
+  }).join("");
+}
+function renderKpisServicios(){
+  const el = document.getElementById("kpisServicios");
+  const recibidos = servicios.filter(s => s.estado === "RECIBIDO").length;
+  const proceso = servicios.filter(s => s.estado === "EN PROCESO").length;
+  const entregados = servicios.filter(s => s.estado === "ENTREGADO").length;
+  const total = servicios.length;
+  el.innerHTML = `
+    <div class="kpi"><div class="v">${total}</div><div class="l">Servicios registrados</div></div>
+    <div class="kpi yellow"><div class="v">${recibidos}</div><div class="l">🟡 Recibidos en taller</div></div>
+    <div class="kpi orange"><div class="v">${proceso}</div><div class="l">🔵 En proceso</div></div>
+    <div class="kpi green"><div class="v">${entregados}</div><div class="l">🟢 Entregados</div></div>
+  `;
+}
+function renderServicios(){
+  renderKpisServicios();
+  renderTablaServicios();
+}
+function exportarServiciosCSV(){
+  if(!servicios.length){ toast("No hay servicios para exportar"); return; }
+  const head = ["FECHA INGRESO","CLIENTE","TELEFONO","EMAIL","VEHICULO","COLOR","PLACA","VIN","REQUISICION","KM","TRABAJO/MANTENIMIENTO","COSTO","ESTADO","FECHA SALIDA","FIRMA CLIENTE","ASESOR","OBSERVACION"];
+  const lines = servicios.map(s => [
+    s.fechaIngreso, s.cliente, s.telefono, s.email, s.vehiculo, s.color, s.placa, s.vin, s.req,
+    s.km, (s.trabajo||"").replace(/\n/g," "), s.costo, s.estado, s.fechaSalida, s.firmaCliente, s.asesor,
+    (s.observacion||"").replace(/\n/g," ")
+  ].map(c => `"${String(c==null?"":c).replace(/"/g,'""')}"`).join(","));
+  const csv = "\uFEFF" + [head.join(","), ...lines].join("\r\n");
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Servicios_Honda.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast("CSV de servicios exportado ✓");
+}
+function limpiarServFiltros(){
+  servFiltros = { estado:"", vehiculo:"" };
+  document.getElementById("filtroServEstado").value = "";
+  document.getElementById("filtroServVehiculo").value = "";
+  renderTablaServicios();
+}
+
+/* ================= EVENTOS ================= */
+document.getElementById("fVehiculo").addEventListener("change", actualizarColores);
+document.getElementById("fMontoTotal").addEventListener("input", calcPct);
+document.getElementById("fMontoAprobado").addEventListener("input", calcPct);
+document.getElementById("btnGuardar").addEventListener("click", guardar);
+document.getElementById("btnCancelar").addEventListener("click", limpiarForm);
+document.getElementById("btnNueva").addEventListener("click", limpiarForm);
+document.getElementById("btnExportar").addEventListener("click", exportarCSV);
+document.getElementById("btnImportar").addEventListener("click", () => togglePanelImportar(true));
+document.getElementById("btnImportarCerrar").addEventListener("click", () => togglePanelImportar(false));
+document.getElementById("btnImportarProcesar").addEventListener("click", importarCSV);
+document.getElementById("btnFiltroBanco").addEventListener("click", toggleFiltroBanco);
+[["filtroPlan","plan"],["filtroBanco","banco"],["filtroPlazo","plazo"],["filtroEstado","estado"]].forEach(([id,k]) => {
+  document.getElementById(id).addEventListener("change", e => {
+    filtros[k] = e.target.value;
+    renderTabla();
+  });
+});
+document.getElementById("btnLimpiarFiltros").addEventListener("click", limpiarFiltros);
+document.getElementById("btnIrMes").addEventListener("click", () => {
+  const m = document.getElementById("inpNuevoMes").value;
+  if(!m){ toast("Selecciona un mes en el selector"); return; }
+  mesActual = m;
+  renderTodo();
+  toast("Mes activo: " + m);
+});
+document.getElementById("selMes").addEventListener("change", e => {
+  mesActual = e.target.value;
+  renderTodo();
+});
+// Enter en campos principales guarda
+document.getElementById("fCliente").addEventListener("keydown", e => { if(e.key==="Enter") guardar(); });
+
+// ======== EVENTOS SERVICIOS ========
+document.getElementById("sVehiculo").addEventListener("change", actualizarColorServicio);
+document.getElementById("btnNuevoServicio").addEventListener("click", limpiarFormServicio);
+document.getElementById("btnGuardarServicio").addEventListener("click", guardarServicio);
+document.getElementById("btnCancelarServicio").addEventListener("click", () => {
+  document.getElementById("cardServicio").classList.add("hidden");
+});
+document.getElementById("btnExportarServicios").addEventListener("click", exportarServiciosCSV);
+document.getElementById("filtroServEstado").addEventListener("change", e => { servFiltros.estado = e.target.value; renderTablaServicios(); });
+document.getElementById("filtroServVehiculo").addEventListener("change", e => { servFiltros.vehiculo = e.target.value; renderTablaServicios(); });
+document.getElementById("btnLimpiarServFiltros").addEventListener("click", limpiarServFiltros);
+
+/* ================= INICIO ================= */
+renderTodo();
+limpiarForm();
+renderServicios();
+</script>
+</body>
+</html>

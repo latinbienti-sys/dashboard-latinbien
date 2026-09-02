@@ -1,0 +1,34 @@
+<script>
+    function test() { console.log("datalabels", typeof ChartDataLabels); if (ChartDataLabels) Chart.register(ChartDataLabels); console.log("Chart after", Chart.plugins.length); }
+    test();
+</script>
+<script>
+    function fmtMoney(v) { return v.toLocaleString(undefined, {minimumFractionDigits:2,maximumFractionDigits:2}); }
+    function safeChart(canvasId, config) {
+        try {
+            if (typeof Chart === 'undefined') {
+                console.warn('Chart.js not loaded, skipping:', canvasId);
+                return null;
+            }
+            if (typeof ChartDataLabels !== 'undefined' && !Chart._datalabelsRegistered) {
+                Chart.register(ChartDataLabels);
+                Chart._datalabelsRegistered = true;
+            }
+            const chart = new Chart(canvasId, config);
+            if (config.plugins && config.plugins.datalabels) chart.datalabels = config.plugins.datalabels;
+            return chart;
+        } catch(e) { console.error('safeChart error:', e); }
+    }
+</script>
+<script>
+    function fmtMoney(v) { return v.toLocaleString(undefined, {minimumFractionDigits:2,maximumFractionDigits:2}); }
+</script>
+<script>
+    function fmtMoney(v) { return '$' + v.toLocaleString(undefined, {minimumFractionDigits:2,maximumFractionDigits:2}); }
+</script>
+<script>
+    function fmtMoney(v) { return v.toLocaleString(undefined, {minimumFractionDigits:2,maximumFractionDigits:2}); }
+</script>
+<script>
+    function fmtMoney(v) { return v.toLocaleString(undefined, {minimumFractionDigits:2,maximumFractionDigits:2}); }
+</script>

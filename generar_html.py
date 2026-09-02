@@ -1453,14 +1453,14 @@ function actualizarDashboard(btn) {{
     btn.classList.add('loading');
     btn.textContent = '⏳ Actualizando...';
 
-    fetch('https://api.github.com/repos/latinbienti-sys/profesional/actions/workflows/update-dashboard.yml/dispatches', {{
+    fetch('https://api.github.com/repos/latinbienti-sys/dashboard-latinbien/actions/workflows/update-dashboard.yml/dispatches', {{
         method: 'POST',
         headers: {{
             'Authorization': 'Bearer ' + GITHUB_TOKEN,
             'Accept': 'application/vnd.github.v3+json',
             'Content-Type': 'application/json'
         }},
-        body: JSON.stringify({{ ref: 'main' }})
+        body: JSON.stringify({{ ref: 'master' }})
     }})
     .then(res => {{
         if (res.status === 204) {{

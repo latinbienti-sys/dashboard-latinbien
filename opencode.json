@@ -1,0 +1,34 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "catcher-chatbot",
+  "agent": {
+    "catcher-chatbot": {
+      "mode": "primary",
+      "description": "CATCHER CHATBOT - Conector principal de Honda Mérida. Recibe clientes y dirige a sub-bots según menú numérico (1-6)."
+    },
+    "bot-1": {
+      "mode": "subagent",
+      "description": "Sub-bot #1 - Modelos Nuevos 2026 (Civic, CR-V, HR-V, City, BR-V)"
+    },
+    "bot-2": {
+      "mode": "subagent",
+      "description": "Sub-bot #2 - Cotización y Planes de Financiamiento"
+    },
+    "bot-3": {
+      "mode": "subagent",
+      "description": "Sub-bot #3 - Agendar Prueba de Manejo"
+    },
+    "bot-4": {
+      "mode": "subagent",
+      "description": "Sub-bot #4 - Autos Seminuevos Garantizados"
+    },
+    "bot-5": {
+      "mode": "subagent",
+      "description": "Sub-bot #5 - Agendar Cita de Servicio / Taller"
+    },
+    "bot-6": {
+      "mode": "subagent",
+      "description": "Sub-bot #6 - Conexión con Asesor Humano"
+    }
+  }
+}

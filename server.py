@@ -14,8 +14,10 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 # ── Configuración Odoo ──────────────────────────────────────────
 ODOO_URL = 'https://latinbien.com'
 ODOO_DB = 'erp_production'
-ODOO_USER = os.environ.get('ODOO_USER', 'latinbienti@latinbien.com')
-ODOO_PASS = os.environ.get('ODOO_PASS', 'z+cakaSe2805*')
+ODOO_USER = os.environ.get('ODOO_USER')
+ODOO_PASS = os.environ.get('ODOO_PASS')
+if not ODOO_USER or not ODOO_PASS:
+    raise RuntimeError("ODOO_USER y ODOO_PASS deben estar definidas como variables de entorno.")
 
 # Statuses que incluimos (Entregado, Aprobado, Cancelación Total, Congelados)
 TARGET_STATUSES = ['6', '4', '8', '10', '12']
