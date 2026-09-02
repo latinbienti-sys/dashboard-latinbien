@@ -2,7 +2,6 @@ name: Actualizar Dashboard
 
 on:
   schedule:
-    # Cada 3 horas (minuto 0)
     - cron: '0 */3 * * *'
   workflow_dispatch:
 
@@ -24,16 +23,13 @@ jobs:
           python-version: '3.11'
 
       - name: Instalar dependencias
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install requests
+        run: python -m pip install --upgrade pip requests
 
       - name: Generar dashboard desde Odoo
         env:
           ODOO_USER: ${{ secrets.ODOO_USER }}
           ODOO_PASS: ${{ secrets.ODOO_PASS }}
-        run: |
-          python server.py --generate
+        run: python server.py --generate
 
       - name: Enviar recordatorios de pago a proveedor
         env:
@@ -41,36 +37,7 @@ jobs:
           ODOO_PASS: ${{ secrets.ODOO_PASS }}
           LATINBIEN_SMTP_USER: ${{ secrets.LATINBIEN_SMTP_USER }}
           LATINBIEN_SMTP_PASS: ${{ secrets.LATINBIEN_SMTP_PASS }}
-        run: |
-          python -c "
-          import os, sys
-          sys.path.insert(0, '.')
-          from server import fetch_data
-          from email_proveedor import verificar_pagos_proximos, enviar_correo_recordatorio
-          print('Verificando pagos próximos al proveedor...')
-          try:
-              data = fetch_data()
-              pagos = verificar_pagos_proximos(data)
-              if pagos:
-                  for p in pagos:
-                      ok, msg = enviar_correo_recordatorio(
-                          proveedor=p['proveedor'],
-                          orden_compra=p['orden_compra'],
-                          cliente=p['cliente'],
-                          modelo=p['modelo'],
-                          cuota_num=p['cuota_num'],
-                          total_cuotas=p['total_cuotas'],
-                          monto=p['monto'],
-                          fecha_pago=p['fecha_pago'],
-                          ciclo=p['ciclo'],
-                          opcion=p['opcion']
-                      )
-                      print(f'  Cuota {p[\"cuota_num\"]}: {msg}')
-              else:
-                  print('  No hay pagos próximos pendientes.')
-          except Exception as e:
-              print(f'  Error enviando recordatorios: {e}')
-          "
+        run: python send_reminders.py
 
       - name: Configurar git
         run: |
