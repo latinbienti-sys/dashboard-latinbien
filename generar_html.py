@@ -309,8 +309,12 @@ html = f'''<!DOCTYPE html>
         .footer {{ text-align: center; padding: 18px; color: #aaa; font-size: 11px; }}
         .footer strong {{ color: var(--primary); }}
 
-        .tabs {{ display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; background: #e8eaf0; border-radius: 12px; padding: 4px; max-height: 600px; overflow-y: auto; }}
-        .tab-btn {{ padding: 9px 16px; border: none; background: transparent; border-radius: 10px; font-size: 12px; font-weight: 600; color: #666; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: left; }}
+        .tabs {{ display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; background: #e8eaf0; border-radius: 14px; padding: 8px; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }}
+        .tab-btn {{ padding: 10px 18px; border: none; background: transparent; border-radius: 10px; font-size: 12.5px; font-weight: 600; color: #555; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; text-align: center; position: relative; }}
+        .tab-btn:hover {{ color: var(--primary); background: rgba(255,255,255,0.5); }}
+        .tab-btn.active {{ background: var(--white); color: var(--primary); box-shadow: 0 3px 10px rgba(33,60,131,0.15); }}
+        .tab-btn.active::after {{ content: ''; position: absolute; bottom: -2px; left: 20%; width: 60%; height: 3px; background: var(--accent); border-radius: 3px; }}
+        @media (max-width: 900px) {{ .tabs {{ flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }} .tab-btn {{ flex: 0 0 auto; }} }}
         .tab-btn:hover {{ color: var(--primary); }}
         .tab-btn.active {{ background: var(--white); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }}
         .tab-content {{ display: none; }}
@@ -385,8 +389,6 @@ html = f'''<!DOCTYPE html>
         <button class="tab-btn" onclick="switchTab('temporal')">⏱ Temporal VIP</button>
         <button class="tab-btn" onclick="switchTab('tabla')">📋 Listado</button>
         <button class="tab-btn" onclick="switchTab('factjulio')">📋 Fact. Julio</button>
-        <button class="tab-btn" onclick="switchTab('factagosto')">📋 Fact. Agosto</button>
-        <button class="tab-btn" onclick="switchTab('ago_operativo')">📊 Análisis Agosto</button>
     </div>
 
     <!-- TAB 1: RESUMEN -->
@@ -1090,6 +1092,25 @@ html = f'''<!DOCTYPE html>
                 </table>
             </div>
         </div>
+
+        <!-- MEDIO DE CONOCIMIENTO -->
+        <div class="results-section">
+            <h3>📣 ¿Por qué medio conoció a Latinbien C.A.?</h3>
+            <p style="color:#666;margin:0 0 12px">Distribución de clientes según el medio por el cual conocieron la empresa.</p>
+            <div class="charts-row">
+                <div class="chart-card full-width">
+                    <div class="chart-container"><canvas id="chartMedios"></canvas></div>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr><th>Medio</th><th class="text-right">Cantidad</th><th class="text-right">% del Total</th></tr>
+                    </thead>
+                    <tbody id="tablaMedios"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <!-- ═══ TAB: PRONTO PAGO ═══ -->
@@ -1432,14 +1453,14 @@ function actualizarDashboard(btn) {{
     btn.classList.add('loading');
     btn.textContent = '⏳ Actualizando...';
 
-    fetch('https://api.github.com/repos/latinbienti-sys/profesional/actions/workflows/update-dashboard.yml/dispatches', {{
+    fetch('https://api.github.com/repos/latinbienti-sys/dashboard-latinbien/actions/workflows/update-dashboard.yml/dispatches', {{
         method: 'POST',
         headers: {{
             'Authorization': 'Bearer ' + GITHUB_TOKEN,
             'Accept': 'application/vnd.github.v3+json',
             'Content-Type': 'application/json'
         }},
-        body: JSON.stringify({{ ref: 'main' }})
+        body: JSON.stringify({{ ref: 'master' }})
     }})
     .then(res => {{
         if (res.status === 204) {{
@@ -1982,7 +2003,24 @@ function renderTable() {{
 function switchTab(tab) {{
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', factagosto:'Fact. Agosto', ago_operativo:'Análisis Agosto', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza', ventas_motos:'Ventas Motos', pago_proveedor:'Pago Proveedor'}};
+    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza', ventas_motos:'Ventas Motos', pago_proveedor:'Pago Proveedor'}};
+
+    // Arreglo de opciones del menú de navegación
+    const menuItems = [
+        {{ id: 'gestion', label: 'Gestión Cobranza', icon: '📋' }},
+        {{ id: 'expedientes', label: 'Expedientes', icon: '📂' }},
+        {{ id: 'prontopago', label: 'Pronto Pago', icon: '⚡' }},
+        {{ id: 'ventas_motos', label: 'Ventas Motos', icon: '🏍️' }},
+        {{ id: 'pago_proveedor', label: 'Pago Proveedor', icon: '💰' }},
+        {{ id: 'resumen', label: 'Resumen', icon: '📊' }},
+        {{ id: 'pagos', label: 'Plan de Pagos', icon: '💳' }},
+        {{ id: 'ciclos', label: 'Ciclos', icon: '📅' }},
+        {{ id: 'montos', label: 'Montos', icon: '💰' }},
+        {{ id: 'segmentos', label: 'Segmentos', icon: '👥' }},
+        {{ id: 'temporal', label: 'Temporal VIP', icon: '⏱️' }},
+        {{ id: 'tabla', label: 'Listado', icon: '📋' }},
+        {{ id: 'factjulio', label: 'Fact. Julio', icon: '📑' }},
+    ];
     const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes(tabMap[tab]));
     if (btn) btn.classList.add('active');
     document.getElementById('tab-'+tab).classList.add('active');
@@ -2770,6 +2808,44 @@ try {{
         }} catch(e) {{ console.error('Expedientes chart error:', e); }}
     }}
 }} catch(e) {{ console.error('Expedientes error:', e); }}
+
+// ── Medio de Conocimiento ──
+try {{
+    var expData = DATA.expedientes || {{}};
+    var medios = expData.medios_conocimiento || {{}};
+    var medioKeys = Object.keys(medios);
+    if (medioKeys.length > 0) {{
+        var labels = medioKeys;
+        var values = medioKeys.map(function(k) {{ return medios[k]; }});
+        var total = values.reduce(function(a, b) {{ return a + b; }}, 0);
+        var colors = ['#213C83','#F98B10','#10b981','#ef4444','#8b5cf6','#06b6d4','#f59e0b','#ec4899','#14b8a6'];
+        safeChart('chartMedios', {{
+            type: 'bar',
+            data: {{
+                labels: labels,
+                datasets: [{{ label: 'Clientes', data: values, backgroundColor: colors.slice(0, labels.length), borderWidth: 0, borderRadius: 4 }}]
+            }},
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {{ legend: {{ display: false }} }},
+                scales: {{
+                    x: {{ beginAtZero: true, ticks: {{ precision: 0 }}, grid: {{ color: 'rgba(0,0,0,0.05)' }} }},
+                    y: {{ grid: {{ display: false }} }}
+                }}
+            }}
+        }});
+        // Tabla
+        var tmBody = document.getElementById('tablaMedios');
+        if (tmBody) {{
+            tmBody.innerHTML = labels.map(function(m, i) {{
+                var pct = total > 0 ? ((values[i] / total) * 100).toFixed(1) : 0;
+                return '<tr><td><strong>' + m + '</strong></td><td class="text-right">' + values[i] + '</td><td class="text-right">' + pct + '%</td></tr>';
+            }}).join('');
+        }}
+    }}
+}} catch(e) {{ console.error('Medios conocimiento error:', e); }}
 
 // ── Pronto Pago: clientes que pagan antes del vencimiento ──
 try {{

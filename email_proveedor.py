@@ -1,4 +1,5 @@
 """Módulo de envío de correos internos para recordatorios de pago a proveedor."""
+import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -6,8 +7,11 @@ from datetime import date
 
 SMTP_SERVER = 'smtp.gmail.com'
 SMTP_PORT = 587
-SMTP_USER = 'infolatinbien2026@gmail.com'
-SMTP_PASS = 'izxu pztm tbct grai'
+SMTP_USER = os.environ.get('LATINBIEN_SMTP_USER')
+SMTP_PASS = os.environ.get('LATINBIEN_SMTP_PASS')
+
+if not SMTP_USER or not SMTP_PASS:
+    raise RuntimeError("LATINBIEN_SMTP_USER y LATINBIEN_SMTP_PASS deben estar definidas como variables de entorno.")
 
 # Destinatarios internos
 DESTINATARIOS_INTERNOS = [

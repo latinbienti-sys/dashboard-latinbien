@@ -14,8 +14,10 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 # ── Configuración Odoo ──────────────────────────────────────────
 ODOO_URL = 'https://latinbien.com'
 ODOO_DB = 'erp_production'
-ODOO_USER = os.environ.get('ODOO_USER', 'latinbienti@latinbien.com')
-ODOO_PASS = os.environ.get('ODOO_PASS', 'z+cakaSe2805*')
+ODOO_USER = os.environ.get('ODOO_USER')
+ODOO_PASS = os.environ.get('ODOO_PASS')
+if not ODOO_USER or not ODOO_PASS:
+    raise RuntimeError("ODOO_USER y ODOO_PASS deben estar definidas como variables de entorno.")
 
 # Statuses que incluimos (Entregado, Aprobado, Cancelación Total, Congelados)
 TARGET_STATUSES = ['6', '4', '8', '10', '12']
@@ -377,9 +379,23 @@ def fetch_expedientes(sess):
         # Totales generales como objeto adicional (lo consume el frontend)
         total_general['monto'] = round(total_general['total_monto'], 2)
         # Guardamos además el total año/mes resumido
+        # Medio de conocimiento
+        medios_counter = {}
+        try:
+            medios_data = json_execute(sess, 'res.partner', 'search_read', [
+                [['x_medio', '!=', False]], ['id', 'x_medio']
+            ])
+            for m in medios_data:
+                medio = m.get('x_medio', '')
+                if medio:
+                    medios_counter[medio] = medios_counter.get(medio, 0) + 1
+        except Exception:
+            pass
+
         return {
             'grupos': grupos,
             'totales': total_general,
+            'medios_conocimiento': medios_counter,
         }
 
     except Exception as e:
@@ -413,11 +429,17 @@ def fetch_pagoProveedorMoto(sess):
         cliente_venta = 'Sin asignar'
         if orden_venta:
             try:
-                so = json_execute(sess, 'sale.order', 'search_read', [['name', '=', orden_venta]], ['id', 'partner_id'])
-                if so:
-                    so_pid = so[0].get('partner_id')
-                    cliente_venta = so_pid[1] if isinstance(so_pid, list) and len(so_pid) > 1 else 'Sin asignar'
-            except:
+                # Cargar todas las ventas publicadas y buscar por nombre
+                all_so = json_execute(sess, 'sale.order', 'search_read', [
+                    [['state', '=', 'sale']], ['id', 'name', 'partner_id']
+                ])
+                for s in all_so:
+                    if s.get('name', '') == orden_venta:
+                        so_pid = s.get('partner_id')
+                        if so_pid and isinstance(so_pid, list) and len(so_pid) > 1:
+                            cliente_venta = so_pid[1]
+                        break
+            except Exception:
                 pass
         line_ids = p.get('order_line', [])
         precio_moto = 0
@@ -438,24 +460,59 @@ def fetch_pagoProveedorMoto(sess):
         inicial_40 = round(precio_moto * 0.40, 2)
         restante_60 = round(precio_moto * 0.60, 2)
         cuota_quincenal = round(restante_60 / 8, 2)
-        ciclo_cliente = '03-18'
+        ciclo_cliente = '10-25'  # Default 10-25 si no se detecta ciclo desde cuotas
         if cliente_venta != 'Sin asignar':
             try:
                 vp = json_execute(sess, 'res.partner', 'search_read', [['name', '=', cliente_venta]], ['id'])
                 if vp:
                     vpid = vp[0]['id']
-                    inst_ids = json_execute(sess, 'account.move', 'search', [['partner_id', '=', vpid], ['state', '=', 'posted'], ['move_type', '=', 'out_invoice']])
-                    for iid in inst_ids[:3]:
-                        moves = json_execute(sess, 'account.move.line', 'search_read', [['move_id', '=', iid]], ['payment_date'])
-                        for m in moves:
-                            pd = str(m.get('payment_date', ''))[:10]
+                    inv_ids = json_execute(sess, 'account.move', 'search', [
+                        ['partner_id', '=', vpid], ['state', '=', 'posted'], ['move_type', '=', 'out_invoice']
+                    ])
+                    if inv_ids:
+                        # Buscar en invoice.installment.line por payment_date
+                        inst_lines = json_execute(sess, 'invoice.installment.line', 'search_read', [
+                            [['invoice_id', 'in', inv_ids]], ['payment_date']
+                        ])
+                        for il in inst_lines:
+                            pd = str(il.get('payment_date', ''))[:10]
                             if pd:
                                 try:
                                     dia = int(pd.split('-')[2])
-                                    if 10 <= dia <= 25:
+                                    if 3 <= dia <= 18:
+                                        ciclo_cliente = '03-18'
+                                        break
+                                    elif 10 <= dia <= 25:
                                         ciclo_cliente = '10-25'
                                         break
                                 except: pass
+            except: pass
+        # Si no se detectó ciclo, buscar en la orden de venta directamente
+        if ciclo_cliente == '03-18' and orden_venta:
+            try:
+                so_data = json_execute(sess, 'sale.order', 'search_read', [['name', '=', orden_venta]], ['order_line'])
+                if so_data and so_data[0].get('order_line'):
+                    so_lines = json_execute(sess, 'sale.order.line', 'read', [so_data[0]['order_line'][:3], ['product_id', 'name']])
+                    for sl in so_lines:
+                        sp = sl.get('product_id')
+                        if sp and isinstance(sp, list) and 'moto' in sp[1].lower():
+                            cliente_pid = json_execute(sess, 'sale.order', 'read', [[so_data[0]['id']], ['partner_id']])
+                            if cliente_pid:
+                                cpid = cliente_pid[0].get('partner_id', [0])[0]
+                                if cpid:
+                                    invs = json_execute(sess, 'account.move', 'search', [['partner_id', '=', cpid], ['state', '=', 'posted'], ['move_type', '=', 'out_invoice']])
+                                    for miid in invs[:2]:
+                                        ml = json_execute(sess, 'account.move.line', 'search_read', [['move_id', '=', miid]], ['date'])
+                                        for mm in ml:
+                                            pd2 = str(mm.get('date', ''))[:10]
+                                            if pd2:
+                                                try:
+                                                    dia2 = int(pd2.split('-')[2])
+                                                    if 10 <= dia2 <= 25:
+                                                        ciclo_cliente = '10-25'
+                                                        break
+                                                except: pass
+                                    break
             except: pass
         if ciclo_cliente == '03-18':
             dias_pago = [5, 20]
@@ -465,7 +522,10 @@ def fetch_pagoProveedorMoto(sess):
         mes_actual = 9
         anio_actual = 2026
         for cuota_num in range(1, 9):
-            dia_pago = dias_pago[(cuota_num - 1) % 2]
+            if ciclo_cliente == '03-18':
+                dia_pago = 5 if cuota_num % 2 == 1 else 20
+            else:
+                dia_pago = 12 if cuota_num % 2 == 1 else 27
             try:
                 fecha_pago = date(anio_actual, mes_actual, dia_pago)
             except:
