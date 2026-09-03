@@ -407,17 +407,125 @@ def fetch_expedientes(sess):
         }
 
 # ── Pago Proveedor MOTO CITY PRO ─────────────────────────
+_ciclo_field_cache = None  # Cache: nombre técnico del campo "ciclo" en sale.order
+
+def _descubrir_campo_ciclo(sess):
+    """Auto-descubre el campo 'Manejo de ciclos' en sale.order via fields_get.
+    Busca campos cuyo string contenga 'ciclo' o 'manejo'. Cachea el resultado."""
+    global _ciclo_field_cache
+    if _ciclo_field_cache is not None:
+        return _ciclo_field_cache
+
+    try:
+        fields_so = json_execute(sess, 'sale.order', 'fields_get', [],
+                                 {'attributes': ['string', 'type']})
+        candidatos = []
+        for fname, finfo in fields_so.items():
+            s = (finfo.get('string') or '').lower()
+            f = fname.lower()
+            if 'ciclo' in s or 'ciclo' in f or 'manejo' in s or 'manejo' in f:
+                candidatos.append((fname, finfo.get('string', ''), finfo.get('type', '')))
+
+        if candidatos:
+            # Preferir campos custom (empiezan con x_) o tipo selection
+            for fname, fstr, ftype in candidatos:
+                if fname.startswith('x_'):
+                    _ciclo_field_cache = fname
+                    print(f"[pagoProveedor] Campo ciclo detectado: {fname} (string: '{fstr}', type: {ftype})")
+                    return fname
+            # Si no hay x_, tomar el primero
+            _ciclo_field_cache = candidatos[0][0]
+            print(f"[pagoProveedor] Campo ciclo detectado: {candidatos[0][0]} (string: '{candidatos[0][1]}')")
+            return candidatos[0][0]
+
+        # No se encontró campo de ciclo — buscar en modelos One2many de sale.order
+        for fname, finfo in fields_so.items():
+            if finfo.get('type') == 'one2many':
+                rel = finfo.get('relation', '')
+                try:
+                    rel_fields = json_execute(sess, rel, 'fields_get', [],
+                                             {'attributes': ['string', 'type']})
+                    for rfname, rfinfo in rel_fields.items():
+                        rs = (rfinfo.get('string') or '').lower()
+                        if 'ciclo' in rs or 'manejo' in rs:
+                            _ciclo_field_cache = f"{fname}.{rfname}"
+                            print(f"[pagoProveedor] Campo ciclo en modelo relacionado: {rel}.{rfname} (via sale.order.{fname})")
+                            return _ciclo_field_cache
+                except Exception:
+                    pass
+
+        print("[pagoProveedor] AVISO: No se encontró campo 'ciclo/manejo' en sale.order ni en modelos relacionados")
+        _ciclo_field_cache = False
+        return False
+    except Exception as e:
+        print(f"[pagoProveedor] Error al buscar campo ciclo: {e}")
+        _ciclo_field_cache = False
+        return False
+
+
+def _leer_ciclo_ov(sess, so_id):
+    """Lee el valor del campo 'Manejo de ciclos' de una sale.order específica.
+    Retorna '03-18', '10-25', o False si no se pudo determinar."""
+    campo = _descubrir_campo_ciclo(sess)
+    if not campo:
+        return False
+
+    try:
+        if '.' in campo:
+            # Campo en modelo relacionado (One2many → subcampo)
+            o2m_field, sub_field = campo.split('.', 1)
+            so_rec = json_execute(sess, 'sale.order', 'read', [[so_id], [o2m_field]])
+            if so_rec and so_rec[0].get(o2m_field):
+                rel_ids = so_rec[0][o2m_field]
+                if isinstance(rel_ids, list) and rel_ids:
+                    sub_recs = json_execute(sess, 'sale.order', 'read', [rel_ids[:1], [sub_field]])
+                    if sub_recs:
+                        val = sub_recs[0].get(sub_field, '')
+                        if val:
+                            val_str = str(val).strip()
+                            if '03' in val_str and '18' in val_str:
+                                return '03-18'
+                            if '10' in val_str and '25' in val_str:
+                                return '10-25'
+                            return val_str
+        else:
+            # Campo directo en sale.order
+            so_rec = json_execute(sess, 'sale.order', 'read', [[so_id], [campo]])
+            if so_rec:
+                val = so_rec[0].get(campo, '')
+                if val:
+                    val_str = str(val).strip()
+                    if '03' in val_str and '18' in val_str:
+                        return '03-18'
+                    if '10' in val_str and '25' in val_str:
+                        return '10-25'
+                    return val_str
+    except Exception as e:
+        print(f"[pagoProveedor] Error leyendo campo ciclo de OV {so_id}: {e}")
+
+    return False
+
+
 def fetch_pagoProveedorMoto(sess):
-    """Pago a proveedor MOTO CITY PRO: 40% inicial + 60% en 8 cuotas quincenales."""
+    """Pago a proveedor MOTO CITY PRO: 40% inicial + 60% en 8 cuotas quincenales.
+    Lee el ciclo del cliente desde el campo 'Manejo de ciclos' de la sale.order."""
     from datetime import date
     import calendar
     proveedor = "MOTO CITY PRO, C.A."
+
+    # Precalentar el cache del campo ciclo una sola vez
+    _descubrir_campo_ciclo(sess)
+
     purchase = json_execute(sess, 'purchase.order', 'search_read', [
         [['partner_id.name', 'ilike', 'MOTO CITY PRO'], ['state', '=', 'purchase']],
         ['id', 'name', 'partner_ref', 'date_order', 'amount_total', 'partner_id', 'state', 'order_line']
     ])
     if not purchase:
         return {"items": [], "proveedor": proveedor, "orden_compra": "", "total_ordenes": 0, "total_pagoInicial": 0, "total_financiado": 0}
+
+    # Cache de sale.order: buscar SOLO una vez por nombre de OV
+    _so_cache = {}  # orden_venta_name → {so_id, cliente}
+
     items = []
     for p in purchase:
         pid = p.get('partner_id')
@@ -427,20 +535,31 @@ def fetch_pagoProveedorMoto(sess):
         orden_compra = p.get('name', '')
         orden_venta = p.get('partner_ref', '')
         cliente_venta = 'Sin asignar'
+        so_id_venta = 0
+
+        # ── Buscar la sale.order por partner_ref (una sola vez por OV) ──
         if orden_venta:
-            try:
-                # Cargar todas las ventas publicadas y buscar por nombre
-                all_so = json_execute(sess, 'sale.order', 'search_read', [
-                    [['state', '=', 'sale']], ['id', 'name', 'partner_id']
-                ])
-                for s in all_so:
-                    if s.get('name', '') == orden_venta:
-                        so_pid = s.get('partner_id')
+            if orden_venta in _so_cache:
+                cached = _so_cache[orden_venta]
+                cliente_venta = cached['cliente']
+                so_id_venta = cached['so_id']
+            else:
+                try:
+                    so_data = json_execute(sess, 'sale.order', 'search_read', [
+                        [['name', '=', orden_venta]],
+                        ['id', 'name', 'partner_id']
+                    ])
+                    if so_data:
+                        so = so_data[0]
+                        so_id_venta = so['id']
+                        so_pid = so.get('partner_id')
                         if so_pid and isinstance(so_pid, list) and len(so_pid) > 1:
                             cliente_venta = so_pid[1]
-                        break
-            except Exception:
-                pass
+                    _so_cache[orden_venta] = {'so_id': so_id_venta, 'cliente': cliente_venta}
+                except Exception:
+                    pass
+
+        # ── Líneas de la orden de compra (precio moto + gasto admin) ──
         line_ids = p.get('order_line', [])
         precio_moto = 0
         gasto_admin = 0
@@ -460,67 +579,24 @@ def fetch_pagoProveedorMoto(sess):
         inicial_40 = round(precio_moto * 0.40, 2)
         restante_60 = round(precio_moto * 0.60, 2)
         cuota_quincenal = round(restante_60 / 8, 2)
-        ciclo_cliente = '10-25'  # Default 10-25 si no se detecta ciclo desde cuotas
-        if cliente_venta != 'Sin asignar':
-            try:
-                vp = json_execute(sess, 'res.partner', 'search_read', [['name', '=', cliente_venta]], ['id'])
-                if vp:
-                    vpid = vp[0]['id']
-                    inv_ids = json_execute(sess, 'account.move', 'search', [
-                        ['partner_id', '=', vpid], ['state', '=', 'posted'], ['move_type', '=', 'out_invoice']
-                    ])
-                    if inv_ids:
-                        # Buscar en invoice.installment.line por payment_date
-                        inst_lines = json_execute(sess, 'invoice.installment.line', 'search_read', [
-                            [['invoice_id', 'in', inv_ids]], ['payment_date']
-                        ])
-                        for il in inst_lines:
-                            pd = str(il.get('payment_date', ''))[:10]
-                            if pd:
-                                try:
-                                    dia = int(pd.split('-')[2])
-                                    if 3 <= dia <= 18:
-                                        ciclo_cliente = '03-18'
-                                        break
-                                    elif 10 <= dia <= 25:
-                                        ciclo_cliente = '10-25'
-                                        break
-                                except: pass
-            except: pass
-        # Si no se detectó ciclo, buscar en la orden de venta directamente
-        if ciclo_cliente == '03-18' and orden_venta:
-            try:
-                so_data = json_execute(sess, 'sale.order', 'search_read', [['name', '=', orden_venta]], ['order_line'])
-                if so_data and so_data[0].get('order_line'):
-                    so_lines = json_execute(sess, 'sale.order.line', 'read', [so_data[0]['order_line'][:3], ['product_id', 'name']])
-                    for sl in so_lines:
-                        sp = sl.get('product_id')
-                        if sp and isinstance(sp, list) and 'moto' in sp[1].lower():
-                            cliente_pid = json_execute(sess, 'sale.order', 'read', [[so_data[0]['id']], ['partner_id']])
-                            if cliente_pid:
-                                cpid = cliente_pid[0].get('partner_id', [0])[0]
-                                if cpid:
-                                    invs = json_execute(sess, 'account.move', 'search', [['partner_id', '=', cpid], ['state', '=', 'posted'], ['move_type', '=', 'out_invoice']])
-                                    for miid in invs[:2]:
-                                        ml = json_execute(sess, 'account.move.line', 'search_read', [['move_id', '=', miid]], ['date'])
-                                        for mm in ml:
-                                            pd2 = str(mm.get('date', ''))[:10]
-                                            if pd2:
-                                                try:
-                                                    dia2 = int(pd2.split('-')[2])
-                                                    if 10 <= dia2 <= 25:
-                                                        ciclo_cliente = '10-25'
-                                                        break
-                                                except: pass
-                                    break
-            except: pass
-        if ciclo_cliente == '03-18':
-            dias_pago = [5, 20]
+
+        # ── DETECCIÓN DEL CICLO ──
+        # 1) Intentar leer directo del campo 'Manejo de ciclos' en la sale.order
+        ciclo_cliente = '03-18'  # Default: mayoría de clientes
+        if so_id_venta:
+            ciclo_ov = _leer_ciclo_ov(sess, so_id_venta)
+            if ciclo_ov:
+                ciclo_cliente = ciclo_ov
+            else:
+                print(f"[pagoProveedor] AVISO: OV {orden_venta} (id={so_id_venta}) sin 'Manejo de ciclos' definido, usando default '03-18'")
         else:
-            dias_pago = [12, 27]
+            print(f"[pagoProveedor] AVISO: OV '{orden_venta}' no encontrada, usando ciclo default '03-18'")
+
+        # ── Calcular 8 cuotas quincenales según ciclo ──
         pagos = []
-        mes_actual = 9
-        anio_actual = 2026
+        hoy = date.today()
+        mes_actual = hoy.month
+        anio_actual = hoy.year
         for cuota_num in range(1, 9):
             if ciclo_cliente == '03-18':
                 dia_pago = 5 if cuota_num % 2 == 1 else 20
@@ -535,6 +611,7 @@ def fetch_pagoProveedorMoto(sess):
             if cuota_num % 2 == 0:
                 mes_actual += 1
                 if mes_actual > 12: mes_actual = 1; anio_actual += 1
+
         items.append({
             'purchase_order_id': p['id'], 'orden_compra': orden_compra, 'orden_venta': orden_venta,
             'proveedor': proveedor_nombre, 'cliente': cliente_venta, 'modelo': modelo,
@@ -1472,11 +1549,47 @@ def fetch_payment_plan(sess):
     }
 
 def fetch_ventas_motos(sess):
-    """Ventas de motos PUBLICADAS: precio producto + gasto admin separado."""
-    moto_categ_ids = [174, 167]
+    """Ventas de motos PUBLICADAS: precio producto + gasto admin separado.
+    Usa categorías dinámicas + cache de tags CREDIMOTO + filtro temporal."""
+    from datetime import date, timedelta
+
+    # ── 1. Encontrar categorías de motos dinámicamente ──
+    # Buscar categorías cuyo nombre contenga 'moto' o 'motocicleta'
+    _moto_categ_cache = getattr(fetch_ventas_motos, '_categ_cache', None)
+    if _moto_categ_cache is None:
+        try:
+            cats = json_execute(sess, 'product.category', 'search_read', [
+                [], ['id', 'name']
+            ])
+            moto_categ_ids = [
+                c['id'] for c in cats
+                if 'moto' in (c.get('name') or '').lower()
+            ]
+            if not moto_categ_ids:
+                # Fallback: categorías originales si no se encontraron por nombre
+                moto_categ_ids = [174, 167]
+                print("[ventasMotos] AVISO: No se encontraron categorías 'moto', usando fallback [174, 167]")
+            else:
+                print(f"[ventasMotos] Categorías de motos detectadas: {moto_categ_ids}")
+            fetch_ventas_motos._categ_cache = moto_categ_ids
+        except Exception as e:
+            moto_categ_ids = [174, 167]
+            print(f"[ventasMotos] Error detectando categorías: {e}, usando fallback [174, 167]")
+            fetch_ventas_motos._categ_cache = moto_categ_ids
+    else:
+        moto_categ_ids = _moto_categ_cache
+
+    # ── 2. Buscar productos en esas categorías ──
     prod_ids = json_execute(sess, 'product.product', 'search', [
         [['categ_id', 'in', moto_categ_ids]]
     ])
+    if not prod_ids:
+        return {
+            'items': [], 'total_ordenes': 0, 'total_motos': 0,
+            'total_producto': 0, 'total_gasto_admin': 0, 'total_monto': 0,
+        }
+
+    # ── 3. Buscar sale.order.line con esos productos ──
     sol_ids = json_execute(sess, 'sale.order.line', 'search', [
         [['product_id', 'in', prod_ids]]
     ])
@@ -1487,49 +1600,92 @@ def fetch_ventas_motos(sess):
             oid = s.get('order_id')
             if oid and isinstance(oid, list):
                 order_ids.add(oid[0])
+
+    if not order_ids:
+        return {
+            'items': [], 'total_ordenes': 0, 'total_motos': 0,
+            'total_producto': 0, 'total_gasto_admin': 0, 'total_monto': 0,
+        }
+
+    # ── 4. Leer órdenes de venta publicadas ──
     orders = json_execute(sess, 'sale.order', 'read', [
-        list(order_ids), ['id', 'name', 'state', 'partner_id', 'date_order', 'order_line', 'amount_total']
+        list(order_ids), ['id', 'name', 'state', 'partner_id', 'date_order',
+                          'order_line', 'amount_total']
     ])
     posted = [o for o in orders if o.get('state') == 'sale']
+
+    # ── 5. Cache de tags CREDIMOTO (cargar todos los partners de una vez) ──
+    partner_ids_needed = set()
+    for o in posted:
+        pid = o.get('partner_id')
+        if isinstance(pid, list) and pid[0]:
+            partner_ids_needed.add(pid[0])
+
+    _credimoto_cache = {}  # partner_id → bool
+    if partner_ids_needed:
+        partner_ids_list = list(partner_ids_needed)
+        for i in range(0, len(partner_ids_list), 500):
+            batch = partner_ids_list[i:i+500]
+            pdata = json_execute(sess, 'res.partner', 'read', [
+                batch, ['id', 'category_id']
+            ])
+            for p in pdata:
+                tags = [t[1] for t in p.get('category_id', []) if isinstance(t, list)]
+                _credimoto_cache[p['id']] = any(
+                    'CREDIMOTO' in t or 'CERDIMOTO' in t for t in tags
+                )
+
+    # ── 6. Procesar cada orden ──
     items = []
     for o in posted:
         oid_id = o['id']
-        date_order = str(o.get('date_order') or '')[:7]
+        date_order = str(o.get('date_order') or '')[:10]  # YYYY-MM-DD completo
+        mes = date_order[:7]  # YYYY-MM para agrupación
         if not date_order:
             continue
+
         pid = o.get('partner_id')
         partner_id = pid[0] if isinstance(pid, list) and len(pid) > 1 else 0
         cliente = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Desconocido'
-        credimoto = False
-        if partner_id:
-            try:
-                p_data = json_execute(sess, 'res.partner', 'read', [partner_id], ['category_id'])
-                if p_data:
-                    tags = [t[1] for t in p_data[0].get('category_id', []) if isinstance(t, list)]
-                    credimoto = any('CREDIMOTO' in t or 'CERDIMOTO' in t for t in tags)
-            except:
-                pass
+        credimoto = _credimoto_cache.get(partner_id, False)
+
+        # ── Líneas de la orden: separar moto vs gasto admin ──
         all_lines_data = json_execute(sess, 'sale.order.line', 'read',
-                                      [o.get('order_line', []), ['product_id', 'price_unit', 'price_subtotal', 'name']])
+                                      [o.get('order_line', []),
+                                       ['product_id', 'price_unit', 'price_subtotal',
+                                        'product_uom_qty', 'name']])
         precio_producto = 0
         gasto_admin = 0
         modelo = ''
+        unidades_moto = 0
         for l in all_lines_data:
             pname = l.get('name', '')
+            qty = int(l.get('product_uom_qty', 1) or 1)
             if 'Gasto Administrativo' in pname or 'gasto' in pname.lower():
                 gasto_admin += float(l.get('price_subtotal', 0) or 0)
             else:
-                precio_producto = float(l.get('price_unit', 0) or 0)
-                prod = l.get('product_id')
-                modelo = prod[1] if isinstance(prod, list) and len(prod) > 1 else pname
+                # Tomar la línea de producto con mayor subtotal como "moto"
+                subtotal = float(l.get('price_subtotal', 0) or 0)
+                if subtotal > precio_producto:
+                    precio_producto = float(l.get('price_unit', 0) or 0)
+                    prod = l.get('product_id')
+                    modelo = prod[1] if isinstance(prod, list) and len(prod) > 1 else pname
+                    unidades_moto = qty
+
         items.append({
-            'mes': date_order, 'modelo': modelo, 'cliente': cliente,
-            'orden': o.get('name', ''), 'orden_id': oid_id, 'unidades': 1,
+            'mes': mes, 'modelo': modelo, 'cliente': cliente,
+            'orden': o.get('name', ''), 'orden_id': oid_id,
+            'unidades': unidades_moto if unidades_moto else 1,
             'precio_producto': round(precio_producto, 2),
             'gasto_admin': round(gasto_admin, 2),
             'monto_total': round(float(o.get('amount_total', 0)), 2),
             'credimoto': credimoto,
+            'fecha': date_order,
         })
+
+    # Ordenar por fecha descendente
+    items.sort(key=lambda x: x.get('fecha', ''), reverse=True)
+
     return {
         'items': items,
         'total_ordenes': len(items),

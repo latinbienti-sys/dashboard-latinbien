@@ -1284,7 +1284,7 @@ html = f'''<!DOCTYPE html>
                             <th class="text-right">Precio Moto</th>
                             <th class="text-right">Gasto Admin</th>
                             <th class="text-right">Total</th>
-                            <th>Mes</th>
+                            <th>Fecha</th>
                         </tr>
                     </thead>
                     <tbody id="tablaOrdenesMotos"></tbody>
@@ -3177,6 +3177,7 @@ try {{
         vmOrdBody.innerHTML = vmItems.map(function(it) {{
             var ordUrl = 'https://latinbien.com/web#id=' + (it.orden_id||0) + '&model=sale.order&view_type=form';
             var credTag = it.credimoto ? '<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;border:1px solid #f59e0b">CREDIMOTO</span>' : '<span style="color:#ccc">—</span>';
+            var fecha = it.fecha || it.mes || '';
             return '<tr>' +
                 '<td><a href="' + ordUrl + '" target="_blank" style="color:#213C83;font-weight:600;text-decoration:none;border-bottom:1px dashed #213C83">' + it.orden + '</a></td>' +
                 '<td><strong>' + it.cliente + '</strong></td>' +
@@ -3185,7 +3186,7 @@ try {{
                 '<td class="text-right" style="font-weight:600">' + fmtMoney(it.precio_producto) + '</td>' +
                 '<td class="text-right" style="color:#888">' + fmtMoney(it.gasto_admin) + '</td>' +
                 '<td class="text-right" style="font-weight:700">' + fmtMoney(it.monto_total) + '</td>' +
-                '<td>' + it.mes + '</td>' +
+                '<td>' + fecha + '</td>' +
                 '</tr>';
         }}).join('');
     }}
