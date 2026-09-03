@@ -407,167 +407,80 @@ def fetch_expedientes(sess):
         }
 
 # ── Pago Proveedor MOTO CITY PRO ─────────────────────────
-_ciclo_field_cache = None  # Cache: modelo y campo para leer ternure_plan
+_ciclo_field_cache = None  # Cache: nombre técnico del campo "Manejo de ciclos"
 
-# Nombre técnico confirmado del campo "Manejo de ciclos"
-_CAMPO_CICLO = 'ternure_plan'
+# Nombre técnico CONFIRMADO del campo "Manejo de ciclos"
+# (field_get en Odoo: tenure_plan_ciclo, selection ['3y18'/'10y25'])
+_CAMPO_CICLO = 'tenure_plan_ciclo'
 
-def _descubrir_ruta_ciclo(sess):
-    """Busca en qué modelo vive ternure_plan y cómo se accede desde sale.order.
-    Cachea el resultado para no repetir la búsqueda."""
+def _descubrir_campo_ciclo(sess):
+    """Verifica el nombre técnico del campo 'Manejo de ciclos' en sale.order.
+    Cachea el resultado para no repetir fields_get por orden."""
     global _ciclo_field_cache
     if _ciclo_field_cache is not None:
         return _ciclo_field_cache
 
-    # 1) Verificar si ternure_plan existe directamente en sale.order
     try:
         so_fields = json_execute(sess, 'sale.order', 'fields_get', [],
-                                 {'attributes': ['string', 'type']})
+                                 {'attributes': ['string', 'type', 'selection']})
         if _CAMPO_CICLO in so_fields:
-            _ciclo_field_cache = {'modelo': 'sale.order', 'campo': _CAMPO_CICLO, 'via': 'directo'}
-            print(f"[pagoProveedor] Campo '{_CAMPO_CICLO}' encontrado directamente en sale.order")
-            return _ciclo_field_cache
+            _ciclo_field_cache = _CAMPO_CICLO
+            info = so_fields[_CAMPO_CICLO]
+            print(f"[pagoProveedor] Campo '{_CAMPO_CICLO}' confirmado en sale.order "
+                  f"(string: '{info.get('string')}', selection: {info.get('selection')})")
+            return _CAMPO_CICLO
+        # Fallback: buscar por string "Manejo de ciclos"
+        for fname, finfo in so_fields.items():
+            if (finfo.get('string') or '').lower() in ('manejo de ciclos', 'manejo de cicle'):
+                _ciclo_field_cache = fname
+                print(f"[pagoProveedor] Campo detectado por string: '{fname}' (Manejo de ciclos)")
+                return fname
+        print("[pagoProveedor] AVISO: No se encontró campo 'Manejo de ciclos' en sale.order")
+        _ciclo_field_cache = False
+        return False
     except Exception as e:
         print(f"[pagoProveedor] Error consultando sale.order.fields_get: {e}")
-
-    # 2) Buscar en modelos One2many de sale.order
-    try:
-        if not so_fields:
-            so_fields = json_execute(sess, 'sale.order', 'fields_get', [],
-                                     {'attributes': ['string', 'type', 'relation']})
-        for fname, finfo in so_fields.items():
-            if finfo.get('type') == 'one2many':
-                rel_model = finfo.get('relation', '')
-                if not rel_model:
-                    continue
-                try:
-                    rel_fields = json_execute(sess, rel_model, 'fields_get', [],
-                                             {'attributes': ['string', 'type']})
-                    if _CAMPO_CICLO in rel_fields:
-                        _ciclo_field_cache = {'modelo': rel_model, 'campo': _CAMPO_CICLO,
-                                              'via': f'sale.order.{fname}'}
-                        print(f"[pagoProveedor] Campo '{_CAMPO_CICLO}' encontrado en {rel_model} (via sale.order.{fname})")
-                        return _ciclo_field_cache
-                except Exception:
-                    pass
-    except Exception as e:
-        print(f"[pagoProveedor] Error buscando en One2many: {e}")
-
-    # 3) Buscar en invoice.installment.line (ya se usa en el código)
-    try:
-        iil_fields = json_execute(sess, 'invoice.installment.line', 'fields_get', [],
-                                  {'attributes': ['string', 'type']})
-        if _CAMPO_CICLO in iil_fields:
-            # Encontrar cómo se llega desde sale.order → account.move → invoice.installment.line
-            # Buscar campo One2many en account.move que apunte a invoice.installment.line
-            am_fields = json_execute(sess, 'account.move', 'fields_get', [],
-                                     {'attributes': ['string', 'type', 'relation']})
-            o2m_a_miil = None
-            for am_fname, am_finfo in am_fields.items():
-                if am_finfo.get('type') == 'one2many' and am_finfo.get('relation') == 'invoice.installment.line':
-                    o2m_a_miil = am_fname
-                    break
-
-            # Buscar campo One2many en sale.order que apunte a account.move
-            o2m_so_am = None
-            for so_fname, so_finfo in so_fields.items():
-                if so_finfo.get('type') == 'one2many' and so_finfo.get('relation') == 'account.move':
-                    o2m_so_am = so_fname
-                    break
-
-            if o2m_so_am and o2m_a_miil:
-                ruta = f'sale.order.{o2m_so_am} → account.move.{o2m_a_miil}'
-                _ciclo_field_cache = {'modelo': 'invoice.installment.line', 'campo': _CAMPO_CICLO,
-                                      'via': ruta, 'o2m_so_am': o2m_so_am, 'o2m_a_miil': o2m_a_miil}
-                print(f"[pagoProveedor] Campo '{_CAMPO_CICLO}' en invoice.installment.line (via {ruta})")
-                return _ciclo_field_cache
-            else:
-                print(f"[pagoProveedor] AVISO: '{_CAMPO_CICLO}' está en invoice.installment.line "
-                      f"pero no se encontró ruta desde sale.order "
-                      f"(sale.order→account.move: {o2m_so_am}, account.move→invoice.installment.line: {o2m_a_miil})")
-    except Exception as e:
-        print(f"[pagoProveedor] Error consultando invoice.installment.line: {e}")
-
-    print(f"[pagoProveedor] AVISO: Campo '{_CAMPO_CICLO}' no encontrado en ningún modelo conocido")
-    _ciclo_field_cache = False
-    return False
+        _ciclo_field_cache = False
+        return False
 
 
 def _leer_ciclo_ov(sess, so_id):
-    """Lee ternure_plan para la sale.order dada.
-    Retorna '03-18', '10-25', el valor crudo, o False si no se pudo determinar."""
-    ruta = _descubrir_ruta_ciclo(sess)
-    if not ruta:
+    """Lee el campo 'Manejo de ciclos' (tenure_plan_ciclo) de una sale.order.
+    Retorna '03-18', '10-25', o False si no se pudo determinar."""
+    campo = _descubrir_campo_ciclo(sess)
+    if not campo:
         return False
 
     try:
-        modelo = ruta['modelo']
-        campo = ruta['campo']
-
-        if modelo == 'sale.order':
-            # Campo directo en sale.order
-            recs = json_execute(sess, 'sale.order', 'read', [[so_id], [campo]])
-            if recs:
-                val = recs[0].get(campo, '')
-                return _normalizar_ciclo(val)
-
-        elif modelo == 'invoice.installment.line':
-            # Ruta: sale.order → account.move (One2many) → invoice.installment.line
-            o2m_so_am = ruta.get('o2m_so_am', 'invoice_ids')
-            o2m_a_miil = ruta.get('o2m_a_miil', 'installment_line_ids')
-
-            so_rec = json_execute(sess, 'sale.order', 'read', [[so_id], [o2m_so_am]])
-            if not so_rec or not so_rec[0].get(o2m_so_am):
-                return False
-
-            move_ids = so_rec[0][o2m_so_am]
-            if not isinstance(move_ids, list) or not move_ids:
-                return False
-
-            # Leer invoice.installment.line de esas facturas
-            iil_recs = json_execute(sess, 'invoice.installment.line', 'search_read', [
-                [[o2m_a_miil.replace('_ids', '_id'), 'in', move_ids]],
-                [campo]
-            ])
-            if iil_recs:
-                for rec in iil_recs:
-                    val = rec.get(campo, '')
-                    if val:
-                        return _normalizar_ciclo(val)
-
-        else:
-            # Modelo genérico One2many desde sale.order
-            via_parts = ruta.get('via', '').split('.')
-            if len(via_parts) >= 2:
-                o2m_field = via_parts[1]
-                so_rec = json_execute(sess, 'sale.order', 'read', [[so_id], [o2m_field]])
-                if so_rec and so_rec[0].get(o2m_field):
-                    rel_ids = so_rec[0][o2m_field]
-                    if isinstance(rel_ids, list) and rel_ids:
-                        rel_recs = json_execute(sess, modelo, 'read', [rel_ids[:1], [campo]])
-                        if rel_recs:
-                            return _normalizar_ciclo(rel_recs[0].get(campo, ''))
-
+        recs = json_execute(sess, 'sale.order', 'read', [[so_id], [campo]])
+        if recs:
+            val = recs[0].get(campo, '')
+            return _normalizar_ciclo(val)
     except Exception as e:
-        print(f"[pagoProveedor] Error leyendo ciclo de OV {so_id}: {e}")
+        print(f"[pagoProveedor] Error leyendo campo '{campo}' de OV {so_id}: {e}")
 
     return False
 
 
 def _normalizar_ciclo(valor):
-    """Normaliza el valor de ternure_plan a '03-18' o '10-25'."""
+    """Normaliza el valor de tenure_plan_ciclo a '03-18' o '10-25'.
+    Valores de Odoo: '3y18' (3 y 18) → 03-18, '10y25' (10 y 25) → 10-25."""
     if not valor:
         return False
     val_str = str(valor).strip().lower()
-    if not val_str or val_str == 'false' or val_str == 'none':
+    if not val_str or val_str in ('false', 'none', 'f'):
         return False
-    if '03' in val_str and '18' in val_str:
+    if '3y18' == val_str or '03y18' == val_str or '3 y 18' in val_str:
         return '03-18'
-    if '10' in val_str and '25' in val_str:
+    if '10y25' == val_str or '10 y 25' in val_str:
         return '10-25'
-    # Valor no reconocido — devolver tal cual para debug
-    print(f"[pagoProveedor] AVISO: ternure_plan con valor no reconocido: '{valor}'")
-    return str(valor).strip()
+    # Fallback flexible
+    if '3' in val_str and '18' in val_str and '10' not in val_str:
+        return '03-18'
+    if '10' in val_str and '25' in val_str and '3' not in val_str:
+        return '10-25'
+    print(f"[pagoProveedor] AVISO: valor de ciclo no reconocido: '{valor}'")
+    return val_str
 
 
 def fetch_pagoProveedorMoto(sess):
@@ -578,7 +491,7 @@ def fetch_pagoProveedorMoto(sess):
     proveedor = "MOTO CITY PRO, C.A."
 
     # Precalentar el cache del campo ciclo una sola vez
-    _descubrir_ruta_ciclo(sess)
+    _descubrir_campo_ciclo(sess)
 
     purchase = json_execute(sess, 'purchase.order', 'search_read', [
         [['partner_id.name', 'ilike', 'MOTO CITY PRO'], ['state', '=', 'purchase']],
