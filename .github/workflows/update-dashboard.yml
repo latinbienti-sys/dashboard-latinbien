@@ -2,8 +2,14 @@ name: Actualizar Dashboard
 
 on:
   schedule:
-    - cron: '0 */3 * * *'
+    # 8:00 AM hora Venezuela (UTC-4) = 12:00 UTC
+    - cron: '0 12 * * *'
   workflow_dispatch:
+    inputs:
+      enviar_prueba:
+        description: 'Enviar correo de prueba SOLO a yarley@latinbien.com'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -37,7 +43,7 @@ jobs:
           ODOO_PASS: ${{ secrets.ODOO_PASS }}
           LATINBIEN_SMTP_USER: ${{ secrets.LATINBIEN_SMTP_USER }}
           LATINBIEN_SMTP_PASS: ${{ secrets.LATINBIEN_SMTP_PASS }}
-        run: python send_reminders.py
+        run: python send_reminders.py ${{ github.event.inputs.enviar_prueba == 'true' && '--test' || '' }}
 
       - name: Configurar git
         run: |
