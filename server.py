@@ -501,9 +501,79 @@ def _normalizar_ciclo(valor):
     return val_str
 
 
+def _fecha_ancla_cuota(sess, so_id):
+    """Primera cuota REAL del cliente: línea invoice.installment.line con
+    is_installment=True de las facturas de la sale.order. Devuelve la payment_date
+    (date) de la primera cuota aún por pagar según el plan; si todas están pagadas,
+    la más antigua. None si no se puede determinar."""
+    from datetime import date as _dt_date
+    try:
+        so_data = json_execute(sess, 'sale.order', 'search_read', [
+            [['id', '=', so_id]],
+            ['id', 'invoice_ids']
+        ])
+        if not so_data:
+            return None
+        inv_ids = list(so_data[0].get('invoice_ids') or [])
+        if not inv_ids:
+            return None
+        il_ids = json_execute(sess, 'invoice.installment.line', 'search',
+                              [[['invoice_id', 'in', inv_ids], ['is_installment', '=', True]]])
+        if not il_ids:
+            return None
+        recs = json_execute(sess, 'invoice.installment.line', 'read',
+                            [il_ids, ['payment_date', 'state']])
+        pendientes = []
+        todas = []
+        for r in recs:
+            pd = str(r.get('payment_date') or '')[:10]
+            if len(pd) == 10:
+                todas.append(pd)
+                if r.get('state') != 'paid':
+                    pendientes.append(pd)
+        fechas = pendientes or todas
+        if not fechas:
+            return None
+        fechas.sort()
+        return _dt_date.fromisoformat(fechas[0])
+    except Exception as e:
+        print(f"[pagoProveedor] AVISO: no se pudo leer fecha ancla de OV id={so_id}: {e}")
+        return None
+
+
+def _primera_cuota_proveedor(ciclo, ancla):
+    """Asigna la cuota #1 del proveedor según el ciclo y la primera cuota real
+    del cliente. Opción A (03-18): días 5/20. Opción B (10-25): días 12/27."""
+    day_a, day_b = (5, 20) if ciclo == '03-18' else (12, 27)
+    if ancla.day <= day_a:
+        return ancla.replace(day=day_a)
+    if ancla.day <= day_b:
+        return ancla.replace(day=day_b)
+    y, m = ancla.year, ancla.month + 1
+    if m > 12:
+        y, m = y + 1, 1
+    return ancla.replace(year=y, month=m, day=day_a)
+
+
+def _base_fallback(ciclo, hoy):
+    """Cuota #1 del proveedor cuando no hay cuotas reales del cliente: siguiente
+    día de pago del ciclo a partir de hoy."""
+    from datetime import date as _dt_date
+    day_a, day_b = (5, 20) if ciclo == '03-18' else (12, 27)
+    if hoy.day <= day_a:
+        return hoy.replace(day=day_a)
+    if hoy.day <= day_b:
+        return hoy.replace(day=day_b)
+    y, m = hoy.year, hoy.month + 1
+    if m > 12:
+        y, m = y + 1, 1
+    return _dt_date(y, m, day_a)
+
+
 def fetch_pagoProveedorMoto(sess):
     """Pago a proveedor MOTO CITY PRO: 40% inicial + 60% en 8 cuotas quincenales.
-    Lee el ciclo del cliente desde el campo 'Manejo de ciclos' de la sale.order."""
+    La cuota #1 se calcula desde la PRIMERA CUOTA REAL del cliente (invoice.installment.line
+    con is_installment=True, 'Manejo de ciclos' de la sale.order como opción A/B)."""
     from datetime import date
     import calendar
     proveedor = "MOTO CITY PRO, C.A."
@@ -520,6 +590,7 @@ def fetch_pagoProveedorMoto(sess):
 
     # Cache de sale.order: buscar SOLO una vez por nombre de OV
     _so_cache = {}  # orden_venta_name → {so_id, cliente}
+    _ancla_cache = {}  # so_id → fecha ancla (date) o None
 
     items = []
     for p in purchase:
@@ -587,25 +658,48 @@ def fetch_pagoProveedorMoto(sess):
         else:
             print(f"[pagoProveedor] AVISO: OV '{orden_venta}' no encontrada, usando ciclo default '03-18'")
 
-        # ── Calcular 8 cuotas quincenales según ciclo ──
+        # ── Calcular 8 cuotas quincenales según ciclo y FECHA ANCLA ──
         pagos = []
-        hoy = date.today()
-        mes_actual = hoy.month
-        anio_actual = hoy.year
-        for cuota_num in range(1, 9):
-            if ciclo_cliente == '03-18':
-                dia_pago = 5 if cuota_num % 2 == 1 else 20
+        day_a, day_b = (5, 20) if ciclo_cliente == '03-18' else (12, 27)
+        fecha_ancla = None
+        if so_id_venta:
+            if so_id_venta in _ancla_cache:
+                fecha_ancla = _ancla_cache[so_id_venta]
             else:
-                dia_pago = 12 if cuota_num % 2 == 1 else 27
+                fecha_ancla = _fecha_ancla_cuota(sess, so_id_venta)
+                _ancla_cache[so_id_venta] = fecha_ancla
+            if fecha_ancla:
+                base = _primera_cuota_proveedor(ciclo_cliente, fecha_ancla)
+                print(f"[pagoProveedor] {orden_compra}: primera cuota cliente={fecha_ancla} "
+                      f"-> cuota#1 proveedor={base} (ciclo {ciclo_cliente})")
+            else:
+                print(f"[pagoProveedor] {orden_compra}: sin cuotas del cliente, fechas desde hoy")
+                base = _base_fallback(ciclo_cliente, date.today())
+        else:
+            # Sin OV: fallback desde hoy con el ciclo por defecto
+            print(f"[pagoProveedor] {orden_compra}: sin OV, fechas desde hoy")
+            base = _base_fallback(ciclo_cliente, date.today())
+        fecha_ancla_str = str(fecha_ancla)[:10] if fecha_ancla else ''
+
+        y, m = base.year, base.month
+        dia = base.day  # primer día del par (A o B)
+        for cuota_num in range(1, 9):
             try:
-                fecha_pago = date(anio_actual, mes_actual, dia_pago)
+                fecha_pago = date(y, m, dia)
             except:
-                ultimo_dia = calendar.monthrange(anio_actual, mes_actual)[1]
-                fecha_pago = date(anio_actual, mes_actual, min(dia_pago, ultimo_dia))
-            pagos.append({'cuota': cuota_num, 'fecha_pago': str(fecha_pago)[:10], 'monto': cuota_quincenal, 'estado': 'pendiente'})
-            if cuota_num % 2 == 0:
-                mes_actual += 1
-                if mes_actual > 12: mes_actual = 1; anio_actual += 1
+                fecha_pago = date(y, m, calendar.monthrange(y, m)[1])
+            pagos.append({'cuota': cuota_num, 'fecha_pago': str(fecha_pago)[:10],
+                          'monto': cuota_quincenal, 'estado': 'pendiente'})
+            # Alternar día: tras el primer día del par sigue el segundo en el mismo mes,
+            # tras el segundo, saltar al siguiente mes con el primer día.
+            if dia == day_a:
+                dia = day_b
+            else:
+                dia = day_a
+                m += 1
+                if m > 12:
+                    m = 1
+                    y += 1
 
         items.append({
             'purchase_order_id': p['id'], 'orden_compra': orden_compra, 'orden_venta': orden_venta,
@@ -613,7 +707,8 @@ def fetch_pagoProveedorMoto(sess):
             'fecha_compra': fecha_compra, 'monto_total_compra': round(monto_total_compra, 2),
             'precio_moto': round(precio_moto, 2), 'gasto_admin': round(gasto_admin, 2),
             'inicial_40': inicial_40, 'restante_60': restante_60, 'cuota_quincenal': cuota_quincenal,
-            'ciclo': ciclo_cliente, 'opcion': 'A' if ciclo_cliente == '03-18' else 'B', 'pagos': pagos,
+            'ciclo': ciclo_cliente, 'opcion': 'A' if ciclo_cliente == '03-18' else 'B',
+            'fecha_ancla_cliente': fecha_ancla_str, 'pagos': pagos,
         })
     return {
         'items': items, 'proveedor': proveedor,
