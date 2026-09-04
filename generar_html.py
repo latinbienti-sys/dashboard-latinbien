@@ -1360,19 +1360,24 @@ html = f'''<!DOCTYPE html>
             <div class="kpi-card"><div class="number" id="dcmCuotasCobrar">—</div><div class="label">Cuotas por Cobrar</div></div>
             <div class="kpi-card success"><div class="number money" id="dcmMontoCobrar">—</div><div class="label">Monto por Cobrar</div></div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px">
-            <div class="results-section">
-                <h3>Flujo de Caja Neto Mensual</h3>
-                <canvas id="chartFlujoCaja" height="200"></canvas>
-            </div>
-            <div class="results-section">
-                <h3>Proyección por Ciclo</h3>
-                <canvas id="chartCiclo" height="200"></canvas>
-            </div>
+        <div id="dcmVacio" style="display:none;background:#fff7ed;border:1px solid #fdba74;border-radius:12px;padding:18px;color:#9a3412;font-size:13px;margin-top:12px">
+            No se encontraron órdenes CREDIMOTO vinculadas a compras de MOTO CITY PRO. Los KPIs y gráficos se cargarán cuando existan.
         </div>
-        <div class="results-section" style="margin-top:12px">
-            <h3>Margen por Venta</h3>
-            <canvas id="chartMargen" height="160"></canvas>
+        <div id="dcmGraficos">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px">
+                <div class="results-section">
+                    <h3>Flujo de Caja Neto Mensual</h3>
+                    <canvas id="chartFlujoCaja" height="200"></canvas>
+                </div>
+                <div class="results-section">
+                    <h3>Proyección por Ciclo</h3>
+                    <canvas id="chartCiclo" height="200"></canvas>
+                </div>
+            </div>
+            <div class="results-section" style="margin-top:12px">
+                <h3>Margen por Venta</h3>
+                <canvas id="chartMargen" height="160"></canvas>
+            </div>
         </div>
     </div>
 
@@ -3304,6 +3309,13 @@ try {{
     document.getElementById('dcmCuotasPagadas').textContent = (dcmRes.cuotas_pagadas||0).toLocaleString();
     document.getElementById('dcmCuotasCobrar').textContent = (dcmRes.cuotas_por_cobrar||0).toLocaleString();
     document.getElementById('dcmMontoCobrar').textContent = fmtMoney(dcmRes.monto_por_cobrar||0);
+
+    var dcmVentas = dcm.ventas || [];
+    var dcmVacio = document.getElementById('dcmVacio');
+    if (dcmVacio) dcmVacio.style.display = dcmVentas.length ? 'none' : 'block';
+    // Ocultar contenedores de gráficos si no hay datos
+    var dcmGraficos = document.getElementById('dcmGraficos');
+    if (dcmGraficos) dcmGraficos.style.display = dcmVentas.length ? '' : 'none';
 
     // Chart: Flujo de caja neto mensual
     var flujo = dcm.flujo_caja || {{}};

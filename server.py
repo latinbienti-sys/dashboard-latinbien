@@ -630,9 +630,36 @@ def fetch_dshbcredimoto(sess):
     from datetime import date
     from collections import defaultdict
 
-    # ── 1. Obtener ventas CREDIMOTO vía fetch_ventas_motos ──
+    # ── 1. Purchase orders (proveedor MOTO CITY PRO) ──
+    # Se cargan PRIMERO porque son la fuente fiable para identificar qué
+    # órdenes de venta son CREDIMOTO (los partners NO siempre tienen tag "CREDIMOTO").
+    po_recs = json_execute(sess, 'purchase.order', 'search_read', [
+        [['partner_id.name', 'ilike', 'MOTO CITY PRO'], ['state', '=', 'purchase']],
+        ['id', 'name', 'partner_ref', 'amount_total', 'partner_id', 'invoice_ids']
+    ])
+
+    po_by_ov = {}  # orden_venta_name → {po_id, po_name, monto, partner_ref, invoice_ids}
+    po_all = []
+    for p in po_recs:
+        ov = p.get('partner_ref', '')
+        po_all.append({
+            'po_id': p['id'], 'po_name': p.get('name', ''),
+            'monto': float(p.get('amount_total', 0) or 0),
+            'invoice_ids': p.get('invoice_ids', []),
+        })
+        if ov:
+            po_by_ov[ov] = po_all[-1]
+
+    # ── 2. Obtener ventas de motos y seleccionar CREDIMOTO ──
     vm = fetch_ventas_motos(sess)
-    credimoto_items = [it for it in vm.get('items', []) if it.get('credimoto')]
+    if po_by_ov:
+        # Fuente principal: OV vinculada a una OC de MOTO CITY PRO (partner_ref)
+        credimoto_items = [it for it in vm.get('items', []) if it.get('orden') in po_by_ov]
+        if not credimoto_items:
+            # Fallback: tag CREDIMOTO en el partner
+            credimoto_items = [it for it in vm.get('items', []) if it.get('credimoto')]
+    else:
+        credimoto_items = [it for it in vm.get('items', []) if it.get('credimoto')]
     if not credimoto_items:
         return {
             'resumen': {'total_ordenes': 0, 'total_facturado': 0, 'total_costos': 0,
@@ -642,7 +669,7 @@ def fetch_dshbcredimoto(sess):
             'proyeccion_ciclo': {},
         }
 
-    # ── 2. Cargar líneas de cuotas de cliente (invoice.installment.line) ──
+    # ── 3. Cargar líneas de cuotas de cliente (invoice.installment.line) ──
     il_ids = json_execute(sess, 'invoice.installment.line', 'search', [[]])
     il_lines = []
     for i in range(0, len(il_ids), 2000):
@@ -663,7 +690,7 @@ def fetch_dshbcredimoto(sess):
                 'payment_date': str(l.get('payment_date') or '')[:10],
             })
 
-    # ── 3. Mapear invoice_id → partner_id (para saber qué factura pertenece a quién) ──
+    # ── 4. Mapear invoice_id → partner_id (para saber qué factura pertenece a quién) ──
     inv_partner = {}
     inv_name_map = {}
     for i in range(0, len(list(all_inv_ids)), 500):
@@ -682,24 +709,6 @@ def fetch_dshbcredimoto(sess):
         if pid:
             for ln in lines:
                 partner_installments[pid].append(ln)
-
-    # ── 4. Purchase orders (proveedor MOTO CITY PRO) ──
-    po_recs = json_execute(sess, 'purchase.order', 'search_read', [
-        [['partner_id.name', 'ilike', 'MOTO CITY PRO'], ['state', '=', 'purchase']],
-        ['id', 'name', 'partner_ref', 'amount_total', 'partner_id', 'invoice_ids']
-    ])
-
-    po_by_ov = {}  # orden_venta_name → {po_id, po_name, monto, partner_ref, invoice_ids}
-    po_all = []
-    for p in po_recs:
-        ov = p.get('partner_ref', '')
-        po_all.append({
-            'po_id': p['id'], 'po_name': p.get('name', ''),
-            'monto': float(p.get('amount_total', 0) or 0),
-            'invoice_ids': p.get('invoice_ids', []),
-        })
-        if ov:
-            po_by_ov[ov] = po_all[-1]
 
     # ── 5. Facturas de proveedor (in_invoice) vinculadas a POs ──
     all_po_inv_ids = set()
