@@ -389,6 +389,7 @@ html = f'''<!DOCTYPE html>
         <button class="tab-btn" onclick="switchTab('temporal')">⏱ Temporal VIP</button>
         <button class="tab-btn" onclick="switchTab('tabla')">📋 Listado</button>
         <button class="tab-btn" onclick="switchTab('factjulio')">📋 Fact. Julio</button>
+        <button class="tab-btn" onclick="switchTab('dshbcredimoto')">🏍️ DSH CREDIMOTO</button>
     </div>
 
     <!-- TAB 1: RESUMEN -->
@@ -1345,6 +1346,36 @@ html = f'''<!DOCTYPE html>
         </div>
     </div>
 
+    <!-- ═══ TAB: DSH CREDIMOTO ═══ -->
+    <div class="tab-content" id="tab-dshbcredimoto">
+        <div class="kpi-row">
+            <div class="kpi-card accent"><div class="number" id="dcmOrdenes">—</div><div class="label">Órdenes CREDIMOTO</div></div>
+            <div class="kpi-card success"><div class="number money" id="dcmFacturado">—</div><div class="label">Total Facturado</div></div>
+            <div class="kpi-card"><div class="number money" id="dcmCostos">—</div><div class="label">Total Costos</div></div>
+            <div class="kpi-card accent"><div class="number money" id="dcmMargen">—</div><div class="label">Margen Bruto</div></div>
+            <div class="kpi-card success"><div class="number" id="dcmMargenPct">—</div><div class="label">Margen %</div></div>
+        </div>
+        <div class="kpi-row">
+            <div class="kpi-card"><div class="number" id="dcmCuotasPagadas">—</div><div class="label">Cuotas Pagadas</div></div>
+            <div class="kpi-card"><div class="number" id="dcmCuotasCobrar">—</div><div class="label">Cuotas por Cobrar</div></div>
+            <div class="kpi-card success"><div class="number money" id="dcmMontoCobrar">—</div><div class="label">Monto por Cobrar</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px">
+            <div class="results-section">
+                <h3>Flujo de Caja Neto Mensual</h3>
+                <canvas id="chartFlujoCaja" height="200"></canvas>
+            </div>
+            <div class="results-section">
+                <h3>Proyección por Ciclo</h3>
+                <canvas id="chartCiclo" height="200"></canvas>
+            </div>
+        </div>
+        <div class="results-section" style="margin-top:12px">
+            <h3>Margen por Venta</h3>
+            <canvas id="chartMargen" height="160"></canvas>
+        </div>
+    </div>
+
     <div class="footer">
         <strong>LATINBIEN</strong> — Latinoamericana de Bienes y Servicios, C.A. &nbsp;·&nbsp;
         Generado el <span id="fechaGeneracion"></span>
@@ -2003,7 +2034,7 @@ function renderTable() {{
 function switchTab(tab) {{
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza', ventas_motos:'Ventas Motos', pago_proveedor:'Pago Proveedor'}};
+    const tabMap = {{resumen:'Resumen', montos:'Montos', segmentos:'Segmentos', temporal:'Temporal', tabla:'Listado', pagos:'Plan de Pagos', factjulio:'Fact. Julio', expedientes:'Expedientes', prontopago:'Pronto Pago', ciclos:'Ciclos', gestion:'Gestión Cobranza', ventas_motos:'Ventas Motos', pago_proveedor:'Pago Proveedor', dshbcredimoto:'DSH CREDIMOTO'}};
 
     // Arreglo de opciones del menú de navegación
     const menuItems = [
@@ -2020,6 +2051,7 @@ function switchTab(tab) {{
         {{ id: 'temporal', label: 'Temporal VIP', icon: '⏱️' }},
         {{ id: 'tabla', label: 'Listado', icon: '📋' }},
         {{ id: 'factjulio', label: 'Fact. Julio', icon: '📑' }},
+        {{ id: 'dshbcredimoto', label: 'DSH CREDIMOTO', icon: '🏍️' }},
     ];
     const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes(tabMap[tab]));
     if (btn) btn.classList.add('active');
@@ -3259,6 +3291,82 @@ try {{
         cronBody.innerHTML = cronHtml || '<tr><td colspan="6" style="text-align:center;color:#999">Sin cronograma</td></tr>';
     }}
 }} catch(e) {{ console.error('Pago Proveedor error:', e); }}
+
+// ── DSH CREDIMOTO ──
+try {{
+    var dcm = DATA.dshbcredimoto || {{}};
+    var dcmRes = dcm.resumen || {{}};
+    document.getElementById('dcmOrdenes').textContent = (dcmRes.total_ordenes||0).toLocaleString();
+    document.getElementById('dcmFacturado').textContent = fmtMoney(dcmRes.total_facturado||0);
+    document.getElementById('dcmCostos').textContent = fmtMoney(dcmRes.total_costos||0);
+    document.getElementById('dcmMargen').textContent = fmtMoney(dcmRes.margen_bruto||0);
+    document.getElementById('dcmMargenPct').textContent = (dcmRes.margen_pct||0).toFixed(1)+'%';
+    document.getElementById('dcmCuotasPagadas').textContent = (dcmRes.cuotas_pagadas||0).toLocaleString();
+    document.getElementById('dcmCuotasCobrar').textContent = (dcmRes.cuotas_por_cobrar||0).toLocaleString();
+    document.getElementById('dcmMontoCobrar').textContent = fmtMoney(dcmRes.monto_por_cobrar||0);
+
+    // Chart: Flujo de caja neto mensual
+    var flujo = dcm.flujo_caja || {{}};
+    var netoM = flujo.neto_mensual || {{}};
+    var fLabels = Object.keys(netoM).sort();
+    var fInflows = fLabels.map(function(k) {{ return flujo.inflows ? flujo.inflows.filter(function(x){{return x.fecha.slice(0,7)===k}}).reduce(function(s,x){{return s+x.monto}},0) : 0; }});
+    var fOutflows = fLabels.map(function(k) {{ return flujo.outflows ? flujo.outflows.filter(function(x){{return x.fecha.slice(0,7)===k}}).reduce(function(s,x){{return s+x.monto}},0) : 0; }});
+    var fNeto = fLabels.map(function(k) {{ return netoM[k] || 0; }});
+    if (fLabels.length && typeof Chart !== 'undefined') {{
+        new Chart(document.getElementById('chartFlujoCaja'), {{
+            type: 'bar',
+            data: {{
+                labels: fLabels,
+                datasets: [
+                    {{ label: 'Inflows', data: fInflows, backgroundColor: 'rgba(34,197,94,0.7)' }},
+                    {{ label: 'Outflows', data: fOutflows, backgroundColor: 'rgba(239,68,68,0.7)' }},
+                    {{ label: 'Neto', data: fNeto, type: 'line', borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.1)', fill: true, tension: 0.3 }},
+                ]
+            }},
+            options: {{ responsive: true, plugins: {{ legend: {{ position: 'bottom' }} }} }}
+        }});
+    }}
+
+    // Chart: Proyección por ciclo (doughnut)
+    var ciclos = dcm.proyeccion_ciclo || {{}};
+    var cicloLabels = Object.keys(ciclos);
+    var cicloPagado = cicloLabels.map(function(c) {{ return ciclos[c].cuotas_pagadas || 0; }});
+    var cicloPendiente = cicloLabels.map(function(c) {{ return ciclos[c].cuotas_por_cobrar || 0; }});
+    if (cicloLabels.length && typeof Chart !== 'undefined') {{
+        new Chart(document.getElementById('chartCiclo'), {{
+            type: 'doughnut',
+            data: {{
+                labels: cicloLabels.map(function(c) {{ return 'Ciclo ' + c; }}),
+                datasets: [
+                    {{ label: 'Pagadas', data: cicloPagado, backgroundColor: ['#22c55e','#16a34a','#15803d'] }},
+                    {{ label: 'Por Cobrar', data: cicloPendiente, backgroundColor: ['#facc15','#f59e0b','#d97706'] }},
+                ]
+            }},
+            options: {{ responsive: true, plugins: {{ legend: {{ position: 'bottom' }} }} }}
+        }});
+    }}
+
+    // Chart: Margen por venta (barras horizontales)
+    var ventas = dcm.ventas || [];
+    if (ventas.length && typeof Chart !== 'undefined') {{
+        var vLabels = ventas.map(function(v) {{ return v.orden + ' — ' + v.cliente; }});
+        var vMargen = ventas.map(function(v) {{ return v.margen || 0; }});
+        var vColors = vMargen.map(function(m) {{ return m >= 0 ? 'rgba(34,197,94,0.7)' : 'rgba(239,68,68,0.7)'; }});
+        new Chart(document.getElementById('chartMargen'), {{
+            type: 'bar',
+            data: {{
+                labels: vLabels,
+                datasets: [{{ label: 'Margen', data: vMargen, backgroundColor: vColors }}]
+            }},
+            options: {{
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {{ legend: {{ display: false }} }},
+                scales: {{ x: {{ beginAtZero: true }} }}
+            }}
+        }});
+    }}
+}} catch(e) {{ console.error('DSH CREDIMOTO error:', e); }}
 
 // ── Facturación Agosto 2026 ──
 try {{

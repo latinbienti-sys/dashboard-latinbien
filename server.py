@@ -241,6 +241,7 @@ def fetch_data():
         'expedientes': expedientes,
         'ventas_motos': fetch_ventas_motos(sess),
         'pago_proveedor_moto': fetch_pagoProveedorMoto(sess),
+        'dshbcredimoto': fetch_dshbcredimoto(sess),
         'agosto_operativo': fetch_agosto_operativo(),
     }
 
@@ -603,6 +604,271 @@ def fetch_pagoProveedorMoto(sess):
         'total_ordenes': len(items),
         'total_pagoInicial': round(sum(it['inicial_40'] for it in items), 2),
         'total_financiado': round(sum(it['restante_60'] for it in items), 2),
+    }
+
+
+def fetch_dshbcredimoto(sess):
+    """Dashboard CREDIMOTO: resumen, ventas, pagos de cliente, facturas proveedor,
+    flujo de caja y proyección por ciclo.
+    Combina datos de venta (sale.order), compras (purchase.order),
+    facturas de cliente (invoice.installment.line) y facturas de proveedor (account.move in_invoice)."""
+    from datetime import date
+    from collections import defaultdict
+
+    # ── 1. Obtener ventas CREDIMOTO vía fetch_ventas_motos ──
+    vm = fetch_ventas_motos(sess)
+    credimoto_items = [it for it in vm.get('items', []) if it.get('credimoto')]
+    if not credimoto_items:
+        return {
+            'resumen': {'total_ordenes': 0, 'total_facturado': 0, 'total_costos': 0,
+                        'margen_bruto': 0, 'margen_pct': 0, 'cuotas_pagadas': 0,
+                        'cuotas_por_cobrar': 0, 'monto_por_cobrar': 0},
+            'ventas': [], 'facturas_proveedor': [], 'flujo_caja': {},
+            'proyeccion_ciclo': {},
+        }
+
+    # ── 2. Cargar líneas de cuotas de cliente (invoice.installment.line) ──
+    il_ids = json_execute(sess, 'invoice.installment.line', 'search', [[]])
+    il_lines = []
+    for i in range(0, len(il_ids), 2000):
+        batch = il_ids[i:i + 2000]
+        il_lines.extend(json_execute(sess, 'invoice.installment.line', 'read',
+                                     [batch, ['state', 'amount', 'payment_date', 'invoice_id']]))
+
+    inv_to_client_lines = defaultdict(list)  # invoice_id → list of {state, amount, payment_date}
+    all_inv_ids = set()
+    for l in il_lines:
+        inv = l.get('invoice_id')
+        inv_id = inv[0] if isinstance(inv, list) and len(inv) > 1 else None
+        if inv_id:
+            all_inv_ids.add(inv_id)
+            inv_to_client_lines[inv_id].append({
+                'state': l.get('state', ''),
+                'amount': float(l.get('amount', 0) or 0),
+                'payment_date': str(l.get('payment_date') or '')[:10],
+            })
+
+    # ── 3. Mapear invoice_id → partner_id (para saber qué factura pertenece a quién) ──
+    inv_partner = {}
+    inv_name_map = {}
+    for i in range(0, len(list(all_inv_ids)), 500):
+        batch = list(all_inv_ids)[i:i + 500]
+        inv_recs = json_execute(sess, 'account.move', 'read',
+                                [batch, ['id', 'partner_id', 'name']])
+        for inv in inv_recs:
+            pid = inv.get('partner_id')
+            inv_partner[inv['id']] = pid[0] if isinstance(pid, list) else 0
+            inv_name_map[inv['id']] = inv.get('name', '')
+
+    # partner_id → lista de cuotas
+    partner_installments = defaultdict(list)
+    for inv_id, lines in inv_to_client_lines.items():
+        pid = inv_partner.get(inv_id, 0)
+        if pid:
+            for ln in lines:
+                partner_installments[pid].append(ln)
+
+    # ── 4. Purchase orders (proveedor MOTO CITY PRO) ──
+    po_recs = json_execute(sess, 'purchase.order', 'search_read', [
+        [['partner_id.name', 'ilike', 'MOTO CITY PRO'], ['state', '=', 'purchase']],
+        ['id', 'name', 'partner_ref', 'amount_total', 'partner_id', 'invoice_ids']
+    ])
+
+    po_by_ov = {}  # orden_venta_name → {po_id, po_name, monto, partner_ref, invoice_ids}
+    po_all = []
+    for p in po_recs:
+        ov = p.get('partner_ref', '')
+        po_all.append({
+            'po_id': p['id'], 'po_name': p.get('name', ''),
+            'monto': float(p.get('amount_total', 0) or 0),
+            'invoice_ids': p.get('invoice_ids', []),
+        })
+        if ov:
+            po_by_ov[ov] = po_all[-1]
+
+    # ── 5. Facturas de proveedor (in_invoice) vinculadas a POs ──
+    all_po_inv_ids = set()
+    for po in po_all:
+        for iid in po.get('invoice_ids', []):
+            all_po_inv_ids.add(iid)
+
+    proveedor_facturas = []
+    if all_po_inv_ids:
+        pf_ids = list(all_po_inv_ids)
+        for i in range(0, len(pf_ids), 500):
+            batch = pf_ids[i:i + 500]
+            pf_recs = json_execute(sess, 'account.move', 'read',
+                                   [batch, ['id', 'name', 'invoice_date', 'amount_total',
+                                            'state', 'partner_id', 'payment_state']])
+            for f in pf_recs:
+                proveedor_facturas.append({
+                    'factura_id': f['id'],
+                    'numero': f.get('name', ''),
+                    'fecha': str(f.get('invoice_date') or '')[:10],
+                    'monto': float(f.get('amount_total', 0) or 0),
+                    'estado': f.get('state', ''),
+                    'pago_estado': f.get('payment_state', ''),
+                })
+
+    # Mapear po_id → facturas de proveedor
+    po_inv_map = defaultdict(list)
+    for f in proveedor_facturas:
+        # Buscar a qué PO pertenece
+        for po in po_all:
+            if f['factura_id'] in po.get('invoice_ids', []):
+                po_inv_map[po['po_id']].append(f)
+                break
+
+    # ── 6. Procesar cada venta CREDIMOTO ──
+    ventas = []
+    total_facturado = 0
+    total_costos = 0
+    cuotas_pagadas_total = 0
+    cuotas_por_cobrar_total = 0
+    monto_por_cobrar_total = 0
+    ciclo_data = defaultdict(lambda: {'facturado': 0, 'costo': 0, 'cuotas_pagadas': 0,
+                                      'cuotas_por_cobrar': 0, 'monto_por_cobrar': 0,
+                                      'clientes': set(), 'inicial_cobrado': 0,
+                                      'inicial_pendiente': 0})
+    flujo_inflows = []  # pagos de clientes
+    flujo_outflows = []  # pagos a proveedor
+
+    for it in credimoto_items:
+        orden = it.get('orden', '')
+        cliente = it.get('cliente', '')
+        modelo = it.get('modelo', '')
+        precio_venta = it.get('monto_total', 0)
+        precio_producto = it.get('precio_producto', 0)
+
+        # Buscar PO asociada
+        po_info = po_by_ov.get(orden, {})
+        po_monto = po_info.get('monto', 0) if po_info else 0
+        po_id = po_info.get('po_id', 0) if po_info else 0
+
+        # Obtener ciclo de la OV (reutilizar lógica de pagoProveedorMoto)
+        ciclo = '03-18'
+        so_data = json_execute(sess, 'sale.order', 'search_read', [
+            [['name', '=', orden]], ['id', 'tenure_plan_ciclo']
+        ])
+        if so_data:
+            raw_ciclo = so_data[0].get('tenure_plan_ciclo', '')
+            ciclo = '03-18' if raw_ciclo == '3y18' else '10-25' if raw_ciclo == '10y25' else '03-18'
+
+        # Costo de compra = monto de la PO
+        costo_compra = round(po_monto, 2) if po_monto else round(precio_producto, 2)
+        margen = round(precio_venta - costo_compra, 2)
+
+        # Cuotas de cliente
+        pid_cliente = 0
+        so_id = so_data[0]['id'] if so_data else 0
+        if so_id:
+            so_full = json_execute(sess, 'sale.order', 'read', [
+                [so_id], ['partner_id']
+            ])
+            if so_full:
+                pid_cliente = so_full[0].get('partner_id', [0])[0] if isinstance(so_full[0].get('partner_id'), list) else 0
+
+        installments = partner_installments.get(pid_cliente, [])
+        # Filtrar cuotas que corresponden a esta OV (aproximar por monto)
+        cuota_monto_ref = round((precio_venta * 0.60) / 8, 2) if precio_venta else 0
+        relevant = [c for c in installments if abs(c['amount'] - cuota_monto_ref) < 100] if cuota_monto_ref else installments
+        if not relevant:
+            relevant = installments  # fallback: todas las cuotas
+
+        cuotas_pagadas = len([c for c in relevant if c['state'] == 'paid'])
+        cuotas_vencidas = len([c for c in relevant if c['state'] in ('overdue', 'pending')])
+        cuotas_totales = len(relevant) if relevant else 8
+        saldo = round(sum(c['amount'] for c in relevant if c['state'] != 'paid'), 2)
+
+        # Flujo de caja: cuotas pagadas por cliente
+        for c in relevant:
+            if c['state'] == 'paid' and c['payment_date']:
+                flujo_inflows.append({
+                    'fecha': c['payment_date'], 'monto': c['amount'],
+                    'cliente': cliente, 'tipo': 'cuota_cliente',
+                })
+
+        # Inicial (40%)
+        inicial_40 = round(precio_venta * 0.40, 2)
+        restante_60 = round(precio_venta * 0.60, 2)
+
+        # Facturas de proveedor para esta PO
+        po_facturas = po_inv_map.get(po_id, []) if po_id else []
+
+        ventas.append({
+            'orden': orden, 'cliente': cliente, 'modelo': modelo, 'ciclo': ciclo,
+            'precio_venta': round(precio_venta, 2), 'costo_compra': costo_compra,
+            'margen': margen,
+            'inicial_40': inicial_40, 'restante_60': restante_60,
+            'cuotas_totales': cuotas_totales, 'cuotas_pagadas': cuotas_pagadas,
+            'cuotas_vencidas': cuotas_vencidas, 'saldo_pendiente': saldo,
+            'po_name': po_info.get('po_name', '') if po_info else '',
+            'po_facturas': po_facturas,
+        })
+
+        total_facturado += precio_venta
+        total_costos += costo_compra
+        cuotas_pagadas_total += cuotas_pagadas
+        cuotas_por_cobrar_total += cuotas_vencidas
+        monto_por_cobrar_total += saldo
+
+        # Ciclo
+        ciclo_data[ciclo]['facturado'] += precio_venta
+        ciclo_data[ciclo]['costo'] += costo_compra
+        ciclo_data[ciclo]['cuotas_pagadas'] += cuotas_pagadas
+        ciclo_data[ciclo]['cuotas_por_cobrar'] += cuotas_vencidas
+        ciclo_data[ciclo]['monto_por_cobrar'] += saldo
+        ciclo_data[ciclo]['clientes'].add(cliente)
+
+    # ── 7. Flujo de caja: pagos a proveedor ──
+    for f in proveedor_facturas:
+        if f['estado'] == 'posted':
+            flujo_outflows.append({
+                'fecha': f['fecha'], 'monto': f['monto'],
+                'concepto': f'Proveedor: {f["numero"]}',
+                'tipo': 'pago_proveedor',
+            })
+
+    # ── 8. Flujo de caja neto mensual ──
+    flujo_mensual = defaultdict(lambda: {'inflows': 0, 'outflows': 0})
+    for inf in flujo_inflows:
+        mes = inf['fecha'][:7]
+        flujo_mensual[mes]['inflows'] += inf['monto']
+    for outf in flujo_outflows:
+        mes = outf['fecha'][:7]
+        flujo_mensual[mes]['outflows'] += outf['monto']
+
+    return {
+        'resumen': {
+            'total_ordenes': len(ventas),
+            'total_facturado': round(total_facturado, 2),
+            'total_costos': round(total_costos, 2),
+            'margen_bruto': round(total_facturado - total_costos, 2),
+            'margen_pct': round((total_facturado - total_costos) / total_facturado * 100, 1) if total_facturado else 0,
+            'cuotas_pagadas': cuotas_pagadas_total,
+            'cuotas_por_cobrar': cuotas_por_cobrar_total,
+            'monto_por_cobrar': round(monto_por_cobrar_total, 2),
+        },
+        'ventas': sorted(ventas, key=lambda x: x['orden']),
+        'facturas_proveedor': sorted(proveedor_facturas, key=lambda x: x['numero']),
+        'flujo_caja': {
+            'inflows': sorted(flujo_inflows, key=lambda x: x['fecha']),
+            'outflows': sorted(flujo_outflows, key=lambda x: x['fecha']),
+            'neto_mensual': {k: round(v['inflows'] - v['outflows'], 2)
+                             for k, v in sorted(flujo_mensual.items())},
+        },
+        'proyeccion_ciclo': {
+            ciclo: {
+                'facturado': round(d['facturado'], 2),
+                'costo': round(d['costo'], 2),
+                'margen': round(d['facturado'] - d['costo'], 2),
+                'cuotas_pagadas': d['cuotas_pagadas'],
+                'cuotas_por_cobrar': d['cuotas_por_cobrar'],
+                'monto_por_cobrar': round(d['monto_por_cobrar'], 2),
+                'clientes_count': len(d['clientes']),
+            }
+            for ciclo, d in sorted(ciclo_data.items())
+        },
     }
 
 
