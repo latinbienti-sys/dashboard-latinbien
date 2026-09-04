@@ -15,7 +15,7 @@ if not SMTP_USER or not SMTP_PASS:
 
 # Destinatarios internos
 DESTINATARIOS_INTERNOS = [
-    'administrativo@latinbien.com',
+    'analistadministrativo@latinbien.com',
     'osoto@latinbien.com',
     'yarley@latinbien.com',
     'presidencia@latinbien.com',
