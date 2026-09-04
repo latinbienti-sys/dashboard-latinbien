@@ -1350,33 +1350,33 @@ html = f'''<!DOCTYPE html>
     <div class="tab-content" id="tab-dshbcredimoto">
         <div class="kpi-row">
             <div class="kpi-card accent"><div class="number" id="dcmOrdenes">—</div><div class="label">Órdenes CREDIMOTO</div></div>
+            <div class="kpi-card"><div class="number" id="dcmMotos">—</div><div class="label">Motos Facturadas</div></div>
+            <div class="kpi-card success"><div class="number money" id="dcmProducto">—</div><div class="label">Precio Producto</div></div>
+            <div class="kpi-card"><div class="number money" id="dcmGastoAdmin">—</div><div class="label">Gasto Administrativo</div></div>
             <div class="kpi-card success"><div class="number money" id="dcmFacturado">—</div><div class="label">Total Facturado</div></div>
-            <div class="kpi-card"><div class="number money" id="dcmCostos">—</div><div class="label">Total Costos</div></div>
-            <div class="kpi-card accent"><div class="number money" id="dcmMargen">—</div><div class="label">Margen Bruto</div></div>
-            <div class="kpi-card success"><div class="number" id="dcmMargenPct">—</div><div class="label">Margen %</div></div>
         </div>
         <div class="kpi-row">
+            <div class="kpi-card success"><div class="number money" id="dcmCobrado">—</div><div class="label">Pagado por Clientes (inicial + cuotas)</div></div>
             <div class="kpi-card"><div class="number" id="dcmCuotasPagadas">—</div><div class="label">Cuotas Pagadas</div></div>
             <div class="kpi-card"><div class="number" id="dcmCuotasCobrar">—</div><div class="label">Cuotas por Cobrar</div></div>
-            <div class="kpi-card success"><div class="number money" id="dcmMontoCobrar">—</div><div class="label">Monto por Cobrar</div></div>
         </div>
         <div id="dcmVacio" style="display:none;background:#fff7ed;border:1px solid #fdba74;border-radius:12px;padding:18px;color:#9a3412;font-size:13px;margin-top:12px">
             No se encontraron órdenes CREDIMOTO vinculadas a compras de MOTO CITY PRO. Los KPIs y gráficos se cargarán cuando existan.
         </div>
         <div id="dcmGraficos">
+            <div class="results-section">
+                <h3>Monto pagado a proveedor por orden de compra</h3>
+                <canvas id="chartProvOC" height="200"></canvas>
+            </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px">
                 <div class="results-section">
-                    <h3>Flujo de Caja Neto Mensual</h3>
-                    <canvas id="chartFlujoCaja" height="200"></canvas>
+                    <h3>Snapshot CREDIMOTO (total actual)</h3>
+                    <canvas id="chartSnapshot" height="200"></canvas>
                 </div>
                 <div class="results-section">
-                    <h3>Proyección por Ciclo</h3>
-                    <canvas id="chartCiclo" height="200"></canvas>
+                    <h3>Cobrado vs Pendiente por Ciclo</h3>
+                    <canvas id="chartCicloMonto" height="200"></canvas>
                 </div>
-            </div>
-            <div class="results-section" style="margin-top:12px">
-                <h3>Margen por Venta</h3>
-                <canvas id="chartMargen" height="160"></canvas>
             </div>
         </div>
     </div>
@@ -3302,79 +3302,89 @@ try {{
     var dcm = DATA.dshbcredimoto || {{}};
     var dcmRes = dcm.resumen || {{}};
     document.getElementById('dcmOrdenes').textContent = (dcmRes.total_ordenes||0).toLocaleString();
+    document.getElementById('dcmMotos').textContent = (dcmRes.total_motos||0).toLocaleString();
+    document.getElementById('dcmProducto').textContent = fmtMoney(dcmRes.total_producto||0);
+    document.getElementById('dcmGastoAdmin').textContent = fmtMoney(dcmRes.total_gasto_admin||0);
     document.getElementById('dcmFacturado').textContent = fmtMoney(dcmRes.total_facturado||0);
-    document.getElementById('dcmCostos').textContent = fmtMoney(dcmRes.total_costos||0);
-    document.getElementById('dcmMargen').textContent = fmtMoney(dcmRes.margen_bruto||0);
-    document.getElementById('dcmMargenPct').textContent = (dcmRes.margen_pct||0).toFixed(1)+'%';
+    document.getElementById('dcmCobrado').textContent = fmtMoney(dcmRes.cobrado_clientes||0);
     document.getElementById('dcmCuotasPagadas').textContent = (dcmRes.cuotas_pagadas||0).toLocaleString();
     document.getElementById('dcmCuotasCobrar').textContent = (dcmRes.cuotas_por_cobrar||0).toLocaleString();
-    document.getElementById('dcmMontoCobrar').textContent = fmtMoney(dcmRes.monto_por_cobrar||0);
 
     var dcmVentas = dcm.ventas || [];
     var dcmVacio = document.getElementById('dcmVacio');
     if (dcmVacio) dcmVacio.style.display = dcmVentas.length ? 'none' : 'block';
-    // Ocultar contenedores de gráficos si no hay datos
     var dcmGraficos = document.getElementById('dcmGraficos');
     if (dcmGraficos) dcmGraficos.style.display = dcmVentas.length ? '' : 'none';
 
-    // Chart: Flujo de caja neto mensual
-    var flujo = dcm.flujo_caja || {{}};
-    var netoM = flujo.neto_mensual || {{}};
-    var fLabels = Object.keys(netoM).sort();
-    var fInflows = fLabels.map(function(k) {{ return flujo.inflows ? flujo.inflows.filter(function(x){{return x.fecha.slice(0,7)===k}}).reduce(function(s,x){{return s+x.monto}},0) : 0; }});
-    var fOutflows = fLabels.map(function(k) {{ return flujo.outflows ? flujo.outflows.filter(function(x){{return x.fecha.slice(0,7)===k}}).reduce(function(s,x){{return s+x.monto}},0) : 0; }});
-    var fNeto = fLabels.map(function(k) {{ return netoM[k] || 0; }});
-    if (fLabels.length && typeof Chart !== 'undefined') {{
-        new Chart(document.getElementById('chartFlujoCaja'), {{
+    // G1: Monto real pagado a proveedor por orden de compra
+    var poOc = dcm.proveedor_por_oc || [];
+    if (poOc.length && typeof Chart !== 'undefined') {{
+        var ocLabels = poOc.map(function(p) {{ return p.orden_compra + ' (' + (p.orden_venta||'') + ')'; }});
+        var ocPagado = poOc.map(function(p) {{ return p.pagado || 0; }});
+        var ocFacturado = poOc.map(function(p) {{ return p.monto_facturado || 0; }});
+        new Chart(document.getElementById('chartProvOC'), {{
             type: 'bar',
             data: {{
-                labels: fLabels,
+                labels: ocLabels,
                 datasets: [
-                    {{ label: 'Inflows', data: fInflows, backgroundColor: 'rgba(34,197,94,0.7)' }},
-                    {{ label: 'Outflows', data: fOutflows, backgroundColor: 'rgba(239,68,68,0.7)' }},
-                    {{ label: 'Neto', data: fNeto, type: 'line', borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.1)', fill: true, tension: 0.3 }},
+                    {{ label: 'Facturado por el proveedor', data: ocFacturado, backgroundColor: 'rgba(148,163,184,0.5)' }},
+                    {{ label: 'Pagado a proveedor', data: ocPagado, backgroundColor: 'rgba(34,197,94,0.75)' }}
                 ]
             }},
-            options: {{ responsive: true, plugins: {{ legend: {{ position: 'bottom' }} }} }}
+            options: {{
+                responsive: true,
+                plugins: {{
+                    legend: {{ position: 'bottom' }},
+                    tooltip: {{ callbacks: {{
+                        afterLabel: function(c) {{
+                            var p = poOc[c.dataIndex] || {{}};
+                            return 'OC: ' + (p.orden_compra||'') + '\\nCliente: ' + (p.cliente||'');
+                        }}
+                    }} }}
+                }}
+            }}
         }});
     }}
 
-    // Chart: Proyección por ciclo (doughnut)
-    var ciclos = dcm.proyeccion_ciclo || {{}};
-    var cicloLabels = Object.keys(ciclos);
-    var cicloPagado = cicloLabels.map(function(c) {{ return ciclos[c].cuotas_pagadas || 0; }});
-    var cicloPendiente = cicloLabels.map(function(c) {{ return ciclos[c].cuotas_por_cobrar || 0; }});
+    // G2: Snapshot total actual (4 barras)
+    var snap = dcm.snapshot || {{}};
+    if (typeof Chart !== 'undefined') {{
+        var snapLabels = ['Ventas', 'Cobrado', 'Por Cobrar', 'Por Pagar'];
+        var snapValues = [snap.ventas||0, snap.cobrado||0, snap.por_cobrar||0, snap.por_pagar||0];
+        var snapColors = ['rgba(37,99,235,0.75)', 'rgba(34,197,94,0.75)', 'rgba(245,158,11,0.75)', 'rgba(239,68,68,0.75)'];
+        new Chart(document.getElementById('chartSnapshot'), {{
+            type: 'bar',
+            data: {{
+                labels: snapLabels,
+                datasets: [{{ label: 'Monto', data: snapValues, backgroundColor: snapColors }}]
+            }},
+            options: {{
+                responsive: true,
+                plugins: {{ legend: {{ display: false }} }},
+                scales: {{ y: {{ beginAtZero: true }} }}
+            }}
+        }});
+    }}
+
+    // G3: Cobrado vs Pendiente por ciclo (dinero)
+    var dcmCiclos = dcm.por_ciclo || {{}};
+    var cicloLabels = Object.keys(dcmCiclos).sort();
     if (cicloLabels.length && typeof Chart !== 'undefined') {{
-        new Chart(document.getElementById('chartCiclo'), {{
-            type: 'doughnut',
+        var cicloCobrado = cicloLabels.map(function(c) {{ return dcmCiclos[c].cobrado || 0; }});
+        var cicloPendiente = cicloLabels.map(function(c) {{ return dcmCiclos[c].pendiente || 0; }});
+        new Chart(document.getElementById('chartCicloMonto'), {{
+            type: 'bar',
             data: {{
                 labels: cicloLabels.map(function(c) {{ return 'Ciclo ' + c; }}),
                 datasets: [
-                    {{ label: 'Pagadas', data: cicloPagado, backgroundColor: ['#22c55e','#16a34a','#15803d'] }},
-                    {{ label: 'Por Cobrar', data: cicloPendiente, backgroundColor: ['#facc15','#f59e0b','#d97706'] }},
+                    {{ label: 'Cobrado', data: cicloCobrado, backgroundColor: 'rgba(34,197,94,0.75)' }},
+                    {{ label: 'Pendiente por cobrar', data: cicloPendiente, backgroundColor: 'rgba(239,68,68,0.75)' }}
                 ]
             }},
-            options: {{ responsive: true, plugins: {{ legend: {{ position: 'bottom' }} }} }}
-        }});
-    }}
-
-    // Chart: Margen por venta (barras horizontales)
-    var ventas = dcm.ventas || [];
-    if (ventas.length && typeof Chart !== 'undefined') {{
-        var vLabels = ventas.map(function(v) {{ return v.orden + ' — ' + v.cliente; }});
-        var vMargen = ventas.map(function(v) {{ return v.margen || 0; }});
-        var vColors = vMargen.map(function(m) {{ return m >= 0 ? 'rgba(34,197,94,0.7)' : 'rgba(239,68,68,0.7)'; }});
-        new Chart(document.getElementById('chartMargen'), {{
-            type: 'bar',
-            data: {{
-                labels: vLabels,
-                datasets: [{{ label: 'Margen', data: vMargen, backgroundColor: vColors }}]
-            }},
             options: {{
-                indexAxis: 'y',
                 responsive: true,
-                plugins: {{ legend: {{ display: false }} }},
-                scales: {{ x: {{ beginAtZero: true }} }}
+                plugins: {{ legend: {{ position: 'bottom' }} }},
+                scales: {{ y: {{ beginAtZero: true }} }}
             }}
         }});
     }}
