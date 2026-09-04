@@ -210,7 +210,22 @@ def fetch_data():
     
     # Expedientes (credit lines aprobadas)
     expedientes = fetch_expedientes(sess)
-    
+
+    # DSH CREDIMOTO: aislado para que un fallo en esta pestaña NUNCA rompa el
+    # resto del dashboard (si falla, se muestra vacío en lugar de bloquear).
+    try:
+        dshbcredimoto = fetch_dshbcredimoto(sess)
+    except Exception as e:
+        print(f"[fetch_data] ERROR en fetch_dshbcredimoto: {e}")
+        dshbcredimoto = {
+            'resumen': {'total_ordenes': 0, 'total_facturado': 0, 'total_costos': 0,
+                        'margen_bruto': 0, 'margen_pct': 0, 'cuotas_pagadas': 0,
+                        'cuotas_por_cobrar': 0, 'monto_por_cobrar': 0},
+            'ventas': [], 'facturas_proveedor': [],
+            'flujo_caja': {'inflows': [], 'outflows': [], 'neto_mensual': {}},
+            'proyeccion_ciclo': {},
+        }
+
     return {
         'status_summary': dict(status_counter.most_common()),
         'total_rows': all_ids,
@@ -241,7 +256,7 @@ def fetch_data():
         'expedientes': expedientes,
         'ventas_motos': fetch_ventas_motos(sess),
         'pago_proveedor_moto': fetch_pagoProveedorMoto(sess),
-        'dshbcredimoto': fetch_dshbcredimoto(sess),
+        'dshbcredimoto': dshbcredimoto,
         'agosto_operativo': fetch_agosto_operativo(),
     }
 
@@ -748,11 +763,13 @@ def fetch_dshbcredimoto(sess):
         # Obtener ciclo de la OV (reutilizar lógica de pagoProveedorMoto)
         ciclo = '03-18'
         so_data = json_execute(sess, 'sale.order', 'search_read', [
-            [['name', '=', orden]], ['id', 'tenure_plan_ciclo']
+            [['name', '=', orden]], ['id', 'partner_id']
         ])
         if so_data:
-            raw_ciclo = so_data[0].get('tenure_plan_ciclo', '')
-            ciclo = '03-18' if raw_ciclo == '3y18' else '10-25' if raw_ciclo == '10y25' else '03-18'
+            so_id = so_data[0]['id']
+            ciclo_leido = _leer_ciclo_ov(sess, so_id)
+            if ciclo_leido:
+                ciclo = ciclo_leido
 
         # Costo de compra = monto de la PO
         costo_compra = round(po_monto, 2) if po_monto else round(precio_producto, 2)
