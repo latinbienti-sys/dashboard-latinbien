@@ -652,11 +652,30 @@ def fetch_dshbcredimoto(sess):
 
     # ── 2. Obtener ventas de motos y seleccionar CREDIMOTO ──
     vm = fetch_ventas_motos(sess)
-    # Fuente principal: etiqueta "CREDIMOTO" en sale.order.tag_ids (ya corregido en
-    # fetch_ventas_motos). Respaldo: OV vinculada a una OC de MOTO CITY PRO.
-    credimoto_items = [it for it in vm.get('items', []) if it.get('credimoto')]
+    vm_items = vm.get('items', [])
+    # La etiqueta "CREDIMOTO" vive en sale.order.tag_ids. Se detecta AQUÍ (solo para
+    # esta pestaña) sin modificar fetch_ventas_motos ni ninguna otra pestaña.
+    _ord_ids = set(it.get('orden_id') for it in vm_items if it.get('orden_id'))
+    _tag_map = {}  # sale_order_id → bool
+    _ord_ids_list = list(_ord_ids)
+    for i in range(0, len(_ord_ids_list), 500):
+        _recs = json_execute(sess, 'sale.order', 'read',
+                             [_ord_ids_list[i:i + 500], ['id', 'tag_ids']])
+        for _r in _recs:
+            _tags = [str(t[1]) for t in (_r.get('tag_ids') or [])
+                     if isinstance(t, list) and len(t) > 1]
+            _tag_map[_r['id']] = any(
+                'CREDIMOTO' in _tg.upper() or 'CERDIMOTO' in _tg.upper() for _tg in _tags
+            )
+
+    # Fuente principal: etiqueta CREDIMOTO en sale.order.tag_ids.
+    credimoto_items = [it for it in vm_items if _tag_map.get(it.get('orden_id'))]
+    # Respaldo 1: OV vinculada a una OC de MOTO CITY PRO (partner_ref).
     if po_by_ov and not credimoto_items:
-        credimoto_items = [it for it in vm.get('items', []) if it.get('orden') in po_by_ov]
+        credimoto_items = [it for it in vm_items if it.get('orden') in po_by_ov]
+    # Respaldo 2: ante la duda, mostrar todas las ventas de motos.
+    if not credimoto_items:
+        credimoto_items = vm_items
     if not credimoto_items:
         return {
             'resumen': {'total_ordenes': 0, 'total_facturado': 0, 'total_costos': 0,
@@ -1876,19 +1895,30 @@ def fetch_ventas_motos(sess):
     # ── 4. Leer órdenes de venta publicadas ──
     orders = json_execute(sess, 'sale.order', 'read', [
         list(order_ids), ['id', 'name', 'state', 'partner_id', 'date_order',
-                          'order_line', 'amount_total', 'tag_ids']
+                          'order_line', 'amount_total']
     ])
     posted = [o for o in orders if o.get('state') == 'sale']
 
-    # ── 5. Helper: detectar etiqueta CREDIMOTO directamente en la orden (campo tag_ids) ──
-    # La etiqueta "CREDIMOTO" está en sale.order.tag_ids (NO en res.partner.category_id).
-    def _es_credimoto(orden):
-        for t in orden.get('tag_ids', []) or []:
-            if isinstance(t, list) and len(t) > 1:
-                nombre = str(t[1])
-                if 'CREDIMOTO' in nombre.upper() or 'CERDIMOTO' in nombre.upper():
-                    return True
-        return False
+    # ── 5. Cache de tags CREDIMOTO (cargar todos los partners de una vez) ──
+    partner_ids_needed = set()
+    for o in posted:
+        pid = o.get('partner_id')
+        if isinstance(pid, list) and pid[0]:
+            partner_ids_needed.add(pid[0])
+
+    _credimoto_cache = {}  # partner_id → bool
+    if partner_ids_needed:
+        partner_ids_list = list(partner_ids_needed)
+        for i in range(0, len(partner_ids_list), 500):
+            batch = partner_ids_list[i:i+500]
+            pdata = json_execute(sess, 'res.partner', 'read', [
+                batch, ['id', 'category_id']
+            ])
+            for p in pdata:
+                tags = [t[1] for t in p.get('category_id', []) if isinstance(t, list)]
+                _credimoto_cache[p['id']] = any(
+                    'CREDIMOTO' in t or 'CERDIMOTO' in t for t in tags
+                )
 
     # ── 6. Procesar cada orden ──
     items = []
@@ -1902,7 +1932,7 @@ def fetch_ventas_motos(sess):
         pid = o.get('partner_id')
         partner_id = pid[0] if isinstance(pid, list) and len(pid) > 1 else 0
         cliente = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Desconocido'
-        credimoto = _es_credimoto(o)
+        credimoto = _credimoto_cache.get(partner_id, False)
 
         # ── Líneas de la orden: separar moto vs gasto admin ──
         all_lines_data = json_execute(sess, 'sale.order.line', 'read',
