@@ -3400,8 +3400,10 @@ try {{
         var mPag = mesLabels.map(function(k) {{ return dcmPorMes[k].cuotas_pagadas || 0; }});
         var mPend = mesLabels.map(function(k) {{ return dcmPorMes[k].cuotas_pendientes || 0; }});
         var mProv = mesLabels.map(function(k) {{ return dcmPorMes[k].pago_proveedor || 0; }});
+        var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
         var mDisp = mesLabels.map(function(k) {{
-            return new Date(k + '-01').toLocaleDateString('es', {{ month: 'short', year: '2-digit' }});
+            var p = k.split('-');
+            return meses[parseInt(p[1], 10) - 1] + ' ' + String(p[0]).slice(2);
         }});
         new Chart(document.getElementById('chartMesCuotas'), {{
             type: 'bar',
