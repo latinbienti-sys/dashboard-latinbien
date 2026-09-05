@@ -224,7 +224,7 @@ def fetch_data():
                         'cuotas_por_cobrar': 0},
             'ventas': [], 'facturas_proveedor': [],
             'proveedor_por_oc': [],
-            'snapshot': {'ventas': 0, 'cobrado': 0, 'por_cobrar': 0, 'por_pagar': 0},
+            'snapshot': {'ventas': 0, 'cobrado': 0, 'pagado_proveedor': 0, 'por_cobrar': 0, 'por_pagar': 0},
             'por_ciclo': {},
             'por_mes': {},
         }
@@ -784,8 +784,8 @@ def fetch_dshbcredimoto(sess):
                         'cobrado_clientes': 0, 'cuotas_pagadas': 0,
                         'cuotas_por_cobrar': 0, 'margen_bruto': 0, 'margen_pct': 0},
             'ventas': [], 'proveedor_por_oc': [],
-            'snapshot': {'ventas': 0, 'cobrado': 0, 'por_cobrar': 0, 'por_pagar': 0},
-            'por_ciclo': {}, 'facturas_proveedor': [],
+            'snapshot': {'ventas': 0, 'cobrado': 0, 'pagado_proveedor': 0, 'por_cobrar': 0, 'por_pagar': 0},
+            'por_ciclo': {}, 'por_mes': {}, 'facturas_proveedor': [],
         }
 
     # ── 3. Facturas EXACTAS de cada orden CREDIMOTO (sale.order.invoice_ids) ──
@@ -1043,6 +1043,7 @@ def fetch_dshbcredimoto(sess):
         'snapshot': {
             'ventas': round(total_facturado, 2),
             'cobrado': round(cobrado_clientes_total, 2),
+            'pagado_proveedor': round(total_pagado_proveedor, 2),
             'por_cobrar': por_cobrar,
             'por_pagar': por_pagar,
         },

@@ -3350,12 +3350,12 @@ try {{
         }});
     }}
 
-    // G2: Snapshot total actual (4 barras)
+    // G2: Snapshot total actual (5 barras)
     var snap = dcm.snapshot || {{}};
     if (typeof Chart !== 'undefined') {{
-        var snapLabels = ['Ventas', 'Cobrado', 'Por Cobrar', 'Por Pagar'];
-        var snapValues = [snap.ventas||0, snap.cobrado||0, snap.por_cobrar||0, snap.por_pagar||0];
-        var snapColors = ['rgba(37,99,235,0.75)', 'rgba(34,197,94,0.75)', 'rgba(245,158,11,0.75)', 'rgba(239,68,68,0.75)'];
+        var snapLabels = ['Ventas', 'Cobrado', 'Por Cobrar', 'Pagado Proveedor', 'Por Pagar'];
+        var snapValues = [snap.ventas||0, snap.cobrado||0, snap.por_cobrar||0, snap.pagado_proveedor||0, snap.por_pagar||0];
+        var snapColors = ['rgba(37,99,235,0.75)', 'rgba(34,197,94,0.75)', 'rgba(245,158,11,0.75)', 'rgba(139,92,246,0.75)', 'rgba(239,68,68,0.75)'];
         new Chart(document.getElementById('chartSnapshot'), {{
             type: 'bar',
             data: {{
