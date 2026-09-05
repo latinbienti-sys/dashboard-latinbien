@@ -1378,6 +1378,10 @@ html = f'''<!DOCTYPE html>
                     <canvas id="chartCicloMonto" height="200"></canvas>
                 </div>
             </div>
+            <div class="results-section" style="margin-top:12px">
+                <h3>Flujo mensual de las motos: cuotas del cliente vs pago a proveedor</h3>
+                <canvas id="chartMesCuotas" height="200"></canvas>
+            </div>
         </div>
     </div>
 
@@ -3379,6 +3383,34 @@ try {{
                 datasets: [
                     {{ label: 'Cobrado', data: cicloCobrado, backgroundColor: 'rgba(34,197,94,0.75)' }},
                     {{ label: 'Pendiente por cobrar', data: cicloPendiente, backgroundColor: 'rgba(239,68,68,0.75)' }}
+                ]
+            }},
+            options: {{
+                responsive: true,
+                plugins: {{ legend: {{ position: 'bottom' }} }},
+                scales: {{ y: {{ beginAtZero: true }} }}
+            }}
+        }});
+    }}
+
+    // G4: Mensual (solo motos): cuotas del cliente pagadas/pendientes vs pago a proveedor
+    var dcmPorMes = dcm.por_mes || {{}};
+    var mesLabels = Object.keys(dcmPorMes).sort();
+    if (mesLabels.length && typeof Chart !== 'undefined') {{
+        var mPag = mesLabels.map(function(k) {{ return dcmPorMes[k].cuotas_pagadas || 0; }});
+        var mPend = mesLabels.map(function(k) {{ return dcmPorMes[k].cuotas_pendientes || 0; }});
+        var mProv = mesLabels.map(function(k) {{ return dcmPorMes[k].pago_proveedor || 0; }});
+        var mDisp = mesLabels.map(function(k) {{
+            return new Date(k + '-01').toLocaleDateString('es', {{ month: 'short', year: '2-digit' }});
+        }});
+        new Chart(document.getElementById('chartMesCuotas'), {{
+            type: 'bar',
+            data: {{
+                labels: mDisp,
+                datasets: [
+                    {{ label: 'Cuotas pagadas (cliente)', data: mPag, backgroundColor: 'rgba(34,197,94,0.75)' }},
+                    {{ label: 'Cuotas pendientes (cliente)', data: mPend, backgroundColor: 'rgba(245,158,11,0.75)' }},
+                    {{ label: 'Pago a proveedor', data: mProv, backgroundColor: 'rgba(239,68,68,0.75)' }}
                 ]
             }},
             options: {{

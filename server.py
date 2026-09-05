@@ -226,6 +226,7 @@ def fetch_data():
             'proveedor_por_oc': [],
             'snapshot': {'ventas': 0, 'cobrado': 0, 'por_cobrar': 0, 'por_pagar': 0},
             'por_ciclo': {},
+            'por_mes': {},
         }
 
     return {
@@ -979,6 +980,46 @@ def fetch_dshbcredimoto(sess):
         for ciclo, d in sorted(ciclo_data.items())
     }
 
+    # ── 7. Mensual (solo motos): cuotas del cliente pagadas/pendientes + pago a proveedor ──
+    por_mes = defaultdict(lambda: {'cuotas_pagadas': 0.0, 'cuotas_pendientes': 0.0,
+                                   'pago_proveedor': 0.0})
+    for it in ventas:
+        so = so_rows.get(it['orden'], {})
+        for iid in so.get('invoice_ids', []):
+            for l in inv_lines.get(iid, []):
+                if not l.get('is_installment'):
+                    continue
+                pd = str(l.get('payment_date') or '')[:7]
+                if len(pd) != 7:
+                    continue
+                monto = float(l.get('amount', 0) or 0)
+                if l.get('state') == 'paid':
+                    por_mes[pd]['cuotas_pagadas'] += monto
+                else:
+                    por_mes[pd]['cuotas_pendientes'] += monto
+
+    # Pago a proveedor: misma proyección quincenal de la pestaña "Pago a proveedor MOTO"
+    try:
+        ppm = fetch_pagoProveedorMoto(sess)
+        for itm in ppm.get('items', []):
+            if itm.get('orden_venta', '') not in po_by_ov:
+                continue  # SOLO órdenes CREDIMOTO (motos)
+            for pg in itm.get('pagos', []):
+                mp = str(pg.get('fecha_pago') or '')[:7]
+                if len(mp) == 7:
+                    por_mes[mp]['pago_proveedor'] += float(pg.get('monto', 0) or 0)
+    except Exception as e:
+        print(f"[dshcredimoto] AVISO: no se pudo agregar pago proveedor mensual: {e}")
+
+    por_mes_out = {
+        m: {
+            'cuotas_pagadas': round(v['cuotas_pagadas'], 2),
+            'cuotas_pendientes': round(v['cuotas_pendientes'], 2),
+            'pago_proveedor': round(v['pago_proveedor'], 2),
+        }
+        for m, v in sorted(por_mes.items())
+    }
+
     print(f"[dshcredimoto] RESUMEN: facturado=${total_facturado}, "
           f"cobrado_clientes=${cobrado_clientes_total}, cuotas pagadas={cuotas_pagadas_total}, "
           f"cuotas por cobrar={cuotas_por_cobrar_total}, "
@@ -1006,6 +1047,7 @@ def fetch_dshbcredimoto(sess):
             'por_pagar': por_pagar,
         },
         'por_ciclo': por_ciclo,
+        'por_mes': por_mes_out,
         'facturas_proveedor': sorted(proveedor_facturas, key=lambda x: x['numero']),
     }
 
