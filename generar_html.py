@@ -1097,7 +1097,7 @@ html = f'''<!DOCTYPE html>
         <!-- MEDIO DE CONOCIMIENTO -->
         <div class="results-section">
             <h3>📣 ¿Por qué medio conoció a Latinbien C.A.?</h3>
-            <p style="color:#666;margin:0 0 12px">Distribución de clientes según el medio por el cual conocieron la empresa.</p>
+            <p style="color:#666;margin:0 0 12px">Distribución de clientes según el medio por el cual conocieron la empresa. <span id="mediosFiltroInfo">—</span></p>
             <div class="charts-row">
                 <div class="chart-card full-width">
                     <div class="chart-container"><canvas id="chartMedios"></canvas></div>
@@ -2853,7 +2853,37 @@ try {{
 // ── Medio de Conocimiento ──
 try {{
     var expData = DATA.expedientes || {{}};
+    var hh = new URLSearchParams(window.location.hash.replace('#',''));
+    var desde = hh.get('desde');
+    var hasta = hh.get('hasta');
+    var filtroActivo = !!(desde || hasta);
     var medios = expData.medios_conocimiento || {{}};
+    // Al filtrar por fecha: sumar SOLO los meses dentro del rango (por x_fecha_activacion)
+    if (filtroActivo) {{
+        var porMes = expData.medios_por_mes || {{}};
+        var agg = {{}};
+        Object.keys(porMes).forEach(function(mk) {{
+            if (mk === 'sin_fecha') return;
+            var parts = mk.split('-');
+            var mesStart = mk + '-01';
+            var ult = new Date(parts[0], parseInt(parts[1], 10), 0);
+            var mesEnd = parts[0] + '-' + String(parseInt(parts[1], 10)).padStart(2, '0') + '-' + String(ult.getDate()).padStart(2, '0');
+            if (desde && mesEnd < desde) return;
+            if (hasta && mesStart > hasta) return;
+            Object.keys(porMes[mk]).forEach(function(m) {{
+                agg[m] = (agg[m] || 0) + porMes[mk][m];
+            }});
+        }});
+        medios = agg;
+    }}
+    var infoEl = document.getElementById('mediosFiltroInfo');
+    if (infoEl) {{
+        if (filtroActivo) {{
+            infoEl.textContent = 'Período filtrado: ' + (desde || 'inicio') + ' → ' + (hasta || 'hoy');
+        }} else {{
+            infoEl.textContent = 'Sin filtro: total acumulado';
+        }}
+    }}
     var medioKeys = Object.keys(medios);
     if (medioKeys.length > 0) {{
         var labels = medioKeys;

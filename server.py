@@ -400,14 +400,26 @@ def fetch_expedientes(sess):
         # Guardamos además el total año/mes resumido
         # Medio de conocimiento
         medios_counter = {}
+        medios_por_mes = {}  # 'YYYY-MM' o 'sin_fecha' -> {medio: count}
         try:
             medios_data = json_execute(sess, 'res.partner', 'search_read', [
-                [['x_medio', '!=', False]], ['id', 'x_medio']
+                [['x_medio', '!=', False]], ['id', 'x_medio', 'x_fecha_activacion']
             ])
             for m in medios_data:
                 medio = m.get('x_medio', '')
-                if medio:
-                    medios_counter[medio] = medios_counter.get(medio, 0) + 1
+                if not medio:
+                    continue
+                medios_counter[medio] = medios_counter.get(medio, 0) + 1
+                fech = m.get('x_fecha_activacion')
+                bucket = 'sin_fecha'
+                if fech:
+                    try:
+                        bucket = str(fech)[:7]
+                    except Exception:
+                        pass
+                if bucket not in medios_por_mes:
+                    medios_por_mes[bucket] = {}
+                medios_por_mes[bucket][medio] = medios_por_mes[bucket].get(medio, 0) + 1
         except Exception:
             pass
 
@@ -415,6 +427,7 @@ def fetch_expedientes(sess):
             'grupos': grupos,
             'totales': total_general,
             'medios_conocimiento': medios_counter,
+            'medios_por_mes': medios_por_mes,
         }
 
     except Exception as e:
