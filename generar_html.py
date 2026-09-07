@@ -3468,18 +3468,21 @@ try {{
             return meses[parseInt(p[1], 10) - 1] + ' ' + String(p[0]).slice(2);
         }});
         new Chart(document.getElementById('chartTendencia'), {{
-            type: 'bar',
+            type: 'line',
             data: {{
                 labels: tDisp,
                 datasets: [
-                    {{ label: 'Facturado (motos CREDIMOTO)', data: tVentas, backgroundColor: 'rgba(37,99,235,0.75)' }},
-                    {{ label: 'Motos vendidas', data: tMotos, type: 'line', borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', tension: 0.3 }}
+                    {{ label: 'Facturado (motos CREDIMOTO)', data: tVentas, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.12)', fill: true, tension: 0.3, pointRadius: 5, yAxisID: 'y' }},
+                    {{ label: 'Motos vendidas', data: tMotos, borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.12)', fill: false, tension: 0.3, pointRadius: 4, yAxisID: 'y1' }}
                 ]
             }},
             options: {{
                 responsive: true,
                 plugins: {{ legend: {{ position: 'bottom' }} }},
-                scales: {{ y: {{ beginAtZero: true }} }}
+                scales: {{
+                    y: {{ beginAtZero: true, position: 'left', title: {{ display: true, text: 'USD' }} }},
+                    y1: {{ beginAtZero: true, position: 'right', grid: {{ drawOnChartArea: false }}, ticks: {{ precision: 0 }}, title: {{ display: true, text: 'Motos' }} }}
+                }}
             }}
         }});
     }}
