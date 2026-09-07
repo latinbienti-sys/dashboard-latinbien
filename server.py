@@ -227,6 +227,7 @@ def fetch_data():
             'snapshot': {'ventas': 0, 'cobrado': 0, 'pagado_proveedor': 0, 'por_cobrar': 0, 'por_pagar': 0},
             'por_ciclo': {},
             'por_mes': {},
+            'tendencia': {},
         }
 
     return {
@@ -798,7 +799,7 @@ def fetch_dshbcredimoto(sess):
                         'cuotas_por_cobrar': 0, 'margen_bruto': 0, 'margen_pct': 0},
             'ventas': [], 'proveedor_por_oc': [],
             'snapshot': {'ventas': 0, 'cobrado': 0, 'pagado_proveedor': 0, 'por_cobrar': 0, 'por_pagar': 0},
-            'por_ciclo': {}, 'por_mes': {}, 'facturas_proveedor': [],
+            'por_ciclo': {}, 'por_mes': {}, 'tendencia': {}, 'facturas_proveedor': [],
         }
 
     # ── 3. Facturas EXACTAS de cada orden CREDIMOTO (sale.order.invoice_ids) ──
@@ -1033,6 +1034,20 @@ def fetch_dshbcredimoto(sess):
         for m, v in sorted(por_mes.items())
     }
 
+    # ── 8. Tendencia histórica mensual: facturado en motos desde la primera (agosto) ──
+    tendencia = defaultdict(lambda: {'ventas': 0.0, 'motos': 0, 'ordenes': 0})
+    for it in ventas:
+        mes = str(it.get('fecha') or '')[:7]
+        if len(mes) != 7:
+            continue
+        tendencia[mes]['ventas'] += it['precio_venta']
+        tendencia[mes]['motos'] += it['unidades']
+        tendencia[mes]['ordenes'] += 1
+    tendencia_out = {
+        m: {'ventas': round(v['ventas'], 2), 'motos': v['motos'], 'ordenes': v['ordenes']}
+        for m, v in sorted(tendencia.items())
+    }
+
     print(f"[dshcredimoto] RESUMEN: facturado=${total_facturado}, "
           f"cobrado_clientes=${cobrado_clientes_total}, cuotas pagadas={cuotas_pagadas_total}, "
           f"cuotas por cobrar={cuotas_por_cobrar_total}, "
@@ -1062,6 +1077,7 @@ def fetch_dshbcredimoto(sess):
         },
         'por_ciclo': por_ciclo,
         'por_mes': por_mes_out,
+        'tendencia': tendencia_out,
         'facturas_proveedor': sorted(proveedor_facturas, key=lambda x: x['numero']),
     }
 

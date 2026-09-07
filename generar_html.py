@@ -1382,6 +1382,10 @@ html = f'''<!DOCTYPE html>
                 <h3>Flujo mensual de las motos: cuotas del cliente vs pago a proveedor</h3>
                 <canvas id="chartMesCuotas" height="200"></canvas>
             </div>
+            <div class="results-section" style="margin-top:12px">
+                <h3>Tendencia histórica facturada en motos CREDIMOTO (desde la primera, agosto)</h3>
+                <canvas id="chartTendencia" height="200"></canvas>
+            </div>
         </div>
     </div>
 
@@ -3443,6 +3447,33 @@ try {{
                     {{ label: 'Cuotas pagadas (cliente)', data: mPag, backgroundColor: 'rgba(34,197,94,0.75)' }},
                     {{ label: 'Cuotas pendientes (cliente)', data: mPend, backgroundColor: 'rgba(245,158,11,0.75)' }},
                     {{ label: 'Pago a proveedor', data: mProv, backgroundColor: 'rgba(239,68,68,0.75)' }}
+                ]
+            }},
+            options: {{
+                responsive: true,
+                plugins: {{ legend: {{ position: 'bottom' }} }},
+                scales: {{ y: {{ beginAtZero: true }} }}
+            }}
+        }});
+    }}
+
+    // G5: Tendencia histórica mensual facturada en motos (desde la primera, agosto)
+    var dcmTend = dcm.tendencia || {{}};
+    var tendLabels = Object.keys(dcmTend).sort();
+    if (tendLabels.length && typeof Chart !== 'undefined') {{
+        var tVentas = tendLabels.map(function(k) {{ return dcmTend[k].ventas || 0; }});
+        var tMotos = tendLabels.map(function(k) {{ return dcmTend[k].motos || 0; }});
+        var tDisp = tendLabels.map(function(k) {{
+            var p = k.split('-');
+            return meses[parseInt(p[1], 10) - 1] + ' ' + String(p[0]).slice(2);
+        }});
+        new Chart(document.getElementById('chartTendencia'), {{
+            type: 'bar',
+            data: {{
+                labels: tDisp,
+                datasets: [
+                    {{ label: 'Facturado (motos CREDIMOTO)', data: tVentas, backgroundColor: 'rgba(37,99,235,0.75)' }},
+                    {{ label: 'Motos vendidas', data: tMotos, type: 'line', borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', tension: 0.3 }}
                 ]
             }},
             options: {{
