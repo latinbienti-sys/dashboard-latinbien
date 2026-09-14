@@ -2762,6 +2762,38 @@ try {{
         // ex puede ser array (formato previo) o {grupos, totales} (nuevo)
         var exGrupos = Array.isArray(ex) ? ex : (ex.grupos || []);
         var exTot = (ex && !Array.isArray(ex) && ex.totales) ? ex.totales : null;
+        // Filtro por fecha: conservar SOLO aprobaciones dentro del rango (fecha_aprobacion)
+        var hx = new URLSearchParams(window.location.hash.replace('#',''));
+        var xDesde = hx.get('desde');
+        var xHasta = hx.get('hasta');
+        var xFiltro = !!(xDesde || xHasta);
+        if (xFiltro) {{
+            exGrupos = exGrupos.map(function(g) {{
+                var cs = (g.clientes || []).filter(function(c) {{
+                    var fa = c.fecha_aprobacion || '';
+                    if (!fa) return false;
+                    if (xDesde && fa < xDesde) return false;
+                    if (xHasta && fa > xHasta) return false;
+                    return true;
+                }});
+                var ng = {{
+                    year: g.year, month: g.month, label: g.label,
+                    rango_menor_3000: 0, rango_3000_6000: 0, rango_mayor_6000: 0,
+                    total_clientes: cs.length, total_monto: 0,
+                    usadas: 0, no_usadas: 0, caducados: 0, clientes: cs
+                }};
+                cs.forEach(function(c) {{
+                    var lim = c.limite || 0;
+                    ng.total_monto += lim;
+                    if (lim < 3000) {{ ng.rango_menor_3000++; }}
+                    else if (lim <= 6000) {{ ng.rango_3000_6000++; }}
+                    else {{ ng.rango_mayor_6000++; }}
+                    if (c.usada) {{ ng.usadas++; }} else {{ ng.no_usadas++; }}
+                    if (c.caducado) {{ ng.caducados++; }}
+                }});
+                return ng;
+            }}).filter(function(g) {{ return g.total_clientes > 0; }});
+        }}
         // Totales
         var totLineas = 0, totMonto = 0, totUsadas = 0, totNoUsadas = 0, totCad = 0;
         var totMenor = 0, tot3K6K = 0, totMayor = 0;
@@ -2775,7 +2807,7 @@ try {{
             tot3K6K += g.rango_3000_6000 || 0;
             totMayor += g.rango_mayor_6000 || 0;
         }});
-        if (exTot) {{
+        if (exTot && !xFiltro) {{
             totLineas = exTot.total_lineas || totLineas;
             totMonto = exTot.monto || exTot.total_monto || totMonto;
             totUsadas = exTot.usadas || totUsadas;
