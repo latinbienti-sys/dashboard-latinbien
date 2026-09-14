@@ -423,18 +423,19 @@ def fetch_expedientes(sess):
         medios_por_mes = {}  # 'YYYY-MM' o 'sin_fecha' -> {medio: count}
         try:
             medios_data = json_execute(sess, 'res.partner', 'search_read', [
-                [['x_medio', '!=', False]], ['id', 'x_medio', 'x_fecha_activacion']
+                [['x_medio', '!=', False]],
+                ['id', 'x_medio', 'x_fecha_resolucion_final', 'create_date', 'x_fecha_activacion']
             ])
             for m in medios_data:
                 medio = m.get('x_medio', '')
                 if not medio:
                     continue
                 medios_counter[medio] = medios_counter.get(medio, 0) + 1
-                fech = m.get('x_fecha_activacion')
+                fech = m.get('x_fecha_resolucion_final') or m.get('create_date')
                 bucket = 'sin_fecha'
                 if fech:
                     try:
-                        bucket = str(fech)[:7]
+                        bucket = str(fech)[:10]
                     except Exception:
                         pass
                 if bucket not in medios_por_mes:

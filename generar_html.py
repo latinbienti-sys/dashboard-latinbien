@@ -2864,20 +2864,16 @@ try {{
     var hasta = hh.get('hasta');
     var filtroActivo = !!(desde || hasta);
     var medios = expData.medios_conocimiento || {{}};
-    // Al filtrar por fecha: sumar SOLO los meses dentro del rango (por x_fecha_activacion)
+    // Al filtrar por fecha: sumar SOLO los días dentro del rango (por x_fecha_resolucion_final)
     if (filtroActivo) {{
-        var porMes = expData.medios_por_mes || {{}};
+        var porDia = expData.medios_por_mes || {{}};
         var agg = {{}};
-        Object.keys(porMes).forEach(function(mk) {{
-            if (mk === 'sin_fecha') return;
-            var parts = mk.split('-');
-            var mesStart = mk + '-01';
-            var ult = new Date(parts[0], parseInt(parts[1], 10), 0);
-            var mesEnd = parts[0] + '-' + String(parseInt(parts[1], 10)).padStart(2, '0') + '-' + String(ult.getDate()).padStart(2, '0');
-            if (desde && mesEnd < desde) return;
-            if (hasta && mesStart > hasta) return;
-            Object.keys(porMes[mk]).forEach(function(m) {{
-                agg[m] = (agg[m] || 0) + porMes[mk][m];
+        Object.keys(porDia).forEach(function(dk) {{
+            if (dk === 'sin_fecha') return;
+            if (desde && dk < desde) return;
+            if (hasta && dk > hasta) return;
+            Object.keys(porDia[dk]).forEach(function(m) {{
+                agg[m] = (agg[m] || 0) + porDia[dk][m];
             }});
         }});
         medios = agg;
