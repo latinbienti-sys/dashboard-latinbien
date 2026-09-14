@@ -268,8 +268,9 @@ def fetch_data():
 def fetch_expedientes(sess):
     """Obtiene líneas de crédito APROBADAS desde res.partner (JSON-RPC).
     Filtro: x_status_expediente = '7pre' (Línea de Crédito - Aprobada).
-    Agrupa por año/mes de x_fecha_activacion y segmenta por rangos del
-    límite aprobado (x_credit_limit_aprobado): <3000, 3000-6000, >6000.
+    Agrupa por año/mes de x_fecha_resolucion_final (fecha de aprobación;
+    respaldo: create_date) y segmenta por rangos del límite aprobado
+    (x_credit_limit_aprobado): <3000, 3000-6000, >6000.
     Estado de caso:
       - Usada      : usa crédito (x_credit_limit_use > 0)
       - No usada   : línes aprobada sin uso
@@ -285,6 +286,8 @@ def fetch_expedientes(sess):
         'x_credit_limit_use',        # Límite de crédito usado
         'x_fecha_activacion',        # Fecha de activación (datetime)
         'x_activacion_linea',        # Línea activada (boolean)
+        'x_fecha_resolucion_final',  # Fecha de resolución/aprobación (datetime)
+        'create_date',               # Fecha de creación (respaldo)
     ]
 
     # Caducidad: línea aprobada que permanece SIN USO más de este número de días
@@ -320,24 +323,33 @@ def fetch_expedientes(sess):
             usado = float(rec.get('x_credit_limit_use') or 0.0)
             es_usada = usado > 0
 
-            fech = rec.get('x_fecha_activacion')
+            f_activ = rec.get('x_fecha_activacion')
             dias_activos = None
-            if fech:
+            if f_activ:
                 try:
-                    fdt = datetime.strptime(str(fech)[:19], '%Y-%m-%d %H:%M:%S').date()
-                    dias_activos = (hoy - fdt).days
+                    fdt_activ = datetime.strptime(str(f_activ)[:19], '%Y-%m-%d %H:%M:%S').date()
+                    dias_activos = (hoy - fdt_activ).days
                 except Exception:
-                    fdt = None
+                    fdt_activ = None
             else:
-                fdt = None
+                fdt_activ = None
 
             es_caducada = (not es_usada) and (dias_activos is not None) and (dias_activos >= CADUCA_DAYS)
 
-            # Año/mes (usa fecha de activación; si no hay, "Sin activar")
-            if fdt:
-                key = (fdt.year, fdt.month)
+            # Fecha de aprobación (resolución final); respaldo: create_date
+            f_res = rec.get('x_fecha_resolucion_final') or rec.get('create_date')
+            fdt_res = None
+            if f_res:
+                try:
+                    fdt_res = datetime.strptime(str(f_res)[:19], '%Y-%m-%d %H:%M:%S').date()
+                except Exception:
+                    fdt_res = None
+
+            # Año/mes (agrupa por fecha de aprobación; si no hay, "Sin fecha")
+            if fdt_res:
+                key = (fdt_res.year, fdt_res.month)
             else:
-                key = (-1, -1)  # sin fecha de activación
+                key = (-1, -1)  # sin fecha de aprobación
 
             g = month_agg[key]
             g['total_clientes'] += 1
@@ -369,14 +381,15 @@ def fetch_expedientes(sess):
                 'available': round(float(rec.get('x_credit_limit_available') or 0.0), 2),
                 'usado': round(usado, 2),
                 'activada': bool(rec.get('x_activacion_linea')),
-                'fecha_activacion': str(fech)[:10] if fech else '',
+                'fecha_activacion': str(f_activ)[:10] if f_activ else '',
+                'fecha_aprobacion': str(f_res)[:10] if f_res else '',
                 'dias_activos': dias_activos,
                 'caducado': es_caducada,
                 'usada': es_usada,
                 'estado': 'Usada' if es_usada else ('Caducada' if es_caducada else 'No usada'),
             })
 
-        # Orden: grupos con fecha primero (año desc, mes desc), "Sin activar" al final
+        # Orden: grupos con fecha primero (año desc, mes desc), "Sin fecha" al final
         def sort_key(item):
             if item == (-1, -1):
                 return (0, 0, 0)
@@ -388,7 +401,7 @@ def fetch_expedientes(sess):
             if k == (-1, -1):
                 grupos.append(dict({
                     'year': None, 'month': None,
-                    'label': 'Sin activar',
+                    'label': 'Sin fecha',
                 }, **g))
             else:
                 grupos.append(dict({
@@ -398,6 +411,12 @@ def fetch_expedientes(sess):
 
         # Totales generales como objeto adicional (lo consume el frontend)
         total_general['monto'] = round(total_general['total_monto'], 2)
+        # Aprobadas el día de hoy (x_fecha_resolucion_final = hoy)
+        total_general['aprobadas_hoy'] = sum(
+            1 for r in all_records
+            if (r.get('x_fecha_resolucion_final') or r.get('create_date')) and
+            (str(r.get('x_fecha_resolucion_final') or r.get('create_date'))[:10] == hoy.isoformat())
+        )
         # Guardamos además el total año/mes resumido
         # Medio de conocimiento
         medios_counter = {}

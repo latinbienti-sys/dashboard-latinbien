@@ -1055,6 +1055,7 @@ html = f'''<!DOCTYPE html>
             <div class="kpi-card"><div class="number" id="expMenor3K">—</div><div class="label">&lt; $3,000</div></div>
             <div class="kpi-card"><div class="number" id="exp3K6K">—</div><div class="label">$3K-$6K</div></div>
             <div class="kpi-card"><div class="number" id="expMayor6K">—</div><div class="label">&gt; $6,000</div></div>
+            <div class="kpi-card accent"><div class="number" id="expAprobadasHoy">—</div><div class="label">Aprobadas Hoy</div></div>
         </div>
 
         <!-- GRAFICO: Lineas por año/mes segmentado por rango -->
@@ -1071,7 +1072,7 @@ html = f'''<!DOCTYPE html>
         <!-- DETALLE EXPEDIENTES: relacion por año/mes -->
         <div class="results-section">
             <h3>🗂️ Relación de Expedientes por Año/Mes</h3>
-            <div style="margin:8px 0;font-size:13px;color:#666">Líneas de crédito aprobadas (Resolución final: "7. Linea de Credito Aprobada"), segmentadas por rango y con estado de uso/caducidad.</div>
+            <div style="margin:8px 0;font-size:13px;color:#666">Líneas de crédito aprobadas (Resolución final: "7. Linea de Credito Aprobada"), agrupadas por fecha de Aprobación (x_fecha_resolucion_final), segmentadas por rango y con estado de uso/caducidad.</div>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -2789,6 +2790,7 @@ try {{
         document.getElementById('expMenor3K').textContent = totMenor.toLocaleString();
         document.getElementById('exp3K6K').textContent = tot3K6K.toLocaleString();
         document.getElementById('expMayor6K').textContent = totMayor.toLocaleString();
+        document.getElementById('expAprobadasHoy').textContent = ((exTot && exTot.aprobadas_hoy) || 0).toLocaleString();
 
         // Tabla de expedientes
         var teBody = document.getElementById('tablaExpedientes');
@@ -2798,7 +2800,7 @@ try {{
                 var datosExtra = (g.clientes || []).map(function(c) {{
                     var stCls = c.usada ? 'status-entregado' : (c.caducado ? 'status-cancelado' : 'status-aprobado');
                     var stTxt = c.usada ? 'Usada' : (c.caducado ? 'Caducada' : 'No usada');
-                    return '<tr><td>' + (c.name||'') + '</td><td class="text-right">' + fmtMoney(c.limite) + '</td><td>' + (c.fecha_activacion||'') + '</td><td><span class="' + stCls + '">' + stTxt + '</span></td></tr>';
+                    return '<tr><td>' + (c.name||'') + '</td><td class="text-right">' + fmtMoney(c.limite) + '</td><td>' + (c.fecha_aprobacion||'') + '</td><td>' + (c.fecha_activacion||'') + '</td><td><span class="' + stCls + '">' + stTxt + '</span></td></tr>';
                 }}).join('');
                 var mostAnio = g.year ? g.year : '—';
                 var mostMes = g.month ? (mesi[(g.month||1)-1]) : (g.label || '—');
@@ -2815,8 +2817,8 @@ try {{
                     '<td class="text-right" style="color:#ef4444">' + (g.caducados||0) + '</td>' +
                     '<td style="font-size:11px;color:#888">▼ Ver</td></tr>' +
                     '<tr class="sub-table" style="display:none"><td colspan="11">' +
-                    '<table class="sub-table-inner"><thead><tr><th>Cliente</th><th class="text-right">Límite</th><th>Activación</th><th>Estado</th></tr></thead><tbody>' +
-                    (datosExtra || '<tr><td colspan="4" style="text-align:center;color:#999">Sin clientes detallados</td></tr>') +
+                    '<table class="sub-table-inner"><thead><tr><th>Cliente</th><th class="text-right">Límite</th><th>Aprobación</th><th>Activación</th><th>Estado</th></tr></thead><tbody>' +
+                    (datosExtra || '<tr><td colspan="5" style="text-align:center;color:#999">Sin clientes detallados</td></tr>') +
                     '</tbody></table></td></tr>';
             }}).join('') || '<tr><td colspan="11" style="text-align:center;color:#999">Sin datos</td></tr>';
         }}
@@ -2825,7 +2827,7 @@ try {{
         try {{
             var exCanvas = document.getElementById('chartExpedientes');
             if (exCanvas && exGrupos.length) {{
-                var labels = exGrupos.map(function(g) {{ return g.year && g.month ? (g.year + '-' + String(g.month).padStart(2,'0')) : (g.label || 'Sin activar'); }});
+                var labels = exGrupos.map(function(g) {{ return g.year && g.month ? (g.year + '-' + String(g.month).padStart(2,'0')) : (g.label || 'Sin fecha'); }});
                 var dMenor = exGrupos.map(function(g) {{ return g.rango_menor_3000; }});
                 var d3K6K = exGrupos.map(function(g) {{ return g.rango_3000_6000; }});
                 var dMayor = exGrupos.map(function(g) {{ return g.rango_mayor_6000; }});
