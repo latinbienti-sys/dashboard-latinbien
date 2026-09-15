@@ -603,10 +603,10 @@ html = f'''<!DOCTYPE html>
             </div>
         </div>
 
-        <!-- ÚLTIMAS ENTREGAS REALIZADAS + MOROSIDAD DEL CLIENTE -->
+        <!-- ÚLTIMAS ENTREGAS REALIZADAS + MOROSIDAD POR FACTURA -->
         <div class="table-card" style="border-color:#7c3aed">
             <h3>📦 Últimas Entregas Realizadas — ¿Quién está Moroso?</h3>
-            <div style="margin:8px 0;font-size:13px;color:#666"><strong id="ueEntregas">—</strong> entregas revisadas · <strong id="ueMorosos">—</strong> clientes morosos · <strong id="ueMonto">—</strong> vencido acumulado</div>
+            <div style="margin:8px 0;font-size:13px;color:#666"><strong id="ueEntregas">—</strong> entregas revisadas · <strong id="ueMorosos">—</strong> facturas morosas · <strong id="ueMonto">—</strong> vencido acumulado</div>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -614,6 +614,7 @@ html = f'''<!DOCTYPE html>
                             <th>Factura</th>
                             <th>Cliente</th>
                             <th>Fecha Entrega</th>
+                            <th class="text-right">Vencido de la Factura</th>
                             <th class="text-right">Vencido del Cliente</th>
                             <th class="text-right">Facturas en Mora</th>
                             <th>Estado</th>
@@ -622,7 +623,14 @@ html = f'''<!DOCTYPE html>
                     <tbody id="tablaUltimasEntregas"></tbody>
                 </table>
             </div>
-            <div style="margin-top:8px;font-size:11px;color:#888">El vencido del cliente incluye TODAS sus facturas, no solo esta entrega. Resalta clientes que reciben mercancía ya teniendo deudas.</div>
+            <div style="margin-top:8px;font-size:11px;color:#888">«Vencido de la Factura» = cuotas vencidas de ESTA factura entregada. «Vencido del Cliente» y «Facturas en Mora» consideran todas las facturas del cliente.</div>
+        </div>
+
+        <!-- MOROSIDAD ENTREGAS ÚLTIMOS 3 MESES -->
+        <div class="table-card" style="border-color:#0d9488">
+            <h3>📊 Vencido Entregado por Mes — Últimos 3 Meses</h3>
+            <div style="margin:8px 0;font-size:13px;color:#666">Cuotas vencidas de facturas <strong>entregadas</strong> en cada mes de los últimos 3 meses (monto vencido y facturas con mora). <span id="moraMesInfo">—</span></div>
+            <div class="chart-container" style="height:300px"><canvas id="chartMoraEntregada"></canvas></div>
         </div>
 
         <!-- CICLO DE PAGO (dentro del tab) -->
@@ -2136,7 +2144,7 @@ try {{
                     '</tr>';
             }}).join('') || '<tr><td colspan="7" style="text-align:center;color:#999">Sin facturas entregadas vencidas</td></tr>';
         }}
-        // Últimas entregas realizadas + morosidad del cliente
+        // Últimas entregas realizadas + morosidad por factura
         var ue = pp.ultimas_entregas || [];
         var ueT = pp.total_ultimas || {{entregas:0,morosos:0,monto:0}};
         var elUeE = document.getElementById('ueEntregas');
@@ -2151,15 +2159,83 @@ try {{
                 var cls = u.moroso ? 'status-cancelado' : 'status-entregado';
                 var txt = u.moroso ? '🔴 MOROSO' : '✅ Al día';
                 var vencColor = u.moroso ? '#ef4444' : '#10b981';
+                var dias = u.max_dias_mora || 0;
+                var diasTxt = dias > 0 ? ' · ' + dias + 'd mora' : '';
                 return '<tr>' +
                     '<td style=\"font-size:12px;color:#7c3aed;font-weight:600\">' + (u.factura||'') + '</td>' +
                     '<td><strong>' + (u.cliente||'') + '</strong></td>' +
                     '<td style=\"font-size:12px\">' + (u.entrega||'') + '</td>' +
-                    '<td class=\"text-right\" style=\"color:' + vencColor + ';font-weight:600\">' + fmtMoney(u.vencido_cliente) + '</td>' +
+                    '<td class=\"text-right\" style=\"color:' + vencColor + ';font-weight:600\">' + fmtMoney(u.vencido_factura) + (diasTxt||'') + '</td>' +
+                    '<td class=\"text-right\" style=\"color:#666;font-size:12px\">' + fmtMoney(u.vencido_cliente) + '</td>' +
                     '<td class=\"text-right\">' + (u.facturas_mora||0) + '</td>' +
                     '<td><span class=\"' + cls + '\">' + txt + '</span></td>' +
                     '</tr>';
-            }}).join('') || '<tr><td colspan="6" style="text-align:center;color:#999">Sin entregas recientes</td></tr>';
+            }}).join('') || '<tr><td colspan="7" style="text-align:center;color:#999">Sin entregas recientes</td></tr>';
+        }}
+        // Vencido entregado por mes — últimos 3 meses
+        var mme = pp.morosidad_por_mes || {{}};
+        var mmKeys = Object.keys(mme).sort();
+        if (mmKeys.length && typeof Chart !== 'undefined' && document.getElementById('chartMoraEntregada')) {{
+            var mmNames = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+            var mmLabels = mmKeys.map(function(k) {{
+                var p = k.split('-');
+                return (mmNames[(parseInt(p[1],10)||1)-1] || p[1]) + ' ' + String(p[0]).slice(2);
+            }});
+            var mmMontos = mmKeys.map(function(k) {{ return mme[k].monto_vencido || 0; }});
+            var mmMorosas = mmKeys.map(function(k) {{ return mme[k].morosas || 0; }});
+            var mmFacturas = mmKeys.map(function(k) {{ return mme[k].facturas || 0; }});
+            var elInfo = document.getElementById('moraMesInfo');
+            if (elInfo) {{
+                var totF = mmFacturas.reduce(function(a,b) {{ return a+b; }}, 0);
+                var totM = mmMontos.reduce(function(a,b) {{ return a+b; }}, 0);
+                elInfo.innerHTML = '<strong>' + totF + '</strong> entregas revisadas · <strong>' + totM.toLocaleString(undefined, {{minimumFractionDigits:2, maximumFractionDigits:2}}) + '</strong> vencido acumulado';
+            }}
+            safeChart('chartMoraEntregada', {{
+                type: 'bar',
+                data: {{
+                    labels: mmLabels,
+                    datasets: [
+                        {{
+                            label: 'Vencido entregado ($)',
+                            data: mmMontos,
+                            backgroundColor: 'rgba(239,68,68,0.75)',
+                            borderColor: '#ef4444',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            yAxisID: 'y'
+                        }},
+                        {{
+                            label: 'Facturas morosas',
+                            data: mmMorosas,
+                            type: 'line',
+                            borderColor: '#213C83',
+                            backgroundColor: '#213C83',
+                            yAxisID: 'y1',
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#213C83'
+                        }}
+                    ]
+                }},
+                options: {{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {{
+                        legend: {{ position: 'bottom' }},
+                        tooltip: {{ callbacks: {{
+                            label: function(ctx) {{
+                                if (ctx.dataset.yAxisID === 'y') return 'Vencido: $' + ctx.parsed.y.toLocaleString(undefined, {{minimumFractionDigits:2, maximumFractionDigits:2}});
+                                return 'Morosas: ' + ctx.parsed.y + ' facturas';
+                            }}
+                        }} }}
+                    }},
+                    scales: {{
+                        x: {{ ticks: {{ color: '#666' }} }},
+                        y: {{ beginAtZero: true, ticks: {{ color: '#666' }} }},
+                        y1: {{ beginAtZero: true, position: 'right', grid: {{ drawOnChartArea: false }}, ticks: {{ color: '#213C83' }} }}
+                    }}
+                }}
+            }});
         }}
         renderCiclo('10-25');
         renderCicloResumen();

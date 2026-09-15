@@ -1456,8 +1456,29 @@ def fetch_payment_plan(sess):
                 'pendientes_clientes': len(pend['clientes']),
             }
 
-    # ── Últimas entregas realizadas: morosidad del cliente ──────────
-    # 1) Morosidad TOTAL por cliente (todas sus facturas con cuotas vencidas)
+    # ── Últimas entregas realizadas: morosidad POR FACTURA ──────────
+    # 1) Vencido DE CADA FACTURA entregada (monto/cuotas/días de mora)
+    factura_vencido = defaultdict(lambda: {'monto': 0.0, 'cuotas': 0,
+                                           'primer_cuota': '', 'ultima_cuota': '',
+                                           'max_dias_mora': 0})
+    for v in vencidos:
+        fv = factura_vencido[v['invoice_id']]
+        fv['monto'] += v['monto']
+        fv['cuotas'] += 1
+        fc = str(v['fecha'] or '')[:10]
+        if fc:
+            if not fv['primer_cuota'] or fc < fv['primer_cuota']:
+                fv['primer_cuota'] = fc
+            if fc > fv['ultima_cuota']:
+                fv['ultima_cuota'] = fc
+            try:
+                dm = (hoy - datetime.strptime(fc, '%Y-%m-%d').date()).days
+                if dm > fv['max_dias_mora']:
+                    fv['max_dias_mora'] = dm
+            except (ValueError, TypeError):
+                pass
+
+    # 2) Contexto CLIENTE: total vencido y facturas en mora del cliente
     partner_vencido = defaultdict(lambda: {'monto': 0.0, 'facturas': set(), 'cuotas': 0})
     for v in vencidos:
         cli = partner_map.get(v['invoice_id'], 'Desconocido')
@@ -1466,7 +1487,7 @@ def fetch_payment_plan(sess):
         if v['invoice_name']:
             partner_vencido[cli]['facturas'].add(v['invoice_name'])
 
-    # 2) Últimas facturas ENTREGADAS ordenadas por fecha efectiva de entrega
+    # 3) Facturas ENTREGADAS ordenadas por fecha efectiva de entrega
     entregadas_ids = json_execute(sess, 'account.move', 'search', [[['x_status_operativos', '=', '6']]])
     entregadas_recs = []
     for i in range(0, len(entregadas_ids), 500):
@@ -1476,28 +1497,60 @@ def fetch_payment_plan(sess):
         if recs:
             entregadas_recs.extend(recs)
 
-    entregadas_recs.sort(key=lambda x: str(x.get('x_commitment_date') or ''), reverse=True)
-    ULTIMAS_N = 60
+    # Ventana: últimos 3 meses calendario (incluye el actual) por fecha de entrega
+    anio_m = hoy.year
+    mes_m = hoy.month - 2
+    if mes_m <= 0:
+        mes_m += 12
+        anio_m -= 1
+    cutoff = date(anio_m, mes_m, 1)
+
+    ULTIMAS_N = 120
     ultimas_entregas = []
-    for inv in entregadas_recs[:ULTIMAS_N]:
+    morosidad_por_mes = defaultdict(lambda: {'facturas': 0, 'morosas': 0, 'monto_vencido': 0.0})
+    for inv in entregadas_recs:
+        entrega = str(inv.get('x_commitment_date') or '')[:10]
+        if not entrega or entrega < cutoff.isoformat():
+            continue
         pid = inv.get('partner_id')
         cliente = pid[1] if isinstance(pid, list) and len(pid) > 1 else 'Desconocido'
+        fv = factura_vencido.get(inv.get('id'), {'monto': 0.0, 'cuotas': 0,
+                                                 'primer_cuota': '', 'ultima_cuota': '',
+                                                 'max_dias_mora': 0})
         pv = partner_vencido.get(cliente, {'monto': 0.0, 'facturas': set(), 'cuotas': 0})
+        es_morosa = fv['monto'] > 0
+        mes = entrega[:7]
+        m = morosidad_por_mes[mes]
+        m['facturas'] += 1
+        m['monto_vencido'] += fv['monto']
+        if es_morosa:
+            m['morosas'] += 1
         ultimas_entregas.append({
             'factura': inv.get('name') or '',
             'cliente': cliente,
-            'entrega': str(inv.get('x_commitment_date') or '')[:10],
+            'entrega': entrega,
             'factura_fecha': str(inv.get('invoice_date') or '')[:10],
+            'vencido_factura': round(fv['monto'], 2),
+            'cuotas_factura': fv['cuotas'],
+            'max_dias_mora': fv['max_dias_mora'],
             'vencido_cliente': round(pv['monto'], 2),
             'facturas_mora': len(pv['facturas']),
             'cuotas_mora': pv['cuotas'],
-            'moroso': pv['monto'] > 0,
+            'moroso': es_morosa,
         })
+
+    ultimas_entregas.sort(key=lambda x: x['entrega'], reverse=True)
+    ultimas_entregas = ultimas_entregas[:ULTIMAS_N]
+    morosidad_por_mes_json = {k: {
+        'facturas': v['facturas'],
+        'morosas': v['morosas'],
+        'monto_vencido': round(v['monto_vencido'], 2),
+    } for k, v in sorted(morosidad_por_mes.items())}
 
     total_ultimas = {
         'entregas': len(ultimas_entregas),
         'morosos': sum(1 for u in ultimas_entregas if u['moroso']),
-        'monto': round(sum(u['vencido_cliente'] for u in ultimas_entregas), 2),
+        'monto': round(sum(u['vencido_factura'] for u in ultimas_entregas), 2),
     }
 
     # ── Pronto Pago: cuotas pagadas cuyo payment_date es futuro ──────
@@ -2009,6 +2062,7 @@ def fetch_payment_plan(sess):
         'total_entregadas_venc': total_entregadas_venc,
         'ultimas_entregas': ultimas_entregas,
         'total_ultimas': total_ultimas,
+        'morosidad_por_mes': morosidad_por_mes_json,
         'pronto_pago': pronto_pago_list,
         'total_pronto': total_pronto,
         'top10_impacto': top10_impacto,
