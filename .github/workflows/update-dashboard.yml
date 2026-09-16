@@ -37,15 +37,14 @@ jobs:
           ODOO_PASS: ${{ secrets.ODOO_PASS }}
         run: python server.py --generate
 
-      # ⏸ DETENIDO — recordatorios pausados para ajustar el cronograma de pagos
-      # (cambio de fecha ancla). Se re-activa comentando las lineas de abajo.
-      # - name: Enviar recordatorios de pago a proveedor
-      #   env:
-      #     ODOO_USER: ${{ secrets.ODOO_USER }}
-      #     ODOO_PASS: ${{ secrets.ODOO_PASS }}
-      #     LATINBIEN_SMTP_USER: ${{ secrets.LATINBIEN_SMTP_USER }}
-      #     LATINBIEN_SMTP_PASS: ${{ secrets.LATINBIEN_SMTP_PASS }}
-      #   run: python send_reminders.py ${{ github.event.inputs.enviar_prueba == 'true' && '--test' || '' }}
+      # Recordatorio de pago a proveedor: próxima fecha, con TOTAL a cancelar.
+      # En el cron diario: envío real. En dispatch manual con enviar_prueba=true:
+      # solo a yarley@latinbien.com (--test).
+      - name: Enviar recordatorio pago a proveedor (total por fecha)
+        env:
+          LATINBIEN_SMTP_USER: ${{ secrets.LATINBIEN_SMTP_USER }}
+          LATINBIEN_SMTP_PASS: ${{ secrets.LATINBIEN_SMTP_PASS }}
+        run: python enviar_recordatorio_proveedor.py --send ${{ github.event.inputs.enviar_prueba == 'true' && '--test' || '' }}
 
       - name: Configurar git
         run: |

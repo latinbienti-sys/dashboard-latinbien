@@ -19,6 +19,7 @@ except Exception:
     pass
 
 ENVIAR = '--send' in sys.argv
+TEST = '--test' in sys.argv
 FECHA_OBJETIVO = None
 for i, a in enumerate(sys.argv):
     if a == '--fecha' and i + 1 < len(sys.argv):
@@ -27,15 +28,22 @@ for i, a in enumerate(sys.argv):
 # ── Credenciales SMTP (SOLO se cargan si se va a enviar) ──
 smtp_user = smtp_pass = None
 if ENVIAR:
-    with open('name.env', 'rb') as f:
-        for raw in f:
-            line = raw.decode('utf-8', 'replace').strip()
-            if line.startswith('LATINBIEN_SMTP_USER='):
-                smtp_user = line.split('=', 1)[1].strip()
-            elif line.startswith('LATINBIEN_SMTP_PASS='):
-                smtp_pass = line.split('=', 1)[1].strip()
+    # 1) Intentar desde variables de entorno (GitHub Actions secrets)
+    env_user = os.environ.get('LATINBIEN_SMTP_USER')
+    env_pass = os.environ.get('LATINBIEN_SMTP_PASS')
+    if env_user and env_pass:
+        smtp_user, smtp_pass = env_user, env_pass
+    else:
+        # 2) Fallback: name.env local
+        with open('name.env', 'rb') as f:
+            for raw in f:
+                line = raw.decode('utf-8', 'replace').strip()
+                if line.startswith('LATINBIEN_SMTP_USER='):
+                    smtp_user = line.split('=', 1)[1].strip()
+                elif line.startswith('LATINBIEN_SMTP_PASS='):
+                    smtp_pass = line.split('=', 1)[1].strip()
     if not smtp_user or not smtp_pass:
-        print("ERROR: para enviar necesitas LATINBIEN_SMTP_USER/PASS en name.env")
+        print("ERROR: para enviar necesitas LATINBIEN_SMTP_USER/PASS en name.env o variables de entorno")
         sys.exit(1)
     os.environ['LATINBIEN_SMTP_USER'] = smtp_user
     os.environ['LATINBIEN_SMTP_PASS'] = smtp_pass
@@ -120,6 +128,10 @@ for c in cuotas_fecha:
 if ENVIAR:
     from email_proveedor import generar_correo_totalizado_por_fecha, enviar_correo_totalizado_por_fecha
     asunto, cuerpo = generar_correo_totalizado_por_fecha(proveedor, fecha_seleccionada, cuotas_fecha, monto_total)
+    if TEST:
+        print("\n[--test] El correo se enviará SOLO a yarley@latinbien.com (prueba).")
+    else:
+        print("\n[--send] Se enviará a los destinatarios internos.")
 else:
     # Preview local idéntico al que se enviaría (sin requerir SMTP)
     asunto = (f'💵 Recordatorio Pago a Proveedor {fecha_seleccionada} — '
@@ -157,9 +169,11 @@ print("CUERPO DEL CORREO (prueba en seco):")
 print(cuerpo)
 
 if ENVIAR:
-    print("\nEnviando correo real...")
+    print("\nEnviando correo...")
+    dest = ['yarley@latinbien.com'] if TEST else None
     ok, msg = enviar_correo_totalizado_por_fecha(proveedor, fecha_seleccionada,
-                                                 cuotas_fecha, monto_total)
+                                                 cuotas_fecha, monto_total,
+                                                 destinatarios=dest)
     print(f"Resultado: {msg}")
     sys.exit(0 if ok else 1)
 else:
