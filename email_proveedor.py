@@ -204,3 +204,76 @@ def enviar_correo_consolidado(proveedor, grupos, destinatarios=None,
         return True, f'Correo (consolidado, {sum(len(g["cuotas"]) for g in grupos)} cuotas) enviado a {len(destinatarios)} destinatarios'
     except Exception as e:
         return False, f'Error: {str(e)}'
+
+
+def generar_correo_totalizado_por_fecha(proveedor, fecha_pago, cuotas, monto_total=None):
+    """Correo consolidado para UNA fecha de pago, con el MONTO TOTAL a cancelar ese día.
+    No modifica nada existente: solo agrega un formato resumido por fecha."""
+    if monto_total is None:
+        monto_total = sum(c.get('monto', 0) for c in cuotas)
+    n_cuotas = len(cuotas)
+    total_dias_mora = sum(c.get('dias_mora', 0) for c in cuotas)
+
+    asunto = (f'💵 Recordatorio Pago a Proveedor {fecha_pago} — '
+              f'{n_cuotas} cuotas | Total ${monto_total:,.2f}')
+
+    cuerpo = f"""
+RECORDATORIO INTERNO DE PAGO A PROVEEDOR — TOTAL POR FECHA
+{'='*55}
+
+Proveedor: {proveedor}
+Fecha de Pago: {fecha_pago}
+Cuotas a cancelar: {n_cuotas}
+TOTAL A CANCELAR: ${monto_total:,.2f}
+
+DETALLE DE LAS CUOTAS ({fecha_pago}):
+"""
+    for c in cuotas:
+        cuerpo += (
+            f"\n  • {c.get('orden_compra', '')} | Cliente: {c.get('cliente', '')}"
+            f" | {c.get('modelo', '')}"
+            f"\n    Cuota {c.get('cuota_num', '')}/{c.get('total_cuotas', '')}"
+            f" | ${c.get('monto', 0):,.2f}"
+            f" | Ciclo {c.get('ciclo', '')} (Op {c.get('opcion', '')})"
+            f"{' | Mora: ' + str(c.get('dias_mora', 0)) + ' d' if c.get('dias_mora', 0) else ''}"
+        )
+
+    cuerpo += f"""
+{'='*55}
+TOTAL POR ESTA FECHA: ${monto_total:,.2f} en {n_cuotas} cuotas.
+
+Este es un recordatorio interno del sistema LATINBIEN Dashboard.
+Fecha de generación: {date.today()}
+
+No responder a este correo. Es solo para referencia interna.
+"""
+    return asunto, cuerpo
+
+
+def enviar_correo_totalizado_por_fecha(proveedor, fecha_pago, cuotas, monto_total=None,
+                                       destinatarios=None, smtp_user=None, smtp_pass=None):
+    """Envía el correo consolidado por fecha con el monto total a cancelar."""
+    if destinatarios is None:
+        destinatarios = DESTINATARIOS_INTERNOS
+    if smtp_user is None:
+        smtp_user = SMTP_USER
+    if smtp_pass is None:
+        smtp_pass = SMTP_PASS
+
+    asunto, cuerpo = generar_correo_totalizado_por_fecha(proveedor, fecha_pago, cuotas, monto_total)
+
+    msg = MIMEMultipart()
+    msg['From'] = smtp_user
+    msg['To'] = ', '.join(destinatarios)
+    msg['Subject'] = asunto
+    msg.attach(MIMEText(cuerpo, 'plain', 'utf-8'))
+
+    try:
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()
+        server.login(smtp_user, smtp_pass)
+        server.sendmail(smtp_user, destinatarios, msg.as_string())
+        server.quit()
+        return True, f'Correo fecha {fecha_pago} ({len(cuotas)} cuotas, ${monto_total:,.2f}) enviado a {len(destinatarios)} destinatarios'
+    except Exception as e:
+        return False, f'Error: {str(e)}'

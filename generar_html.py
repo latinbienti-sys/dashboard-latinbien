@@ -1353,6 +1353,24 @@ html = f'''<!DOCTYPE html>
                 </table>
             </div>
         </div>
+        <div class="results-section" style="border:2px solid #059669;background:linear-gradient(135deg,#ecfdf5,#d1fae5)">
+            <h3>🧾 Total a Cancelar por Fecha de Pago</h3>
+            <p style="color:#065f46;margin:0 0 12px">Monto total de las cuotas <strong>pendientes</strong> a pagar a proveedor, agrupado por fecha de pago.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:12px" id="ppmTotalesFechas"></div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha de Pago</th>
+                            <th class="text-right">Cuotas</th>
+                            <th class="text-right">Total a Cancelar</th>
+                            <th>Próxima</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaTotalesFechas"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <!-- ═══ TAB: DSH CREDIMOTO ═══ -->
@@ -3438,6 +3456,47 @@ try {{
             }});
         }});
         cronBody.innerHTML = cronHtml || '<tr><td colspan="6" style="text-align:center;color:#999">Sin cronograma</td></tr>';
+    }}
+
+    // ── Total a Cancelar por Fecha de Pago (aditivo) ──
+    var totFechas = {{}};
+    var hoyISO = new Date().toISOString().slice(0, 10);
+    ppmItems.forEach(function(it) {{
+        it.pagos.forEach(function(p) {{
+            if (p.estado !== 'pendiente') return;
+            var f = p.fecha_pago || '';
+            if (!f) return;
+            if (!totFechas[f]) totFechas[f] = {{ fecha: f, cuotas: 0, monto: 0 }};
+            totFechas[f].cuotas += 1;
+            totFechas[f].monto += (p.monto || 0);
+        }});
+    }});
+    var totFechasKeys = Object.keys(totFechas).sort();
+    var fechaProxima = totFechasKeys.find(function(f) {{ return f >= hoyISO; }}) || totFechasKeys[0] || '';
+    var cardWrap = document.getElementById('ppmTotalesFechas');
+    if (cardWrap && totFechasKeys.length) {{
+        cardWrap.innerHTML = totFechasKeys.map(function(f) {{
+            var t = totFechas[f];
+            var dest = f === fechaProxima;
+            return '<div style="background:' + (dest ? '#059669' : '#ffffff') + ';color:' + (dest ? 'white' : '#333') + ';border-radius:12px;padding:14px;box-shadow:0 2px 6px rgba(0,0,0,0.06);text-align:center">' +
+                '<div style="font-size:12px;opacity:0.85">' + (dest ? '🚀 PRÓXIMA · ' : '') + 'Fecha ' + f + '</div>' +
+                '<div style="font-size:22px;font-weight:800;margin:4px 0">' + fmtMoney(t.monto) + '</div>' +
+                '<div style="font-size:12px;opacity:0.85">' + t.cuotas + ' cuotas</div>' +
+                '</div>';
+        }}).join('');
+    }}
+    var totBody = document.getElementById('tablaTotalesFechas');
+    if (totBody && totFechasKeys.length) {{
+        totBody.innerHTML = totFechasKeys.map(function(f) {{
+            var t = totFechas[f];
+            var dest = f === fechaProxima;
+            return '<tr' + (dest ? ' style="background:#fee2e2;font-weight:600"' : '') + '>' +
+                '<td><strong>' + f + '</strong></td>' +
+                '<td class="text-right">' + t.cuotas + '</td>' +
+                '<td class="text-right" style="color:#059669;font-weight:800">' + fmtMoney(t.monto) + '</td>' +
+                '<td>' + (dest ? '<span style="background:#059669;color:white;padding:2px 10px;border-radius:4px;font-size:11px;font-weight:700">PRÓXIMA</span>' : '') + '</td>' +
+                '</tr>';
+        }}).join('');
     }}
 }} catch(e) {{ console.error('Pago Proveedor error:', e); }}
 
