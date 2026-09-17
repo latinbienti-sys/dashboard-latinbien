@@ -20,6 +20,7 @@ DESTINATARIOS_INTERNOS = [
     'yarley@latinbien.com',
     'presidencia@latinbien.com',
     'vicepresidencia@latinbien.com',
+    'mvera@latinbien.com',
 ]
 
 def generar_correo_recordatorio(proveedor, orden_compra, cliente, modelo, cuota_num, 
