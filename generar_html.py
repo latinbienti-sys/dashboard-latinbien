@@ -1312,6 +1312,24 @@ html = f'''<!DOCTYPE html>
             <div class="kpi-card success"><div class="number money" id="ppmInicial">—</div><div class="label">40% Inicial</div></div>
             <div class="kpi-card"><div class="number money" id="ppmFinanciado">—</div><div class="label">60% Financiado</div></div>
         </div>
+        <div class="results-section" style="border:2px solid #059669;background:linear-gradient(135deg,#ecfdf5,#d1fae5)">
+            <h3>🧾 Total a Cancelar por Fecha de Pago</h3>
+            <p style="color:#065f46;margin:0 0 12px">Monto total de las cuotas <strong>pendientes</strong> a pagar a proveedor, agrupado por fecha de pago.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:12px" id="ppmTotalesFechas"></div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha de Pago</th>
+                            <th class="text-right">Cuotas</th>
+                            <th class="text-right">Total a Cancelar</th>
+                            <th>Próxima</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaTotalesFechas"></tbody>
+                </table>
+            </div>
+        </div>
         <div class="results-section">
             <h3>💰 Pedido de Compra P01382 — MOTO CITY PRO, C.A.</h3>
             <p style="color:#666;margin:0 0 12px"><strong>40% Inicial:</strong> pagadero al momento de facturación y entrega. &nbsp;|&nbsp; <strong>60% Restante:</strong> 8 cuotas quincenales según ciclo del cliente. &nbsp;|&nbsp; <strong>Opción A:</strong> días 5 y 20 &nbsp;|&nbsp; <strong>Opción B:</strong> días 12 y 27</p>
@@ -1350,24 +1368,6 @@ html = f'''<!DOCTYPE html>
                         </tr>
                     </thead>
                     <tbody id="tablaCronograma"></tbody>
-                </table>
-            </div>
-        </div>
-        <div class="results-section" style="border:2px solid #059669;background:linear-gradient(135deg,#ecfdf5,#d1fae5)">
-            <h3>🧾 Total a Cancelar por Fecha de Pago</h3>
-            <p style="color:#065f46;margin:0 0 12px">Monto total de las cuotas <strong>pendientes</strong> a pagar a proveedor, agrupado por fecha de pago.</p>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:12px" id="ppmTotalesFechas"></div>
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Fecha de Pago</th>
-                            <th class="text-right">Cuotas</th>
-                            <th class="text-right">Total a Cancelar</th>
-                            <th>Próxima</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaTotalesFechas"></tbody>
                 </table>
             </div>
         </div>
