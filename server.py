@@ -2186,7 +2186,7 @@ def fetch_ventas_motos(sess):
     # ── 4. Leer órdenes de venta publicadas ──
     orders = json_execute(sess, 'sale.order', 'read', [
         list(order_ids), ['id', 'name', 'state', 'partner_id', 'date_order',
-                          'order_line', 'amount_total']
+                          'order_line', 'amount_total', 'invoice_ids']
     ])
     posted = [o for o in orders if o.get('state') == 'sale']
 
@@ -2258,6 +2258,85 @@ def fetch_ventas_motos(sess):
             'credimoto': credimoto,
             'fecha': date_order,
         })
+
+    # ── 7. Enriquecer: factura del cliente + morosidad por cuota vencida ──
+    from datetime import date as _dt_date
+    so_by_id = {o['id']: o for o in posted}
+    all_client_inv_ids = set()
+    for o in posted:
+        all_client_inv_ids.update(o.get('invoice_ids') or [])
+
+    client_inv_by_id = {}
+    if all_client_inv_ids:
+        for i in range(0, len(all_client_inv_ids), 200):
+            batch = sorted(set(all_client_inv_ids))[i:i + 200]
+            recs = json_execute(sess, 'account.move', 'read', [
+                batch, ['id', 'name', 'state', 'payment_state', 'amount_total', 'amount_residual']
+            ]) or []
+            for r in recs:
+                client_inv_by_id[r['id']] = r
+
+    client_il_by_inv = defaultdict(list)
+    if all_client_inv_ids:
+        il_ids = json_execute(sess, 'invoice.installment.line', 'search', [
+            [['invoice_id', 'in', list(all_client_inv_ids)]]
+        ])
+        for i in range(0, len(il_ids), 2000):
+            recs = json_execute(sess, 'invoice.installment.line', 'read', [
+                il_ids[i:i + 2000], ['invoice_id', 'state', 'payment_date', 'amount']
+            ]) or []
+            for l in recs:
+                inv = l.get('invoice_id')
+                iid = inv[0] if isinstance(inv, list) and len(inv) > 1 else None
+                if iid:
+                    client_il_by_inv[iid].append(l)
+
+    hoy = _dt_date.today()
+    for item in items:
+        oid = item.get('orden_id')
+        so = so_by_id.get(oid, {})
+        inv_ids = so.get('invoice_ids', [])
+        inv_data = None
+        inv_id = 0
+        for iid in inv_ids:
+            if iid in client_inv_by_id:
+                inv_data = client_inv_by_id[iid]
+                inv_id = iid
+                break
+        if inv_data:
+            total = float(inv_data.get('amount_total', 0) or 0)
+            residual = float(inv_data.get('amount_residual', 0) or 0)
+            item['factura_cliente'] = {
+                'numero': inv_data.get('name', ''),
+                'estado': inv_data.get('state', ''),
+                'payment_state': inv_data.get('payment_state', ''),
+                'total': round(total, 2),
+                'pagado': round(total - residual, 2),
+                'adeudado': round(residual, 2),
+                'move_id': inv_data.get('id', 0),
+            }
+        else:
+            item['factura_cliente'] = {
+                'numero': '', 'estado': '', 'payment_state': '',
+                'total': item.get('monto_total', 0), 'pagado': 0, 'adeudado': item.get('monto_total', 0),
+                'move_id': 0,
+            }
+
+        cuotas_vencidas = 0
+        monto_vencido = 0.0
+        for l in client_il_by_inv.get(inv_id, []):
+            state = l.get('state', '')
+            pd = str(l.get('payment_date') or '')[:10]
+            amt = float(l.get('amount', 0) or 0)
+            is_overdue = (state == 'vencido') or (state == 'draft' and pd and pd < str(hoy))
+            if is_overdue:
+                cuotas_vencidas += 1
+                monto_vencido += amt
+        item['morosidad'] = {
+            'cuotas_vencidas': cuotas_vencidas,
+            'monto_vencido': round(monto_vencido, 2),
+            'tiene_mora': cuotas_vencidas > 0,
+        }
 
     # Ordenar por fecha descendente
     items.sort(key=lambda x: x.get('fecha', ''), reverse=True)

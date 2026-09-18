@@ -1280,6 +1280,11 @@ html = f'''<!DOCTYPE html>
             <div class="kpi-card accent"><div class="number money" id="vmProducto">—</div><div class="label">Precio Producto</div></div>
             <div class="kpi-card"><div class="number money" id="vmGasto">—</div><div class="label">Gasto Admin</div></div>
         </div>
+        <div class="kpi-row">
+            <div class="kpi-card success" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0)"><div class="number money" id="vmPagadoClientes">—</div><div class="label">Pagado por Clientes</div></div>
+            <div class="kpi-card" style="background:linear-gradient(135deg,#fef3c7,#fde68a)"><div class="number money" id="vmAdeudadoClientes">—</div><div class="label">Adeudado por Clientes</div></div>
+            <div class="kpi-card" style="background:linear-gradient(135deg,#fef2f2,#fecaca)"><div class="number" id="vmVencido">—</div><div class="label">Cuotas Vencidas</div></div>
+        </div>
         <div class="results-section">
             <h3>📋 Órdenes Publicadas de Motos</h3>
             <p style="color:#666;margin:0 0 12px">Solo órdenes de venta publicadas (state=sale). Precio producto y gasto administrativo por separado.</p>
@@ -1294,6 +1299,10 @@ html = f'''<!DOCTYPE html>
                             <th class="text-right">Precio Moto</th>
                             <th class="text-right">Gasto Admin</th>
                             <th class="text-right">Total</th>
+                            <th class="text-right">Pagado Cliente</th>
+                            <th class="text-right">Adeudado</th>
+                            <th>Factura</th>
+                            <th>Mora</th>
                             <th>Fecha</th>
                         </tr>
                     </thead>
@@ -3374,15 +3383,36 @@ try {{
     document.getElementById('vmProducto').textContent = fmtMoney(vm.total_producto||0);
     document.getElementById('vmGasto').textContent = fmtMoney(vm.total_gasto_admin||0);
 
-    // Tabla órdenes
+    // KPIs cliente-factura (contabilizado en la factura del cliente)
+    var vmPagCl = 0, vmAdeCl = 0, vmCuenVenc = 0;
     var vmItems = vm.items || [];
+    vmItems.forEach(function(it) {{
+        var fc = it.factura_cliente || {{}};
+        var mo = it.morosidad || {{}};
+        vmPagCl += (fc.pagado || 0);
+        vmAdeCl += (fc.adeudado || 0);
+        vmCuenVenc += (mo.cuotas_vencidas || 0);
+    }});
+    document.getElementById('vmPagadoClientes').textContent = fmtMoney(vmPagCl);
+    document.getElementById('vmAdeudadoClientes').textContent = fmtMoney(vmAdeCl);
+    document.getElementById('vmVencido').textContent = vmCuenVenc.toLocaleString();
+
+    // Tabla órdenes
     var vmOrdBody = document.getElementById('tablaOrdenesMotos');
     if (vmOrdBody && vmItems.length) {{
         vmOrdBody.innerHTML = vmItems.map(function(it) {{
             var ordUrl = 'https://latinbien.com/web#id=' + (it.orden_id||0) + '&model=sale.order&view_type=form';
             var credTag = it.credimoto ? '<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;border:1px solid #f59e0b">CREDIMOTO</span>' : '<span style="color:#ccc">—</span>';
             var fecha = it.fecha || it.mes || '';
-            return '<tr>' +
+            var fc = it.factura_cliente || {{}};
+            var mo = it.morosidad || {{}};
+            var factCell = fc.numero
+                ? '<a href="https://latinbien.com/web#id=' + (fc.move_id||0) + '&model=account.move&view_type=form" target="_blank" style="color:#213C83;font-weight:600;font-size:11px;text-decoration:none;border-bottom:1px dashed #213C83">' + fc.numero + '</a><br/><span style="font-size:9px;color:#666">' + (fc.payment_state||'') + '</span>'
+                : '<span style="color:#ccc">—</span>';
+            var moraCell = mo.tiene_mora
+                ? '<span style="background:#fef2f2;color:#991b1b;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;border:1px solid #fca5a5">💥 ' + mo.cuotas_vencidas + ' vencida(s) · $' + mo.monto_vencido.toFixed(2) + '</span>'
+                : '<span style="color:#ccc">—</span>';
+            return '<tr' + (mo.tiene_mora ? ' style="background:#fef2f2"' : '') + '>' +
                 '<td><a href="' + ordUrl + '" target="_blank" style="color:#213C83;font-weight:600;text-decoration:none;border-bottom:1px dashed #213C83">' + it.orden + '</a></td>' +
                 '<td><strong>' + it.cliente + '</strong></td>' +
                 '<td>' + credTag + '</td>' +
@@ -3390,6 +3420,10 @@ try {{
                 '<td class="text-right" style="font-weight:600">' + fmtMoney(it.precio_producto) + '</td>' +
                 '<td class="text-right" style="color:#888">' + fmtMoney(it.gasto_admin) + '</td>' +
                 '<td class="text-right" style="font-weight:700">' + fmtMoney(it.monto_total) + '</td>' +
+                '<td class="text-right" style="color:#047857;font-weight:700">' + fmtMoney(fc.pagado||0) + '</td>' +
+                '<td class="text-right" style="color:#b45309;font-weight:700">' + fmtMoney(fc.adeudado||0) + '</td>' +
+                '<td>' + factCell + '</td>' +
+                '<td>' + moraCell + '</td>' +
                 '<td>' + fecha + '</td>' +
                 '</tr>';
         }}).join('');
