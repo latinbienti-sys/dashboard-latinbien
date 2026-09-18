@@ -1415,7 +1415,7 @@ html = f'''<!DOCTYPE html>
                 <canvas id="chartMesCuotas" height="200"></canvas>
             </div>
             <div class="results-section" style="margin-top:12px">
-                <h3>📈 Tendencia histórica facturada en motos — $ facturado (barras) y motos vendidas (línea)</h3>
+                <h3>📈 Tendencia histórica facturada en motos — curvas: $ facturado y motos vendidas (doble eje Y)</h3>
                 <canvas id="chartTendencia" height="200"></canvas>
             </div>
         </div>
@@ -3655,12 +3655,12 @@ try {{
             return meses[parseInt(p[1], 10) - 1] + ' ' + String(p[0]).slice(2);
         }});
         new Chart(document.getElementById('chartTendencia'), {{
-            type: 'bar',
+            type: 'line',
             data: {{
                 labels: tDisp,
                 datasets: [
-                    {{ label: 'Facturado (USD)', data: tVentas, type: 'bar', backgroundColor: 'rgba(37,99,235,0.7)', borderRadius: 6, yAxisID: 'y' }},
-                    {{ label: 'Motos vendidas', data: tMotos, type: 'line', borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.15)', fill: true, tension: 0.3, pointRadius: 5, pointBackgroundColor: '#f59e0b', yAxisID: 'y1' }}
+                    {{ label: 'Facturado (USD)', data: tVentas, type: 'line', borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.15)', fill: true, tension: 0.4, pointRadius: 6, pointBackgroundColor: '#2563eb', borderWidth: 3, yAxisID: 'y' }},
+                    {{ label: 'Motos vendidas', data: tMotos, type: 'line', borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.15)', fill: true, tension: 0.4, pointRadius: 5, pointBackgroundColor: '#f59e0b', borderWidth: 2, yAxisID: 'y1' }}
                 ]
             }},
             options: {{
