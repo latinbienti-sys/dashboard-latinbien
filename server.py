@@ -566,7 +566,10 @@ def _fecha_ancla_cuota(sess, so_id):
                 todas.append(pd)
                 if r.get('state') != 'paid':
                     pendientes.append(pd)
-        fechas = pendientes or todas
+        # El ancla es la PRIMERA cuota del plan (aunque ya esté pagada).
+        # Si usáramos solo las pendientes, al pagar la 1ra cuota el ancla
+        # saltaría a la siguiente y movería todo el cronograma del proveedor.
+        fechas = todas
         if not fechas:
             return None
         fechas.sort()
