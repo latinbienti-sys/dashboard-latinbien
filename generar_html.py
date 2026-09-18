@@ -1311,6 +1311,8 @@ html = f'''<!DOCTYPE html>
             <div class="kpi-card"><div class="number" id="ppmOrdenes">—</div><div class="label">Órdenes Venta</div></div>
             <div class="kpi-card success"><div class="number money" id="ppmInicial">—</div><div class="label">40% Inicial</div></div>
             <div class="kpi-card"><div class="number money" id="ppmFinanciado">—</div><div class="label">60% Financiado</div></div>
+            <div class="kpi-card success" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0)"><div class="number money" id="ppmPagado">—</div><div class="label">Contabilizado (Pagado)</div></div>
+            <div class="kpi-card" style="background:linear-gradient(135deg,#fef3c7,#fde68a)"><div class="number money" id="ppmAdeudado">—</div><div class="label">Adeudado</div></div>
         </div>
         <div class="results-section" style="border:2px solid #059669;background:linear-gradient(135deg,#ecfdf5,#d1fae5)">
             <h3>🧾 Total a Cancelar por Fecha de Pago</h3>
@@ -1346,6 +1348,9 @@ html = f'''<!DOCTYPE html>
                             <th class="text-right">40% Inicial</th>
                             <th class="text-right">60% Restante</th>
                             <th class="text-right">Cuota Quincenal</th>
+                            <th>Factura Contabilizada</th>
+                            <th class="text-right">Pagado</th>
+                            <th class="text-right">Adeudado</th>
                         </tr>
                     </thead>
                     <tbody id="tablaPagoProveedor"></tbody>
@@ -3399,12 +3404,21 @@ try {{
     document.getElementById('ppmOrdenes').textContent = (ppm.total_ordenes||0).toLocaleString();
     document.getElementById('ppmInicial').textContent = fmtMoney(ppm.total_pagoInicial||0);
     document.getElementById('ppmFinanciado').textContent = fmtMoney(ppm.total_financiado||0);
+    document.getElementById('ppmPagado').textContent = fmtMoney(ppm.total_pagado||0);
+    document.getElementById('ppmAdeudado').textContent = fmtMoney(ppm.total_adeudado||0);
 
     var ppmItems = ppm.items || [];
     var ppmBody = document.getElementById('tablaPagoProveedor');
     if (ppmBody && ppmItems.length) {{
         ppmBody.innerHTML = ppmItems.map(function(it) {{
             var puUrl = 'https://latinbien.com/web#id=' + (it.purchase_order_id||0) + '&model=purchase.order&view_type=form';
+            var ft = it.factura || {{}};
+            var factCell = ft.move_id
+                ? '<a href="https://latinbien.com/web#id=' + ft.move_id + '&model=account.move&view_type=form" target="_blank" style="color:#213C83;font-weight:700;text-decoration:none;border-bottom:2px solid #213C83;font-size:12px">' + (ft.numero||'—') + '</a>'
+                : (ft.numero || '—');
+            if (ft.payment_state) {{
+                factCell += '<br/><span style="font-size:10px;color:#666">estado pago: ' + ft.payment_state + '</span>';
+            }}
             return '<tr>' +
                 '<td><a href="' + puUrl + '" target="_blank" style="color:#213C83;font-weight:700;text-decoration:none;border-bottom:2px solid #213C83;font-size:14px">' + (it.orden_compra||'P01382') + '</a></td>' +
                 '<td><strong>' + (it.cliente||'') + '</strong></td>' +
@@ -3415,6 +3429,9 @@ try {{
                 '<td class="text-right" style="color:#059669;font-weight:700">' + fmtMoney(it.inicial_40||0) + '</td>' +
                 '<td class="text-right" style="color:#2563eb;font-weight:600">' + fmtMoney(it.restante_60||0) + '</td>' +
                 '<td class="text-right">' + fmtMoney(it.cuota_quincenal||0) + '</td>' +
+                '<td>' + factCell + '</td>' +
+                '<td class="text-right" style="color:#047857;font-weight:800">' + fmtMoney(ft.pagado||0) + '</td>' +
+                '<td class="text-right" style="color:#b45309;font-weight:800">' + fmtMoney(ft.adeudado||0) + '</td>' +
                 '</tr>';
         }}).join('');
     }}
@@ -3428,8 +3445,9 @@ try {{
                 var hoy = new Date().toISOString().slice(0, 10);
                 var esHoy = p.fecha_pago === hoy;
                 var esProximo = new Date(p.fecha_pago) <= new Date(hoy);
+                var esPagado = p.estado === 'pagado';
                 var btnHtml = '';
-                if (esProximo) {{
+                if (esProximo && !esPagado) {{
                     var asunto = encodeURIComponent('Recordatorio Interno - Pago Proveedor: Cuota ' + p.cuota + '/8 - ' + it.orden_compra + ' - MOTO CITY PRO');
                     var cuerpo = encodeURIComponent('RECORDATORIO INTERNO DE PAGO A PROVEEDOR\\n\\n' +
                         'Proveedor: MOTO CITY PRO, C.A.\\n' +
@@ -3444,13 +3462,17 @@ try {{
                         'Este es un recordatorio interno. Favor confirmar el pago.');
                     btnHtml = '<a href="mailto:?subject=' + asunto + '&body=' + cuerpo + '" style="display:inline-block;background:#059669;color:white;padding:3px 10px;border-radius:4px;text-decoration:none;font-size:11px;font-weight:600">📧 Recordar</a>';
                 }}
-                cronHtml += '<tr' + (esProximo ? ' style="background:#fef3c7"' : '') + '>' +
+                var filaBg = esPagado ? ' style="background:#e7f6ee"' : (esProximo ? ' style="background:#fef3c7"' : '');
+                var estadoHtml = esPagado
+                    ? '<span style="background:#059669;color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">Pagado · Contabilizado</span>'
+                    : '<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:11px">Pendiente</span>';
+                cronHtml += '<tr' + filaBg + '>' +
                     '<td>' + (it.orden_compra||'P01382') + '</td>' +
                     '<td><strong>' + (it.cliente||'') + '</strong></td>' +
                     '<td class="text-right">Cuota ' + p.cuota + '/8</td>' +
                     '<td>' + p.fecha_pago + (esHoy ? ' <strong style="color:#dc2626">HOY</strong>' : '') + '</td>' +
                     '<td class="text-right" style="font-weight:600">' + fmtMoney(p.monto) + '</td>' +
-                    '<td><span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:11px">Pendiente</span></td>' +
+                    '<td>' + estadoHtml + '</td>' +
                     '<td>' + btnHtml + '</td>' +
                     '</tr>';
             }});

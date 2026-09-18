@@ -621,10 +621,28 @@ def fetch_pagoProveedorMoto(sess):
 
     purchase = json_execute(sess, 'purchase.order', 'search_read', [
         [['partner_id.name', 'ilike', 'MOTO CITY PRO'], ['state', '=', 'purchase']],
-        ['id', 'name', 'partner_ref', 'date_order', 'amount_total', 'partner_id', 'state', 'order_line']
+        ['id', 'name', 'partner_ref', 'date_order', 'amount_total', 'partner_id', 'state', 'order_line', 'invoice_ids']
     ])
     if not purchase:
         return {"items": [], "proveedor": proveedor, "orden_compra": "", "total_ordenes": 0, "total_pagoInicial": 0, "total_financiado": 0}
+
+    # ── Facturas del proveedor (account.move in_invoice) por OC, para ver LO CONTABILIZADO ──
+    _po_invoices = {}  # po_id → [id_invoice, ...]
+    _inv_ids = []
+    for p in purchase:
+        invs = p.get('invoice_ids') or []
+        if invs:
+            _po_invoices[p['id']] = invs
+            _inv_ids.extend(invs)
+    _invoice_by_id = {}
+    if _inv_ids:
+        for i in range(0, len(_inv_ids), 200):
+            recs = json_execute(sess, 'account.move', 'read', [
+                sorted(set(_inv_ids[i:i + 200])),
+                ['id', 'name', 'move_type', 'state', 'payment_state', 'amount_total', 'amount_residual']
+            ]) or []
+            for r in recs:
+                _invoice_by_id[r['id']] = r
 
     # Cache de sale.order: buscar SOLO una vez por nombre de OV
     _so_cache = {}  # orden_venta_name → {so_id, cliente}
@@ -739,6 +757,26 @@ def fetch_pagoProveedorMoto(sess):
                     m = 1
                     y += 1
 
+        # ── Contabilización real: factura(s) de la OC (amount_total - amount_residual) ──
+        facturas_po = [_invoice_by_id[i] for i in _po_invoices.get(p['id'], []) if i in _invoice_by_id]
+        factura_total = round(sum(float(f.get('amount_total', 0) or 0) for f in facturas_po), 2)
+        factura_pagado = round(sum(float(f.get('amount_total', 0) or 0) - float(f.get('amount_residual', 0) or 0) for f in facturas_po), 2)
+        factura_adeudado = round(sum(float(f.get('amount_residual', 0) or 0) for f in facturas_po), 2)
+        factura_numero = ', '.join((f.get('name') or '') for f in facturas_po)
+        factura_payment_state = facturas_po[0].get('payment_state') if facturas_po else ''
+        factura_estado = facturas_po[0].get('state') if facturas_po else ''
+        factura_move_id = facturas_po[0].get('id') if facturas_po else 0
+
+        # ESTADO de cada cuota del proveedor por pago REAL contabilizado:
+        # el 40% inicial ya está pagado a la facturación; cada pago adicional
+        # cancela las cuotas del 60% en orden cronológico.
+        pagado_aplicable_cuotas = max(0.0, factura_pagado - inicial_40)
+        acumulado = 0.0
+        for cuota in pagos:
+            acumulado += cuota['monto']
+            if str(cuota['fecha_pago'])[:10] <= str(date.today())[:10] and pagado_aplicable_cuotas >= acumulado - 0.005:
+                cuota['estado'] = 'pagado'
+
         items.append({
             'purchase_order_id': p['id'], 'orden_compra': orden_compra, 'orden_venta': orden_venta,
             'proveedor': proveedor_nombre, 'cliente': cliente_venta, 'modelo': modelo,
@@ -747,6 +785,11 @@ def fetch_pagoProveedorMoto(sess):
             'inicial_40': inicial_40, 'restante_60': restante_60, 'cuota_quincenal': cuota_quincenal,
             'ciclo': ciclo_cliente, 'opcion': 'A' if ciclo_cliente == '03-18' else 'B',
             'fecha_ancla_cliente': fecha_ancla_str, 'pagos': pagos,
+            'factura': {
+                'numero': factura_numero, 'estado': factura_estado,
+                'payment_state': factura_payment_state, 'move_id': factura_move_id,
+                'total': factura_total, 'pagado': factura_pagado, 'adeudado': factura_adeudado,
+            },
         })
     return {
         'items': items, 'proveedor': proveedor,
@@ -754,6 +797,9 @@ def fetch_pagoProveedorMoto(sess):
         'total_ordenes': len(items),
         'total_pagoInicial': round(sum(it['inicial_40'] for it in items), 2),
         'total_financiado': round(sum(it['restante_60'] for it in items), 2),
+        'total_facturado': round(sum(it['factura']['total'] for it in items), 2),
+        'total_pagado': round(sum(it['factura']['pagado'] for it in items), 2),
+        'total_adeudado': round(sum(it['factura']['adeudado'] for it in items), 2),
     }
 
 
