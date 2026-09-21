@@ -791,6 +791,21 @@ def fetch_pagoProveedorMoto(sess):
                 'total': factura_total, 'pagado': factura_pagado, 'adeudado': factura_adeudado,
             },
         })
+    cuotas_pagadas = []
+    for it in items:
+        for p in it.get('pagos', []):
+            if p.get('estado') == 'pagado':
+                cuotas_pagadas.append({
+                    'fecha_pago': p.get('fecha_pago', ''),
+                    'orden_compra': it.get('orden_compra', ''),
+                    'cliente': it.get('cliente', ''),
+                    'modelo': it.get('modelo', ''),
+                    'cuota': p.get('cuota', 0),
+                    'total_cuotas': len(it.get('pagos', [])),
+                    'monto': round(p.get('monto', 0), 2),
+                })
+    cuotas_pagadas.sort(key=lambda c: (c['fecha_pago'], c['orden_compra']))
+
     return {
         'items': items, 'proveedor': proveedor,
         'orden_compra': ', '.join(it['orden_compra'] for it in items),
@@ -800,6 +815,9 @@ def fetch_pagoProveedorMoto(sess):
         'total_facturado': round(sum(it['factura']['total'] for it in items), 2),
         'total_pagado': round(sum(it['factura']['pagado'] for it in items), 2),
         'total_adeudado': round(sum(it['factura']['adeudado'] for it in items), 2),
+        'cuotas_pagadas': cuotas_pagadas,
+        'total_cuotas_pagadas_monto': round(sum(c['monto'] for c in cuotas_pagadas), 2),
+        'total_cuotas_pagadas_count': len(cuotas_pagadas),
     }
 
 

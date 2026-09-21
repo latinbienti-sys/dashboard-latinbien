@@ -1341,6 +1341,35 @@ html = f'''<!DOCTYPE html>
                 </table>
             </div>
         </div>
+        <div class="results-section" style="border:2px solid #1d4ed8;background:linear-gradient(135deg,#eff6ff,#dbeafe)">
+            <h3>✅ Cuotas Pagadas al Proveedor</h3>
+            <p style="color:#1e40af;margin:0 0 12px">Cuotas del cronograma <strong>contabilizadas como pagadas</strong> (cubiertas por la factura del proveedor), con su monto.</p>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha Pago</th>
+                            <th>Orden</th>
+                            <th>Cliente</th>
+                            <th>Modelo</th>
+                            <th class="text-right">Cuota</th>
+                            <th class="text-right">Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaCuotasPagadas"></tbody>
+                </table>
+            </div>
+            <div style="display:flex;gap:24px;margin-top:12px;flex-wrap:wrap">
+                <div>
+                    <div class="number money" style="font-size:22px;font-weight:800;color:#1e40af" id="ppmCuotasPagadasTotal">$0.00</div>
+                    <div class="label">Total Cuotas Pagadas al Proveedor</div>
+                </div>
+                <div>
+                    <div class="number" style="font-size:22px;font-weight:800;color:#1e40af" id="ppmCuotasPagadasCount">0</div>
+                    <div class="label">Cuotas Pagadas</div>
+                </div>
+            </div>
+        </div>
         <div class="results-section">
             <h3>💰 Pedido de Compra P01382 — MOTO CITY PRO, C.A.</h3>
             <p style="color:#666;margin:0 0 12px"><strong>40% Inicial:</strong> pagadero al momento de facturación y entrega. &nbsp;|&nbsp; <strong>60% Restante:</strong> 8 cuotas quincenales según ciclo del cliente. &nbsp;|&nbsp; <strong>Opción A:</strong> días 5 y 20 &nbsp;|&nbsp; <strong>Opción B:</strong> días 12 y 27</p>
@@ -3440,6 +3469,28 @@ try {{
     document.getElementById('ppmFinanciado').textContent = fmtMoney(ppm.total_financiado||0);
     document.getElementById('ppmPagado').textContent = fmtMoney(ppm.total_pagado||0);
     document.getElementById('ppmAdeudado').textContent = fmtMoney(ppm.total_adeudado||0);
+
+    // Cuotas pagadas al proveedor (detalle en monto)
+    var cpBody = document.getElementById('tablaCuotasPagadas');
+    var cp = ppm.cuotas_pagadas || [];
+    document.getElementById('ppmCuotasPagadasTotal').textContent = fmtMoney(ppm.total_cuotas_pagadas_monto||0);
+    document.getElementById('ppmCuotasPagadasCount').textContent = (ppm.total_cuotas_pagadas_count||0).toLocaleString();
+    if (cpBody) {{
+        if (cp.length) {{
+            cpBody.innerHTML = cp.map(function(c) {{
+                return '<tr>' +
+                    '<td>' + c.fecha_pago + '</td>' +
+                    '<td><strong>' + (c.orden_compra||'') + '</strong></td>' +
+                    '<td>' + (c.cliente||'') + '</td>' +
+                    '<td>' + (c.modelo||'') + '</td>' +
+                    '<td class="text-right">' + (c.cuota||0) + '/' + (c.total_cuotas||8) + '</td>' +
+                    '<td class="text-right" style="color:#1e40af;font-weight:800">' + fmtMoney(c.monto||0) + '</td>' +
+                    '</tr>';
+            }}).join('');
+        }} else {{
+            cpBody.innerHTML = '<tr><td colspan="6" style="color:#1e40af;text-align:center;padding:14px">Aún no hay cuotas pagadas al proveedor — el monto contemplado hoy es solo el 40% inicial. Este detalle se poblará al contabilizarse cada cuota del 60%.</td></tr>';
+        }}
+    }}
 
     var ppmItems = ppm.items || [];
     var ppmBody = document.getElementById('tablaPagoProveedor');
