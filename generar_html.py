@@ -1227,7 +1227,7 @@ html = f'''<!DOCTYPE html>
         </div>
         <div class="results-section">
             <h3>📋 Gestión de Cobranza por Ciclo — Segmentación por Fase</h3>
-            <p style="color:#666;margin:0 0 12px">Cuotas de clientes con status <strong>Entregado</strong> y <strong>Aprobado</strong>. Segmentadas por ciclo (03-18 / 10-25), fase (2 días antes, día del ciclo, después) y estado (pagado/pendiente).</p>
+            <p style="color:#666;margin:0 0 12px">Cuotas de clientes con status <strong>Entregado</strong> (se excluyen clientes con status Aprobado). Segmentadas por ciclo (03-18 / 10-25), fase (2 días antes, día del ciclo, después) y estado (pagado/pendiente).</p>
             <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
                 <strong>Ciclo:</strong>
                 <button onclick="filtrarGestion('todos')" style="padding:6px 14px;border-radius:6px;border:1px solid #ccc;background:#fff;cursor:pointer;font-size:12px" class="btn-gestion active">Todos</button>

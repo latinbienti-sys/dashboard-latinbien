@@ -1973,9 +1973,9 @@ def fetch_payment_plan(sess):
         # Solo no pagados
         if line.get('state') == 'paid':
             continue
-        # Solo Entregado/Aprobado
+        # Solo Entregado (status operativo del cliente debe ser Entregado)
         st_op = invoice_status_map.get(inv_id, '')
-        if st_op not in ('Entregado', 'Aprobado'):
+        if st_op != 'Entregado':
             continue
         # Solo facturas publicadas (ya filtrado en all_lines por invoice_valido)
         fecha = str(line.get('payment_date') or '')[:10]
