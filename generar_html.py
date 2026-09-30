@@ -763,6 +763,13 @@ html = f'''<!DOCTYPE html>
                 <div class="kpi-card danger"><div class="number" id="compOverdue">—</div><div class="label">Compromisos Vencidos</div></div>
                 <div class="kpi-card success"><div class="number" id="compPlanned">—</div><div class="label">Compromisos Vigentes</div></div>
             </div>
+            <div style="margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                <strong style="font-size:12px">Filtrar compromisos por fecha:</strong>
+                <input type="date" id="filtroCompFecha" onchange="renderCompromiso()" style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;font-size:12px">
+                <button onclick="(function(){{ var d=new Date(); var s=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); document.getElementById('filtroCompFecha').value=s; renderCompromiso(); }})()" style="padding:6px 14px;border-radius:6px;border:1px solid #213C83;background:#dbeafe;cursor:pointer;font-size:12px;color:#213C83">📅 Hoy</button>
+                <button onclick="document.getElementById('filtroCompFecha').value=''; renderCompromiso();" style="padding:6px 14px;border-radius:6px;border:1px solid #9ca3af;background:#f3f4f6;cursor:pointer;font-size:12px;color:#374151">✕ Limpiar</button>
+                <span id="compFiltroInfo" style="color:#666;font-size:12px"></span>
+            </div>
             <div class="table-container">
                 <table class="data-table">
                     <thead>
@@ -2381,8 +2388,17 @@ try {{
         document.getElementById('compPlanned').textContent = tc3.planned || 0;
 
         var coBody = document.getElementById('tablaCompromiso');
-        if (coBody) {{
-            coBody.innerHTML = comp.map(function(f) {{
+        window.renderCompromiso = function() {{
+            if (!coBody) return;
+            var fechaFiltro = (document.getElementById('filtroCompFecha') || {{}}).value || '';
+            var lista = comp;
+            if (fechaFiltro) {{
+                lista = comp.filter(function(f) {{ return (f.proximo_deadline || '') === fechaFiltro; }});
+            }}
+            var vacio = fechaFiltro
+                ? 'Sin facturas con compromiso el ' + fechaFiltro
+                : 'Sin facturas con compromiso';
+            coBody.innerHTML = lista.map(function(f) {{
                 var estadoHtml = f.compromiso_overdue
                     ? '<span style="background:#fef2f2;color:#991b1b;padding:2px 8px;border-radius:4px;font-weight:700;border:1px solid #dc2626">VENCIDO</span>'
                     : '<span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:4px;font-weight:700;border:1px solid #10b981">VIGENTE</span>';
@@ -2400,8 +2416,15 @@ try {{
                     '<td style="font-size:12px">' + (f.actividades[0]?.responsable || '') + '</td>' +
                     '<td style="font-size:11px;max-width:250px">' + acts + '</td>' +
                     '</tr>';
-            }}).join('') || '<tr><td colspan="8" style="text-align:center;color:#999">Sin facturas con compromiso</td></tr>';
-        }}
+            }}).join('') || '<tr><td colspan="8" style="text-align:center;color:#999">' + vacio + '</td></tr>';
+            var info = document.getElementById('compFiltroInfo');
+            if (info) {{
+                info.textContent = fechaFiltro
+                    ? lista.length + ' factura(s) — compromiso el ' + fechaFiltro
+                    : comp.length + ' facturas en total';
+            }}
+        }};
+        renderCompromiso();
     }}
 }} catch(e) {{ console.error('Compromiso error:', e); }}
 
