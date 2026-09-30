@@ -762,6 +762,7 @@ html = f'''<!DOCTYPE html>
                 <div class="kpi-card danger"><div class="number money" id="compMonto">—</div><div class="label">$ Monto Vencido</div></div>
                 <div class="kpi-card danger"><div class="number" id="compOverdue">—</div><div class="label">Compromisos Vencidos</div></div>
                 <div class="kpi-card success"><div class="number" id="compPlanned">—</div><div class="label">Compromisos Vigentes</div></div>
+                <div class="kpi-card" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0)"><div class="number money" id="compRecibir">—</div><div class="label">💰 Monto a Recibir</div></div>
             </div>
             <div style="margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
                 <strong style="font-size:12px">Filtrar compromisos por fecha:</strong>
@@ -2418,10 +2419,18 @@ try {{
                     '</tr>';
             }}).join('') || '<tr><td colspan="8" style="text-align:center;color:#999">' + vacio + '</td></tr>';
             var info = document.getElementById('compFiltroInfo');
+            var recibirEl = document.getElementById('compRecibir');
+            var montoRecibir;
+            if (fechaFiltro) {{
+                montoRecibir = lista.reduce(function(s, f) {{ return s + (f.monto_vencido||0); }}, 0);
+            }} else {{
+                montoRecibir = comp.reduce(function(s, f) {{ return s + (f.compromiso_overdue ? 0 : (f.monto_vencido||0)); }}, 0);
+            }}
+            if (recibirEl) {{ recibirEl.textContent = fmtMoney(montoRecibir); }}
             if (info) {{
                 info.textContent = fechaFiltro
-                    ? lista.length + ' factura(s) — compromiso el ' + fechaFiltro
-                    : comp.length + ' facturas en total';
+                    ? lista.length + ' factura(s) · $' + montoRecibir.toFixed(2) + ' a recibir — compromiso el ' + fechaFiltro
+                    : comp.length + ' facturas en total · $' + montoRecibir.toFixed(2) + ' a recibir (compromisos vigentes)';
             }}
         }};
         renderCompromiso();
