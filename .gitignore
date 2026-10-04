@@ -9,6 +9,9 @@ analisis_temporal_vip.csv
 # Exception: needed by EAS Build for adaptive icon / splashscreen
 !latinbien-mobile/android/app/src/main/res/drawable*/splashscreen_logo.png
 
+# Exception: Expo assets referenciados por app.json (icon, splash, adaptive-icon, favicon)
+!latinbien-mobile/assets/*.png
+
 # Python bytecode
 __pycache__/
 *.pyc

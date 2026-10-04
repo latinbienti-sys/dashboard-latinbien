@@ -170,6 +170,99 @@ export function getCreditLines() {
 }
 
 // ============================================================
+// PAGOS — pasarelas del ERP (payment.provider)
+// Odoo 16 + "Payment Engine" custom: `payment.acquirer` fue
+// renombrado a `payment.provider`. Usar /payment/pay del servidor,
+// nunca llamar al banco desde la app.
+// ============================================================
+
+export const PROVIDER_BDV = 'bdv';
+export const PROVIDER_BNC = 'bnc';
+
+/** Pasarelas habilitadas, en el mismo orden que muestra el carrito web. */
+export function getPaymentProviders() {
+  return jsonRpc('/web/dataset/search_read', {
+    model: 'payment.provider',
+    domain: [['state', '=', 'enabled']],
+    fields: ['id', 'display_name', 'code', 'state', 'journal_id', 'sequence'],
+    order: 'sequence,id',
+  }).then(asArray);
+}
+
+/**
+ * Facturas del cliente con saldo pendiente.
+ * El grupo Portal solo tiene lectura sobre account.move, asi que
+ * la app nunca crea facturas: solo lista las que Odoo ya emitio.
+ */
+export function getMyUnpaidInvoices(limit = 30) {
+  if (!_partnerId) throw new Error('No hay sesión activa');
+  return jsonRpc('/web/dataset/search_read', {
+    model: 'account.move',
+    domain: [
+      ['partner_id', '=', _partnerId],
+      ['move_type', '=', 'out_invoice'],
+      ['state', '=', 'posted'],
+      ['amount_residual', '>', 0],
+    ],
+    fields: [
+      'id', 'name', 'invoice_date_due', 'amount_total',
+      'amount_residual', 'currency_id', 'payment_state', 'access_token',
+    ],
+    limit,
+    order: 'invoice_date_due asc',
+  }).then(asArray);
+}
+
+/** Historial de pagos del cliente contra las pasarelas del ERP. */
+export function getMyPaymentTransactions(limit = 20) {
+  if (!_partnerId) throw new Error('No hay sesión activa');
+  return jsonRpc('/web/dataset/search_read', {
+    model: 'payment.transaction',
+    domain: [['partner_id', '=', _partnerId]],
+    fields: ['id', 'reference', 'state', 'amount', 'provider_id', 'create_date'],
+    limit,
+    order: 'id desc',
+  }).then(asArray);
+}
+
+/**
+ * Construye la URL que abre el servidor para cobrar una factura.
+ * El `access_token` evita que el cliente tenga que loguearse otra
+ * vez en el navegador: con el token, Odoo autoriza la factura.
+ *
+ * Importante: NO se mandan credenciales del banco desde la app.
+ * `pass_bdv` / `user_bdv` viven unicamente en Odoo.
+ */
+export function buildInvoicePaymentUrl({ invoiceId, amount, providerId, providerCode = PROVIDER_BDV, currencyId = 2, accessToken }) {
+  const params = [
+    'reference_model=account.move',
+    `reference_id=${encodeURIComponent(invoiceId)}`,
+    `amount=${encodeURIComponent(amount)}`,
+    `currency_id=${encodeURIComponent(currencyId)}`,
+  ];
+  if (providerId) params.push(`provider_id=${encodeURIComponent(providerId)}`);
+  params.push(`provider_code=${encodeURIComponent(providerCode)}`);
+  if (accessToken) params.push(`access_token=${encodeURIComponent(accessToken)}`);
+  return `${BASE_URL}/payment/pay?${params.join('&')}`;
+}
+
+/** Texto legible del estado de pago de una factura. */
+export function paymentStateLabel(paymentState) {
+  switch (paymentState) {
+    case 'paid':
+      return 'Pagada';
+    case 'partial':
+      return 'Pago parcial';
+    case 'reversed':
+      return 'Revertida';
+    case 'in_payment':
+      return 'En proceso';
+    default:
+      return 'Pendiente';
+  }
+}
+
+// ============================================================
 // UTILIDADES
 // ============================================================
 

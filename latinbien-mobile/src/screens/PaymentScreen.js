@@ -1,239 +1,354 @@
 // ============================================================
-// PaymentScreen — Reportar pago desde la app
+// PaymentScreen — Pagar facturas con las pasarelas del ERP
+// El cobro lo hace Odoo (payment.provider): la app solo arma
+// el pedido y abre /payment/pay. Nunca se manda la clave del banco.
 // ============================================================
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
   Linking,
   Alert,
-  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import { COLORS } from '../utils/constants';
-import { getCurrentUser } from '../services/auth';
+import { formatPrice, formatDate } from '../utils/storage';
+import {
+  getMyUnpaidInvoices,
+  getPaymentProviders,
+  getMyPaymentTransactions,
+  buildInvoicePaymentUrl,
+  paymentStateLabel,
+  PROVIDER_BDV,
+} from '../services/api';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function PaymentScreen() {
-  const [contract, setContract] = useState('');
-  const [amount, setAmount] = useState('');
-  const [reference, setReference] = useState('');
-  const [method, setMethod] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [notes, setNotes] = useState('');
-  const [sending, setSending] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [invoices, setInvoices] = useState([]);
+  const [providers, setProviders] = useState([]);
+const [history, setHistory] = useState([]);
+  const [error, setError] = useState(null);
 
-  const methods = [
-    'Transferencia bancaria',
-    'Depósito en efectivo',
-    'Punto de venta',
-    'Pago móvil',
-    'Zelle / Internacional',
-    'Efectivo en tienda',
-    'Otro',
-  ];
+  const load = useCallback(async () => {
+    setError(null);
+    // Cada bloque va por separado: el Portal no tiene ACL de lectura
+    // sobre payment.transaction, y eso no debe tumbar la pantalla.
+    const safe = (p, fallback) =>
+      p.catch(() => fallback);
 
-  const handleSubmit = async () => {
-    if (!contract.trim() || !amount.trim() || !reference.trim()) {
-      Alert.alert('Campos requeridos', 'Completa contrato, monto y referencia');
+    const [inv, provs, hist] = await Promise.all([
+      safe(getMyUnpaidInvoices(), null),
+      safe(getPaymentProviders(), []),
+      safe(getMyPaymentTransactions(), []),
+    ]);
+
+    if (inv === null) {
+      setError('No se pudieron cargar tus facturas. Revisa tu conexión.');
+    } else {
+      setInvoices(inv);
+    }
+    setProviders(provs);
+    setHistory(hist);
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      await load();
+      setLoading(false);
+    })();
+  }, [load]);
+
+  const pay = async (invoice, provider) => {
+    if (!provider) {
+      Alert.alert('Sin pasarela', 'No hay ninguna pasarela habilitada en el sistema.');
       return;
     }
+    const amount = invoice.amount_residual || 0;
+    const url = buildInvoicePaymentUrl({
+      invoiceId: invoice.id,
+      amount,
+      currencyId: invoice.currency_id ? invoice.currency_id[0] : 2,
+      accessToken: invoice.access_token,
+      providerId: provider.id,
+      providerCode: provider.code,
+    });
 
-    setSending(true);
     try {
-      const user = getCurrentUser();
-      const userName = user?.name || user?.username || 'Cliente';
-
-      const msg = encodeURIComponent(
-        `📌 *REPORTE DE PAGO - LatinBien App*\n\n` +
-        `👤 Cliente: ${userName}\n` +
-        `📄 Contrato: ${contract.trim()}\n` +
-        `💰 Monto: $${amount.trim()}\n` +
-        `🔢 Ref: ${reference.trim()}\n` +
-        `🏦 Método: ${method || 'No especificado'}\n` +
-        `📅 Fecha: ${date}\n` +
-        `${notes ? `📝 Notas: ${notes.trim()}\n` : ''}\n` +
-        `✅ Reportado desde la app`
+      const res = await Linking.canOpenURL(url);
+      if (!res) throw new Error('no navegador');
+      await Linking.openURL(url);
+    } catch (e) {
+      Alert.alert(
+        'No se pudo abrir el pago',
+        'Intenta de nuevo o comunícate con atención al cliente.'
       );
-
-      await Linking.openURL(`https://wa.me/584147348785?text=${msg}`);
-      setSuccess(true);
-    } catch (err) {
-      Alert.alert('Error', 'No se pudo abrir WhatsApp. Intenta de nuevo.');
-    } finally {
-      setSending(false);
     }
   };
 
-  if (success) {
-    return (
-      <View style={styles.successContainer}>
-        <Text style={styles.successIcon}>✅</Text>
-        <Text style={styles.successTitle}>¡Pago reportado con éxito!</Text>
-        <Text style={styles.successText}>
-          Hemos recibido tu reporte. El equipo de LatinBien lo verificará.
-        </Text>
-      </View>
-    );
-  }
+  if (loading) return <LoadingSpinner message="Cargando tus facturas..." />;
 
   return (
-    <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
-      <Text style={styles.title}>💰 Reportar Pago</Text>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.content}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={async () => {
+            setRefreshing(true);
+            await load();
+            setRefreshing(false);
+          }}
+          tintColor={COLORS.primary}
+        />
+      }
+    >
+      <Text style={styles.title}>💳 Pagar</Text>
       <Text style={styles.subtitle}>
-        Reporta el pago de tu cuota o anticipo para que sea registrado en tu
-        cuenta.
+        Elige la factura y paga con la pasarela de LatinBien. Te lleva al Banco de
+        Venezuela para confirmar.
       </Text>
 
-      <View style={styles.form}>
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Número de contrato</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Ej: S000123"
-            value={contract}
-            onChangeText={setContract}
-          />
+      {error && (
+        <View style={styles.errorBox}>
+          <Text style={styles.errorText}>⚠️ {error}</Text>
         </View>
+      )}
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Monto pagado ($)</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="0.00"
-            value={amount}
-            onChangeText={setAmount}
-            keyboardType="decimal-pad"
-          />
+      {!error && invoices.length === 0 && (
+        <View style={styles.emptyBox}>
+          <Text style={styles.emptyIcon}>✅</Text>
+          <Text style={styles.emptyTitle}>No tienes facturas pendientes</Text>
+          <Text style={styles.emptyText}>
+            Cuando LatinBien emita una factura por una compra o crédito, aparecerá
+            aquí para pagarla.
+          </Text>
         </View>
+      )}
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Referencia / N° de depósito</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Ej: 123456789"
-            value={reference}
-            onChangeText={setReference}
-          />
-        </View>
-
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Método de pago</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.methodRow}>
-              {methods.map((m) => (
-                <TouchableOpacity
-                  key={m}
-                  style={[styles.methodChip, method === m && styles.methodChipActive]}
-                  onPress={() => setMethod(m)}
-                >
-                  <Text
-                    style={[
-                      styles.methodChipText,
-                      method === m && styles.methodChipTextActive,
-                    ]}
-                  >
-                    {m}
+      {invoices.length > 0 && (
+        <>
+          <Text style={styles.sectionTitle}>Facturas pendientes</Text>
+          {invoices.map((inv) => (
+            <View key={inv.id} style={styles.card}>
+              <View style={styles.cardHead}>
+                <View style={styles.cardHeadLeft}>
+                  <Text style={styles.invoiceName}>{inv.name}</Text>
+                  <Text style={styles.invoiceDate}>
+                    Vence: {formatDate(inv.invoice_date_due)}
                   </Text>
-                </TouchableOpacity>
-              ))}
+                </View>
+                <Text style={styles.invoiceAmount}>
+                  {formatPrice(inv.amount_residual || 0)}
+                </Text>
+              </View>
+
+              <View style={styles.badgeRow}>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>
+                    {paymentStateLabel(inv.payment_state)}
+                  </Text>
+                </View>
+                <Text style={styles.invoiceTotal}>
+                  Total: {formatPrice(inv.amount_total || 0)}
+                </Text>
+              </View>
+
+              <Text style={styles.payLabel}>Pagar con</Text>
+              <View style={styles.providerRow}>
+                {providers.length === 0 && (
+                  <Text style={styles.noProviders}>
+                    No hay pasarelas habilitadas. Contacta a atención al cliente.
+                  </Text>
+                )}
+                {providers.map((p) => (
+                  <TouchableOpacity
+                    key={p.id}
+                    style={styles.providerChip}
+                    onPress={() => pay(inv, p)}
+                  >
+                    <Text style={styles.providerChipText} numberOfLines={1}>
+                      {providerLabel(p)}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
-          </ScrollView>
-        </View>
+          ))}
+        </>
+      )}
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Fecha del pago</Text>
-          <TextInput
-            style={styles.input}
-            value={date}
-            onChangeText={setDate}
-            placeholder="YYYY-MM-DD"
-          />
-        </View>
-
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Notas adicionales (opcional)</Text>
-          <TextInput
-            style={[styles.input, styles.textArea]}
-            placeholder="Cualquier detalle adicional..."
-            value={notes}
-            onChangeText={setNotes}
-            multiline
-            numberOfLines={3}
-          />
-        </View>
-
-        <TouchableOpacity
-          style={[styles.submitBtn, sending && { opacity: 0.7 }]}
-          onPress={handleSubmit}
-          disabled={sending}
-        >
-          {sending ? (
-            <ActivityIndicator color={COLORS.white} />
-          ) : (
-            <Text style={styles.submitBtnText}>📩 Enviar reporte por WhatsApp</Text>
-          )}
-        </TouchableOpacity>
-      </View>
+      {history.length > 0 && (
+        <>
+          <Text style={styles.sectionTitle}>Pagos recientes</Text>
+          {history.slice(0, 6).map((t) => (
+            <View key={t.id} style={styles.historyRow}>
+              <View style={styles.historyLeft}>
+                <Text style={styles.historyRef} numberOfLines={1}>
+                  {t.reference}
+                </Text>
+                <Text style={styles.historyDate}>
+                  {providerName(providers, t.provider_id)}
+                </Text>
+              </View>
+              <Text
+                style={[
+                  styles.historyAmount,
+                  t.state === 'done' && styles.historyDone,
+                  t.state === 'error' && styles.historyError,
+                  t.state === 'draft' && styles.historyDraft,
+                ]}
+              >
+                {formatPrice(t.amount || 0)} · {txStateLabel(t.state)}
+              </Text>
+            </View>
+          ))}
+        </>
+      )}
     </ScrollView>
   );
 }
 
+// ------------------------------------------------------------
+// Helpers
+// ------------------------------------------------------------
+
+function providerLabel(p) {
+  if (p.code === PROVIDER_BDV) return '🏦 Botón BDV';
+  if (p.code === 'bnc') return '🏦 Pago Móvil BNC';
+  if (p.code === 'paypal') return '🅿️ PayPal';
+  return `💳 ${p.display_name || p.code}`;
+}
+
+function providerName(providers, providerId) {
+  if (!providerId) return '—';
+  const p = providers.find((x) => x.id === providerId[0]);
+  return p ? p.display_name : '—';
+}
+
+function txStateLabel(state) {
+  switch (state) {
+    case 'done':
+      return 'Pagado';
+    case 'error':
+      return 'Fallido';
+    case 'pending':
+      return 'Procesando';
+    case 'cancel':
+      return 'Cancelado';
+    default:
+      return 'Pendiente';
+  }
+}
+
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.gray50, padding: 16 },
-  title: { fontSize: 22, fontWeight: '700', color: COLORS.primary, marginBottom: 4 },
-  subtitle: { fontSize: 13, color: COLORS.gray500, marginBottom: 20, lineHeight: 18 },
-  form: {
-    backgroundColor: COLORS.white,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: COLORS.gray200,
-    padding: 20,
-    marginBottom: 20,
+  container: { flex: 1, backgroundColor: COLORS.gray50 },
+  content: { padding: 16, paddingBottom: 32 },
+  title: { fontSize: 24, fontWeight: '800', color: COLORS.primary },
+  subtitle: {
+    fontSize: 13,
+    color: COLORS.gray600,
+    marginTop: 4,
+    marginBottom: 18,
+    lineHeight: 19,
   },
-  inputGroup: { marginBottom: 16 },
-  label: { fontSize: 13, fontWeight: '600', color: COLORS.gray700, marginBottom: 6 },
-  input: {
-    backgroundColor: COLORS.gray50,
-    borderWidth: 1.5,
-    borderColor: COLORS.gray200,
+  errorBox: {
+    backgroundColor: '#fee2e2',
     borderRadius: 10,
     padding: 12,
-    fontSize: 15,
-    color: COLORS.dark,
+    marginBottom: 16,
   },
-  textArea: { minHeight: 80, textAlignVertical: 'top' },
-  methodRow: { flexDirection: 'row', gap: 8, paddingVertical: 4 },
-  methodChip: {
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 100,
-    borderWidth: 1.5,
-    borderColor: COLORS.gray200,
+  errorText: { color: COLORS.danger, fontSize: 13 },
+  emptyBox: {
     backgroundColor: COLORS.white,
+    borderRadius: 14,
+    padding: 24,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.gray200,
   },
-  methodChipActive: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
-  methodChipText: { fontSize: 12, color: COLORS.gray600, fontWeight: '500' },
-  methodChipTextActive: { color: COLORS.white },
-  submitBtn: {
-    backgroundColor: COLORS.accent,
-    borderRadius: 10,
+  emptyIcon: { fontSize: 40, marginBottom: 10 },
+  emptyTitle: { fontSize: 16, fontWeight: '700', color: COLORS.dark },
+  emptyText: {
+    fontSize: 13,
+    color: COLORS.gray600,
+    textAlign: 'center',
+    marginTop: 6,
+    lineHeight: 19,
+  },
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: COLORS.primary,
+    marginTop: 22,
+    marginBottom: 10,
+  },
+  card: {
+    backgroundColor: COLORS.white,
+    borderRadius: 14,
     padding: 14,
-    alignItems: 'center',
-    marginTop: 8,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: COLORS.gray200,
   },
-  submitBtnText: { color: COLORS.white, fontSize: 15, fontWeight: '700' },
-  successContainer: {
-    flex: 1,
-    justifyContent: 'center',
+  cardHead: { flexDirection: 'row', justifyContent: 'space-between' },
+  cardHeadLeft: { flex: 1, marginRight: 10 },
+  invoiceName: { fontSize: 15, fontWeight: '700', color: COLORS.dark },
+  invoiceDate: { fontSize: 12, color: COLORS.gray500, marginTop: 2 },
+  invoiceAmount: { fontSize: 16, fontWeight: '800', color: COLORS.accentDark },
+  badgeRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    padding: 48,
+    justifyContent: 'space-between',
+    marginTop: 10,
   },
-  successIcon: { fontSize: 56, marginBottom: 16 },
-  successTitle: { fontSize: 20, color: COLORS.success, fontWeight: '700', marginBottom: 8, textAlign: 'center' },
-  successText: { fontSize: 14, color: COLORS.gray500, textAlign: 'center', lineHeight: 20 },
+  badge: {
+    backgroundColor: COLORS.accentLight,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+  },
+  badgeText: { fontSize: 11, fontWeight: '700', color: COLORS.accentDark },
+  invoiceTotal: { fontSize: 11, color: COLORS.gray500 },
+  payLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: COLORS.gray600,
+    marginTop: 14,
+    marginBottom: 8,
+    textTransform: 'uppercase',
+  },
+  providerRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  providerChip: {
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: 20,
+  },
+  providerChipText: { color: COLORS.white, fontSize: 12, fontWeight: '700' },
+  noProviders: { fontSize: 12, color: COLORS.danger },
+  historyRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: COLORS.gray200,
+  },
+  historyLeft: { flex: 1, marginRight: 10 },
+  historyRef: { fontSize: 13, fontWeight: '600', color: COLORS.dark },
+  historyDate: { fontSize: 11, color: COLORS.gray500, marginTop: 2 },
+  historyAmount: { fontSize: 12, fontWeight: '700', color: COLORS.gray600 },
+  historyDone: { color: COLORS.success },
+  historyError: { color: COLORS.danger },
+  historyDraft: { color: COLORS.warning },
 });
