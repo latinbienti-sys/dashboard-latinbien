@@ -2405,7 +2405,8 @@ try {{
                     : '<span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:4px;font-weight:700;border:1px solid #10b981">VIGENTE</span>';
                 var factUrl = 'https://latinbien.com/web#id=' + f.invoice_id + '&model=account.move&view_type=form';
                 var acts = (f.actividades || []).map(function(a) {{
-                    return '<div style="margin:2px 0;font-size:11px"><strong>' + (a.summary || '(sin resumen)') + '</strong><br>Deadline: ' + a.deadline + ' | ' + a.responsable + '</div>';
+                    var montoHtml = (a.monto > 0) ? ' <span style="color:#065f46;font-weight:700">💰 ' + fmtMoney(a.monto) + '</span>' : '';
+                    return '<div style="margin:2px 0;font-size:11px"><strong>' + (a.summary || '(sin resumen)') + '</strong> ' + montoHtml + '<br>Deadline: ' + a.deadline + ' | ' + a.responsable + '</div>';
                 }}).join('');
                 return '<tr>' +
                     '<td>' + estadoHtml + '</td>' +
@@ -2420,17 +2421,24 @@ try {{
             }}).join('') || '<tr><td colspan="8" style="text-align:center;color:#999">' + vacio + '</td></tr>';
             var info = document.getElementById('compFiltroInfo');
             var recibirEl = document.getElementById('compRecibir');
-            var montoRecibir;
-            if (fechaFiltro) {{
+var montoRecibir;
+            var montoCompDia = 0;
+            var montoCompTotal = 0;
+if (fechaFiltro) {{
                 montoRecibir = lista.reduce(function(s, f) {{ return s + (f.monto_vencido||0); }}, 0);
+                montoCompDia = lista.reduce(function(s, f) {{ return s + (f.prox_compromiso_monto||f.proximo_monto||0); }}, 0);
             }} else {{
                 montoRecibir = comp.reduce(function(s, f) {{ return s + (f.compromiso_overdue ? 0 : (f.monto_vencido||0)); }}, 0);
+                montoCompTotal = comp.reduce(function(s, f) {{ return s + (f.prox_compromiso_monto||f.proximo_monto||0); }}, 0);
             }}
             if (recibirEl) {{ recibirEl.textContent = fmtMoney(montoRecibir); }}
             if (info) {{
-                info.textContent = fechaFiltro
+                var txtInfo = fechaFiltro
                     ? lista.length + ' factura(s) · $' + montoRecibir.toFixed(2) + ' a recibir — compromiso el ' + fechaFiltro
                     : comp.length + ' facturas en total · $' + montoRecibir.toFixed(2) + ' a recibir (compromisos vigentes)';
+                if (montoCompDia > 0) txtInfo += ' · 💰 ' + montoCompDia.toFixed(2) + ' en compromisos del día';
+                else if (montoCompTotal > 0) txtInfo += ' · 💰 ' + montoCompTotal.toFixed(2) + ' en compromisos vigentes';
+                info.textContent = txtInfo;
             }}
         }};
         renderCompromiso();

@@ -1888,6 +1888,27 @@ def fetch_payment_plan(sess):
         }
 
     # ── COBRANZA VENCIDA CON COMPROMISO ────────────────────────
+    def _parse_monto_compromiso(note_texto):
+        """Extrae el monto a pagar escrito en la nota de la actividad
+        (ej. '30$', '$30', '30 USD'). Retorna 0.0 si no hay monto claro."""
+        t = re.sub(r'<[^>]+>', ' ', note_texto or '')
+        t = re.sub(r'\s+', ' ', t).strip()
+        for pat in [r'\$\s*([0-9][0-9.,]*)',
+                    r'\$?\s*([0-9][0-9.,]*)\s?\$',
+                    r'(?:usd|dolares?|d[oó]lares?|bs\.?)\s*:?\s*([0-9][0-9.,]*)',
+                    r'([0-9][0-9.,]*)\s*(?:usd|dolares?|d[oó]lares?|bs\.?)']:
+            m = re.search(pat, t, re.I)
+            if m:
+                try:
+                    return round(float(m.group(1).replace(',', '')), 2)
+                except (ValueError, TypeError):
+                    pass
+        # Un único número sin símbolo en la nota -> probablemente el monto
+        nums = [float(n.replace(',', '')) for n in re.findall(r'\d+(?:[.,]\d{1,2})?', t)]
+        if len(nums) == 1 and nums[0] > 0:
+            return round(nums[0], 2)
+        return 0.0
+
     compromiso_ids = json_execute(sess, 'mail.activity', 'search',
                                   [[['res_model', '=', 'account.move'],
                                     ['state', 'in', ['overdue', 'planned']]]])
@@ -1908,10 +1929,12 @@ def fetch_payment_plan(sess):
             tipo_nombre = tipo[1] if isinstance(tipo, list) and len(tipo) > 1 else ''
             user = a.get('user_id')
             user_nombre = user[1] if isinstance(user, list) and len(user) > 1 else ''
+            note_cruda = str(a.get('note') or '')
             compromiso_map[inv_id].append({
                 'actividad_id': a['id'],
                 'summary': a.get('summary') or '',
-                'note': str(a.get('note') or '')[:200],
+                'note': note_cruda[:200],
+                'monto': _parse_monto_compromiso(note_cruda),
                 'state': a.get('state', ''),
                 'deadline': str(a.get('date_deadline') or '')[:10],
                 'tipo': tipo_nombre,
@@ -1938,6 +1961,13 @@ def fetch_payment_plan(sess):
         monto_venc = sum(x['monto'] for x in vencidos if x['invoice_id'] == inv_id)
         hay_overdue = any(a['state'] == 'overdue' for a in acts)
         proximo_deadline = min((a['deadline'] for a in acts if a['deadline']), default='')
+        prox_act = next((a for a in acts if a['deadline'] == proximo_deadline), None)
+        proximo_monto = round((prox_act.get('monto') or 0), 2) if prox_act else 0.0
+        # Próximo compromiso de pago REAL (actividad que sí registra monto)
+        comps_con_monto = [(a['deadline'], a['monto']) for a in acts if a.get('monto', 0) > 0]
+        prox_comp_act = min(comps_con_monto, default=None, key=lambda x: x[0])
+        prox_compromiso_monto = round(prox_comp_act[1], 2) if prox_comp_act else 0.0
+        prox_compromiso_deadline = prox_comp_act[0] if prox_comp_act else ''
         facturas_con_compromiso.append({
             'invoice_id': inv_id,
             'factura': inv_name,
@@ -1949,6 +1979,9 @@ def fetch_payment_plan(sess):
             'total_actividades': len(acts),
             'compromiso_overdue': hay_overdue,
             'proximo_deadline': proximo_deadline,
+            'proximo_monto': proximo_monto,
+            'prox_compromiso_monto': prox_compromiso_monto,
+            'prox_compromiso_deadline': prox_compromiso_deadline,
         })
     facturas_con_compromiso.sort(key=lambda x: -x['dias_atraso'])
     total_compromiso = {
