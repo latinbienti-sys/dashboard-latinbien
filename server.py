@@ -1911,7 +1911,7 @@ def fetch_payment_plan(sess):
 
     compromiso_ids = json_execute(sess, 'mail.activity', 'search',
                                   [[['res_model', '=', 'account.move'],
-                                    ['state', 'in', ['overdue', 'planned']]]])
+                                    ['state', 'in', ['overdue', 'planned', 'done']]]])
     compromiso_map = {}
     for i in range(0, len(compromiso_ids), 500):
         batch = compromiso_ids[i:i+500]
@@ -1968,6 +1968,11 @@ def fetch_payment_plan(sess):
         prox_comp_act = min(comps_con_monto, default=None, key=lambda x: x[0])
         prox_compromiso_monto = round(prox_comp_act[1], 2) if prox_comp_act else 0.0
         prox_compromiso_deadline = prox_comp_act[0] if prox_comp_act else ''
+        # Montos por recibir / recibidos según estado de la actividad (done = hecho)
+        monto_por_recibir = round(sum(a['monto'] for a in acts
+                                      if a.get('monto', 0) > 0 and a.get('state') != 'done'), 2)
+        monto_recibido = round(sum(a['monto'] for a in acts
+                                   if a.get('monto', 0) > 0 and a.get('state') == 'done'), 2)
         facturas_con_compromiso.append({
             'invoice_id': inv_id,
             'factura': inv_name,
@@ -1982,6 +1987,8 @@ def fetch_payment_plan(sess):
             'proximo_monto': proximo_monto,
             'prox_compromiso_monto': prox_compromiso_monto,
             'prox_compromiso_deadline': prox_compromiso_deadline,
+            'monto_por_recibir': monto_por_recibir,
+            'monto_recibido': monto_recibido,
         })
     facturas_con_compromiso.sort(key=lambda x: -x['dias_atraso'])
     total_compromiso = {
@@ -1989,6 +1996,8 @@ def fetch_payment_plan(sess):
         'monto_total': round(sum(f['monto_vencido'] for f in facturas_con_compromiso), 2),
         'overdue': sum(1 for f in facturas_con_compromiso if f['compromiso_overdue']),
         'planned': sum(1 for f in facturas_con_compromiso if not f['compromiso_overdue']),
+        'monto_por_recibir': round(sum(f['monto_por_recibir'] for f in facturas_con_compromiso), 2),
+        'monto_recibido': round(sum(f['monto_recibido'] for f in facturas_con_compromiso), 2),
     }
 
     # ── GESTIÓN DE COBRANZA POR CICLO ─────────────────────────

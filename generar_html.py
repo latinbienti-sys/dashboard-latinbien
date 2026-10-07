@@ -763,6 +763,8 @@ html = f'''<!DOCTYPE html>
                 <div class="kpi-card danger"><div class="number" id="compOverdue">—</div><div class="label">Compromisos Vencidos</div></div>
                 <div class="kpi-card success"><div class="number" id="compPlanned">—</div><div class="label">Compromisos Vigentes</div></div>
                 <div class="kpi-card" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0)"><div class="number money" id="compRecibir">—</div><div class="label">💰 Monto a Recibir</div></div>
+                <div class="kpi-card" style="background:linear-gradient(135deg,#fef3c7,#fde68a)"><div class="number money" id="compPorRecibir">—</div><div class="label">💰 MONTO COMPROMISOS POR RECIBIR</div></div>
+                <div class="kpi-card" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe)"><div class="number money" id="compRecibidos">—</div><div class="label">✅ COMPROMISOS RECIBIDOS</div></div>
             </div>
             <div style="margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
                 <strong style="font-size:12px">Filtrar compromisos por fecha:</strong>
@@ -2405,8 +2407,11 @@ try {{
                     : '<span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:4px;font-weight:700;border:1px solid #10b981">VIGENTE</span>';
                 var factUrl = 'https://latinbien.com/web#id=' + f.invoice_id + '&model=account.move&view_type=form';
                 var acts = (f.actividades || []).map(function(a) {{
-                    var montoHtml = (a.monto > 0) ? ' <span style="color:#065f46;font-weight:700">💰 ' + fmtMoney(a.monto) + '</span>' : '';
-                    return '<div style="margin:2px 0;font-size:11px"><strong>' + (a.summary || '(sin resumen)') + '</strong> ' + montoHtml + '<br>Deadline: ' + a.deadline + ' | ' + a.responsable + '</div>';
+                    var esDone = a.state === 'done';
+                    var badge = esDone ? ' <span style="background:#065f46;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700">RECIBIDO</span>' : '';
+                    var montoColor = esDone ? '#065f46' : '#065f46';
+                    var montoHtml = (a.monto > 0) ? ' <span style="color:' + montoColor + ';font-weight:700">💰 ' + fmtMoney(a.monto) + '</span>' : '';
+                    return '<div style="margin:2px 0;font-size:11px' + (esDone ? ';opacity:.75' : '') + '"><strong>' + (a.summary || '(sin resumen)') + '</strong> ' + badge + montoHtml + '<br>Deadline: ' + a.deadline + ' | ' + a.responsable + '</div>';
                 }}).join('');
                 return '<tr>' +
                     '<td>' + estadoHtml + '</td>' +
@@ -2421,23 +2426,51 @@ try {{
             }}).join('') || '<tr><td colspan="8" style="text-align:center;color:#999">' + vacio + '</td></tr>';
             var info = document.getElementById('compFiltroInfo');
             var recibirEl = document.getElementById('compRecibir');
-var montoRecibir;
+            var porRecibirEl = document.getElementById('compPorRecibir');
+            var recibidosEl = document.getElementById('compRecibidos');
+            var montoRecibir;
             var montoCompDia = 0;
             var montoCompTotal = 0;
-if (fechaFiltro) {{
+            var montoPorRecibir = 0;
+            var montoRecibidos = 0;
+            function sumAct(f, soloFecha, estado) {{
+                var s = 0;
+                (f.actividades || []).forEach(function(a) {{
+                    if (!(a.monto > 0)) return;
+                    if (soloFecha && (a.deadline || '') !== soloFecha) return;
+                    var esDone = a.state === 'done';
+                    if (estado === 'recibir' && esDone) return;
+                    if (estado === 'recibido' && !esDone) return;
+                    s += (a.monto || 0);
+                }});
+                return s;
+            }}
+            if (fechaFiltro) {{
                 montoRecibir = lista.reduce(function(s, f) {{ return s + (f.monto_vencido||0); }}, 0);
                 montoCompDia = lista.reduce(function(s, f) {{ return s + (f.prox_compromiso_monto||f.proximo_monto||0); }}, 0);
+                comp.forEach(function(f) {{
+                    montoPorRecibir += sumAct(f, fechaFiltro, 'recibir');
+                    montoRecibidos += sumAct(f, fechaFiltro, 'recibido');
+                }});
             }} else {{
                 montoRecibir = comp.reduce(function(s, f) {{ return s + (f.compromiso_overdue ? 0 : (f.monto_vencido||0)); }}, 0);
                 montoCompTotal = comp.reduce(function(s, f) {{ return s + (f.prox_compromiso_monto||f.proximo_monto||0); }}, 0);
+                comp.forEach(function(f) {{
+                    montoPorRecibir += sumAct(f, '', 'recibir');
+                    montoRecibidos += sumAct(f, '', 'recibido');
+                }});
             }}
             if (recibirEl) {{ recibirEl.textContent = fmtMoney(montoRecibir); }}
+            if (porRecibirEl) {{ porRecibirEl.textContent = fmtMoney(montoPorRecibir); }}
+            if (recibidosEl) {{ recibidosEl.textContent = fmtMoney(montoRecibidos); }}
             if (info) {{
                 var txtInfo = fechaFiltro
                     ? lista.length + ' factura(s) · $' + montoRecibir.toFixed(2) + ' a recibir — compromiso el ' + fechaFiltro
                     : comp.length + ' facturas en total · $' + montoRecibir.toFixed(2) + ' a recibir (compromisos vigentes)';
                 if (montoCompDia > 0) txtInfo += ' · 💰 ' + montoCompDia.toFixed(2) + ' en compromisos del día';
                 else if (montoCompTotal > 0) txtInfo += ' · 💰 ' + montoCompTotal.toFixed(2) + ' en compromisos vigentes';
+                txtInfo += ' · 💰 ' + montoPorRecibir.toFixed(2) + ' por recibir';
+                txtInfo += ' · ✅ ' + montoRecibidos.toFixed(2) + ' recibidos';
                 info.textContent = txtInfo;
             }}
         }};
