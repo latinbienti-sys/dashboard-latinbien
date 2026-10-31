@@ -1,0 +1,39 @@
+================================================================================
+PRUEBA LOCAL - HONDA MÉRIDA (hondamerida.com)
+================================================================================
+Fecha: 26/10/2026
+Sitio origen: https://hondamerida.com/
+Origen de datos: static/js/bundle.v2.js (modulo ./src/data/mock.js -> vehicleModels)
+
+ALCANCE DE LA TAREA
+--------------------------------------------------------------------------------
+- Backup local realizado en: backups/hondamerida_original/
+- Nueva ruta local de prueba creada en: prueba_hondamerida/
+- Se ELIMINARON dos modelos del inventario local (solo en la copia de prueba):
+    * HONDA HR-V LX 2026  (id 2, precio 30600)
+    * HONDA HR-V EXL 2026 (id 3, precio 33600)
+- Se MANTUVIERON sin tocar precios ni datos:
+    * HONDA WR-V EXL 2027   (id 4, precio 32500)
+    * HONDA CITY EXL 2026   (id 1, precio 26900)
+    * HONDA HR-V EXL 2027   (id 5, precio 35600)
+- No se movieron precios. No se toco nada mas.
+
+INVENTARIO ORIGINAL (5 modelos)
+--------------------------------------------------------------------------------
+1. HONDA WR-V EXL   2027  $32500  [MANTENER]
+2. HONDA CITY EXL   2026  $26900  [MANTENER]
+3. HONDA HR-V LX    2026  $30600  [ELIMINADO]
+4. HONDA HR-V EXL   2026  $33600  [ELIMINADO]
+5. HONDA HR-V EXL   2027  $35600  [MANTENER]
+
+INVENTARIO EN LA PRUEBA LOCAL (3 modelos)
+--------------------------------------------------------------------------------
+1. HONDA WR-V EXL   2027  $32500
+2. HONDA CITY EXL   2026  $26900
+3. HONDA HR-V EXL   2027  $35600
+
+NOTA
+--------------------------------------------------------------------------------
+El sitio en vivo (https://hondamerida.com/) NO fue modificado. Todos los
+cambios se aplicaron exclusivamente a la copia local de prueba en
+prueba_hondamerida/.

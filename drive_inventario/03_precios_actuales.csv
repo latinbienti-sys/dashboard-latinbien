@@ -1,0 +1,822 @@
+﻿codigo,producto,categoria,stock_actual,precio_lista,precio_lista_confiable,precio_venta_prom_12m,fuente_precio_venta,precio_venta_ultimo_12m,costo,margen_sobre_precio_prom_pct,precio_proveedor_min,proveedor_min
+,Aceite de Motor 0W 20 FULL SINTETICO,All,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Argom Tech Altavoz inalámbrico portátil BoogieLink con resistencia al agua IPX5 ARG-SP-3110PK Rosado.,CASO DE USO 1,0.0,1.0,NO,23.33,promedio_12m,23.33,22.0,5.7,22.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"ARGOMTECH SOPORTE DE PARED PARA TV 37"" - 80"" FULL MOTION DOBLE BRAZO 600 X 400",Televisores,0.0,146.16,SI,146.16,lista,,68.0,53.5,,
+,Aspiradora Dyson Gen5detect Absolute Vacuum,CASO DE USO 3,0.0,1984.95,SI,1984.95,lista,,808.42,59.3,1203.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Aspiradora/secadora 10lts Seco/humedo 1200w 110v,CASO DE USO 1,0.0,1.0,NO,95.27,promedio_12m,95.27,94.45,0.9,84.6,"FERREBORNES, C.A"
+,Astra Morral Para Laptop Apolo 24L,CASO DE USO 3,0.0,1.0,NO,25.55,promedio_12m,25.55,16.0,37.4,16.0,"DISTRIBUIDORA EMITECH, C.A"
+,Astra Morral Para Laptop Vector 19L,CASO DE USO 3,0.0,1.0,NO,26.87,promedio_12m,26.87,17.3,35.6,17.3,"DISTRIBUIDORA EMITECH, C.A"
+,ASTRA MOUSE ALAMBRICO USB 3 BOTONES DPI 1000 NEGRO,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,2.5,,,
+,ASTRA MOUSE INALAMBRICO USB 6 BOTONES DPI 1600 NEGRO,CASO DE USO 3,0.0,1.0,NO,9.75,promedio_12m,9.75,6.0,38.5,5.0,"DISTRIBUIDORA EMITECH, C.A"
+,"Audifono Razer Kraken V3 X Fortnite Edition (RZ04-03750500-R3M1), Black.",CASO DE USO 1,0.0,1.0,NO,269.0,promedio_12m,269.0,269.0,0.0,269.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Audifonos Inalambricos Gaming Razer BlackShark V3 for PC: 50mm Drivers - Super Wideband Mic - 2.4 GHz, Bluetooth, USB - Works with Mac, PS5, Nintendo Switch, Smartphone - 70 Hr Battery - Black",CASO DE USO 3,0.0,1.0,NO,275.16,promedio_12m,275.16,176.0,36.0,176.0,AMAZON
+,Audifonos Inalambricos PlayStation Pulse Elite,CASO DE USO TC,0.0,1.0,NO,316.16,promedio_12m,316.16,173.0,45.3,182.0,AMAZON
+,"Audifonos Razer BlackShark V2 X PlayStation GamingHeadset: 50mm Drivers - Cardioid Mic - Lightweight - Comfortable, Noise Isolati ng Earcups - for PS5, Xbox Series X, PC, Switch via 3.5 mm Audio Jack",CASO DE USO TC,1.0,1.0,NO,,sin_dato,,73.0,,73.0,AMAZON
+,Audifonos Vieta Pro Transformer,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,30.91,,,
+,Balanza BalControl Corporal HBF-514C,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,92.74,,,
+,Base Para Starlink Mini Iman Soporte,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,77.0,,,
+,Batidora Artisan (4.7 L / 325 W) – KitchenAid,CASO DE USO 3,0.0,1.0,NO,450.6,promedio_12m,450.6,391.31,13.2,299.99,CORPORACIÓN STAR WHITE C.A
+,Batidora Artisan (4.7 L / 325 W) + Rebanador – KitchenAid,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Batidora Artisan Evergreen (4.7 L / 325 W) – KitchenAid,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Batidora Classic (4.3 L / 250 W) – KitchenAid,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Batidora Comercial NSF (7.6 L / 970 W) – KitchenAid,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Batidora de Pedestal 5.5 QT (500 W) – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Batidora de pedestal Kucce 600 Watts Kucce,CASO DE USO 1,0.0,1.0,NO,95.08,promedio_12m,95.08,100.0,-5.2,84.99,MULTIMAX STORE C.A
+,Batidora Pro (7 Qt / 500 W) – KitchenAid,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Batidora Profesional 5 Plus (4.7 L / 525 W) – KitchenAid,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Batidora Ultra Power (4.3 L / 300 W) – KitchenAid,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Bicicleta Cross Country SPZ Chisel Comp  Gloss Ion / Smoke Liquid Metal,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,3500.0,,,
+,Bicicleta Cross Country SPZ Chisel HT 2023 MORNMST/WHT,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,1860.0,,,
+,Bicicleta Cross Country SPZ Chisel HT 2025,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,3420.0,,,
+,Bicicleta Cross Country SPZ Chisel HT Comp REDTNT/SMK/WHT,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,1690.0,,,
+,Bicicleta Cross Country SPZ Epic 8 Comp,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,5122.56,,,
+,Bicicleta Cross Country SPZ Epic 8 Comp Evo,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,3700.19,,,
+,Bicicleta Cross Country SPZ Epic 8 Comp Evo 2025,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,5911.36,,,
+,BICICLETA CROSS COUNTRY SPZ EPIC 8 COMP EVO  PDRNDGO/MNSHDW,CASO DE USO 5,0.0,1.0,NO,5469.83,promedio_12m,5469.83,4229.85,22.7,3760.0,ULTRABIKEX C.A
+,Bicicleta Cross Country SPZ Epic Comp MRN/ICEPPYA,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,3780.0,,,
+,Bicicleta Cross Country SPZ Epic Ht 2022,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,2760.0,,,
+,Bicicleta Cross Country SPZ Epic HT Comp  EGRN/FSTGRN,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,3900.0,,,
+,Bicicleta Cross Country SPZ Rockhopper 29,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,690.0,,,
+,Bicicleta Cross Country SPZ Rockhopper Comp 29 Mvemet /Fjdmet,CASO DE USO 5,0.0,1222.65,SI,1021.59,promedio_12m,1021.59,1289.3,-26.2,584.0,ULTRABIKEX C.A
+,Bicicleta Cross Country SPZ Rockhopper Comp OAKGRNMET/SMK,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,1200.0,,,
+,Bicicleta Cross Country SPZ Rockhopper Expert 2026,CASO DE USO 5,0.0,1.0,NO,1939.74,promedio_12m,1939.74,1960.0,-1.0,1500.0,ULTRABIKEX C.A
+,Bicicleta Cross Country SPZ Rockhopper Expert 29 Emdmet /Shdwsil,CASO DE USO 5,0.0,2260.5,SI,2260.5,lista,,1500.0,33.6,,
+,Bicicleta Cross Country SPZ Rockhopper Expert SILDST/BNTGLDMET,CASO DE USO 5,0.0,2093.85,SI,2093.85,lista,,1500.0,28.4,1000.0,ULTRABIKEX C.A
+,Bicicleta Cross Country SPZ Rockhopper Sport FTGRN/OIS,CASO DE USO 5,0.0,1374.45,SI,1060.38,promedio_12m,1060.38,820.0,22.7,656.0,ULTRABIKEX C.A
+,Bicicleta de Ruta Specialized Aethos Comp  CARB/TLTNT/FLKSIL,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,3990.0,,,
+,Bicicleta de Ruta Specialized Allez E5 Disc Sport TARBLK,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,2100.0,,,
+,Bicicleta de Ruta Specialized Tarmac SL7 Sport CARB/METDKNVY,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,3900.0,,,
+,Bicicleta de Ruta Specialized Tarmac SL8 Comp,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,5900.0,,,
+,Bicicleta de Ruta Specialized Tarmac SL8 Expert,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,7300.0,,,
+,Bicicleta Little Kids SPZ Riprock 20 AMBRGLW/REDWD,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,780.0,,,
+,Bicicleta Little Kids SPZ Riprock 24,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,720.0,,,
+,Bicicleta Niños SPZ Hotwalk,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,300.0,,,
+,Bicicleta Niños SPZ RipRock 20,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,748.8,,,
+,Bicicleta Niños SPZ RipRock 24,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,996.0,,,
+,Bicicleta Niños SPZ RipRock Cdtr 16 Whtsge / Dunewht,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,400.0,,,
+,Bicicleta SPZ Levo Comp Alloy G4  GUN/OBSD,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,7900.0,,,
+,Bicicleta SPZ LEVO SL HT,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,3648.0,,,
+,Block De Construccion,CASO DE USO 1,0.0,1.0,NO,1.12,promedio_12m,1.12,1.1,1.8,0.95,"MEGA PAPELERIA EL RODEO, C.A."
+,Block De Construccion Caribe 11,CASO DE USO 1,0.0,1.0,NO,2.12,promedio_12m,2.12,1.89,10.8,1.63,"MEGA PAPELERIA EL RODEO, C.A."
+,BOLSO GYMGO,CASO DE USO TC,2.0,1.0,NO,42.27,promedio_12m,42.27,31.43,25.6,44.0,ERIKA PRATS
+,Borrador Kores Trino Color Nego,CASO DE USO 1,0.0,1.0,NO,0.49,promedio_12m,0.49,0.47,4.1,0.4,"MEGA PAPELERIA EL RODEO, C.A."
+,Bose L1 Pro8 Portable Line Array System,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Bose Music Amplifier,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Bose QuietComfort Headphones,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Bose QuietComfort Ultra Earbuds,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Bose Smart Soundbar 900,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Bose SoundLink Max Portable Speaker,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Bose SoundLink Micro Bluetooth Speaker,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,165.0,,,
+,Bose T8S ToneMatch Mixer,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Bose Videobar VB-1,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Botella EPSON T664 Amarillo L110-L210-L355-L555,CASO DE USO TC,2.0,1.0,NO,,sin_dato,,19.23,,19.23,"DISTRIBUIDORA KTDC, C.A."
+,Botella EPSON T664 Azul L200-L110-L210-L355-L555,CASO DE USO TC,2.0,1.0,NO,,sin_dato,,19.23,,19.23,"DISTRIBUIDORA KTDC, C.A."
+,Botella EPSON T664 Negro 200-L110-L210-L355-L555,CASO DE USO TC,2.0,1.0,NO,,sin_dato,,19.23,,19.23,"DISTRIBUIDORA KTDC, C.A."
+,Botella EPSON T664 Rojo L110-L210-L355-L555,CASO DE USO TC,2.0,1.0,NO,,sin_dato,,19.23,,19.23,"DISTRIBUIDORA KTDC, C.A."
+,Box Matrimonial Sin Copete Negro,CASO DE USO 1,0.0,1.0,NO,163.79,promedio_12m,163.79,162.39,0.9,140.0,"FOTO ESTUDIO VENEZUELA, C.A."
+,"Cable Starlink Mini Cable 12V, Cable de Alimentacion",CASO DE USO 3,0.0,1.0,NO,30.24,promedio_12m,30.24,23.0,23.9,22.99,AMAZON
+,Cafetera Programable 12 Tazas – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Caldero Eléctrico para Fondue – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Campana de Pared de 90 cm (“T” Invertida en Acero),CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Campana Empotrable de 60 cm en Acero Inoxidable,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Campana Extractora Isla 100 cm Whirlpool,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Cargador Apple 40W Dynamic Power con potencia máxima de 60 W – MGKN4AM/A,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,35.0,,35.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,CAUCHO 165/70R13 MARCA ARIVO,CASO DE USO 3,0.0,1.0,NO,55.34,promedio_12m,55.34,35.0,36.8,35.0,SERMECA
+,CAUCHO 165/95R15 APLUS,CASO DE USO 3,0.0,1.0,NO,60.52,promedio_12m,60.52,50.0,17.4,,
+,CAUCHO 175/70/R13 FIRESTONE,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,55.0,,,
+,CAUCHO 175/70 R13 KUMO,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,55.0,,,
+,CAUCHO 185/60R14 APLUS,CASO DE USO TC,0.0,1.0,NO,53.78,promedio_12m,53.78,41.73,22.4,,
+,CAUCHO 185/60R14 GENERAL,CASO DE USO 3,0.0,1.0,NO,70.52,promedio_12m,70.52,60.26,14.5,60.0,SERMECA
+,CAUCHO 185/60R14 MARCA MAZZINI,CASO DE USO 3,0.0,1.0,NO,62.08,promedio_12m,62.08,38.2,38.5,53.0,SERMECA
+,CAUCHO 185/65R14 GENERAL,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,72.0,,,
+,CAUCHO 185/65R14 MARCA NEXEN,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,56.0,,,
+,CAUCHO 185/65R14 PIRELLI,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,72.0,,,
+,CAUCHO 185/65R14 QUALID,CASO DE USO 3,0.0,1.0,NO,61.23,promedio_12m,61.23,50.0,18.3,51.0,SERMECA
+,CAUCHO 195/60R15 MARCA NEXEN,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,70.0,,,
+,CAUCHO 195/65R15 GENERAL,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,85.0,,,
+,CAUCHO 195/65R15 MAZZINI,CASO DE USO 3,0.0,1.0,NO,71.11,promedio_12m,71.11,50.0,29.7,47.0,SERMECA
+,CAUCHO 215/60R17 QUALID,CASO DE USO 3,0.0,1.0,NO,147.41,promedio_12m,147.41,84.94,42.4,80.0,SERMECA
+,Caucho 215/65R16 AT Zmax,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,105.0,,,
+,Caucho 235/60R14 firestone,CASO DE USO 3,0.0,1.0,NO,118.69,promedio_12m,118.69,105.0,11.5,105.0,SERMECA
+,CAUCHO 235/60/R16 APLUS,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,75.0,,,
+,Caucho 235/60 R16 CHENGSAHN,CASO DE USO 3,0.0,1.0,NO,129.45,promedio_12m,129.45,77.0,40.5,77.0,SERMECA
+,Caucho 255/70R22.5 Triangle,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,193.5,,,
+,Caucho 265/60R18 HT Zmax,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,165.0,,,
+,"CAUCHO 31x10.50R15, MARCA WINDFORCE",CASO DE USO 3,0.0,1.0,NO,166.43,promedio_12m,166.43,110.0,33.9,,
+,Caucho AT Zmax 235/75R15,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,110.14,,,
+,Caucho BF Goodrich 315/70R17 KO2,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,443.52,,,
+,Caucho BF Goodrich 37x12.50 R17 KO2,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,584.64,,,
+,Caucho Firemax 185/65 R14,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,37.63,,56.0,SERMECA
+,Caucho Firemax 195/60 R15,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,62.0,,62.0,SERMECA
+,Caucho Kumho 185/65 R14,CASO DE USO 3,0.0,103.5,SI,103.5,lista,,69.0,33.3,69.0,SERMECA
+,Caucho Kumho 205/55 R16,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,90.0,,90.0,SERMECA
+,Caucho Mazzini 185/65 R14,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,42.0,,65.0,SERMECA
+,Cauchos 175/70R13 Tourador,CASO DE USO 3,0.0,1.0,NO,44.86,promedio_12m,44.86,38.46,14.3,48.0,SERMECA
+,CAUCHOS 185/65R14 TRIANGLE,CASO DE USO 3,0.0,132.6,SI,132.6,lista,,45.0,66.1,45.0,SERMECA
+,Cauchos 235/60 R16 Kumho,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,122.5,,122.5,CAUCHOS TAVARES C.A.
+,Cauchos 235/75R15 SUMAXX,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,127.7,,,
+,Cauchos 235/75/R15 Tourador,CASO DE USO 4,0.0,202.5,SI,202.5,lista,,0.0,,,
+,Cauchos 265/60R18 Zmax Modelo AT,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,165.0,,165.0,SERMECA
+,Cauchos 31x10.50R15 Powerhub,CASO DE USO 3,0.0,1.0,NO,239.8,promedio_12m,239.8,120.0,50.0,120.0,SERMECA
+,Cauchos 31x10.5 R15 Gianxplorer Mazzini,CASO DE USO 3,0.0,1.0,NO,169.3,promedio_12m,169.3,150.24,11.3,129.0,SERMECA
+,Cauchos Zmax 195/65R15,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,65.0,,65.0,SERMECA
+,Caucho Tourador 33x12.5R15LT 6PR,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,186.0,,186.0,SERMECA
+,CAUCHO TOURADOR AT 31/10.50R15,CASO DE USO 3,0.0,1.0,NO,213.83,promedio_12m,213.83,140.0,34.5,140.0,SERMECA
+,Caucho Zmax 165/70 R13,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,49.4,,45.0,SERMECA
+,Caucho Zmax  235-75- R15,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,97.0,,97.0,SERMECA
+,CHUWI MINI COMPUTADORA UBOX  AMD RYZEN 5- 7430U 32GB DDR5 1TB  SSD WIN 11 PRO (6935768760412.1),CASO DE USO 3,0.0,1.0,NO,,sin_dato,,663.0,,,
+,"Cocina Whirlpool de Gas 30"" 6 Quemadores",CASO DE USO TC,0.0,1.0,NO,,sin_dato,,669.0,,,
+,Colchón Colflex Collection 1 Pillow,Hogar / Colchones,0.0,1.0,NO,456.92,promedio_12m,456.92,453.0,0.9,406.0,"FOTO ESTUDIO VENEZUELA, C.A."
+,Colchon Matrimonial Colflex 2 Pillow,Hogar / Colchones,0.0,1.0,NO,502.59,promedio_12m,502.59,498.28,0.9,449.0,"FOTO ESTUDIO VENEZUELA, C.A."
+,Colchón Matrimonial Lady best 2 Pillow Ortopedico,Hogar / Colchones,0.0,1.0,NO,,sin_dato,,525.0,,,
+,Colchón Matrimonial  Sahara Ortopédico 1pillow,Hogar / Colchones,0.0,1.0,NO,562.86,promedio_12m,562.86,501.34,10.9,457.0,"FOTO ESTUDIO VENEZUELA, C.A."
+,Colchon Sahara Premium 1 Pillow Queen,Hogar / Colchones,0.0,1.0,NO,327.81,promedio_12m,327.81,325.0,0.9,325.0,"FOTO ESTUDIO VENEZUELA, C.A."
+,Colchon SD-42 Semi Ortopedico 1 Pillow Matrimonial,Hogar / Colchones,0.0,1.0,NO,,sin_dato,,292.3,,,
+,Colchón Willpoor Flex 1 Pillow Ortopedico 1.40*1.90 (Matrimonial),Hogar / Colchones,0.0,405.9,SI,405.9,lista,,246.0,39.4,246.0,"FOTO ESTUDIO VENEZUELA, C.A."
+,Compresor De Aire 24 Litros 1.5hp Libre De Aceite Silencioso Marca Total,CASO DE USO 1,0.0,1.0,NO,249.92,promedio_12m,249.92,223.0,10.8,224.82,"REPUESTOS MARKET VALENCIA, C.A"
+,Compresor De Aire 50 Litros 1.5hp Libre De Aceite MARCA BRICKELL,CASO DE USO 1,0.0,1.0,NO,297.42,promedio_12m,297.42,265.38,10.8,263.65,"REPUESTOS MARKET VALENCIA, C.A"
+,Congelador Individual de 18 pies cúbicos,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Congelador Individual de 18 pies cúbicos,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,CONGELADOR VERTICAL SJ ELECTRONIC 946L,CASO DE USO TC,0.0,1.0,NO,4698.28,promedio_12m,4698.28,3881.63,17.4,2988.0,"PEREZ Y CIA, S.A."
+,Control PlayStation DualSense Edge Wireless,CASO DE USO 3,0.0,1.0,NO,356.46,promedio_12m,356.46,228.0,36.0,228.0,AMAZON
+,Control PlayStation DualSense Wireless,CASO DE USO TC,0.0,1.0,NO,149.69,promedio_12m,149.69,77.0,48.6,98.0,AMAZON
+,Cordzero A9 LG Aspiradora Inalámbrica Inteligente,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,403.2,,,
+,Cotufera al Aire 1500W Blanca – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Cotufera de Aire (1500 W) – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Creyones Solita De Madera 12 Colores,CASO DE USO 1,0.0,1.0,NO,3.83,promedio_12m,3.83,2.97,22.5,2.97,"MEGA PAPELERIA EL RODEO, C.A."
+,Cuaderno 1 linea,CASO DE USO 1,0.0,1.0,NO,1.68,promedio_12m,1.68,1.5,10.7,1.3,"LIDA PAPELERIA Y SOFTWARE, C.A."
+,Cuaderno Caligrafia,CASO DE USO 1,0.0,1.0,NO,2.63,promedio_12m,2.63,0.89,66.2,0.89,"MEGA PAPELERIA EL RODEO, C.A."
+,Cuaderno Engrapado 100 Hojas,CASO DE USO 1,0.0,1.0,NO,1.01,promedio_12m,1.01,0.78,22.8,0.78,"MEGA PAPELERIA EL RODEO, C.A."
+,Cubot Kingkong X Pro 12GB/256GB,CASO DE USO 1,0.0,1.0,NO,478.8,promedio_12m,478.8,450.0,6.0,386.0,DISTRIBUIDORA MUNDO ELECTRONICA C.A
+,Dell LDC15255-7322BLK-PUS – AMD Ryzen 7 7730U / 16GB / 1TB SSD / 15.6” / US / W11,Computadoras,0.0,1.0,NO,935.15,promedio_12m,935.15,779.0,16.7,779.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,DELL Morral  Ecoloop ESsential 14-16,Computadoras,0.0,1.0,NO,28.75,promedio_12m,28.75,19.0,33.9,19.0,"DISTRIBUIDORA EMITECH, C.A"
+,"Dell XPS 15 9530 Intel Core i9-13900H, 32GB, 512GB, GeForce RTX 4060 8GB, 15.6"", US, W11.",Computadoras,0.0,1.0,NO,,sin_dato,,2830.0,,,
+,Dispensador de Agua Botellón Oculto,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Dispensador de Agua con Fabricador de Hielo,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Elemento Purificador de Aire,All,0.0,1.0,NO,,sin_dato,,0.0,,13716.89,"DIPROMURO, C.A."
+,ENERGIA PORTATIL ROCCIA 800W 512WH,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,470.0,,,
+,"EPSON SureColor T3170X 24"" (SCT3170X)",CASO DE USO 3,0.0,1.0,NO,3296.79,promedio_12m,3296.79,2179.0,33.9,2179.0,"DISTRIBUIDORA EMITECH, C.A"
+,Equipo Electrocardiograma Portatil Contec Ecg90a,CASO DE USO 1,0.0,1.0,NO,678.63,promedio_12m,678.63,640.0,5.7,640.0,PROVERMEDICAL C.A
+,Estacion de Energia Portatil Oukitel 1024 WH,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,500.0,,,
+,Estetoscopio Littmann Classic III,CASO DE USO 3,5.0,1.0,NO,102.89,promedio_12m,102.89,75.0,27.1,89.99,GABRIEL MOLINA
+,"Estufa a Gas 4 Quemadores 20"" en Acero",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,"Estufa a Gas 5 Quemadores 30"" en Acero",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,"Estufa a Gas 6 Quemadores 30"" en Acero",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,"Estufa Eléctrica 30"" Plateada para Empotrar",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Exhibidor vertical congelador 842L SJ Electronics,CASO DE USO 1,0.0,1.0,NO,4698.28,promedio_12m,4698.28,4657.95,0.9,,
+,Filtro Cabina Aire Acondicionado,All,0.0,1.0,NO,,sin_dato,,0.0,,7068.56,"DIPROMURO, C.A."
+,Filtro de Aceite HONDA,All,0.0,1.0,NO,,sin_dato,,0.0,,4029.94,"DIPROMURO, C.A."
+,Funda Forro Con Teclado Para iPad 10th 10ma Y 11th A16,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,70.0,,69.99,DUBRASKA DANIELA BENITEZ REINA
+,Glucómetro Sinocare Incluye 50 Cintas Y 50 Lancetas,All,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Honor 600 – 6.57” – 8 GB / 256 GB,CASO DE USO TC,1.0,1.0,NO,,sin_dato,,659.0,,659.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Honor 90 12GB/512GB,CASO DE USO 3,0.0,905.85,SI,905.85,lista,,549.0,39.4,,
+,Honor Play 9A 4GB/256GB,CASO DE USO 3,0.0,1.0,NO,157.59,promedio_12m,157.59,94.8,39.8,86.0,KEDCELL GRUPO
+,Honor X8B 8GB/512GB,CASO DE USO 3,0.0,550.28,SI,550.28,lista,,255.0,53.7,,
+,Honor X8d – 6.77” 8 GB/256 GB,CASO DE USO TC,0.0,1.0,NO,380.71,promedio_12m,380.71,349.0,8.3,339.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Horno Negro Espejo 24"" de Perillas – Whirlpool",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,"HP 15-fd0133wm, Intel Core i3-N305, 8GB/256GB, 15.6"", US, W11.",CASO DE USO TC,0.0,1.0,NO,549.13,promedio_12m,549.13,429.0,21.9,429.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"HP Omnibook 5 Flip 14-fp0013dx 2-in-1 Laptop, Intel Core 5-120U, 8GB, 512GB, ""14 (1920 x 1200) 2k Screen, Windows 11",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,494.0,,,
+,"HP Stream 14-dq6014, Intel N150, 4GB, 128GB SSD, 14"", US, W11",CASO DE USO TC,0.0,1.0,NO,453.94,promedio_12m,453.94,295.0,35.0,425.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Huawei Smart Watch GT 5 Pro 46MM VLI-B29,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,442.0,,,
+,Impresora Epson Matriz de Punto LX-350.,CASO DE USO 1,0.0,1.0,NO,518.64,promedio_12m,518.64,455.31,12.2,527.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Impresora Epson Tinta Continua EcoTank L3350 (Multifuncional/Color).,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,306.82,,264.5,"DISTRIBUIDORA KTDC, C.A."
+,Impresora Epson Tinta Continua EcoTank L4360 (Color).,CASO DE USO 3,1.0,1.0,NO,389.89,promedio_12m,389.89,308.0,21.0,254.0,"DISTRIBUIDORA EMITECH, C.A"
+,Impresora SILHOUETTE CAMEO 5 ALPHA,CASO DE USO 3,0.0,1.0,NO,520.21,promedio_12m,520.21,390.0,25.0,385.0,FOPLUS ANDES C.A.
+,Infinix Hot 50 Pro (X6881) 8GB/256GB,CASO DE USO 3,0.0,429.0,SI,429.0,lista,,148.0,65.5,148.0,KEDCELL GRUPO
+,Infinix Hot 70 (X6895) 8GB/256GB,CASO DE USO TC,1.0,1.0,NO,307.84,promedio_12m,307.84,259.0,15.9,245.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Infinix Note 50 Pro 256GB/12GB,CASO DE USO 3,0.0,1.0,NO,403.4,promedio_12m,403.4,265.0,34.3,232.0,KEDCELL GRUPO
+,Infinix Zero Flip 8GB/512GB (X6962),CASO DE USO TC,1.0,1.0,NO,,sin_dato,,419.0,,419.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,IPAD PRO 11 M5 256GB,CASO DE USO 3,0.0,1.0,NO,1262.3,promedio_12m,1262.3,1050.36,16.8,1040.0,DISTRIBUIDORA MUNDO ELECTRONICA C.A
+,iPhone 13 128GB,CASO DE USO 1,0.0,1392.72,SI,1392.72,lista,,949.0,31.9,,
+,iPhone 15 128GB (1 SIM + eSIM),CASO DE USO 1,0.0,200.0,SI,200.0,lista,,1256.0,-528.0,999.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,iPhone 16E 256GB,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,1451.0,,,
+,iPhone 16E 512GB,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,1858.0,,,
+,iPhone 16 Pro 256GB,CASO DE USO 1,0.0,3640.32,SI,3640.32,lista,,1629.0,55.3,,
+,iPhone 16 Pro Max 512GB (1SIM+eSIM),CASO DE USO TC,0.0,3560.7,SI,3560.7,lista,,1669.0,53.1,1879.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,iPhone 17 Pro 256GB (1 SIM + eSIM),CASO DE USO 3,0.0,1.0,NO,2358.5,promedio_12m,2358.5,1544.93,34.5,2299.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,IPHONE 18 PRO MAX 256GB,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,1728.0,,,
+,JBL Tune 310C USB-C White Audífonos,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,22.18,,,
+,Juego De Muebles,CASO DE USO 1,0.0,1.0,NO,526.57,promedio_12m,526.57,520.0,1.2,460.0,FÁBRICA DE MUEBLES DE K-SA
+,Juego Geometrico Bambary,CASO DE USO 1,0.0,1.0,NO,1.94,promedio_12m,1.94,1.49,23.2,1.49,"MEGA PAPELERIA EL RODEO, C.A."
+,"Klipxtreme Funda Para Laptop 15.6""",CASO DE USO 3,0.0,1.0,NO,13.26,promedio_12m,13.26,8.3,37.4,8.3,"DISTRIBUIDORA EMITECH, C.A"
+,"KLIPXTREME FUNDA PARA LAPTOP SQUAREPRO CON ASA 15.6""",CASO DE USO 3,0.0,1.0,NO,17.58,promedio_12m,17.58,11.0,37.4,10.4,"DISTRIBUIDORA EMITECH, C.A"
+,"KLIPXTREME MORRAL INDIGO PARA LAPTOP HASTA15.6""",CASO DE USO TC,0.0,1.0,NO,22.36,promedio_12m,22.36,15.0,32.9,15.0,"DISTRIBUIDORA EMITECH, C.A"
+,KLIPXTREME MOUSE OPTICO INALAMBRICO  CON BLUETOOTH V5.1 4 BOTONES (KMB-251BK),CASO DE USO 3,0.0,1.0,NO,19.67,promedio_12m,19.67,13.0,33.9,12.21,"DISTRIBUIDORA EMITECH, C.A"
+,KLIPXTREME MOUSE SURFER INALÁMBRICO DELGADO SILENCIOSO 2.4 GHZ 800/1200/1600 ppp HD 4 BOTONES,CASO DE USO 3,0.0,1.0,NO,12.66,promedio_12m,12.66,8.0,36.8,7.0,"DISTRIBUIDORA EMITECH, C.A"
+,LAPIZ OPTICO XIAOMI REDMI SMART PEN,CASO DE USO 1,0.0,1.0,NO,141.22,promedio_12m,141.22,126.0,10.8,126.0,EDGARDO JAVIER FONTANA GUERRERO
+,Lapiz Para iPad Apple Pencil Usb-c,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,151.0,,151.0,"AR ELECTRONICS, C.A."
+,Lapiz Solita De Grafito Hb Premium,CASO DE USO 1,0.0,1.0,NO,0.33,promedio_12m,0.33,0.25,24.2,0.25,"MEGA PAPELERIA EL RODEO, C.A."
+,LAPTOP 82XQ012GUS Notebook LENOVO IdeaPad Slim 3 15.6 3 FHD  AMD Ryzen 5 / 8GB / 256GB  Win 11 Home,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,636.0,,,
+,"Laptop Acer Aspire 3 AMD A315-24PT-R288, AMD Ryzen 5 7520U, 16GB, 1TB SSD, 15.6"" Touchscreen, US, W11.",CASO DE USO TC,1.0,1.0,NO,791.14,promedio_12m,791.14,699.0,11.6,699.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Laptop Acer Aspire Go 15 AG15-42P-R917 – AMD Ryzen 7 7730U / AMD Radeon / 16GB / 512GB SSD / 15.6” / US / W11,CASO DE USO TC,0.0,1.0,NO,822.84,promedio_12m,822.84,719.0,12.6,719.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Laptop Asus VivoBook F1605VA-WS74 – Intel Core i7-1355U / 16GB / 512GB SSD / 16” / US / W11,CASO DE USO TC,0.0,1.0,NO,895.95,promedio_12m,895.95,849.0,5.2,849.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"LAPTOP ASUS VIVOBOOK GO 15 AMD R5-7520U 8GB RAM 512GB SSD 15.6"" WINDOWS 11",CASO DE USO 1,0.0,1.0,NO,674.39,promedio_12m,674.39,636.0,5.7,636.0,"CORPORACION TECNOLOGICA CRT 2010, C.A"
+,"Laptop Compaq QL15I3BM8256, Intel Core i3-1215U, 8GB, 256GB, 15.6"", W11.",CASO DE USO TC,0.0,1.0,NO,420.9,promedio_12m,420.9,359.0,14.7,359.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Laptop Compaq QL15R5BM16256 – AMD Ryzen 5 7430U / 16 GB / 256 GB SSD / 15.6” / W11,CASO DE USO TC,2.0,1.0,NO,675.09,promedio_12m,675.09,670.0,0.8,569.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Laptop Compaq QL15R7BM16512, AMD Ryzen 7 5825U 16GB, 512GB SSD, 15.6"", W11.",CASO DE USO TC,0.0,1.0,NO,694.12,promedio_12m,694.12,659.0,5.1,790.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Laptop Dell DC15250, Intel Core i7 1355U, 16GB, 1TB SSD, 15.6"" 2K Touchscreen, US, W11.",CASO DE USO 1,0.0,1.0,NO,1189.23,promedio_12m,1189.23,1162.0,2.3,1108.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Laptop Dell Inspiron 14 i5440-5463BLK-PUS, Intel Core i5-1334U, 8GB, 512GB SSD, 14"", US, W11.",CASO DE USO 1,0.0,1.0,NO,907.76,promedio_12m,907.76,825.0,9.1,879.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Laptop HP 15-fc0146dx – AMD Ryzen 5 7520U / 8GB / 512GB SSD / 15.6” / US / W11,CASO DE USO TC,0.0,1.0,NO,741.69,promedio_12m,741.69,659.0,11.1,629.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Laptop HP 15-fd0230wm – Intel Core i3-N305 / 8GB / 256GB SSD / 15.6” / US / W11,CASO DE USO TC,0.0,1.0,NO,651.09,promedio_12m,651.09,599.0,8.0,569.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Laptop HP Notebook 15-fd0150wm, Intel Core i5-120U, 8GB, 512GB SSD, 15.6"", US, W11.",CASO DE USO 1,0.0,1.0,NO,858.36,promedio_12m,858.36,804.0,6.3,915.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Laptop HP Pavilion 16'' 8+512GB AMD Ryzen 7,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,828.0,,,
+,"Laptop Lenovo IdeaPad 3 82RK01AEUS, Intel Core i3-1215U, 8GB/512GB SSD, 15.6"", US, W11.",CASO DE USO 3,0.0,1.0,NO,810.08,promedio_12m,810.08,480.0,40.7,824.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Laptop Lenovo IdeaPad Slim 3 15ITN9 83L7002KUS – Intel N150 / 8GB / 128GB UFS / 15.6” / US / W11,CASO DE USO TC,0.0,1.0,NO,406.48,promedio_12m,406.48,338.0,16.8,359.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Laptop Lenovo Ideapad Slim 3 82XM00LMUS, AMD Ryzen 7 5825U, 16GB, 512GB SSD, 15.6"" Touchscreen, US, W11.",CASO DE USO TC,1.0,1.0,NO,876.23,promedio_12m,876.23,779.0,11.1,779.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Laptop Lenovo IdeaPad Slim 3 83K700G8US, AMD Ryzen 7 170, 16GB, 512GB SSD, 15.3"" 2K Touchscreen, US, W11.",CASO DE USO TC,0.0,1.0,NO,1074.55,promedio_12m,1074.55,799.0,25.6,799.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Laptop Lenovo IdeaPad Slim 3i 82XB00BMUS, Intel Core i3-N305, 8GB, 256GB SSD, 15.6"", US, W11.",CASO DE USO 1,0.0,1.0,NO,673.0,promedio_12m,673.0,685.0,-1.8,673.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Laptop Lenovo IdeaPad Slim 5 16IRU9 83FW000XUS, Intel Core 7 150U, 8GB, 512GB SSD, 16"", US, W11.",CASO DE USO TC,0.0,1.0,NO,923.42,promedio_12m,923.42,759.0,17.8,654.31,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Laptop Lenovo V14 G4 IRU 83A000PCUS – Intel Core i7-13620H / 16GB / 512GB SSD / 14” / US / W11,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,779.0,,,
+,"Laptop Lenovo V15 G4 IRU 83A100PBUS Intel Core i3-1315U, 16GB, 512GB SSD, 15.6"", US, W11",CASO DE USO TC,1.0,1.0,NO,696.55,promedio_12m,696.55,639.0,8.3,639.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Laptop Lenovo Yoga 7i 2-in-1 83DJ0002US / Intel Core Ultra 7 155U / 16 GB / 1 TB SSD / 14″ / 2K / Táctil / US / W11,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,1145.09,,,
+,LATINBIEN CLUB,All,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Lavadora Aiwa 9kg Semi Automatica,CASO DE USO 1,0.0,1.0,NO,340.53,promedio_12m,340.53,305.0,10.4,302.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Lavadora Carga Frontal 4.5 ft³ – Whirlpool,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Lavadora Oster Digital 14KG 120V/60Hz (WSMMED14W).,CASO DE USO 3,0.0,1.0,NO,533.35,promedio_12m,533.35,386.09,27.6,396.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Lavaplatos con Interior de Acero Inoxidable – Whirlpool,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Lavaplatos silencioso Antihuella con interior plástico – Whirlpool,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,"Lenovo IdeaPad Slim 3i 82XB00C2US, Intel Core i3-N305, 8GB, 128GB UFS, 15.6"", US, W11.",CASO DE USO TC,0.0,1.0,NO,,sin_dato,,509.0,,,
+,"Lenovo. V130-20IGM (10RX0058UM), 19.5"", Intel Celeron Dual-Core, 16GB, 512GB SSD, W11 Pro, Wired Keyboard & Mouse.",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,523.49,,,
+,"LG 65"" Class UQ7050 Series 4K UHD WEBOS Smart TV (65UQ7050ZUD).",Televisores,0.0,1.0,NO,,sin_dato,,1361.0,,,
+,Libreta cosida VIP/FAMA/NORMA,CASO DE USO 1,0.0,1.0,NO,0.98,promedio_12m,0.98,0.94,4.1,0.76,"MEGA PAPELERIA EL RODEO, C.A."
+,Licuadora Compacta de 48 oz (600 W) – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Licuadora Compacta de 56 oz (1 HP) – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Licuadora KitchenAid K400 Velocidades Variables (1.65L/1200W),CASO DE USO TC,0.0,1.0,NO,275.34,promedio_12m,275.34,279.0,-1.3,179.99,CORPORACIÓN STAR WHITE C.A
+,Máquina Compacta para Hacer Pan – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,MAQUINA DE SOLDAR MARCA TOTAL + LENTES DE PROTECCION,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,330.76,,,
+,Maquina Fiscal Vmax 801,CASO DE USO HKA,0.0,1.0,NO,,sin_dato,,1133.9,,,
+,Marcador Acrilico Norma Azul,CASO DE USO 1,0.0,1.0,NO,1.03,promedio_12m,1.03,1.02,1.0,0.88,"MEGA PAPELERIA EL RODEO, C.A."
+,Marcador Acrilico Norma Negro,CASO DE USO 1,0.0,1.0,NO,1.15,promedio_12m,1.15,1.02,11.3,0.88,"MEGA PAPELERIA EL RODEO, C.A."
+,Marcador Acrilico Ofica Negro,CASO DE USO 1,0.0,1.0,NO,0.77,promedio_12m,0.77,0.73,5.2,0.63,"MEGA PAPELERIA EL RODEO, C.A."
+,Marcador Acrilico Studmark,CASO DE USO 1,0.0,1.0,NO,1.12,promedio_12m,1.12,1.0,10.7,0.87,"MEGA PAPELERIA EL RODEO, C.A."
+,Marsriva  Mini Ups  Kp6 Max 18W 20000 mAh,CASO DE USO 1,0.0,1.0,NO,74.92,promedio_12m,74.92,74.57,0.5,64.29,"VENEPAC 2020, C.A."
+,Microondas Empotrable Negro con Trim Kit 1.1 cu. ft. – Whirlpool,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Microondas Oster 0.7 OGGME2701 20L,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,114.0,,,
+,Mindray Analizador Hemato BC10,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,5568.0,,,
+,Mini Horno de Acero con Convección 17 Lts (1800 W) – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Mini Ups Olax 10000 mAh,CASO DE USO 1,0.0,1.0,NO,73.12,promedio_12m,73.12,69.99,4.3,69.99,TODO TECNOLÓGICO JD FP
+,"Monitor Samsung 27"" Odyssey G65B Curved Gaming LS27BG652ENXGO 1440p QHD, 240Hz, 1m.",All,0.0,1.0,NO,638.0,promedio_12m,638.0,638.0,0.0,638.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Motocicleta Bel By UM Nitrox Sport,CASO MOTO,0.0,1.0,NO,1232.76,promedio_12m,1232.76,1580.0,-28.2,1430.0,"MOTO CITY PRO, C.A."
+,Motocicleta Bel By UM Power Max,CASO MOTO,0.0,1.0,NO,,sin_dato,,1640.0,,,
+,Motocicleta Bel By UM Rennegade Commando 250T,CASO MOTO,0.0,1.0,NO,,sin_dato,,3350.0,,,
+,Motocicleta Bel KEIKO 150,CASO MOTO,0.0,1.0,NO,1012.0,promedio_12m,1012.0,1260.0,-24.5,1060.0,"MOTO CITY PRO, C.A."
+,MOTOCICLETA BEL LA MULA 200CC,CASO MOTO,0.0,1.0,NO,,sin_dato,,3650.0,,,
+,Motocicleta Bel Natsu 150,CASO MOTO,0.0,1.0,NO,1142.24,promedio_12m,1142.24,1325.0,-16.0,1325.0,"MOTO CITY PRO, C.A."
+,Motocicleta Bel Ranger 250cc,CASO MOTO,0.0,1.0,NO,2241.38,promedio_12m,2241.38,2800.0,-24.9,2500.0,"MOTO CITY PRO, C.A."
+,Motocicleta Bel Saki 150,CASO MOTO,0.0,1.0,NO,,sin_dato,,1600.0,,,
+,Motocicleta Bel TT 150,CASO MOTO,0.0,1.0,NO,,sin_dato,,1800.0,,,
+,Motocicleta Bel UM Renegade Sport,CASO MOTO,0.0,1.0,NO,,sin_dato,,2700.0,,,
+,Motocicleta Bel Zoom 150,CASO MOTO,0.0,1.0,NO,,sin_dato,,1600.0,,,
+,Motocicleta DSR Hyper Sport,CASO MOTO,0.0,1.0,NO,,sin_dato,,3450.0,,,
+,Motocicleta Max RS 150,CASO MOTO,0.0,1.0,NO,1293.1,promedio_12m,1293.1,1500.0,-16.0,1500.0,"MOTO CITY PRO, C.A."
+,Motocicleta UM DSR 200,CASO MOTO,0.0,1.0,NO,1551.72,promedio_12m,1551.72,1800.0,-16.0,1800.0,"MOTO CITY PRO, C.A."
+,Motocicleta UM DSR Rally Pro,CASO MOTO,0.0,1.0,NO,,sin_dato,,3900.0,,,
+,Mouse Gamer Esports Razer Viper V3 HyperSpeed Inalámbrico,CASO DE USO 3,1.0,1.0,NO,,sin_dato,,87.0,,87.0,AMAZON
+,Mouse Gamer Razer Basilisk V3 35K con Cable,CASO DE USO 3,1.0,1.0,NO,,sin_dato,,100.0,,100.0,AMAZON
+,MSI Mouse Forge GM300.,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,17.47,,,
+,Mueble Base Soporte Tv Con Ruedas De 42 Hasta 70 Pulgadas,CASO DE USO 1,0.0,171.6,SI,171.6,lista,,104.0,39.4,104.0,"VENSPEED, C.A."
+,Nebulizador Comp NE-C801LA,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,52.42,,,
+,Nebulizador Portátil Con Accesorios Completos,All,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Nevera 1 Puerta 4 Pies Acero Negro – Whirlpool,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Nevera Condesa 9 pies,CASO DE USO 1,0.0,544.56,SI,544.56,lista,,0.0,,400.0,MULTIMAX STORE C.A
+,Nevera Ejecutiva Drija 3.2pies 115v,CASO DE USO 1,0.0,1.0,NO,362.06,promedio_12m,362.06,323.06,10.8,301.72,"TECNI MUNDO 21, C.A"
+,Nevera Ejecutiva GPLUS – 93L / Negro – GP-NEJ1P,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,267.0,,,
+,Nevera Ejecutiva GPlus GP-NEJ2P – 110V,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,230.0,,,
+,Nevera Side by Side 18 Pies – Whirlpool,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Nevera Top Mount 9 Pies Plateada – Whirlpool,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Nevera Una Puerta 2 Pies Vintage – Whirlpool,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Ninja Creami,All,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Ninja DETECT DUO Power Blender Pro + Single Serve TB301 1200W.,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,302.4,,,
+,Ninja Foodi DualZone,All,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Ninja PROFESSIONAL PLUS Blender BN701 1200W.,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,341.0,,,
+,Ninja PROFESSIONAL PLUS Blender Duo BN750 1400W.,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,215.04,,,
+,Ninja Sistema de licuadora y procesador Foodi Power,All,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Ninja Woodfire Outdoor Grill,All,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Nintendo Switch 2 Mario Kart World Bundle (USA) Black.,CASO DE USO TC,0.0,1.0,NO,1220.0,promedio_12m,1220.0,709.0,41.9,1220.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Nintendo Switch Oled (JPN), White.",CASO DE USO 1,0.0,1.0,NO,767.62,promedio_12m,767.62,678.0,11.7,752.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Olax Router Portatil AX6 Pro 4G LTE.,All,0.0,1.0,NO,85.0,promedio_12m,85.0,85.0,0.0,85.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Olla de Cocción Lenta 6.5 Litros – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Papel De Examen N&G 60H,CASO DE USO 1,0.0,1.0,NO,5.05,promedio_12m,5.05,4.84,4.2,4.17,"MEGA PAPELERIA EL RODEO, C.A."
+,Pega Blanca Solita 115Grs,CASO DE USO 1,0.0,1.0,NO,2.44,promedio_12m,2.44,2.37,2.9,2.05,"MEGA PAPELERIA EL RODEO, C.A."
+,Plastilina Solita 6 Colores,CASO DE USO 1,0.0,1.0,NO,2.89,promedio_12m,2.89,2.22,23.2,2.22,"MEGA PAPELERIA EL RODEO, C.A."
+,Procesador de Alimentos 11 Tazas - Plateado – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Procesador de Alimentos 8 Tazas - Gris – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,pruebambresia,All,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Realme C61 8GB/256GB,CASO DE USO 3,0.0,328.35,SI,328.35,lista,,133.73,59.3,148.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Realme C75 8GB / 256GB,CASO DE USO 3,0.0,481.8,SI,481.8,lista,,196.22,59.3,292.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Regleta Ovalada Energizer – 6 tomas,CASO DE USO TC,1.0,1.0,NO,13.72,promedio_12m,13.72,11.0,19.8,9.48,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Regleta y Protector Energizer – 6 Tomas / 1 USB-A / 1 USB-C,CASO DE USO TC,0.0,1.0,NO,22.43,promedio_12m,22.43,18.0,19.8,18.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Rin Trasero Power Tr 180,CASO DE USO 1,0.0,1.0,NO,67.85,promedio_12m,67.85,60.0,11.6,67.89,"BARRETOMOTORCYCLE, C.A."
+,Rodillo De Entrenamiento Wahoo Kickr Roll Smart  Trainer,Caso de uso 7,0.0,1.0,NO,,sin_dato,,950.0,,,
+,Sacapunta Aluminio Con Deposito Irrompible,CASO DE USO 1,0.0,1.0,NO,0.73,promedio_12m,0.73,0.69,5.5,0.59,"MEGA PAPELERIA EL RODEO, C.A."
+,Salcar Aire Acondicionado Split SAL-ACSPL24K0 24K BTU 220V,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,514.0,,,
+,"Samsung 19"" Flat Monitor 1366X768",CASO DE USO 1,0.0,300.48,SI,300.48,lista,,182.1,39.4,,
+,"Samsung 27"" M70C Smart Monitor (LS27CM701UNXZA), 4K UHD with Streaming TV USB-C and Ergonomic Stand.",CASO DE USO TC,0.0,1.0,NO,,sin_dato,,409.0,,,
+,Samsung Galaxy A16 5G 8GB/256GB,CASO DE USO 3,0.0,386.0,SI,386.0,lista,,162.0,58.0,320.0,AL GIORNO CYBER CAFE C.A
+,Samsung Galaxy A25 5G 8GB/256GB,CASO DE USO 1,0.0,498.3,SI,498.3,lista,,280.0,43.8,239.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Samsung Galaxy A27 8GB/256GB SM-A276B/DS,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,349.0,,,
+,Samsung Galaxy A35 5G 8GB/256GB,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,285.0,,,
+,Samsung Galaxy Buds 4,CASO DE USO TC,1.0,1.0,NO,,sin_dato,,140.0,,140.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Samsung Galaxy S24 FE 256GB (SM-S721),CASO DE USO 3,0.0,1516.56,SI,1516.56,lista,,469.73,69.0,,
+,Samsung Galaxy S26 Ultra 12GB/256GB,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,1059.0,,,
+,Samsung Galaxy Tab A9 64GB (SM-X115) LTE,CASO DE USO 3,0.0,1.0,NO,262.05,promedio_12m,262.05,135.0,48.5,235.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Samsung Galaxy Tab S9 FE 10.9"" (SM-X510) 6GB/128GB",CASO DE USO 1,0.0,1.0,NO,,sin_dato,,589.0,,589.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Samsung Lavadora de Carga Superior 19Kg,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,637.73,,,
+,"Samsung Lavadora de Carga Superior 19Kg WA10CG6442BDAP, Ecobubble Digital Inverter",CASO DE USO TC,0.0,1.0,NO,981.95,promedio_12m,981.95,599.0,39.0,905.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Samsung Power Adapter 25W (EP-T2510) USB-C to USB-C Cable,All,0.0,1.0,NO,24.0,promedio_12m,24.0,24.0,0.0,24.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Sanduchera Grill – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Secadora Carga Frontal 20 kg – Whirlpool,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Secadora Carga Frontal 23 kg – Whirlpool,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,"Set de Ollas, Sartenes y Utensilios de Teflón 12 Piezas (Aguamarina) – Faberware",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,"Set de Ollas, Sartenes y Utensilios de Teflón 15 Piezas (Aguamarina) – Faberware",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Set de Ollas y Sartenes 11 Piezas - Teflón - Rojo – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Set de Ollas y Sartenes de Cerámica 10 Piezas (Gris) – Faberware,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Sony Playstation 5 Slim Digital Edition 825GB Marvel's Wolverine Battle Yellow Limited Edition Bundle.,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,999.0,,,
+,Sony Playstation 5 Slim Disc Drive Fortnite Flowering Chaos (USA) 1TB,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,809.6,,,
+,"Sony Playstation 5 Slim Disc Drive Fortnite Flowering Chaos (USA) 1TB, White.,",CASO DE USO TC,0.0,1.0,NO,995.19,promedio_12m,995.19,809.2,18.7,809.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Sony Playstation 5 Slim Disc Drive Ghost of Yotei Gold Limited Edition CFI-2015, 1TB.",CASO DE USO TC,0.0,1.0,NO,,sin_dato,,935.0,,935.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Tablet Xiaomi Redmi Pad 2 Pro – 12.1” 8GB/256GB,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,369.0,,,
+,Tablet Xiaomi SE 8GB/256GB,CASO DE USO 1,0.0,1.0,NO,267.03,promedio_12m,267.03,271.0,-1.5,,
+,"Taladro de impacto Inalambrico 42v , 69N.m, motor Brushless.",CASO DE USO 1,0.0,1.0,NO,203.97,promedio_12m,203.97,180.0,11.8,180.0,JESUS ANTONIO CAMACHO CERRADA
+,TCL Nevera Top-Mount F210TMC 210L 110-120V/60Hz.,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,372.0,,,
+,Teclado Gaming Razer Ornata V3 TKL  Low Profile Keys - Mecha Membrane Switches - UV Coated Keycaps - Backlit Media Keys - 8 Zone RGB Lighting - Spill Resistant - Magnetic Wrist Wrest Snap Tap,CASO DE USO TC,2.0,1.0,NO,,sin_dato,,87.0,,87.0,AMAZON
+,Teclado Mecanico Gaming Razer BlackWidow V4 Green Switches Tactile & Clicky - Chroma RGB - 6 Macro Keys - Magnet ic Wrist Rest - Doubleshot ABS Keycaps - Roller & Media Keys - Snap Tap,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,181.0,,181.0,AMAZON
+,Teclado Plegable WIWU,CASO DE USO 1,0.0,1.0,NO,46.28,promedio_12m,46.28,40.0,13.6,47.0,"INNOVATECH STORES, C.A"
+,Tecno Pova 6 (L17) 12GB/256GB,CASO DE USO 1,0.0,468.6,SI,468.6,lista,,359.0,23.4,239.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Tecno Spark 30 (KL6) 8GB/256GB,CASO DE USO 1,0.0,361.3,SI,361.3,lista,,219.0,39.4,165.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Tecno Spark 50 (KN4) 4GB/256GB,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,155.0,,,
+,Teléfono celular Xiaomi Poco F8 Pro – 6.9” / 12 GB / 256 GB,CASO DE USO TC,0.0,1.0,NO,749.19,promedio_12m,749.19,639.0,14.7,639.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Tensiómetro De Pedestal,All,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Tensiómetro Digital Automático De Brazo HEM-7144T2-LA Omron,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,68.54,,,
+,Tensiometro Digital De Brazo HEM-7142-LA Omron,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,57.12,,,
+,Tensiometro HoMedics,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,92.74,,,
+,"Tope a Gas Acero 5 Quemadores 36"" – Whirlpool",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,"Tope a Gas Negro 4 Quemadores 30"" – Whirlpool",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Tope De Cocina A Gas Empotrar 4 Hornillas As Electronic D101 Plateado,CASO DE USO 1,0.0,1.0,NO,190.87,promedio_12m,190.87,180.0,5.7,180.0,"INVERSIONES TECNOLOGY 2030, C.A"
+,"Tope Eléctrico 4 Zonas 24"" – Whirlpool",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,"Tope Eléctrico de Perilla 5 Zonas 30"" (Doble Zona) – Whirlpool",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,"Toshiba Portable Storage 2TB Canvio Flex (HDTX120XSCAA), Silver.",CASO DE USO TC,3.0,1.0,NO,140.72,promedio_12m,140.72,104.88,25.5,111.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Tostadora de 2 Rebanadas Acero Negro – Cuisinart,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,0.0,,,
+,Tostador KitchenAid Clasico 2 Rebanadas,CASO DE USO TC,1.0,1.0,NO,86.77,promedio_12m,86.77,50.0,42.4,49.99,CORPORACIÓN STAR WHITE C.A
+,"Tp-Link Tapo C200, Pan/Tilt Home Security Wi-Fi Camera.",CASO DE USO 1,0.0,1.0,NO,64.0,promedio_12m,64.0,64.0,0.0,64.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,TWOCOOLER,CASO DE USO TC,3.0,1.0,NO,18.49,promedio_12m,18.49,13.47,27.1,20.0,ERIKA PRATS
+,Xiaomi 17 12 GB / 512 GB,CASO DE USO TC,0.0,1.0,NO,1171.49,promedio_12m,1171.49,999.0,14.7,999.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Xiaomi Poco M6 Pro 8GB/256GB,CASO DE USO 3,0.0,447.15,SI,447.15,lista,,193.54,56.7,269.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Xiaomi Redmi Note 13 Pro+ 5G (23090RA98G) 8GB/256GB.,CASO DE USO 1,0.0,674.85,SI,674.85,lista,,508.0,24.7,349.0,GRUPO BONOBO CA
+,Xiaomi Redmi Note 13 Pro 5G (2312DRA50G) 12GB/512GB.,CASO DE USO 1,0.0,674.85,SI,674.85,lista,,409.0,39.4,361.87,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Xiaomi Redmi Note 13 Pro 5G 8GB/256GB,CASO DE USO 1,0.0,610.5,SI,610.5,lista,,370.0,39.4,238.0,DISTRIBUIDORA MUNDO ELECTRONICA C.A
+,Xiaomi Redmi Note 14 8GB/256GB.,CASO DE USO 1,0.0,460.35,SI,297.7,promedio_12m,297.7,254.0,14.7,186.0,KEDCELL GRUPO
+,Xiaomi Redmi Note 14 Pro+ 5G 12GB/512GB,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,396.6,,,
+,Xiaomi Redmi Note 14 Pro 5G 8GB/256GB,CASO DE USO 3,0.0,577.5,SI,447.36,promedio_12m,447.36,317.18,29.1,359.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Xiaomi Redmi Note 14 Pro+ 5G 8GB/256GB.,CASO DE USO 3,0.0,727.65,SI,545.39,promedio_12m,545.39,338.02,38.0,439.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Xiaomi Redmi Note 14 Pro 8GB/256GB,CASO DE USO 3,0.0,493.35,SI,352.28,promedio_12m,352.28,231.17,34.4,193.0,KEDCELL GRUPO
+,Xiaomi Redmi Note 15 Pro+ 5G 8GB/256GB,CASO DE USO TC,1.0,1.0,NO,495.56,promedio_12m,495.56,439.0,11.4,401.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,Xiaomi Redmi Note 17 Pro Max 5G 8GB/256GB,CASO DE USO TC,2.0,1.0,NO,,sin_dato,,462.0,,462.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"Xiaomi Redmi Pad SE 11"" (23073RPBFG) 8GB/256GB",CASO DE USO 1,0.0,1.0,NO,291.67,promedio_12m,291.67,296.0,-1.5,269.0,JUHENDIS ESTHER VALLADARES LOPEZ F.P
+,Xiaomi Redmi Watch 5 Lite (BHR8789GL),CASO DE USO TC,0.0,1.0,NO,97.43,promedio_12m,97.43,65.0,33.3,112.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+,"ZTE Blade X10 10"" T1002 3GB/32GB LTE, Black + Bluetooth Keyboard.",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,76.22,,,
+,ZTE Nubia Neo 2 5G 8GB/256GB,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,157.0,,157.0,JUHENDIS ESTHER VALLADARES LOPEZ F.P
+0001-1,"Apple iPad Pro 13"" (M4) Wi-Fi 256GB",CASO DE USO 3,0.0,3816.0,SI,2268.55,promedio_12m,2268.55,1364.4,39.9,1779.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-12,Control PlayStation 5 / Sony DualSense PS5,CASO DE USO TC,0.0,1.0,NO,114.65,promedio_12m,114.65,79.0,31.1,79.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-14,Honor 200 Lite 8GB/256GB,CASO DE USO 1,0.0,1.0,NO,322.89,promedio_12m,322.89,307.0,4.9,192.0,KEDCELL GRUPO
+0001-15,Honor 400 12Gb/256Gb,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,344.0,,344.0,KEDCELL GRUPO
+0001-17,HONOR CHOICE Earbunds X7 Lite MZT-ME00,All,0.0,1.0,NO,,sin_dato,,0.0,,,
+0001-18,Honor Magic 7 Lite 5G 8GB/256GB,CASO DE USO 1,0.0,679.8,SI,461.06,promedio_12m,461.06,485.0,-5.2,270.0,KEDCELL GRUPO
+0001-2,Audífonos para obsequio,Varios,-1.0,0.0,NO,,sin_dato,,0.0,,,
+0001-20,Honor X7C 8GB/256GB,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,147.0,,147.0,KEDCELL GRUPO
+0001-25,Huawei Smart Band 10 NOR-B19,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,44.0,,44.0,KEDCELL GRUPO
+0001-3,Audífonos Redragon Ares H120,CASO DE USO 1,0.0,1.0,NO,36.08,promedio_12m,36.08,35.0,3.0,35.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-33,Inversor UPS FT-B 300W 12V-110V,CASO DE USO 3,1.0,504.0,SI,504.0,lista,,235.0,53.4,,
+0001-37,"Laptop HP 15-dy5885wm, Intel Core i5-1235U, 8GB, 256GB SSD, 15.6"", US, W11.",CASO DE USO 1,0.0,1266.72,SI,1266.72,lista,,791.7,37.5,609.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-38,"Laptop Lenovo 15.6"" 82QD00DHUS Ideapad Intel Core I3-1215U 8GB/256GB Windows 11",CASO DE USO 1,0.0,1.0,NO,,sin_dato,,527.0,,380.0,GRUPO BONOBO CA
+0001-39,"Laptop Lenovo, Intel 10-Core i7-13620H (Beat Ultra 7 255U), 40 GB DDR4 RAM, 1TB PCIe SSD, WiFi 6, Bluetooth 5.2, FHD de 15.6, RJ45, tipo C, HDMI, Windows 11 Pro",CASO DE USO 3,0.0,1.0,NO,1078.51,promedio_12m,1078.51,950.0,11.9,948.5,GEMITECH CORP (AMAZON USA)
+0001-4,Audífonos Redragon Pelops H818,CASO DE USO TC,1.0,1.0,NO,,sin_dato,,81.0,,121.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-42,Lentes de Sol Ray-Ban  IA Meta Headliner,CASO DE USO 3,0.0,1.0,NO,801.7,promedio_12m,801.7,491.0,38.8,811.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-44,Ninja PROFESSIONAL Blender 1000 BL610 1000W.,CASO DE USO 3,0.0,384.0,SI,384.0,lista,,174.05,54.7,259.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-47,Playstation 5 SLIM Marvel Spider-Man 2 / Disc Drive / 1TB,CASO DE USO 1,0.0,1.0,NO,1156.94,promedio_12m,1156.94,1232.0,-6.5,990.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-49,Protector de pantalla,CASO DE USO TC,3.0,0.0,NO,,sin_dato,,0.0,,,
+0001-5,Audífonos Vieta Pro Way 4,CASO DE USO 3,0.0,1.0,NO,48.29,promedio_12m,48.29,27.55,42.9,41.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-50,Reloj Electronico Digital,CASO DE USO 1,-2.0,0.0,NO,,sin_dato,,0.0,,,
+0001-51,Router Wifi-6 Archer AX90 AX6600 Gigabit,CASO DE USO 1,1.0,1.0,NO,,sin_dato,,326.23,,485.46,"DISTRIBUIDORA KTDC, C.A."
+0001-55,Samsung Galaxy M55 5G 8GB/256GB,CASO DE USO 1,1.0,546.15,SI,339.58,promedio_12m,339.58,0.0,,319.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-56,Seguro de Reserva de Dominio,CASO DE USO 1,642.0,1.0,NO,5.0,promedio_12m,5.0,3.85,23.0,3.0,WHALEDIGITALS
+0001-57,Silla Gamer Redragon Gaia C211,CASO DE USO TC,0.0,1.0,NO,420.69,promedio_12m,420.69,236.0,43.9,524.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-58,Teclado Redragon 2in1 S101-3 Gamer – Alámbrico / Combo Mouse y teclado,CASO DE USO TC,0.0,1.0,NO,73.39,promedio_12m,73.39,49.0,33.2,85.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-59,Teclado Redragon HarpePro Gamer,CASO DE USO TC,1.0,1.0,NO,,sin_dato,,37.8,,63.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-6,Barra De Sonido Aiwa,CASO DE USO 1,4.0,171.6,SI,47.49,promedio_12m,47.49,90.0,-89.5,80.0,TIENDA 19
+0001-60,Tecno Camon 40 8GB/256GB,CASO DE USO 3,0.0,1.0,NO,289.88,promedio_12m,289.88,197.0,32.0,197.0,KEDCELL GRUPO
+0001-61,Tecno Camon 40 Pro 8GB/256GB,CASO DE USO 3,0.0,542.85,SI,346.24,promedio_12m,346.24,223.0,35.6,216.0,KEDCELL GRUPO
+0001-62,Tecno Spark 30 PRO (KL7) 8GB/256GB,CASO DE USO 1,0.0,435.6,SI,291.67,promedio_12m,291.67,296.0,-1.5,201.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-63,Tecno Spark 40 Pro (KM6) 8GB/256GB,CASO DE USO TC,0.0,1.0,NO,268.14,promedio_12m,268.14,179.0,33.2,150.0,KEDCELL GRUPO
+0001-64,Tecno Spark 40 Pro+ (KM7) 8GB/256GB,CASO DE USO TC,0.0,1.0,NO,299.62,promedio_12m,299.62,219.0,26.9,169.0,KEDCELL GRUPO
+0001-66,USB-C CABLE 4tf/1.2m Powerline,CASO DE USO 1,0.0,0.0,NO,,sin_dato,,0.0,,,
+0001-67,XIAOMI QBH4269GL-SZ Cornetas XIAOMI de Bolsillo S28D 5W,CASO DE USO 1,0.0,1.0,NO,43.12,promedio_12m,43.12,41.0,4.9,21.52,"DISTRIBUIDORA KTDC, C.A."
+0001-69,"Xiaomi Redmi Pad SE 11"" (23073RPBFG) 4GB/128GB",CASO DE USO 1,0.0,1.0,NO,,sin_dato,,287.0,,287.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-7,Base para Televisor Aiwa Soporte Fijo Pared 32/70 pulgadas,Televisores,4.0,0.0,NO,0.0,promedio_12m,0.0,0.0,,,
+0001-70,"Xiaomi Redmi Pad SE 8.7, 6GB/128GB",CASO DE USO 3,0.0,433.2,SI,290.94,promedio_12m,290.94,166.66,42.7,220.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+0001-71,CAMON 40 Bluetooth Power Bank,All,0.0,1.0,NO,,sin_dato,,0.0,,,
+0001-72,Cauchos 245/65 R17 Kumho At52,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,175.0,,175.0,CAUCHOS TAVARES C.A.
+0001-73,Honor Play 9A 64Gb/4Gb,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,58.5,,58.5,KEDCELL GRUPO
+0001-8,Case For Phone,Varios,3.0,0.0,NO,,sin_dato,,0.0,,1.0,JUHENDIS ESTHER VALLADARES LOPEZ F.P
+0001-9,Caucho Pneus 265/75 R16,CASO DE USO 4,0.0,370.56,SI,370.56,lista,,247.0,33.3,170.0,SERMECA
+074108456434,"Plancha ionica de acero inoxidable de 1¼"" Optima3000 Babyliss",CASO DE USO TC,0.0,1.0,NO,60.0,promedio_12m,60.0,87.0,-45.0,60.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+074108464521,Nano Titanium Secador profesional BaBylissPRO Con Tecnología Ionica Doble de 1875 Watts,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,175.0,,148.03,"GLOW COSMETICS UNIVERSAL, C.A."
+074108468390,Máquina de cortar cabello profesional BaBylissPRO LO-PROFX,CASO DE USO 1,0.0,1.0,NO,112.07,promedio_12m,112.07,100.0,10.8,109.85,"GLOW COSMETICS UNIVERSAL, C.A."
+074108470508,Máquina de afeitar de doble hoja metálica sin cable BaBylissPRO FXONE GOLDFX,CASO DE USO 3,0.0,1.0,NO,182.86,promedio_12m,182.86,104.32,43.0,133.82,"GLOW COSMETICS UNIVERSAL, C.A."
+074108477651,Maquina de afeitar de doble hoja metálica sin cable FXONE BLACKFX,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,133.82,,,
+074108477682,Máquina de cortar cabello profesional BaBylissPRO FXONE BLACKFX,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,118.77,,152.36,"GLOW COSMETICS UNIVERSAL, C.A."
+074108477705,"Terminadora de Barba, Bigote, Cuello y Orejas BaBylissPRO FXONE BLACKFX",CASO DE USO 1,1.0,1.0,NO,,sin_dato,,103.34,,132.57,"GLOW COSMETICS UNIVERSAL, C.A."
+074108488732,"Nano Titanium Combo de Plancha de 1 ½"" y Secadora de Cabello 2000 watts BaBylissPRO",CASO DE USO 3,0.0,1.0,NO,154.3,promedio_12m,154.3,98.59,36.1,126.48,"GLOW COSMETICS UNIVERSAL, C.A."
+074108502759,"Nano Titanium Combo de Plancha de 1 ¼"" y Cepillo de Aire Caliente de 2½ BaBylissPRO",CASO DE USO 1,0.0,1.0,NO,156.91,promedio_12m,156.91,140.0,10.8,135.0,"GLOW COSMETICS UNIVERSAL, C.A."
+074108509758,Cepillo Secador BabylissPRO NANO Titanium – Style/Switch Ionic Multi-Styler Dryer,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,160.0,,196.75,"GLOW COSMETICS UNIVERSAL, C.A."
+08086279176479,Olla Arrocera 4-C Rice Cooker Cuisinart,CASO DE USO TC,1.0,1.0,NO,,sin_dato,,67.1,,86.08,"GLOW COSMETICS UNIVERSAL, C.A."
+086279189134,Batidora Digital Pro 5.5Quart Stand Mixer Gris,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,233.59,,299.67,"GLOW COSMETICS UNIVERSAL, C.A."
+086279217080,Licuadora Compacta J/E Combo Cuisinart,CASO DE USO 1,0.0,1.0,NO,138.28,promedio_12m,138.28,123.38,10.8,158.28,"GLOW COSMETICS UNIVERSAL, C.A."
+10022,"Marsriva Mini UPS KP2 Pro 8000mAh, 30W (4P).",CASO DE USO 1,0.0,63.8,SI,51.63,promedio_12m,51.63,74.0,-43.3,33.33,"VENEPAC 2020, C.A."
+108-B/8P,NVR mini 1U de 4 canales y 4 PoE 4K,CASO DE USO 3,0.0,277.68,SI,277.68,lista,,113.08,59.3,,
+1100-PINGUINAP12N,Aire Portatil 12000 Btu Deshumidificador Y Ventilador Negro Negro Tecnolam,CASO DE USO 1,0.0,1.0,NO,406.91,promedio_12m,406.91,456.0,-12.1,363.0,INVERSIONES NAIDA HOGAR C.A.
+3030050187236,Secador profesional BaBylissPRO 2000 Watts,CASO DE USO TC,0.0,1.0,NO,63.31,promedio_12m,63.31,49.0,22.6,49.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+96523-6320,Bicicleta Niño SPZ RipRock CSTR 20,CASO DE USO 5,0.0,1.0,NO,,sin_dato,,528.0,,,
+A.S000-00001,Starlink Standard Kit AC Dual Band Wi-Fi System,CASO DE USO 3,0.0,1649.52,SI,1649.52,lista,,671.8,59.3,775.03,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+A.S000-00012,Starlink Mini Dual-Band Wi-Fi System,CASO DE USO TC,5.0,530.0,SI,393.38,promedio_12m,393.38,290.0,26.3,216.0,STARLINK
+A2,A2 Administrativo Contable,CASO DE USO 1,0.0,1.0,NO,,sin_dato,,1396.32,,,
+AAC001-00008,"TCL A/A Split 24K BTU, 220V/60Hz.",CASO DE USO 3,0.0,1376.1,SI,1376.1,lista,,543.65,60.5,600.0,"TCL/VIOGP, C.A"
+AAC002-00003,Aiwa Home Aire Acondicionado Portatil 12K BTU,CASO DE USO TC,0.0,594.0,SI,404.73,promedio_12m,404.73,259.0,36.0,259.0,GERARDO JOSE RAMIREZ FERNANDEZ
+AAC002-00006,Aiwa Home AWHACC12D01 Aire Acondicionado Split Essential 12K BTU.,CASO DE USO TC,0.0,1.0,NO,417.55,promedio_12m,417.55,339.0,18.8,1.0,JUHENDIS ESTHER VALLADARES LOPEZ F.P
+AAC002-00011,Aiwa Aire Acondicionado de Ventana (AWHWACM0601) 5000 BTU,CASO DE USO TC,0.0,311.85,SI,239.11,promedio_12m,239.11,129.0,46.0,192.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AAC002-00014,Aiwa Home AWHACC18DI03P Aire Acondicionado Split Efficient Inverter 18K BTU Wi-Fi.,CASO DE USO TC,0.0,983.4,SI,633.95,promedio_12m,633.95,483.0,23.8,1.0,GERARDO JOSE RAMIREZ FERNANDEZ
+AAC002-00015,Aiwa Home AWHACC24DI03P Aire Acondicionado Split Efficient Inverter 24K BTU Wi-Fi.,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,588.0,,450.0,"255K VENEZUELA, C. A"
+AAC002-00017,Aiwa Aire Acondicionado de Ventana (AWHWACM1202) 12.000 BTU (220V).,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,259.0,,,
+AAC004-00017,Aire Acondicionado Samsung Split AR24BVHQAURNXL – 24000 BTU,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,588.0,,,
+AAC005-00003,Aire Acondicionado LG VM122C9 DUALCOOL – 12K BTU,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,565.0,,,
+AC12G,Router Mercusys AC1300 Dual Band Gigabit,CASO DE USO 1,1.0,1.0,NO,57.47,promedio_12m,57.47,44.0,23.4,51.04,"VENEPAC 2020, C.A."
+ACE002-00015,Cargador Apple 35W Dual USB-C Port Compact Power,CASO DE USO TC,0.0,1.0,NO,48.34,promedio_12m,48.34,32.0,33.8,32.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+ACE009-00072,"Samsung Power Adapter 45W (EP-T4511), Low Standby USB-C Cable",CASO DE USO TC,1.0,1.0,NO,48.97,promedio_12m,48.97,39.0,20.4,33.62,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+ACE00A-00001,Apple Pencil 2th generation (MU8F2AM/A),CASO DE USO TC,1.0,422.64,SI,422.64,lista,,147.0,65.2,130.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+ACL-CR2050-BLK-001,Caja Registradora CR2050 (PT),CASO DE USO HKA,2.0,1737.69,SI,812.19,promedio_12m,812.19,532.0,34.5,458.0,THE FACTORY HKA EQUIPOS FISCALES
+ACL-PP9P-BLK-001,Impresora Fiscal  Aclas PP9-Plus (PT),CASO DE USO HKA,0.0,1737.69,SI,761.38,promedio_12m,761.38,531.28,30.2,458.0,THE FACTORY HKA EQUIPOS FISCALES
+AIA16,"Apple iPad A16 11"", 128GB, Wi-Fi (MD4A4LL/A),",CASO DE USO TC,0.0,1.0,NO,676.87,promedio_12m,676.87,466.08,31.1,755.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AIARG-01,Alimentador Inteligente ARGOMTECH para Mascotas-Capacidad de 4 L,CASO DE USO 1,2.0,1.0,NO,144.24,promedio_12m,144.24,112.5,22.0,140.01,"DISTRIBUIDORA KTDC, C.A."
+AIO000-00079,"HP 24-df1000 23.8"", Intel Core i3-1115G4, 8GB, 256GB SSD, W11.",CASO DE USO 1,0.0,1349.28,SI,1349.28,lista,,817.7,39.4,,
+AIO000-00086,"All in One HP 22-dd2000nh, 21.5"", Intel Celeron J4025, 4GB, 256GB SSD, W11.",CASO DE USO TC,0.0,1239.84,SI,1239.84,lista,,490.0,60.5,1.0,GERARDO JOSE RAMIREZ FERNANDEZ
+AIO001-00035,"All In One Lenovo V130-20IGM, 19.5"", Intel Celeron Dual-Core, 16GB, 512GB SSD, W11 Pro, Wired Keyboard & Mouse.",CASO DE USO TC,0.0,1596.0,SI,1596.0,lista,,523.0,67.2,690.24,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AIO001-00052,"All in One Lenovo IdeaCentre F0HR000BUS 23.8"", AMD Ryzen 5 7535H, 16GB, 512GB, W11.",CASO DE USO TC,0.0,4075.44,SI,4075.44,lista,,949.0,76.7,,
+AIO003-00004,"All In One Asus 23.8"", Intel Core i3-1215U, 8GB, 512GB SSD, W11.",CASO DE USO TC,0.0,1872.48,SI,1872.48,lista,,732.0,60.9,,
+AIO004-00037,"Dell Inspiron i7720-7173WHT-PUS, 27"" Touchscreen, Intel Core i7-1355U, 32GB, 1TB SSD, GeForce MX550 2GB, W11.",CASO DE USO 1,0.0,3524.16,SI,3524.16,lista,,2135.9,39.4,,
+AIO004-00049,"All In One Dell Inspiron 24 5415 23.8"", AMD Ryzen 3-7330U, 8GB, 512GB SSD, W11.",CASO DE USO TC,0.0,1949.76,SI,1949.76,lista,,911.0,53.3,,
+AIO00A-00004,"All in One Compaq QA24N1GW8256 24"", Intel N-Series N100 8GB, 256GB SSD, W11.",Computadoras,0.0,1.0,NO,643.0,promedio_12m,643.0,705.0,-9.6,643.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AMCB13,Laptop Apple MacBook Neo 13” – A18 Pro / 8GB / 256GB,CASO DE USO TC,1.0,1.0,NO,1207.55,promedio_12m,1207.55,889.0,26.4,885.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+ANT-21560-01,Caucho 215/60/ R17 Antares,CASO DE USO 3,0.0,113.04,SI,113.04,lista,,68.55,39.4,70.0,SERMECA
+ARG-BG-6782,"Maletin ARGOMTECH para Laptop 15.6"" /Negro",CASO DE USO 1,0.0,1.0,NO,26.56,promedio_12m,26.56,25.0,5.9,24.22,"DISTRIBUIDORA KTDC, C.A."
+ARG-BP-0728BK,"Bolso ARGOMTECH Visionaire para Laptop 15.6""",CASO DE USO 1,0.0,1.0,NO,31.78,promedio_12m,31.78,28.35,10.8,28.35,"DISTRIBUIDORA KTDC, C.A."
+ARG-BP-1342GR,"Bolso ARGOMTECH Stark para Laptop 14.1""",CASO DE USO 1,0.0,1.0,NO,21.49,promedio_12m,21.49,15.75,26.7,20.71,"DISTRIBUIDORA KTDC, C.A."
+ARG-SL-0018BK,"Funda ARGOMTECH para Laptop 15""",CASO DE USO 3,0.0,1.0,NO,14.48,promedio_12m,14.48,9.65,33.4,14.36,"DISTRIBUIDORA KTDC, C.A."
+ASXM4432G,"ASTRA FUNDA  PARA LAPTOP BRUMA 14""",CASO DE USO 3,1.0,1.0,NO,20.94,promedio_12m,20.94,13.9,33.6,13.9,"DISTRIBUIDORA EMITECH, C.A"
+AUD002-00013,Apple AirPods Pro 2 with Magsafe Charging Case Type C,CASO DE USO 3,0.0,682.08,SI,682.08,lista,,296.35,56.6,318.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AUD002-00015,Apple AirPods 4,CASO DE USO TC,0.0,1.0,NO,189.03,promedio_12m,189.03,153.0,19.1,274.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AUD002-00016,Apple AirPods 4 with Acttive Noise Cancellation,CASO DE USO TC,0.0,598.56,SI,217.0,promedio_12m,217.0,189.0,12.9,217.0,JUHENDIS ESTHER VALLADARES LOPEZ F.P
+AUD002-00018,Apple Airpods Max,CASO DE USO TC,0.0,1484.4,SI,1484.4,lista,,579.0,61.0,,
+AUD002-00022,"Apple AirPods Pro 3, White.",CASO DE USO 1,0.0,1.0,NO,590.0,promedio_12m,590.0,590.0,0.0,590.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AUD003-00033,Audífonos Samsung Galaxy Buds 3 Pro,CASO DE USO TC,0.0,504.48,SI,191.75,promedio_12m,191.75,166.66,13.1,122.0,GERARDO JOSE RAMIREZ FERNANDEZ
+AUD008-00011,Huawei Freebuds SE 3 T0016,CASO DE USO TC,1.0,1.0,NO,88.93,promedio_12m,88.93,69.0,22.4,53.0,KEDCELL GRUPO
+AUD008-00013,Huawei Bluetooth Earphones Freeclips T0017,CASO DE USO 3,0.0,1.0,NO,233.0,promedio_12m,233.0,154.0,33.9,154.0,KEDCELL GRUPO
+AUD009-00052,Audifonos inalámbricos Xiaomi Redmi Buds 6,CASO DE USO TC,5.0,1.0,NO,53.54,promedio_12m,53.54,49.0,8.5,49.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AUD01R-00004,Audifonos Lamborghini Lambo Headset Huracan LB-HS,CASO DE USO TC,1.0,1.0,NO,62.58,promedio_12m,62.58,39.0,37.7,58.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AUD01S-00004,Shokz OPENFIT AIR Open-Ear True Wireless Earbuds,CASO DE USO 1,0.0,469.68,SI,469.68,lista,,284.7,39.4,,
+AUT000-00001,AccuBanker D450 Detector Automático de Billetes Falsos.,CASO DE USO TC,0.0,422.64,SI,422.64,lista,,143.0,66.2,,
+AW40B4SFG,"Aiwa 40"", FHD Smart TV, Google TV.",CASO DE USO 1,0.0,480.15,SI,480.15,lista,,300.0,37.5,236.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AW42B4SFG,"Aiwa 42"" HD Smart TV, Full HD SFG - Google TV",CASO DE USO TC,0.0,1.0,NO,376.93,promedio_12m,376.93,179.0,52.5,189.0,"255K VENEZUELA, C. A"
+AW50B4KFG,"Aiwa 50"", 4K Smart TV, Google TV.",CASO DE USO TC,0.0,836.64,SI,836.64,lista,,336.0,59.8,303.6,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AW65B4KFG,"Aiwa 65"" 4K Smart Tv Google Tv",CASO DE USO TC,0.0,1409.28,SI,1409.28,lista,,463.0,67.1,465.6,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AWHAFT8001,"Aiwa Easy Life, Freidora sin aceite 8L, Doble Canasto.",CASO DE USO TC,0.0,278.88,SI,153.64,promedio_12m,153.64,119.0,22.5,124.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AWHCFC40001,Congelador Horizontal Aiwa 400Lt /10.6 CuFt,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,621.0,,799.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+AWHRC26501,"Aiwa Nevera Refrigeradora Top Mount, 9 CuFt, Dispensador de Agua, Acero Inoxidable.",CASO DE USO 1,0.0,1333.2,SI,1333.2,lista,,808.0,39.4,415.0,"255K VENEZUELA, C. A"
+AWHRC31401,Aiwa Nevera Refrigeradora Top Mount 10.5 CuFt,Hogar,0.0,1.0,NO,,sin_dato,,519.68,,,
+BE200LAA,Ninja CLASSIC Blender BE200LAA 1000W.,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,175.39,,,
+BTT003-00017,Batidora Cuisinart HM-70 – 7-Speed Hand Mixer,CASO DE USO TC,1.0,1.0,NO,147.0,promedio_12m,147.0,97.0,34.0,147.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CAB002-00013,Cable de Carga Apple MU2G3ZM/A – 240W / USB-C / 2m,CASO DE USO TC,3.0,1.0,NO,46.88,promedio_12m,46.88,28.0,40.3,28.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CAF004-00002,"Aiwa Easy Life AWHCMD1501, Cafetera de 12 tazas con filtro permanente programable.",CASO DE USO TC,2.0,123.75,SI,62.46,promedio_12m,62.46,53.0,15.1,75.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CAF008-00001,Ninja 12 Cup Programable Coffe Maker CE250.,CASO DE USO 3,0.0,435.36,SI,435.36,lista,,177.34,59.3,,
+CAM005-00059,Fujifilm Intax Mini 12 Instanx Camera Bundle,CASO DE USO 3,0.0,319.68,SI,319.68,lista,,131.04,59.0,,
+CAM005-00063,Fujifilm Intax Mini 12 + 30 Paper + Marcos (Combo B).,CASO DE USO 3,0.0,394.35,SI,292.37,promedio_12m,292.37,160.61,45.1,239.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CAMP-LITE76.NG,Campana Lite 76cm Vetrux Acero,CASO DE USO 3,0.0,225.12,SI,225.12,lista,,110.88,50.7,104.99,MULTIMAX STORE C.A
+CC-CF-18,Colchón Colflex Dallas 1 pillow individual,CASO DE USO 1,0.0,510.48,SI,510.48,lista,,382.0,25.2,238.0,"FOTO ESTUDIO VENEZUELA, C.A."
+CC-CF-45,Colchon Colflex 2 Pillow Ortopedico 1.40*1.90 (Matrimonial),CASO DE USO 1,0.0,795.84,SI,444.63,promedio_12m,444.63,530.0,-19.2,351.0,"FOTO ESTUDIO VENEZUELA, C.A."
+CC-CO-63,Colchón Confort Lemans 2 Pillow 1.60*1.90 (Queen),CASO DE USO 3,0.0,853.68,SI,853.68,lista,,347.69,59.3,,
+CC-PR-62,Colchón Paris Rouge 1 Pillow Ortopedico  1.60*1.90 (Queen),CASO DE USO 3,0.0,686.4,SI,686.4,lista,,279.55,59.3,,
+CC-SE-45,Colchón Serta Euro Pillow Ortopedico 1.40*1.90 (Matrimonial),CASO DE USO 3,0.0,793.65,SI,521.62,promedio_12m,521.62,380.0,27.2,481.0,"FOTO ESTUDIO VENEZUELA, C.A."
+CC-SE-65,Colchón Serta Euro Pillow Ortopedico 1.60*1.90 (Queen),CASO DE USO 3,0.0,930.96,SI,930.96,lista,,379.14,59.3,,
+CC-SI-160,Colchón Simmons BackCare Advance 1 Pillow Ortopedico 1.60*1.90 (Queen),CASO DE USO 3,0.0,1246.32,SI,1246.32,lista,,507.56,59.3,623.0,SIMMONS COLLECTION C.A
+CE-11W4,Calentador Termotronic W4 220 Voltios,CASO DE USO 3,0.0,650.76,SI,650.76,lista,,265.44,59.2,,
+CEL000-00927,Samsung Galaxy S25 12GB/256GB,CASO DE USO 1,0.0,1572.45,SI,1572.45,lista,,1025.0,34.8,,
+CEL000-00933,Samsung Galaxy S25 Ultra 12GB/256GB,CASO DE USO TC,0.0,2310.0,SI,1508.8,promedio_12m,1508.8,889.0,41.1,1439.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL000-00937,Samsung Galaxy S25 Ultra 12GB/512GB,CASO DE USO TC,0.0,2438.7,SI,1574.31,promedio_12m,1574.31,949.0,39.7,1519.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL000-00941,Samsung Galaxy S25 Ultra 12GB/1TB,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,999.0,,,
+CEL000-00962,Samsung Galaxy A36 5G 8GB/256GB,CASO DE USO TC,0.0,663.3,SI,428.38,promedio_12m,428.38,329.0,23.2,263.5,KEDCELL GRUPO
+CEL000-00966,Samsung Galaxy A56 5G 8GB/128GB,CASO DE USO 3,0.0,801.9,SI,801.9,lista,,342.05,57.3,529.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL000-00970,Samsung Galaxy A56 5G 8GB/256GB,CASO DE USO TC,0.0,1.0,NO,490.28,promedio_12m,490.28,413.0,15.8,399.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL000-00981,Samsung Galaxy A26 5G 8GB/256GB,CASO DE USO 1,0.0,551.1,SI,319.14,promedio_12m,319.14,325.0,-1.8,202.0,KEDCELL GRUPO
+CEL000-00984,Samsung Galaxy A56 5G 12GB/256GB,CASO DE USO 3,0.0,1.0,NO,552.08,promedio_12m,552.08,459.0,16.9,345.0,GRUPO BONOBO CA
+CEL000-00995,Samsung Galaxy Z Flip 7 FE 8GB/256GB (SM-F761B),CASO DE USO 3,0.0,1.0,NO,,sin_dato,,714.0,,,
+CEL000-01000,Samsung Galaxy Z Flip 7 12GB/512GB (SM-F766B),CASO DE USO 3,0.0,1.0,NO,,sin_dato,,991.2,,,
+CEL000-01015,Samsung Galaxy A17 5G 6GB/128GB,CASO DE USO 3,0.0,1.0,NO,298.42,promedio_12m,298.42,200.93,32.7,299.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL000-01018,Samsung Galaxy A17 5G 8GB/256GB,CASO DE USO TC,1.0,1.0,NO,339.73,promedio_12m,339.73,314.0,7.6,207.0,KEDCELL GRUPO
+CEL000-01039,Samsung Galaxy S25 FE 8GB/512GB,CASO DE USO 1,0.0,1.0,NO,1029.62,promedio_12m,1029.62,1042.0,-1.2,1042.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL000-01045,"Samsung Galaxy S26 12GB/256GB 6.3""",CASO DE USO TC,0.0,1.0,NO,809.0,promedio_12m,809.0,759.0,6.2,809.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL000-01057,"Samsung Galaxy S26 12GB/512GB 6.3""",CASO DE USO TC,0.0,1.0,NO,,sin_dato,,899.0,,,
+CEL000-01067,Samsung Galaxy S26 Ultra 12GB/512GB,CASO DE USO TC,2.0,1.0,NO,1663.69,promedio_12m,1663.69,1229.0,26.1,1229.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL000-01071,Samsung Galaxy S26 Ultra 16GB/1TB,CASO DE USO TC,0.0,1.0,NO,1962.17,promedio_12m,1962.17,1459.0,25.6,1459.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL000-01073,Samsung Galaxy A37 6GB/128GB,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,313.0,,,
+CEL000-01077,Samsung Galaxy A37 8GB/256GB,CASO DE USO TC,0.0,1.0,NO,501.36,promedio_12m,501.36,389.0,22.4,389.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL000-01083,Samsung Galaxy A57 8GB/128GB,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,469.0,,,
+CEL000-01087,Samsung Galaxy A57 8GB/256GB,CASO DE USO TC,0.0,1.0,NO,534.8,promedio_12m,534.8,449.0,16.0,459.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL000-01089,Samsung Galaxy A57 12GB/512GB,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,599.0,,,
+CEL003-00908,Xiaomi Redmi 15C 8GB/256GB,CASO DE USO TC,1.0,1.0,NO,212.6,promedio_12m,212.6,215.0,-1.1,148.0,GERARDO JOSE RAMIREZ FERNANDEZ
+CEL003-00911,Xiaomi Redmi 15 8GB/256GB,CASO DE USO TC,0.0,1.0,NO,262.73,promedio_12m,262.73,229.0,12.8,140.5,KEDCELL GRUPO
+CEL003-00952,Xiaomi Redmi Note 15 8GB/256GB,CASO DE USO TC,3.0,1.0,NO,309.64,promedio_12m,309.64,269.0,13.1,225.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL003-00956,Xiaomi Redmi Note 15 Pro  5G 8GB/256GB,CASO DE USO TC,2.0,1.0,NO,388.29,promedio_12m,388.29,399.0,-2.8,426.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL003-00964,Xiaomi Redmi Note 15 Pro+ 5G 12GB/512GB,CASO DE USO TC,0.0,1.0,NO,653.1,promedio_12m,653.1,489.0,25.1,410.0,GRUPO BONOBO CA
+CEL005-00791,iPhone 16 128GB (1SIM+eSIM),CASO DE USO TC,0.0,3018.0,SI,3018.0,lista,,859.0,71.5,1039.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL005-00930,iPhone 16 Pro Max 256GB (1SIM+eSIM),CASO DE USO TC,0.0,3265.35,SI,1804.32,promedio_12m,1804.32,1379.0,23.6,1469.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL005-00995,iPhone 17 Air 256GB (eSIM),CASO DE USO TC,0.0,1.0,NO,1646.28,promedio_12m,1646.28,1069.0,35.1,2051.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL005-01015,Apple iPhone 17 Pro 256GB (1 SIM + eSIM),CASO DE USO TC,0.0,1.0,NO,,sin_dato,,1489.0,,,
+CEL005-01024,Apple iPhone 17 Pro 256GB (2 SIM),CASO DE USO 1,0.0,1.0,NO,,sin_dato,,2626.0,,,
+CEL005-01034,iPhone 17 Pro Max 256GB Esim,CASO DE USO TC,1.0,1.0,NO,1893.41,promedio_12m,1893.41,1521.0,19.7,1600.0,JJ SMART STORE
+CEL005-01036,iPhone 17 Pro Max 512GB (eSIM),CASO DE USO TC,0.0,1.0,NO,2759.39,promedio_12m,2759.39,1759.0,36.3,1600.0,JJ SMART STORE
+CEL005-01045,iPhone 17 Pro Max 256GB (1SIM + eSIM),CASO DE USO TC,0.0,1.0,NO,2614.56,promedio_12m,2614.56,1599.0,38.8,2637.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL005-01048,iPhone 17 Pro Max 512GB (1 SIM + eSIM),CASO DE USO 3,0.0,1.0,NO,3118.71,promedio_12m,3118.71,1879.0,39.8,2939.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL005-01069,iPhone 14 (eSIM) 512GB,CASO DE USO 1,0.0,1876.08,SI,1876.08,lista,,1142.0,39.1,,
+CEL007-00079,Honor X8C 8GB/256GB,CASO DE USO TC,0.0,1.0,NO,358.38,promedio_12m,358.38,245.0,31.6,199.0,KEDCELL GRUPO
+CEL007-00087,Honor X8C 8GB/512GB,CASO DE USO TC,0.0,539.55,SI,376.15,promedio_12m,376.15,279.0,25.8,228.0,KEDCELL GRUPO
+CEL007-00092,Honor Magic 7 Lite 5G 8GB/512GB,CASO DE USO 3,0.0,1.0,NO,554.24,promedio_12m,554.24,380.0,31.4,314.0,KEDCELL GRUPO
+CEL007-00094,Honor 200 12GB/512GB,CASO DE USO 3,0.0,1.0,NO,701.99,promedio_12m,701.99,444.0,36.8,444.0,KEDCELL GRUPO
+CEL007-00101,Honor X6c 8GB/256GB,CASO DE USO TC,0.0,1.0,NO,224.69,promedio_12m,224.69,173.0,23.0,218.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL007-00108,Honor 400 Lite 256GB/12GB,CASO DE USO TC,0.0,1.0,NO,383.66,promedio_12m,383.66,294.0,23.4,241.0,KEDCELL GRUPO
+CEL007-00115,Honor X7D 8GB/256GB,CASO DE USO TC,1.0,1.0,NO,299.33,promedio_12m,299.33,309.0,-3.2,155.0,KEDCELL GRUPO
+CEL007-00119,Honor Play 10 4GB/128 GB,CASO DE USO TC,0.0,1.0,NO,143.6,promedio_12m,143.6,119.0,17.1,153.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL007-00131,Honor Magic 8 Lite 8GB/256GB,CASO DE USO TC,0.0,1.0,NO,487.62,promedio_12m,487.62,429.0,12.0,354.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL007-00133,Honor Magic 8 Lite 8GB/512GB,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,529.0,,,
+CEL008-00030,ZTE Nubia Neo 3 ( 256GB/8GB),CASO DE USO TC,0.0,1.0,NO,274.82,promedio_12m,274.82,211.0,23.2,167.0,KEDCELL GRUPO
+CEL01A-00229,Tecno Camon 50 Pro – 6.78” 8GB/256GB,CASO DE USO TC,0.0,1.0,NO,413.51,promedio_12m,413.51,394.0,4.7,326.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL01B-00191,Infinix Note 50 Pro 8GB/256GB,CASO DE USO TC,0.0,577.5,SI,422.92,promedio_12m,422.92,259.0,38.8,213.5,KEDCELL GRUPO
+CEL01B-00204,Infinix Hot 50 Pro+ (X6880) 8GB/256GB,CASO DE USO 3,0.0,493.35,SI,493.35,lista,,168.0,65.9,168.0,KEDCELL GRUPO
+CEL01B-00208,Infinix Smart 10 4GB/128GB,CASO DE USO TC,0.0,1.0,NO,154.05,promedio_12m,154.05,100.0,35.1,74.0,KEDCELL GRUPO
+CEL01B-00211,Infinix GT 30 Pro (X6873) 256GB/12GB,CASO DE USO 3,0.0,1.0,NO,516.3,promedio_12m,516.3,273.0,47.1,273.0,KEDCELL GRUPO
+CEL01B-00217,Infinix Hot 60i (X6728) 8GB/256GB,CASO DE USO TC,0.0,1.0,NO,237.37,promedio_12m,237.37,169.0,28.8,172.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL01B-00222,Infinix Hot 60 Pro 8GB/256GB,CASO DE USO TC,0.0,1.0,NO,284.73,promedio_12m,284.73,212.0,25.5,148.0,KEDCELL GRUPO
+CEL01B-00229,Infinix Hot 60 Pro+ 8GB/256GB,CASO DE USO 3,0.0,1.0,NO,321.66,promedio_12m,321.66,243.0,24.5,177.5,KEDCELL GRUPO
+CEL01B-00242,"Infinix Smart 20, 4GB/128GB",CASO DE USO TC,2.0,1.0,NO,157.47,promedio_12m,157.47,154.0,2.2,119.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CEL01B-00252,Infinix Note 60 Pro 5G 8GB/256GB,CASO DE USO TC,2.0,1.0,NO,501.87,promedio_12m,501.87,459.0,8.5,317.0,KEDCELL GRUPO
+CEL01G-00009,Google pixel 10 Pro XL 5G 16 GB / 256 GB,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,1639.68,,,
+CHE-19560-01,Caucho 195/60R15 Chengshan,CASO DE USO 3,0.0,107.28,SI,107.28,lista,,55.0,48.7,55.0,SERMECA
+CIT-17565-01,Caucho City Star 175/65 R14,CASO DE USO 3,0.0,83.88,SI,83.88,lista,,55.95,33.3,,
+CIT-18560-01,Caucho City Star 185/60R14,CASO DE USO 3,0.0,87.84,SI,87.84,lista,,58.55,33.3,,
+CIT-18570-01,Caucho City Star 185/70 R14,CASO DE USO 3,0.0,117.0,SI,117.0,lista,,78.0,33.3,,
+COC006-00002,Cocina a Gas Samsung 4 hornillas,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,397.0,,,
+COMP8256,All In One  Compaq QA25I3GW8256 – 25” / Intel Core i3-1215U / 8 GB / 256 GB SSD / W11 / Teclado y Ratón,Computadoras,0.0,1.0,NO,787.41,promedio_12m,787.41,569.0,27.7,569.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CON000-00063,"Sony Playstation 5 Slim Disc Drive CFI-2015 (USA), 1TB, White.",CASO DE USO TC,0.0,1552.8,SI,1552.8,lista,,879.0,43.4,724.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CON000-00079,"Sony Playstation 5 Slim Digital Edition Fortnite Cobalt Star Bundle CFI-2015 (USA) 1TB, White.",CASO DE USO TC,0.0,1.0,NO,1060.15,promedio_12m,1060.15,719.0,32.2,1086.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CON000-00083,Playstation 5 Slim Digital Edition Call of Duty Black OPS 6 – 1TB / CFI-2015 (USA),CASO DE USO 3,0.0,1.0,NO,1172.29,promedio_12m,1172.29,645.0,45.0,859.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CON001-00042,Nintendo Switch Oled Neon Red & Neon Blue,CASO DE USO TC,1.0,872.88,SI,700.26,promedio_12m,700.26,449.0,35.9,389.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CON001-00046,Nintendo Switch Lite HDH-001 (JPN),CASO DE USO TC,0.0,1.0,NO,311.69,promedio_12m,311.69,199.0,36.2,300.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CON001-00068,Nintendo Switch 2,CASO DE USO 1,0.0,1.0,NO,1064.84,promedio_12m,1064.84,950.0,10.8,899.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CON002-00009,"Microsoft Xbox Series X (USA), 1TB.",CASO DE USO TC,0.0,1561.68,SI,914.5,promedio_12m,914.5,809.0,11.5,809.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CON002-00029,"Microsoft Xbox Series S (USA) 1TB, Robot White.",CASO DE USO TC,0.0,1134.72,SI,1134.72,lista,,608.0,46.4,,
+COR004-00019,Bose S1 Pro+ Portable Bluetooth Speaker System.,CASO DE USO 3,0.0,2451.9,SI,2451.9,lista,,928.0,62.2,,
+COR00K-00017,Corneta Aiwa 500W AWPOC11,CASO DE USO 1,0.0,384.0,SI,384.0,lista,,345.0,10.2,179.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+CR-27L,Calentador De Agua Eléctrico Record 27Lt,CASO DE USO 3,0.0,535.92,SI,535.92,lista,,220.99,58.8,169.98,"COMERCIALIZADORA JAB 2050, C.A"
+CR-35L,Calentador De Agua Eléctrico Record 35Lt,CASO DE USO 3,0.0,578.02,SI,578.02,lista,,258.72,55.2,184.98,"COMERCIALIZADORA JAB 2050, C.A"
+CR-50L,Calentador De Agua Eléctrico Record 50Lt,CASO DE USO 3,0.0,658.41,SI,658.41,lista,,268.8,59.2,209.99,"COMERCIALIZADORA JAB 2050, C.A"
+DMWH100HP,Mini Waffer Heart WP-MK05,CASO DE USO 3,0.0,118.08,SI,118.08,lista,,48.05,59.3,,
+DS-2CD1057G0-L,Camara de red tipo bala fija ColorVu de 5 MP,CASO DE USO 3,0.0,232.1,SI,232.1,lista,,94.53,59.3,,
+DS-2CD1357G0-LUF,Camara de red de torreta fija ColorVu de 5 MP,CASO DE USO 3,0.0,301.68,SI,301.68,lista,,122.89,59.3,,
+DS-2CD1383G0-IUF,Camara de red de torreta fija con micrófono 4K,CASO DE USO 3,0.0,336.24,SI,336.24,lista,,136.96,59.3,,
+DS-2CD2083G2-IU,Camara de red tipo bala fija AcuSense de 8 MP,CASO DE USO 3,0.0,444.24,SI,444.24,lista,,180.94,59.3,,
+DS-7108NI-Q1/8P,NVR mini 1U de 8 canales y 8 PoE,CASO DE USO 3,0.0,341.06,SI,341.06,lista,,139.6,59.1,,
+DS-7604NI-K1/4P,"NVR 4K de 4 canales, 1U y 4 PoE",CASO DE USO 3,0.0,339.36,SI,339.36,lista,,138.22,59.3,,
+DS-7616NI-K1,NVR 4K de 16 canales y 1U,CASO DE USO 3,0.0,324.0,SI,324.0,lista,,131.93,59.3,,
+DVB4327US-SZ,Router Xiaomi RB02 AC1200 4 Antenas Gigabit,CASO DE USO 1,0.0,1.0,NO,43.41,promedio_12m,43.41,27.77,36.0,41.33,"DISTRIBUIDORA KTDC, C.A."
+DVB4462GL-SZ,Router Xiaomi RD23 AX3000T Wifi6 4 Antenas,CASO DE USO 1,0.0,1.0,NO,63.09,promedio_12m,63.09,43.03,31.8,64.03,"DISTRIBUIDORA KTDC, C.A."
+E1504G,"Laptop Asus Vivobook Go 15 E1504GA-WS36, Intel Core i3-N305, 8GB, 256GB SSD, 15.6"", US, W11.",CASO DE USO 1,0.0,1083.12,SI,1083.12,lista,,550.0,49.2,479.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+ECO-D2-1024,EcoFlow Delta 2 / 1024WH,CASO DE USO 3,0.0,1699.0,SI,1243.98,promedio_12m,1243.98,833.95,33.0,900.0,TECHNOLOGY T&G
+ECO-DPRO-3600,EcoFlow Delta Pro / 3600Wh / 300Ah,CASO DE USO 1,0.0,6798.0,SI,6798.0,lista,,3500.0,48.5,2900.0,TECHNOLOGY T&G
+ECO-R2M-512,EcoFlow River 2 Max / 512WH,CASO DE USO 3,0.0,1060.5,SI,736.42,promedio_12m,736.42,530.0,28.0,470.0,TECHNOLOGY T&G
+ECO-R2P-768,EcoFlow River 2 Pro / 768WH,CASO DE USO 3,0.0,1278.75,SI,1278.75,lista,,670.0,47.6,570.0,TECHNOLOGY T&G
+EIH000-00002,"Aiwa Congelador Horizontal, 141LT (5CuFt).",CASO DE USO TC,0.0,596.4,SI,295.15,promedio_12m,295.15,229.0,22.4,296.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+EIH000-00003,"Aiwa Congelador Horizontal, 100Lt. (3.5 cuFt).",CASO DE USO TC,0.0,491.28,SI,242.93,promedio_12m,242.93,201.0,17.3,153.0,"255K VENEZUELA, C. A"
+EIH000-00004,"Aiwa Congelador Horizontal, 198Lt (7cuFt).",CASO DE USO TC,0.0,722.88,SI,722.88,lista,,257.0,64.4,260.93,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+EIH000-00005,"Aiwa Congelador Horizontal (AWHCFC25601), 254Lt. (9cuFt)",CASO DE USO TC,0.0,862.32,SI,862.32,lista,,314.0,63.6,428.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+EIH001-00003,TCL Congelador Horizontal 400Lts.,CASO DE USO 3,0.0,1550.88,SI,1550.88,lista,,631.61,59.3,,
+FRE008-00001,Ninja Air Fryer Max XL AF161.,CASO DE USO 3,0.0,389.4,SI,389.4,lista,,158.59,59.3,236.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+FUJ-82520-01,Caucho Fujisaki 8.25R20 con Tripa y Protector,CASO DE USO 3,0.0,448.56,SI,448.56,lista,,299.0,33.3,,
+GDWFKICKRPOWER,Cable de Alimentación Wahoo Wfkickr Power All Version,Caso de uso 7,0.0,42.5,SI,42.5,lista,,50.0,-17.6,,
+GP-COC20,Cocina a Gas GPLUS GP-COC20 – 20″ / 4 Hornillas,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,224.0,,360.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+GP-COC30,Cocina a Gas GPLUS 30″ / 6 Hornillas,CASO DE USO TC,0.0,1.0,NO,601.1,promedio_12m,601.1,352.0,41.4,565.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+GRE-75016-01,"Caucho Greenlander 7,50/R16",CASO DE USO 3,0.0,224.4,SI,224.4,lista,,149.59,33.3,,
+H087,Compresor De Aire 50 Litros 3.2hp Libre De Aceite Roccia Semi silencioso,CASO DE USO 3,0.0,982.83,SI,982.83,lista,,595.66,39.4,,
+H114,Compresor De Aire Libre De Aceite 30l Ultra Silent Roccia,CASO DE USO 3,0.0,526.35,SI,526.35,lista,,361.92,31.2,,
+HIK-3E0109P-EM,Switch DS-3E0109P-E/M,CASO DE USO 3,0.0,308.64,SI,308.64,lista,,125.66,59.3,,
+HIK-3E0318P-EM,Switch DS-3E0318P-E/M,CASO DE USO 3,0.0,478.22,SI,478.22,lista,,194.77,59.3,,
+HKA20-STD-BLK,Punto de Venta Fiscal HKA20,CASO DE USO HKA,0.0,2004.17,SI,2004.17,lista,,612.48,69.4,,
+HKA80-ISM-BLK,Impresora Fiscal  HKA80 (PT) Con Modulo de transmision de datos wifi (PT),CASO DE USO HKA,1.0,2495.04,SI,1022.66,promedio_12m,1022.66,762.12,25.5,657.0,THE FACTORY HKA EQUIPOS FISCALES
+HOR001-00001,Horno Eléctrico Aiwa 30L,CASO DE USO TC,0.0,1.0,NO,160.2,promedio_12m,160.2,109.0,32.0,155.0,JUHENDIS ESTHER VALLADARES LOPEZ F.P
+HP-15,"Laptop HP 15-fc0275la, AMD Ryzen 7 7730U, 16GB, 512GB SSD, 15.6"", US, W11.",CASO DE USO TC,0.0,1.0,NO,807.99,promedio_12m,807.99,559.0,30.8,619.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+HWF4,Huawei Watch Fit 4,CASO DE USO TC,2.0,1.0,NO,215.89,promedio_12m,215.89,149.0,31.0,223.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+I006,Amasadora industrial electrica 34 litros 220v Roccia,CASO DE USO 3,0.0,3284.42,SI,3284.42,lista,,1694.22,48.4,,
+ICE-DAE-45KG-INOX,Fabricador De Hielo Daewoo 45 Kilos,CASO DE USO 3,-1.0,1560.0,SI,1560.0,lista,,945.51,39.4,727.32,"INVERSIONES TECNOLOGY 2030, C.A"
+IMP000-00044,Impresora HP LaserJet M111w – Monocromática,CASO DE USO TC,0.0,1.0,NO,232.63,promedio_12m,232.63,152.0,34.7,151.07,GERARDO JOSE RAMIREZ FERNANDEZ
+IMP001-00015,Impresora Epson Tinta Continua EcoTank L1250 (Color).,CASO DE USO TC,0.0,540.48,SI,278.59,promedio_12m,278.59,210.0,24.6,155.0,"DISTRIBUIDORA EMITECH, C.A"
+IMP001-00015,Impresora Epson Tinta Continua EcoTank L3250 (Multifuncional/Color).,CASO DE USO 3,0.0,571.77,SI,354.38,promedio_12m,354.38,245.0,30.9,211.0,"SOLUTIONS PLANET, C.A."
+IMP001-00019,Impresora Epson Tinta Continua Ecotank L4260 (Color),CASO DE USO 3,0.0,924.48,SI,445.06,promedio_12m,445.06,264.55,40.6,361.62,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+IMP001-00025,Epson SureColor SC-F170 Sublimación UltraChrome (Color).,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,483.6,,,
+IMP001-00035,Impresora Epson Tinta Continua EcoTank L5590,CASO DE USO 1,0.0,1.0,NO,565.8,promedio_12m,565.8,580.0,-2.5,495.0,"VENEPAC 2020, C.A."
+JBLT110BLKAM,JBL Tune 110,CASO DE USO 1,0.0,57.84,SI,57.84,lista,,27.0,53.3,27.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+K22M-800,Batería KTO Tipo 22 800 AMP Borne Izquierdo- K22M-800,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,90.0,,,
+K22MR-800,"Batería KTO Tipo 22, 800 AMP, Borne Derecho-K22MR-800",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,90.0,,,
+K24I-850,"Batería KTO Tipo 24, 850 AMP, Borne Izquierdo-K24I-850",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,90.0,,,
+K24R-1100,"Batería KTO Tipo 24, 1100 AMP, Borne Derecho-K24R-1100",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,103.0,,158.14,"CORPORACION MAXICAR, C.A"
+K27R-1100,"Batería KTO Tipo 27, 1100 AMP, Borne Derecho K27R-1100",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,124.71,,,
+K34M-850,Batería KTO Tipo 34M 850 AMP Borne Izquierdo-K34M-850,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,97.0,,,
+K36MR-800,Batería KTO Tipo 36M 800 AMP Borne Derecho-K36MR-800,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,70.0,,138.88,"CORPORACION MAXICAR, C.A"
+K41-950,Batería KTO Tipo 41 950 AMP Borne Izquierdo-K41-950,CASO DE USO 3,0.0,1.0,NO,105.09,promedio_12m,105.09,90.0,14.4,89.14,"CORPORACION MAXICAR, C.A"
+K41R-950,Batería KTO Tipo 41 950 AMP Borne Derecho-K41R-950,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,90.0,,,
+K42-850,Batería KTO Tipo 42 850 AMP Borne Derecho-K42-850,CASO DE USO 3,0.0,1.0,NO,94.78,promedio_12m,94.78,90.0,5.0,80.64,"CORPORACION MAXICAR, C.A"
+K65-1100,Batería KTO Tipo 65 1100 AMP Borne Izquierdo-K65-1100,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,113.69,,,
+K9800G+M588GX,Combo Teclado Mouse Usb Gaming Inalambrico Delux K9800 M588,CASO DE USO TC,6.0,1.0,NO,44.55,promedio_12m,44.55,25.64,42.4,29.59,"VENEPAC 2020, C.A."
+KSM195PSBT,"Batidora Artisan Con Accesorios (4,5L)",CASO DE USO 3,0.0,1.0,NO,390.02,promedio_12m,390.02,290.0,25.6,290.0,CORPORACIÓN STAR WHITE C.A
+KUM-18560-01,Caucho Kumho 185/60 R14,CASO DE USO 3,0.0,122.88,SI,122.88,lista,,81.9,33.3,46.0,"TIRE SHOP, C.A"
+KUM-23575-01,Caucho Kumho 235/75 R15,CASO DE USO 3,0.0,277.5,SI,277.5,lista,,185.0,33.3,185.0,"TIRE SHOP, C.A"
+LAP000-00102,"Laptop Dell i3501-5075BLK-PUS, Core i5-1135G7, 12GB, 256GB SSD, 15.6"", US, W10S.",CASO DE USO 1,0.0,1722.48,SI,1722.48,lista,,1054.0,38.8,,
+LAP000-00138,"Dell Inspiron 15 i3520-7896BLK-PLUS, Intel Core i7-1255U, 16GB 1TB SSD, 15.6"" Touchscreen, US, W11.",CASO DE USO 1,0.0,1992.72,SI,1992.72,lista,,1207.7,39.4,950.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP000-00141,"Laptop Dell Inspiron 15 3000 (3520), Intel Core i7-1255U, 16GB, 512GB SSD, 15.6"", US, W11 Home.",CASO DE USO 1,0.0,1969.2,SI,1969.2,lista,,918.0,53.4,918.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP000-00176,Laptop Dell G16 7630 – Intel Core i9 -16GB / 1TB SSD - NVIDIA RTX 4060 8GB,CASO DE USO TC,0.0,1.0,NO,2080.46,promedio_12m,2080.46,1400.0,32.7,2736.0,CASHEA-CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP001-00343,"Laptop Lenovo Legion 83DG004JUS, Intel Core i9-14900HX, 32GB, 1TB SSD, NVIDIA RTX 4060 8GB, 16"" 165Hz, US, W11.",CASO DE USO 1,0.0,4637.52,SI,4637.52,lista,,2810.6,39.4,,
+LAP001-00346,"Laptop Lenovo IdeaPad 1, Intel Celeron N4020, 4GB, 128GB eMMC, 14"", US, W11.",CASO DE USO 1,0.0,536.25,SI,536.25,lista,,484.0,9.7,313.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP001-00353,"Laptop Lenovo IdeaPad Slim 3 15IAN8 82XB008LUS, Intel Core i3-N305, 8GB, 256GB SSD, 15.6"", US, W11",CASO DE USO 1,0.0,1039.5,SI,1039.5,lista,,630.0,39.4,479.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP001-00354,"Lenovo IdeaPad 1 82LX00DGUS, Intel Celeron N4500, 4GB, 128GB eMMC, 15.6"", US, W11.",CASO DE USO 1,0.0,691.35,SI,691.35,lista,,479.0,30.7,315.0,DISTRIBUIDORA MUNDO ELECTRONICA C.A
+LAP001-00367,"Lenovo IdeaPad 1I 82LV0075US, Intel Celeron N4500, 4GB, 128GB eMMC, 14"", US, W11.",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,354.14,,315.0,DISTRIBUIDORA MUNDO ELECTRONICA C.A
+LAP001-00399,"Laptop Lenovo IdeaPad 1i 15IRU7 83B40001US, Intel Core i5-1334U, 16GB, 512GB SSD, 15.6"" Touchscreen, US, W11.",CASO DE USO TC,0.0,1.0,NO,868.16,promedio_12m,868.16,699.0,19.5,699.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP001-00425,"Laptop Lenovo IdeaPad 1 82VG00WXUS, AMD Ryzen 5 7520U, 8GB, 256GB SSD, AMD Radeon 610M, 15.6"", US, W11.",CASO DE USO TC,0.0,1.0,NO,568.07,promedio_12m,568.07,530.0,6.7,434.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP002-00066,"Laptop Acer Aspire 5 A515-58M-78JL, Intel Core i7-1355U, 16GB, 512GB SSD, 15.6"", US, W11.",CASO DE USO 3,0.0,2149.2,SI,1363.17,promedio_12m,1363.17,973.06,28.6,,
+LAP002-00076,"Laptop Acer Aspire 3 A315-510P-378E, Intel Core i3-N305, 8GB, 512GB SSD 15.6"", W11.",CASO DE USO 3,0.0,1.0,NO,767.41,promedio_12m,767.41,420.0,45.3,791.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP003-00310,"Laptop HP Omen 16-wf0083dx, Intel Core i9-13900HX, 16GB, 1TB SSD, NVDIA RTX 4060 8GB, 16.1"" FHD, US, W11.",CASO DE USO 1,0.0,3867.36,SI,3867.36,lista,,2343.9,39.4,,
+LAP003-00323,"Laptop HP 15-fd0130wm, Intel Core i3-N305, 8GB, 256GB SSD, 15.6"", US, W11.",CASO DE USO TC,0.0,1057.44,SI,615.61,promedio_12m,615.61,423.0,31.3,493.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP003-00325,"Laptop HP 15-fd0023dx, Intel Core i3, 8GB, 256GB SSD, 15.6"" Touchscreen, US, W11.",CASO DE USO 1,0.0,1275.45,SI,1275.45,lista,,773.0,39.4,773.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP003-00327,Laptop HP 15-FD0095WM Intel Core i5-1235U 8GB/ 256GB SSD W 11 Home.,CASO DE USO 1,0.0,1306.32,SI,1306.32,lista,,799.0,38.8,599.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP003-00328,"Laptop HP 15-FD0005DX Core i5-1235U Touch-Screen 15.6"" 8GB/512SSD W11.",CASO DE USO 1,0.0,1153.35,SI,1153.35,lista,,875.0,24.1,699.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP003-00341,"Laptop HP 15-FD0123DX Core I3-1315U 8GB/256GB SSD 15.6"" Touch US W11.",CASO DE USO 1,0.0,1.0,NO,782.19,promedio_12m,782.19,740.0,5.4,671.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP004-00122,Laptop Asus Vivobook 14 – Intel Core i3 / 8GB / 128GB SSD / 14″,CASO DE USO TC,0.0,1.0,NO,557.5,promedio_12m,557.5,380.0,31.8,389.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP005-00196,"Laptop Apple MacBook Air 2025 13"" Chip M4, 16GB/SSD256GB",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,1002.0,,1002.0,GEMITECH CORP (AMAZON USA)
+LAP005-00219,Apple MacBook Neo 13” – A18 Pro / 8GB / 512GB,Computadoras,0.0,1.0,NO,,sin_dato,,1009.0,,,
+LAP005-00258,"Apple MacBook Pro 14"" M5 10C CPU 10C GPU (MDE14LL/A) 16GB 1TB",Computadoras,0.0,1.0,NO,2940.45,promedio_12m,2940.45,2189.0,25.6,2791.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP019-00002,"Laptop Compaq QL16I5BM16256, Intel Core i5-1235U, 16GB, 256GB, 15.6"", W11.",CASO DE USO 1,0.0,1.0,NO,848.2,promedio_12m,848.2,760.0,10.4,675.0,DISTRIBUIDORA MUNDO ELECTRONICA C.A
+LAP019-00005,"Laptop Compaq QL15R5SU8256, AMD Ryzen 5 3500U, 8GB, 256GB SSD, 15.6"", W11.",CASO DE USO 1,0.0,1.0,NO,590.78,promedio_12m,590.78,603.0,-2.1,513.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP019-00006,"Laptop Compaq QL14R5SU8256, AMD Ryzen 5 3500U, 8GB, 256GB SSD, 14"", W11.",CASO DE USO TC,0.0,1.0,NO,534.67,promedio_12m,534.67,416.0,22.2,474.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP019-00007,"Laptop Compaq QL15R3HE16256, AMD Ryzen 3 3200U, 16GB, 256GB SSD, 15.6"", W11.",CASO DE USO TC,0.0,1.0,NO,540.73,promedio_12m,540.73,439.0,18.8,434.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP019-00008,"Laptop Compaq QL14N45BM8128, Intel N45. 8GB, 128GB, 14"", W11.",CASO DE USO TC,0.0,1.0,NO,400.62,promedio_12m,400.62,304.0,24.1,399.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAP019-00009,"Compaq QL15R3BM8256, AMD Ryzen 3 3200U, 8GB, 256GB, 15.6"", W11.",CASO DE USO TC,0.0,1.0,NO,,sin_dato,,403.0,,,
+LAP019-00013,"Laptop Compaq QL14N45GW12128, Intel Celeron N4500, 12GB, 128GB EMMC, 14"", W11.",CASO DE USO TC,0.0,1.0,NO,417.54,promedio_12m,417.54,319.0,23.6,299.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAV001-00005,TCL Lavadora Automatica 12KG,CASO DE USO 3,0.0,1001.55,SI,1001.55,lista,,395.81,60.5,399.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAV001-00006,TCL Lavadora Automática 10KG,CASO DE USO 3,0.0,777.15,SI,777.15,lista,,328.61,57.7,359.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAV001-00007,"TCL Lavadora Automática 15KG, Control Difuso, Respaldo de Memoria, Tambor Honeycumb.",CASO DE USO 3,0.0,1267.2,SI,1267.2,lista,,516.1,59.3,585.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAV005-00014,"Samsung Torre de lavado Secador-Lavadora 22kg , Negro",CASO DE USO 3,0.0,5228.85,SI,5228.85,lista,,2556.96,51.1,3169.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LAV005-00015,Samsung Lavadora Dual Storm – 9KG,CASO DE USO TC,0.0,889.35,SI,472.12,promedio_12m,472.12,349.0,26.1,539.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LDELL-15250,"Laptop Dell LDC15250-5315BLK, Intel Core i5-1334U, 8GB, 512GB SSD, 15.6"" 2K Touchscreen, US, W11.",CASO DE USO TC,2.0,1.0,NO,692.76,promedio_12m,692.76,589.0,15.0,589.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+LIC008-00002,"Aiwa Licuadora 1,75 Litros con Jarra Tritan AWHBTLP7401.",CASO DE USO TC,0.0,1.0,NO,,sin_dato,,61.0,,,
+LNK-EA6350-AC1200-DB,Router Linksys EA6350 AC1200 Dual-Band Wi-Fi,CASO DE USO 1,0.0,105.12,SI,105.12,lista,,42.8,59.3,,
+LU28R550UQNXZA,"Samsung 28"" UR55 UHD 4K Monitor (3840 X 2160)",CASO DE USO 3,0.0,937.2,SI,937.2,lista,,381.71,59.3,381.0,JUHENDIS ESTHER VALLADARES LOPEZ F.P
+M23K3,Microondas Samsung MS23K3513 – 23L,CASO DE USO TC,0.0,1.0,NO,117.25,promedio_12m,117.25,100.0,14.7,100.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+MAZ-17570-01,Caucho Mazzini 175/70 R13,CASO DE USO 3,0.0,87.72,SI,49.82,promedio_12m,49.82,37.0,25.7,37.0,SERMECA
+MAZ-19560-01,CAUCHO 195/60 R15 MARCA MAZZINI,CASO DE USO 3,0.0,113.16,SI,62.73,promedio_12m,62.73,48.0,23.5,50.0,SERMECA
+MAZ-23560-01,Caucho 235/60/R16 MAZZINI,CASO DE USO 3,0.0,172.5,SI,134.49,promedio_12m,134.49,77.0,42.7,77.0,SERMECA
+MAZ-26575-01,Caucho Mazzini Giantsaver 265/75 R16,CASO DE USO 3,0.0,429.0,SI,429.0,lista,,286.0,33.3,,
+MC-01,Molino De Café De Acero Hamilton,CASO DE USO 1,15.0,1.0,NO,41.74,promedio_12m,41.74,40.0,4.2,38.17,TIENDAS DAKA C.A
+MME73AM/A,Apple Airpods 3 with Magsafe Charging Case,Accesorios,0.0,448.32,SI,448.32,lista,,271.72,39.4,,
+MON008-00014,"LG. LG20MK400HB. 20"". D-Sub. HDMI. HD (1366x768) TN Monitot with AMD FreeSync.",CASO DE USO 3,0.0,311.04,SI,311.04,lista,,126.68,59.3,139.92,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+MON009-00011,"Samsung 22"" FHD Super Slim 1920X1080",CASO DE USO 3,0.0,341.04,SI,341.04,lista,,138.89,59.3,,
+MON009-00036,"Samsung LC32T550FDNXZA 32"" Curved Monitor Bezelles 1000R 1920*1080 75HZ 4MS 1 HDMI",CASO DE USO TC,0.0,755.7,SI,375.69,promedio_12m,375.69,299.0,20.4,299.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+MON009-00039,Monitor Samsung Essential – 27´´/ Curved / 1920×1080 / 60Hz / 4ms,CASO DE USO 3,0.0,1.0,NO,233.81,promedio_12m,233.81,194.21,16.9,263.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+MR2A2CH/A,Apple USB-C 30W Power Adapter,CASO DE USO 3,0.0,79.44,SI,80.48,promedio_12m,80.48,46.37,42.4,37.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+MR80X,Router  SPEED Wi-Fi 6 AX3000 Dual-Band,CASO DE USO TC,0.0,1.0,NO,76.11,promedio_12m,76.11,79.0,-3.8,71.14,"VENEPAC 2020, C.A."
+MUPKP-8,Marsiva Mini Ups kp2-Ec 8000 mAh,CASO DE USO 1,0.0,1.0,NO,42.3,promedio_12m,42.3,49.0,-15.8,27.0,"VENEPAC 2020, C.A."
+NET-MTK-RB3011-RM-BLK,RB3011UiAS-RM Router Mikrotik,CASO DE USO 1,2.0,772.32,SI,772.32,lista,,330.0,57.3,360.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+NEV002-00002,"Aiwa Nevera Refrigeradora Top Mount, 14.5 CuFt, Dispensador de Agua, Acero Inoxidable.",CASO DE USO TC,0.0,1722.6,SI,796.16,promedio_12m,796.16,712.0,10.6,592.0,"255K VENEZUELA, C. A"
+NEV002-00007,"Aiwa Nevera Refrigeradora Top Mount (AWHRC21301), 7 CuFt, Acero Inoxidable",CASO DE USO 3,0.0,894.48,SI,894.48,lista,,297.0,66.8,297.0,"255K VENEZUELA, C. A"
+NEV002-00009,"Aiwa Nevera Refrigeradora Top Mount, 16.5 CuFt, Acero Inoxidable.",CASO DE USO TC,0.0,2070.75,SI,2070.75,lista,,789.0,61.9,,
+NEV006-00007,Nevera TCL Top-Mount F118TMC – 118L,CASO DE USO TC,0.0,1.0,NO,357.6,promedio_12m,357.6,305.0,14.7,305.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+NEV007-00018,Nevera Samsung French 31.5 cu.ft 3-Door – RF32CG5N10B1AP,CASO DE USO 3,0.0,1.0,NO,3859.87,promedio_12m,3859.87,2490.43,35.5,3706.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+NEV009-00001,Oster Nevera Ejecutiva 3.4 pies 91L,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,258.05,,,
+NEV009-00006,Oster Nevera Refrigeradora No Frost 248L c/ Dispensador de Agua.,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,664.61,,,
+NKAP12B110V,Aire Portatil Newkool 12000btu Deshumidificador Y Ventilador Blanco,CASO DE USO 3,0.0,1.0,NO,459.78,promedio_12m,459.78,341.88,25.6,312.93,INVERSIONES NAIDA HOGAR C.A.
+NX52T3510LVAP,Cocina a gas 6H Samsung 30´´,CASO DE USO 1,0.0,1072.5,SI,1072.5,lista,,757.0,29.4,499.99,MULTIMAX STORE C.A
+PC001-00054,CPU Lenovo ThinkCentre M80S – Intel Core i3 12100 / 8GB / 256GB SSD,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,439.0,,689.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+PC002-00053,CPU Dell Inspiron 3020S i3020S-3985BLU-PUS / Intel Core i3 / 8GB / 512GB SSD,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,571.0,,,
+PIR-18560-01,Caucho Pirelli 185/60 R15,CASO DE USO 3,0.0,132.6,SI,132.6,lista,,88.4,33.3,,
+PIR-18565-01,Caucho Pirelli 185/65 R15,CASO DE USO 3,0.0,126.72,SI,126.72,lista,,84.45,33.4,,
+PIR-19555-01,Caucho Pirelli 195/55 R15,CASO DE USO 3,0.0,136.68,SI,136.68,lista,,91.11,33.3,,
+PIR-19560-01,Caucho Pirelli 195/60 R15,CASO DE USO 3,0.0,185.28,SI,185.28,lista,,123.55,33.3,,
+PIR-19560-02,Caucho Pirelli 195/60 R16,CASO DE USO 3,0.0,146.28,SI,146.28,lista,,97.55,33.3,,
+PIR-20555-01,Caucho Pirelli 205/55 R16,CASO DE USO 3,0.0,195.0,SI,195.0,lista,,130.0,33.3,,
+PIR-28570-01,Caucho Pirelli 285/70 R17,CASO DE USO 3,0.0,429.0,SI,429.0,lista,,286.0,33.3,,
+PNE-17570-01,Caucho Pneus 175/70 R13,CASO DE USO 3,0.0,97.56,SI,97.56,lista,,65.0,33.4,,
+PNE-19560-01,Caucho Pneus 195/60 R13,CASO DE USO 3,0.0,107.28,SI,107.28,lista,,71.55,33.3,,
+PNE-23560-01,Caucho PNEUS 235/60 R16,CASO DE USO 3,0.0,204.84,SI,204.84,lista,,107.52,47.5,120.0,SERMECA
+PVE-01,Protector de Voltaje Energizer - Para electrodomésticos - V009 120V,CASO DE USO TC,0.0,1.0,NO,26.95,promedio_12m,26.95,20.0,25.8,20.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+QL-MINI-BR5,Base Metalica Starlink Mini Con Iman,CASO DE USO 3,0.0,168.3,SI,58.42,promedio_12m,58.42,45.0,23.0,102.0,AMAZON
+RCCR25,Cocina a gas 4H RCA Acero Inoxidable,CASO DE USO 1,0.0,330.0,SI,330.0,lista,,200.0,39.4,179.99,MULTIMAX STORE C.A
+RCCR7607V,Cocina a gas 6 hornillas RCA acero inoxidable,CASO DE USO 1,0.0,1.0,NO,546.98,promedio_12m,546.98,551.0,-0.7,551.0,MULTIMAX STORE C.A
+RCRC-250,Rebanadora Charcutera 250mm Roccia,CASO DE USO 3,0.0,1219.22,SI,1219.22,lista,,651.84,46.5,,
+RCSC10,Vitrina RCA 1 Puerta de 10pies,CASO DE USO 1,0.0,1100.0,SI,685.25,promedio_12m,685.25,700.0,-2.2,657.0,MULTIMAX STORE C.A
+ROC-BAT12L-SLV-001,Batidora Industrial 12l Roccia,CASO DE USO 3,0.0,2116.88,SI,2116.88,lista,,1011.41,52.2,,
+ROU000-00100,Router Tp-Link AC1900 Archer C80,CASO DE USO 1,3.0,1.0,NO,86.79,promedio_12m,86.79,41.0,52.8,77.34,"VENEPAC 2020, C.A."
+ROU000-00159,Router Tp-Link  AX1800 Dual Band Wi-Fi 6,CASO DE USO 1,2.0,233.76,SI,75.33,promedio_12m,75.33,70.0,7.1,75.78,"VENEPAC 2020, C.A."
+ROU000-00168,Router Tp-Link AX12 AX1500 Gigabit Wi-Fi 6,CASO DE USO 1,4.0,1.0,NO,58.19,promedio_12m,58.19,73.28,-25.9,56.84,"VENEPAC 2020, C.A."
+ROU000-00177,Router Tp-Link AX3000 Dual Band WiFi 6,CASO DE USO 1,0.0,214.56,SI,214.56,lista,,61.49,71.3,84.91,"VENEPAC 2020, C.A."
+ROU009-00018,Router Mercusys AC1900 Dual Band Gigabit MR50G,CASO DE USO 1,0.0,191.04,SI,71.85,promedio_12m,71.85,41.47,42.3,61.71,"VENEPAC 2020, C.A."
+ROU01E-00002,Router Linksys Hydra 6 Dual-Band Mesh Wi-Fi 6 AX3000 (MR20EC),CASO DE USO 1,0.0,351.84,SI,351.84,lista,,143.27,59.3,,
+ROY-16570-01,Caucho 165/70/ R13 Royal Black,CASO DE USO 3,0.0,85.8,SI,85.8,lista,,57.2,33.3,35.0,SERMECA
+S.W001-00103,Xiaomi Watch S1 Active,CASO DE USO 1,0.0,452.64,SI,452.64,lista,,274.37,39.4,179.17,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+S.W001-00143,Reloj inteligente Xiaomi Redmi Watch 5,CASO DE USO TC,0.0,1.0,NO,175.81,promedio_12m,175.81,120.0,31.7,162.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+S.W002-00273,Apple Watch Ultra 2 – 49mm / Titanium Orange / GPS + Cellular,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,1075.2,,,
+S.W002-00298,Apple Watch Serie 10 46mm,CASO DE USO 1,0.0,1.0,NO,618.66,promedio_12m,618.66,630.55,-1.9,616.0,DISTRIBUIDORA MUNDO ELECTRONICA C.A
+S.W002-00362,Apple Watch SE – 40mm / GPS / 2nd Generación,CASO DE USO TC,1.0,1.0,NO,438.31,promedio_12m,438.31,256.0,41.6,451.0,AL GIORNO CYBER CAFE C.A
+S.W002-00397,Apple Watch Serie 11 46mm,CASO DE USO 1,0.0,1.0,NO,790.18,promedio_12m,790.18,796.0,-0.7,796.0,DISTRIBUIDORA MUNDO ELECTRONICA C.A
+S.W003-00027,Huawei Smart Watch GT 5 46MM VLI-B19,CASO DE USO 3,0.0,1.0,NO,259.65,promedio_12m,259.65,232.0,10.6,170.0,KEDCELL GRUPO
+S.W003-00029,Huawei Smart Watch GT 5 Pro 42MM JNA-B29,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,280.0,,,
+S.W003-00031,Huawei Smart Watch GT 5 41 MM JNA-B19,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,180.0,,,
+S.W003-00033,Huawei Smart Watch FIT 3 SLO-B09,CASO DE USO 3,0.0,1.0,NO,191.81,promedio_12m,191.81,105.0,45.3,105.0,KEDCELL GRUPO
+S.W007-00216,Smartwatch Garmin fenix E,CASO DE USO 3,0.0,2342.4,SI,2342.4,lista,,760.7,67.5,,
+S.W00H-00004,Kieslect Calling Watch Ks Pro,CASO DE USO TC,1.0,208.08,SI,93.46,promedio_12m,93.46,72.0,23.0,89.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+S.W00H-00021,Reloj Inteligente Kieslect Calling Actor,CASO DE USO 1,0.0,1.0,NO,135.74,promedio_12m,135.74,140.0,-3.1,117.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+S6500,Accubanker S6500 Contador De Valores Mixtos Billetes.,CASO DE USO TC,0.0,2782.08,SI,2782.08,lista,,1078.0,61.3,,
+SF301,Ninja Olla de Cocción Rapida con Air Fryer,CASO DE USO 3,0.0,493.44,SI,493.44,lista,,200.93,59.3,,
+SPI-17570-01,Caucho Spider 175/70 R13,CASO DE USO 3,0.0,87.96,SI,87.96,lista,,58.65,33.3,,
+SPI-18565-01,Caucho Zmax Spider 185/65 R14,CASO DE USO 3,0.0,83.88,SI,83.88,lista,,55.95,33.3,,
+SUN-1200500,Adaptador Wahoo Power Brick For Trainers 2018 SUN-1200500,Caso de uso 7,0.0,51.0,SI,51.0,lista,,60.0,-17.6,,
+Sport-31105015-1,Caucho Sportrack MT 31x10.50 R15,CASO DE USO 3,0.0,1.0,NO,224.26,promedio_12m,224.26,138.0,38.5,146.0,SERMECA
+TAB005-00151,Tablet Samsung Galaxy Tab S11 Ultra – 14.6” / 12 GB – 256 GB / Wi-Fi,CASO DE USO TC,0.0,1.0,NO,1383.91,promedio_12m,1383.91,1079.0,22.0,1079.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+TAB007-00242,Apple iPad mini (6th Generation) Wi-Fi + Cellular 64GB,CASO DE USO 3,0.0,2310.24,SI,2310.24,lista,,950.88,58.8,,
+TAB007-00399,Apple iPad A16 11” 256GB,CASO DE USO TC,0.0,1.0,NO,,sin_dato,,649.0,,,
+TAB01D-00039,"Tablet Xiaomi Redmi Pad 2  ""11"" 2.5K (25040RP0AL) 8GB/256GB",CASO DE USO TC,0.0,1.0,NO,313.91,promedio_12m,313.91,269.0,14.3,299.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+TAB01Q-00003,Honor pad X8A 4GB/128GB,CASO DE USO 3,0.0,1.0,NO,,sin_dato,,180.0,,,
+TAB01Y-00001,"Tablet Infinix XPAD 11"" (X1101B) 4GB/128GB",CASO DE USO 1,0.0,1.0,NO,297.28,promedio_12m,297.28,296.0,0.4,296.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+TAB026-00003,"Compaq Tablet 12"" 6GB/128GB",CASO DE USO TC,0.0,1.0,NO,228.82,promedio_12m,228.82,164.0,28.3,237.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+TB128FU,Lenovo Pad / Tab M10 Plus 3rd Gen 6GB/128GB,CASO DE USO 1,0.0,611.28,SI,611.28,lista,,285.0,53.4,285.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+TIN000-00019,Tintas Epson T664 Original Ecotank Para L210 L220 L355 L475,CASO DE USO 3,0.0,1.0,NO,14.74,promedio_12m,14.74,10.08,31.6,15.0,3RTONER C.A
+TOU-17570-01,Caucho Touring 175/70 R13,CASO DE USO 3,0.0,107.28,SI,107.28,lista,,71.55,33.3,,
+TRI-750R16-10PR-001,Caucho Triangle 7.50 R16,CASO DE USO 3,0.0,292.56,SI,292.56,lista,,195.0,33.3,,
+TV000-00186,"Samsung 65"" Crystal UHD 4K Smart TV",CASO DE USO 3,0.0,1660.08,SI,1660.08,lista,,940.8,43.3,,
+TV005-00011,"TV TCL 32"" S54 (32S5400AF), FHD (1920x1080P), Android 11.",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,147.17,,,
+TV016-00001,"Aiwa 43"", HD Smart TV, Google TV.",CASO DE USO TC,0.0,547.37,SI,318.73,promedio_12m,318.73,184.41,42.1,194.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+TV016-00002,"Aiwa 32"" HD Smart TV, Google TV.",CASO DE USO TC,0.0,321.75,SI,153.85,promedio_12m,153.85,119.0,22.7,100.0,test
+TV016-00005,"Aiwa 55"", 4K Smart TV, Google TV.",CASO DE USO TC,0.0,1037.85,SI,491.84,promedio_12m,491.84,356.27,27.6,360.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+TV016-00006,"Aiwa 58"", 4K Smart Tv Google Tv",CASO DE USO TC,0.0,1070.4,SI,703.67,promedio_12m,703.67,408.0,42.0,389.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+TV016-00020,"Aiwa 75"", QLED Smart, Google TV",CASO DE USO TC,2.0,2250.0,SI,983.64,promedio_12m,983.64,795.0,19.2,840.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+TV016-00023,"Aiwa 85"", QLED Smart, Google TV.",CASO DE USO TC,0.0,3422.1,SI,3422.1,lista,,1299.0,62.0,2011.78,GERARDO JOSE RAMIREZ FERNANDEZ
+TV016-00025,"Aiwa 65"" QLED AW65B2Q 4K UHD Smart TV  Google TV.",CASO DE USO TC,0.0,1.0,NO,664.68,promedio_12m,664.68,629.0,5.4,529.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+TV016-00027,"Aiwa QLED 43""1080p  Smart TV Google TV.",CASO DE USO TC,3.0,1.0,NO,274.1,promedio_12m,274.1,222.0,19.0,221.1,GERARDO JOSE RAMIREZ FERNANDEZ
+TV016-00032,"Aiwa 55"" QLED UHD 4K AW55B4Q Google TV.",CASO DE USO TC,0.0,1.0,NO,491.25,promedio_12m,491.25,419.0,14.7,419.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+UPS003-00002,MARSRIVA en KP3 -10000mAh/ 18W,CASO DE USO 1,11.0,92.16,SI,52.67,promedio_12m,52.67,47.0,10.8,36.67,GRUPO BONOBO CA
+V.B000-00016,Epson. E. PowerLite E20. XGA de Alta Calidad 3.400 lúmenes,CASO DE USO TC,0.0,1.0,NO,727.55,promedio_12m,727.55,597.0,17.9,597.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+V.B000-00033,"Epson PowerLite W49 (V11H983020), 3800 Lumens, WXGA (1280x800), 1,3 to 1.56:1.",CASO DE USO 3,0.0,1.0,NO,,sin_dato,,829.92,,,
+V.B005-00004,Samsung SP-LFF3CLAX The Freestyle 2nd Gen with Gaming Hub.,CASO DE USO 3,0.0,1746.0,SI,1746.0,lista,,700.9,59.9,814.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+V11H975020,Epson EX3280 3LCD XGA Projector 3600 Lumens,CASO DE USO 3,0.0,1651.2,SI,1651.2,lista,,672.45,59.3,,
+V11H983020,"Epson PowerLite W49, 3800 Lumens, WXGA (1280x800), 1,3 to 1.56:1.",CASO DE USO 3,0.0,1967.04,SI,1967.04,lista,,801.09,59.3,880.32,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+VM182C9,Aire Acondicionado LG VM182C9 DUALCOOL – 18000 BTU,CASO DE USO 1,0.0,1796.85,SI,1796.85,lista,,1089.0,39.4,,
+W01-0004,Cable y Bloque de Alimentación Wahoo Power Cord Kickr And Snap W01-0004,Caso de uso 7,0.0,8.5,SI,8.5,lista,,8.5,0.0,,
+WA15CG5441BWAP,Samsung Lavadora de Carga Superior Digital 15KG,CASO DE USO 1,0.0,1219.35,SI,732.0,promedio_12m,732.0,880.0,-20.2,732.0,MULTIMAX STORE C.A
+WA20B3553GW/AP,Samsung Lavadora de Carga Superior 20kg Automatica,CASO DE USO 1,0.0,1598.85,SI,1598.85,lista,,869.0,45.6,749.99,MULTIMAX STORE C.A
+WAF000-00002,Cuisinart Vertical Waffle Maker,CASO DE USO 1,0.0,208.08,SI,208.08,lista,,126.1,39.4,,
+WCGK5036PB,"Tope a Gas Negro 5 Quemadores 36"" Whirlpool",CASO DE USO 3,0.0,1.0,NO,1020.1,promedio_12m,1020.1,618.0,39.4,520.57,CORPORACIÓN STAR WHITE C.A
+WFBIKE2,Bicicleta Inteligente Wahoo Kickr Bike Shift,Caso de uso 7,0.0,1.0,NO,,sin_dato,,3600.0,,,
+WFBKTR123,Rodillo Inteligente Wahoo Kickr V6 BLACK,Caso de uso 7,0.0,1.0,NO,,sin_dato,,1350.0,,,
+WFBKTR7US,Ventilador Wahoo Kickr Headwind Fan,Caso de uso 7,0.0,340.0,SI,340.0,lista,,400.0,-17.6,,
+WFBTHR03,Monitor Wahoo de Frecuencia Cardiaca Con Banda Para el Brazo TICKR FIT,Caso de uso 7,0.0,1.0,NO,,sin_dato,,121.12,,,
+WFBTHR05W,Monitor Frecuencia Cardiaca Wahoo Trackr Heart Rat,Caso de uso 7,0.0,102.0,SI,102.0,lista,,120.0,-17.6,,
+WFCC5,Ciclocomputador Wahoo Elmnt Bolt V2,Caso de uso 7,0.0,297.5,SI,297.5,lista,,350.0,-17.6,,
+WFCC5B,Ciclocomputador Wahoo Elemnt Bolt Bundle V2,Caso de uso 7,0.0,391.0,SI,391.0,lista,,460.0,-17.6,,
+WFCC7,Ciclocomputador Gps Wahoo Elemnt Ace,Caso de uso 7,0.0,552.5,SI,552.5,lista,,650.0,-17.6,,
+WFCC8,Ciclocomputador Wahoo Elemnt Roam 3 Gps,Caso de uso 7,0.0,425.0,SI,425.0,lista,,500.0,-17.6,,
+WFCC9,Ciclocomputador Wahoo Elemnt Bolt 3 Gps,Caso de uso 7,0.0,340.0,SI,340.0,lista,,400.0,-17.6,,
+WFDESK1,Mesa Para Ciclismo en Interiores Wahoo Kickr Desk,Caso de uso 7,0.0,297.5,SI,297.5,lista,,350.0,-17.6,,
+WFKICKR142,Adaptador de Eje Pasante Wahoo 142X12 Gris,Caso de uso 7,0.0,51.0,SI,51.0,lista,,60.0,-17.6,,
+WFKICKRAXIS,Adaptador Wahoo Kickr Eje de Movimiento Axis Action Feet,Caso de uso 7,0.0,76.5,SI,76.5,lista,,90.0,-17.6,,
+WFPODCAD2,Sensor de Velocidad y Cadencia Wahoo RPM Cadence,Caso de uso 7,0.0,46.75,SI,46.75,lista,,55.0,-17.6,,
+WFPRC1S53,Sistema de Pedal Wahoo Speedplay Comp,Caso de uso 7,0.0,144.5,SI,144.5,lista,,170.0,-17.6,,
+WFPRCLTST,Traba de Tensión Wahoo Estandard Speedplay,Caso de uso 7,0.0,72.25,SI,72.25,lista,,85.0,-17.6,,
+WFPRX1L55,Pedal Wahoo Powerlink Left Sided Power,Caso de uso 7,0.0,680.0,SI,680.0,lista,,1020.0,-50.0,,
+WFPRZ1S53,Sistema de Pedal Wahoo Speedplay Zero,Caso de uso 7,0.0,204.0,SI,204.0,lista,,240.0,-17.6,,
+WFRPMSPD,Sensor Wahoo RPM Speed,Caso de uso 7,0.0,51.0,SI,51.0,lista,,52.2,-2.4,,
+WFTRACKRRDR1,Luz Trasera Wahoo Trackr Radar,Caso de uso 7,0.0,1.0,NO,,sin_dato,,300.0,,,
+WFXKZ,Contenedor Wahoo Koozie,Caso de uso 7,0.0,4.25,SI,4.25,lista,,0.0,,,
+WHW9010S,Campana de Pared Whirlpool 90cm,CASO DE USO 3,0.0,1.0,NO,963.14,promedio_12m,963.14,583.5,39.4,583.5,CORPORACIÓN STAR WHITE C.A
+WIN-16570-01,Caucho Windforce 165/70 R13,CASO DE USO 3,0.0,74.16,SI,64.66,promedio_12m,64.66,38.85,39.9,35.0,SERMECA
+WIN-19565-01,Caucho Windforce 195/65 R15,CASO DE USO 3,0.0,107.28,SI,107.28,lista,,71.55,33.3,,
+WIN-20570-01,Caucho Windforce 205/70 R15,CASO DE USO 3,0.0,165.84,SI,165.84,lista,,110.55,33.3,,
+WOA105F,"Horno 24"" a Gas Negro Espejo Whirlpool",CASO DE USO 3,0.0,1.0,NO,768.38,promedio_12m,768.38,465.5,39.4,389.0,CORPORACIÓN STAR WHITE C.A
+XBAND6,Xiaomi Smart Band 9 (M2345B1),CASO DE USO TC,5.0,1.0,NO,73.86,promedio_12m,73.86,63.0,14.7,63.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+XRP26128,Xiaomi Redmi Pad 2 Pro 6GB/128GB,CASO DE USO TC,0.0,1.0,NO,354.47,promedio_12m,354.47,279.0,21.3,279.0,CORPORACION UNIVERSAL TECHNOLOGY XXI C.A
+ZJB4192GL-SZ,Bolso XIAOMI para Laptop Gris Oscuro,CASO DE USO 3,0.0,1.0,NO,49.07,promedio_12m,49.07,33.47,31.8,49.8,"DISTRIBUIDORA KTDC, C.A."
+ZMA-17570-01,Caucho Zmax 175/70 R13,CASO DE USO 3,0.0,83.88,SI,83.88,lista,,55.95,33.3,42.0,SERMECA
+ZMA-18560-01,Caucho ZMAX 185/60 R14,CASO DE USO 3,0.0,83.88,SI,83.88,lista,,55.95,33.3,,
+ZMA-24570-01,Caucho Zmax Modelo HT 245/70R16,CASO DE USO 3,0.0,181.44,SI,181.44,lista,,120.95,33.3,,

@@ -1,0 +1,26 @@
+DASHBOARD HUB — PAQUETE CORRECTO PARA GITHUB PAGES
+
+IMPORTANTE:
+Sube TODO el contenido de esta carpeta directamente a la raíz del repositorio.
+No subas la carpeta contenedora como una carpeta adicional.
+
+La raíz del repositorio debe quedar así:
+index.html
+styles.css
+app.js
+manus-routes.json
+app.config.ts
+.nojekyll
+
+Pasos:
+1. En GitHub abre el repositorio.
+2. Elimina los archivos de la versión anterior, especialmente index.html, styles.css y app.js.
+3. Sube estos archivos directamente a la raíz.
+4. Haz commit.
+5. Ve a Settings > Pages.
+6. Selecciona Deploy from a branch, rama main y carpeta /root.
+7. Guarda y espera la publicación.
+8. Actualiza el navegador con Ctrl+F5 o Ctrl+Shift+R.
+
+No mezcles este index.html con otro app.js o styles.css.
+Los tres archivos deben pertenecer a esta misma versión.

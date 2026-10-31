@@ -1,0 +1,50 @@
+INVENTARIO → GOOGLE DRIVE → CHATGPT  ·  CÓMO USARLO
+=====================================================
+
+1. QUÉ CONTIENE ESTA CARPETA
+   Se genera desde Odoo (latinbien.com) con un solo comando:
+
+       python drive_inventario/exportar_inventario.py
+
+   (ejecutar desde la raíz del proyecto; usa ODOO_USER/ODOO_PASS de name.env)
+
+   01_existencias_por_almacen.csv ..... existencias por producto y almacén (109 filas)
+   02_inventario_total.csv ............ inventario completo valorizado a costo (821 SKU)
+   03_precios_actuales.csv ............ precio de venta, costo, margen y precio mínimo de proveedor
+   04_proveedores.csv ................. 407 proveedores con contacto y actividad de compra
+   05_lista_precios_proveedor.csv ..... 1,766 precios vigentes de proveedores
+   06_cambios_precio_proveedor.csv .... 2,498 registros de compra 24m con subidas/bajadas de precio
+   07_rotacion_ventas_12m.csv ......... ventas 12m, cobertura y clasificación ABC (359 SKU vendidos)
+   prompt_chatgpt.txt ................. prompts listos para pegar en ChatGPT
+
+2. SUBIR A GOOGLE DRIVE
+   - Abrir la carpeta: https://drive.google.com/drive/folders/1sHvUEUNbZDNO-xTx0_iljzWasPQmZ67v
+   - Arrastrar los 7 CSV (01...07). Si ya estaban, se reemplazan (mismo nombre).
+   - Opcional: instalar Google Drive para Escritorio y dejar la carpeta sincronizada.
+
+3. CONECTAR CHATGPT CON GOOGLE DRIVE
+   - En chatgpt.com: Ajustes (Settings) → Conectores (Connectors) → Google Drive → conectar tu cuenta de Google.
+   - Dar permiso SOLO a esta carpeta de inventario cuando lo pregunte.
+   - Requiere un plan que incluya conectores (Plus, Pro o Team/Business).
+   - (Los nombres del menú pueden variar un poco según el idioma/plan.)
+
+4. ANALIZAR
+   - Nueva conversación en ChatGPT → pegar el PROMPT A (inventario/rotación)
+     o el PROMPT B (precios y proveedores) de prompt_chatgpt.txt.
+   - Si ChatGPT no selecciona los archivos solo, escribir:
+     "usa los archivos 01...07 de mi carpeta de Inventario de Google Drive".
+
+5. ACTUALIZAR LOS DATOS
+   - Volver a ejecutar el script y subir los 7 CSV de nuevo (mismo nombre = sobrescribe).
+   - ChatGPT leerá siempre la última versión subida.
+
+6. NOTAS DE CALIDAD DE DATOS (importante)
+   - 566 productos tienen precio_lista <= 1 (placeholder de Odoo). Para esos,
+     usar precio_venta_prom_12m del archivo 03 (precio real de venta 12 meses);
+     la columna precio_lista_confiable indica SI/NO.
+   - Ingresos del archivo 07 están en USD; las ventas en bolívares (VEF) solo
+     cuentan en unidades, no en ingresos.
+   - Los cambios de precio se detectan con las ORDENES DE COMPRA de 24 meses;
+     el campo "estado" dice SUBIO / BAJO / SIN CAMBIO.
+   - Las existencias incluyen almacenes de consignación; cantidades negativas
+     suelen ser ajustes o averías.

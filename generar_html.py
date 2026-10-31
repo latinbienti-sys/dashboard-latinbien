@@ -3535,7 +3535,7 @@ try {{
 // ── Pago Proveedor Moto ──
 try {{
     var ppm = DATA.pago_proveedor_moto || {{}};
-    document.getElementById('ppmOrdenCompra').textContent = ppm.orden_compra || 'P01382';
+    document.getElementById('ppmOrdenCompra').textContent = 'Órdenes: ' + (ppm.total_ordenes||0);
     document.getElementById('ppmProvedor').textContent = ppm.proveedor || '';
     document.getElementById('ppmOrdenes').textContent = (ppm.total_ordenes||0).toLocaleString();
     document.getElementById('ppmInicial').textContent = fmtMoney(ppm.total_pagoInicial||0);
@@ -3553,7 +3553,7 @@ try {{
             cpBody.innerHTML = cp.map(function(c) {{
                 return '<tr>' +
                     '<td>' + c.fecha_pago + '</td>' +
-                    '<td><strong>' + (c.orden_compra||'') + '</strong></td>' +
+                    '<td></td>' +
                     '<td>' + (c.cliente||'') + '</td>' +
                     '<td>' + (c.modelo||'') + '</td>' +
                     '<td class="text-right">' + (c.cuota||0) + '/' + (c.total_cuotas||8) + '</td>' +
@@ -3578,7 +3578,7 @@ try {{
                 factCell += '<br/><span style="font-size:10px;color:#666">estado pago: ' + ft.payment_state + '</span>';
             }}
             return '<tr>' +
-                '<td><a href="' + puUrl + '" target="_blank" style="color:#213C83;font-weight:700;text-decoration:none;border-bottom:2px solid #213C83;font-size:14px">' + (it.orden_compra||'P01382') + '</a></td>' +
+                '<td></td>' +
                 '<td><strong>' + (it.cliente||'') + '</strong></td>' +
                 '<td>' + (it.modelo||'') + '</td>' +
                 '<td>' + (it.ciclo||'') + '</td>' +

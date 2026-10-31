@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="razon_pagos_dashboard.DonutChart">
+        <div class="o_rp_donut_wrap">
+            <canvas t-ref="canvas" height="260"/>
+        </div>
+    </t>
+
+    <t t-name="razon_pagos_dashboard.Dashboard">
+        <div class="o_rp_dashboard">
+
+            <div class="o_rp_header">
+                <div>
+                    <h2>¿En qué se gastó el dinero?</h2>
+                    <p class="o_rp_sub">
+                        Análisis de pagos y egresos por
+                        <strong t-esc="state.config.reason_label"/>
+                        <span t-if="state.config" class="o_rp_model">
+                            — <t t-esc="state.config.model_label"/>
+                        </span>
+                    </p>
+                </div>
+                <div class="o_rp_header_actions">
+                    <button class="btn btn-secondary" t-on-click="() => this.openAll()">Ver detalle</button>
+                    <button class="btn btn-secondary" t-on-click="() => this.exportCsv()">Exportar CSV</button>
+                    <button class="btn btn-primary" t-on-click="() => this.load()">Actualizar</button>
+                </div>
+            </div>
+
+            <div t-if="state.loading" class="o_rp_state">Cargando datos…</div>
+
+            <div t-if="state.error" class="o_rp_error">
+                <strong>No se pudo construir el tablero</strong>
+                <p t-esc="state.error.message"/>
+                <div t-if="state.error.models_tried" class="o_rp_error_detail">
+                    <p>Modelos revisados: <code t-esc="state.error.models_tried.join(', ')"/></p>
+                    <p>Campos revisados: <code t-esc="state.error.fields_tried.join(', ')"/></p>
+                </div>
+            </div>
+
+            <t t-if="state.config and !state.error">
+
+                <div class="o_rp_filters">
+                    <div class="o_rp_field">
+                        <label>Desde</label>
+                        <input type="date" t-model="state.filter.date_from" t-on-change="() => this.onFilterChange()"/>
+                    </div>
+                    <div class="o_rp_field">
+                        <label>Hasta</label>
+                        <input type="date" t-model="state.filter.date_to" t-on-change="() => this.onFilterChange()"/>
+                    </div>
+                    <div class="o_rp_field">
+                        <label>Estado</label>
+                        <select t-on-change="ev => this.onStateChange(ev)">
+                            <option value="posted" selected="state.filter.states.includes('posted')">Publicado</option>
+                            <option value="draft" selected="state.filter.states.includes('draft')">Borrador</option>
+                            <option value="cancel" selected="state.filter.states.includes('cancel')">Cancelado</option>
+                            <option value="all" selected="!state.filter.states.length">Todos</option>
+                        </select>
+                    </div>
+                    <div t-if="state.config.payment_type_field" class="o_rp_field">
+                        <label>Tipo de pago</label>
+                        <select t-on-change="ev => this.onPaymentTypeChange(ev)">
+                            <option value="outbound"
+                                    selected="state.filter.payment_type === 'outbound'">Salidas (egresos)</option>
+                            <option value="inbound"
+                                    selected="state.filter.payment_type === 'inbound'">Entradas (ingresos)</option>
+                            <option value="all"
+                                    selected="state.filter.payment_type === 'all'">Ambos</option>
+                        </select>
+                    </div>
+                    <div class="o_rp_quick">
+                        <button class="btn btn-link" t-on-click="() => this.setThisMonth()">Este mes</button>
+                        <button class="btn btn-link" t-on-click="() => this.setThisYear()">Este año</button>
+                        <button class="btn btn-link" t-on-click="() => this.setDefaults()">Todo el histórico</button>
+                    </div>
+                </div>
+
+                <div t-if="state.config.categories.length" class="o_rp_categories">
+                    <div class="o_rp_categories_head">
+                        <span>Filtrar por <strong t-esc="state.config.reason_label"/></span>
+                        <button t-if="state.filter.reasons.length"
+                                class="btn btn-link"
+                                t-on-click="() => this.clearReasons()">Limpiar</button>
+                    </div>
+                    <div class="o_rp_chips">
+                        <t t-foreach="state.config.categories" t-as="cat" t-key="cat.key">
+                            <button class="o_rp_chip"
+                                    t-att-class="state.filter.reasons.includes(cat.key) ? 'o_rp_chip active' : 'o_rp_chip'"
+                                    t-on-click="() => this.toggleReason(cat.key)">
+                                <t t-esc="cat.label"/>
+                            </button>
+                        </t>
+                    </div>
+                </div>
+
+                <div class="o_rp_kpis">
+                    <div class="o_rp_kpi">
+                        <div class="o_rp_kpi_label">Total analizado</div>
+                        <div class="o_rp_kpi_value" t-esc="money(state.total)"/>
+                    </div>
+                    <div class="o_rp_kpi">
+                        <div class="o_rp_kpi_label">Nº de registros</div>
+                        <div class="o_rp_kpi_value" t-esc="state.count"/>
+                    </div>
+                    <div class="o_rp_kpi">
+                        <div class="o_rp_kpi_label">Ticket promedio</div>
+                        <div class="o_rp_kpi_value" t-esc="money(state.avg)"/>
+                    </div>
+                    <div class="o_rp_kpi">
+                        <div class="o_rp_kpi_label">Categorías</div>
+                        <div class="o_rp_kpi_value" t-esc="state.donut.length"/>
+                    </div>
+                    <div t-if="state.donut.length" class="o_rp_kpi o_rp_kpi_accent">
+                        <div class="o_rp_kpi_label">Mayor gasto</div>
+                        <div class="o_rp_kpi_value_small" t-esc="state.donut[0].label"/>
+                        <div class="o_rp_kpi_note" t-esc="pct(state.donut[0].pct) + ' · ' + money(state.donut[0].value)"/>
+                    </div>
+                </div>
+
+                <div class="o_rp_top_grid">
+                    <div class="o_rp_card">
+                        <h3>Distribución por <t t-esc="state.config.reason_label"/></h3>
+                        <p class="o_rp_hint">Haz clic en una porción para filtrar la tabla.</p>
+                        <DonutChart rows="state.donut"
+                                    totalCaption="Total"
+                                    totalLabel="money(state.total)"
+                                    onSliceClick.bind="this"/>
+                    </div>
+
+                    <div class="o_rp_card o_rp_card_table">
+                        <h3>Detalle y desglose</h3>
+                        <p class="o_rp_hint">Expande una categoría para ver proveedores y documentos.</p>
+                        <div class="o_rp_table_wrap">
+                            <table class="o_rp_table">
+                                <thead>
+                                    <tr>
+                                        <th class="o_rp_col_label">Concepto</th>
+                                        <th class="o_rp_col_num">Monto</th>
+                                        <th class="o_rp_col_num">%</th>
+                                        <th class="o_rp_col_num">Cant.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-if="!flatRows.length">
+                                        <td colspan="4" class="o_rp_empty">
+                                            Sin registros para los filtros seleccionados.
+                                        </td>
+                                    </tr>
+                                    <t t-foreach="flatRows" t-as="row" t-key="row.path">
+                                        <tr t-att-class="row.depth === 0 ? 'o_rp_row_l0' : 'o_rp_row_l1'">
+                                            <td class="o_rp_col_label">
+                                                <div class="o_rp_label_cell"
+                                                     t-att-style="row.depth ? 'padding-left: ' + (row.depth * 18 + 18) + 'px' : ''">
+                                                    <button t-if="hasChildren(row)"
+                                                            class="o_rp_toggle"
+                                                            t-att-class="state.expanded[row.path] ? 'o_rp_toggle open' : 'o_rp_toggle'"
+                                                            t-on-click="() => this.toggleNode(row)">›</button>
+                                                    <span t-else="row.depth" class="o_rp_leaf">•</span>
+                                                    <span t-if="row.depth > 0" class="o_rp_level_tag"
+                                                          t-esc="levelLabel(row.level)"/>
+                                                    <span class="o_rp_name" t-esc="row.label"/>
+                                                </div>
+                                            </td>
+                                            <td class="o_rp_col_num" t-esc="money(row.value)"/>
+                                            <td class="o_rp_col_num">
+                                                <div class="o_rp_pct_cell">
+                                                    <span t-esc="pct(row.pct)"/>
+                                                    <div class="o_rp_bar">
+                                                        <div class="o_rp_bar_fill"
+                                                             t-att-style="'width: ' + Math.min(row.pct, 100) + '%'"/>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="o_rp_col_num" t-esc="row.count"/>
+                                        </tr>
+                                    </t>
+                                    <tr class="o_rp_total_row">
+                                        <td>Total</td>
+                                        <td class="o_rp_col_num" t-esc="money(state.total)"/>
+                                        <td class="o_rp_col_num">100.0%</td>
+                                        <td class="o_rp_col_num" t-esc="state.count"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div t-if="state.activeReason" class="o_rp_active">
+                    Filtrado por <strong t-esc="state.activeReason"/>
+                </div>
+
+            </t>
+        </div>
+    </t>
+
+</templates>

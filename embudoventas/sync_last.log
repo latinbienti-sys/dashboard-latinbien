@@ -1,0 +1,7 @@
+[sync_live] Ventana: 2026-09-28 -> 2026-10-07 (10 dias), lectura en curso...
+[sync_live] crm.lead: 292 registros
+[sync_live] mail.message: 752 registros
+[sync_live] res.partner CREDIMOTOS: 30 registros
+[sync_live] res.partner CREDIMOTOS (ventana + leads): 31
+[sync_live] Linea de Credito: 5 dias con gestion
+[sync_live] OK: cache_live.json escrito en 5.0s (solo lectura, 292 leads / 752 mensajes).

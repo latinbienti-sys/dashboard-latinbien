@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro WS · Balance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f4f6f9; }
+        .card { box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075); border: none; }
+        .table td { vertical-align: middle; }
+        .table input { min-width: 110px; text-align: right; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1"><i class="bi bi-pencil-square"></i> Registro de datos WS</span>
+        <div class="d-flex align-items-center gap-2 text-white small">
+            <i class="bi bi-person-circle"></i> {{ usuario }}
+            <a class="btn btn-outline-light btn-sm" href="/logout"><i class="bi bi-box-arrow-right"></i> Salir</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-3" style="max-width: 960px">
+    <div class="card mb-3">
+        <div class="card-body py-2 d-flex flex-wrap align-items-center gap-2">
+            <label class="mb-0">Fecha</label>
+            <input type="date" id="inputFecha" class="form-control" style="width:auto" onchange="cargar()">
+            <span class="text-muted small ms-auto">Registre los saldos del día. Solo se permiten los últimos 7 días.</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-sm mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Concepto</th><th class="text-end">LB</th><th class="text-end">GR</th>
+                        <th class="text-end">JV</th><th class="text-center">Estado</th><th></th>
+                    </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toast" class="toast text-bg-dark border-0" role="alert">
+        <div class="d-flex"><div class="toast-body" id="toastMsg"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const hoy = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const toast = (m) => { document.getElementById("toastMsg").textContent = m; new bootstrap.Toast(document.getElementById("toast")).show(); };
+
+async function cargar() {
+    const fecha = document.getElementById("inputFecha").value;
+    const r = await fetch("/api/captura/datos?fecha=" + fecha);
+    if (r.status === 401) { location.href = "/login"; return; }
+    const data = await r.json();
+    document.getElementById("tbody").innerHTML = data.filas.map((f) => `
+        <tr data-fila="${f.fila}">
+            <td>${esc(f.concepto)}</td>
+            ${["lb", "gr", "jv"].map((k) => `<td><input type="number" step="0.01" class="form-control form-control-sm" data-k="${k}" value="${f[k] ?? ""}"></td>`).join("")}
+            <td class="text-center small">${f.registrado
+                ? `<span class="badge text-bg-success">Registrado</span><br><span class="text-muted">${esc(f.usuario || "")} ${esc((f.actualizado || "").slice(11, 16))}</span>`
+                : '<span class="badge text-bg-warning">Pendiente</span>'}</td>
+            <td><button class="btn btn-primary btn-sm" onclick="guardar(this)"><i class="bi bi-save"></i></button></td>
+        </tr>`).join("");
+}
+
+async function guardar(btn) {
+    const tr = btn.closest("tr");
+    const payload = { fecha: document.getElementById("inputFecha").value, fila: tr.dataset.fila };
+    tr.querySelectorAll("input").forEach((i) => { payload[i.dataset.k] = i.value; });
+    const r = await fetch("/api/captura/guardar", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
+    });
+    const data = await r.json();
+    toast(data.ok ? data.msg : "Error: " + (data.error || "desconocido"));
+    if (data.ok) cargar();
+}
+
+const inp = document.getElementById("inputFecha");
+inp.value = inp.max = hoy();
+cargar();
+</script>
+</body>
+</html>

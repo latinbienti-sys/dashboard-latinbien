@@ -1,0 +1,828 @@
+[
+  {
+    "id": 43767,
+    "name": "INV/2026/00005/FAC000213",
+    "invoice_date": "2026-10-30",
+    "partner_id": [
+      56599,
+      "REINALDO JOSÉ GUTIÉRREZ GRIMALDOS"
+    ],
+    "invoice_origin": "LBM-ORDEN-00121",
+    "amount_total": 39080,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-09-29"
+  },
+  {
+    "id": 43756,
+    "name": "INV/2026/00005/FAC000211",
+    "invoice_date": "2026-10-28",
+    "partner_id": [
+      56734,
+      "WISAM KASSIEH"
+    ],
+    "invoice_origin": "LBM-ORDEN-00137",
+    "amount_total": 42938.28,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-10-27"
+  },
+  {
+    "id": 43754,
+    "name": "INV/2026/00005/FAC000209",
+    "invoice_date": "2026-10-28",
+    "partner_id": [
+      56597,
+      "DANNY CAROLINA INFANTE"
+    ],
+    "invoice_origin": "LBM-ORDEN-00110",
+    "amount_total": 39234.4,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-09-17"
+  },
+  {
+    "id": 43749,
+    "name": "INV/2026/00005/FAC000207",
+    "invoice_date": "2026-10-26",
+    "partner_id": [
+      56643,
+      "SOLEIMA COROMOTO SANCHEZ ARAQUE"
+    ],
+    "invoice_origin": "LBM-ORDEN-00136",
+    "amount_total": 39234.4,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-10-24"
+  },
+  {
+    "id": 43711,
+    "name": "INV/2026/00005/FAC000196",
+    "invoice_date": "2026-10-23",
+    "partner_id": [
+      56644,
+      "MIRTHA COROMOTO OSORIO PAREDES"
+    ],
+    "invoice_origin": "LBM-ORDEN-00125",
+    "amount_total": 39234.4,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-10-02"
+  },
+  {
+    "id": 43709,
+    "name": "INV/2026/00005/FAC000194",
+    "invoice_date": "2026-10-23",
+    "partner_id": [
+      56603,
+      "JEAN PIERRE OMAÑA ARAQUE"
+    ],
+    "invoice_origin": "LBM-ORDEN-00108",
+    "amount_total": 39234.4,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-09-17"
+  },
+  {
+    "id": 43690,
+    "name": "INV/2026/00005/FAC000193",
+    "invoice_date": "2026-10-21",
+    "partner_id": [
+      56717,
+      "JOSE ALEJANDRO GUILLEN CAÑIZARES"
+    ],
+    "invoice_origin": "LBM-ORDEN-00127",
+    "amount_total": 32170,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-10-18"
+  },
+  {
+    "id": 43509,
+    "name": "INV/2026/00005/FAC000189",
+    "invoice_date": "2026-09-30",
+    "partner_id": [
+      56646,
+      "YC COSMETICS GROUP, C.A"
+    ],
+    "invoice_origin": "LBM-ORDEN-00123",
+    "amount_total": 34781.12,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-09-30"
+  },
+  {
+    "id": 43465,
+    "name": "INV/2026/00005/FAC000184",
+    "invoice_date": "2026-09-28",
+    "partner_id": [
+      56551,
+      "MICHAEL ANYER GALLARDO MENDEZ"
+    ],
+    "invoice_origin": "LBM-ORDEN-00118",
+    "amount_total": 37843.86,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-09-25"
+  },
+  {
+    "id": 43464,
+    "name": "INV/2026/00005/FAC000183",
+    "invoice_date": "2026-09-25",
+    "partner_id": [
+      56606,
+      "FRANK ADNER NIÑO LABRADOR"
+    ],
+    "invoice_origin": "LBM-ORDEN-00114",
+    "amount_total": 38200,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-09-23"
+  },
+  {
+    "id": 43462,
+    "name": "INV/2026/00005/FAC000181",
+    "invoice_date": "2026-09-25",
+    "partner_id": [
+      56608,
+      "KEILA PATRICIA MENDOZA DE VELAZCO"
+    ],
+    "invoice_origin": "LBM-ORDEN-00113",
+    "amount_total": 36120.65,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-09-20"
+  },
+  {
+    "id": 43442,
+    "name": "INV/2026/00005/FAC000180",
+    "invoice_date": "2026-09-25",
+    "partner_id": [
+      56043,
+      "ALBA SALAS"
+    ],
+    "invoice_origin": "LBM-ORDEN-00070",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-12"
+  },
+  {
+    "id": 43388,
+    "name": "INV/2026/00005/FAC000179",
+    "invoice_date": "2026-09-23",
+    "partner_id": [
+      56570,
+      "ARDICSON ZAMBRANO"
+    ],
+    "invoice_origin": "LBM-ORDEN-00111",
+    "amount_total": 38467.59,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-09-17"
+  },
+  {
+    "id": 43295,
+    "name": "INV/2026/00005/FAC000170",
+    "invoice_date": "2026-09-11",
+    "partner_id": [
+      56380,
+      "JOSE HERNAN ROA RAD"
+    ],
+    "invoice_origin": "LBM-ORDEN-00069",
+    "amount_total": 38199.12,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-12"
+  },
+  {
+    "id": 43189,
+    "name": "INV/2026/00005/FAC000153",
+    "invoice_date": "2026-09-07",
+    "partner_id": [
+      56516,
+      "NUMA POMPILIO PAREDES PARRA"
+    ],
+    "invoice_origin": "LBM-ORDEN-00095",
+    "amount_total": 36942,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-09-07"
+  },
+  {
+    "id": 43188,
+    "name": "INV/2026/00005/FAC000152",
+    "invoice_date": "2026-09-07",
+    "partner_id": [
+      56461,
+      "DANIEL MOLINA"
+    ],
+    "invoice_origin": "LBM-ORDEN-00094",
+    "amount_total": 36941.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-09-06"
+  },
+  {
+    "id": 43159,
+    "name": "INV/2026/00005/FAC000149",
+    "invoice_date": "2026-09-02",
+    "partner_id": [
+      56316,
+      "MARIA SOLEDAD GONZALEZ REYES"
+    ],
+    "invoice_origin": "LBM-ORDEN-00066",
+    "amount_total": 38518.04,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-10"
+  },
+  {
+    "id": 43104,
+    "name": "INV/2026/00005/FAC000148",
+    "invoice_date": "2026-08-31",
+    "partner_id": [
+      56412,
+      "LABORATORIOS BIOFARCO C.A."
+    ],
+    "invoice_origin": "LBM-ORDEN-00072",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-17"
+  },
+  {
+    "id": 43096,
+    "name": "INV/2026/00005/FAC000146",
+    "invoice_date": "2026-08-31",
+    "partner_id": [
+      56383,
+      "ELADIO GARCÍA"
+    ],
+    "invoice_origin": "LBM-ORDEN-00089",
+    "amount_total": 37605.18,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-24"
+  },
+  {
+    "id": 43052,
+    "name": "INV/2026/00005/FAC000140",
+    "invoice_date": "2026-08-28",
+    "partner_id": [
+      56322,
+      "ALEJANDRO RAFAEL LEZAMA SÁNCHEZ"
+    ],
+    "invoice_origin": "LBM-ORDEN-00074",
+    "amount_total": 38518.04,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-18"
+  },
+  {
+    "id": 43050,
+    "name": "INV/2026/00005/FAC000138",
+    "invoice_date": "2026-08-28",
+    "partner_id": [
+      56400,
+      "CHRISTAVEL CONTRERAS ZERPA"
+    ],
+    "invoice_origin": "LBM-ORDEN-00068",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-12"
+  },
+  {
+    "id": 43048,
+    "name": "INV/2026/00005/FAC000136",
+    "invoice_date": "2026-08-28",
+    "partner_id": [
+      56347,
+      "MARLY CECILIA VIELMA DE PAREDES"
+    ],
+    "invoice_origin": "LBM-ORDEN-00090",
+    "amount_total": 33738.32,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-27"
+  },
+  {
+    "id": 43011,
+    "name": "INV/2026/00005/FAC000127",
+    "invoice_date": "2026-08-24",
+    "partner_id": [
+      56365,
+      "JESUS ALFONSO UGUETO LEAL"
+    ],
+    "invoice_origin": "LBM-ORDEN-00082",
+    "amount_total": 42938.28,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-24"
+  },
+  {
+    "id": 43009,
+    "name": "INV/2026/00005/FAC000125",
+    "invoice_date": "2026-08-24",
+    "partner_id": [
+      56426,
+      "KARLA ISAMAR PAREDES MOLINA"
+    ],
+    "invoice_origin": "LBM-ORDEN-00081",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-23"
+  },
+  {
+    "id": 43005,
+    "name": "INV/2026/00005/FAC000122",
+    "invoice_date": "2026-08-22",
+    "partner_id": [
+      56288,
+      "ROMINA BARBACANE"
+    ],
+    "invoice_origin": "LBM-ORDEN-00065",
+    "amount_total": 38324,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-07"
+  },
+  {
+    "id": 43003,
+    "name": "INV/2026/00005/FAC000120",
+    "invoice_date": "2026-08-22",
+    "partner_id": [
+      56307,
+      "ORLANDO JOSE ALBORNOZ RODRIGUEZ"
+    ],
+    "invoice_origin": false,
+    "amount_total": 42938.28,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": false
+  },
+  {
+    "id": 43001,
+    "name": "INV/2026/00005/FAC000118",
+    "invoice_date": "2026-08-22",
+    "partner_id": [
+      56259,
+      "HEBERTT JOSE SIRA RAMIREZ"
+    ],
+    "invoice_origin": "LBM-ORDEN-00071",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-14"
+  },
+  {
+    "id": 42976,
+    "name": "INV/2026/00005/FAC000117",
+    "invoice_date": "2026-08-21",
+    "partner_id": [
+      56379,
+      "GERALDINE CAROLINA RINCON AÑEZ"
+    ],
+    "invoice_origin": "LBM-ORDEN-00076",
+    "amount_total": 34888,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-18"
+  },
+  {
+    "id": 42849,
+    "name": "INV/2026/00005/FAC000115",
+    "invoice_date": "2026-08-15",
+    "partner_id": [
+      56260,
+      "YADIRA COROMOTO ARIZA"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-14"
+  },
+  {
+    "id": 42464,
+    "name": "INV/2026/00005/FAC000097",
+    "invoice_date": "2026-07-31",
+    "partner_id": [
+      56242,
+      "GREGORY ARCANGEL ARAQUE LOPEZ"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 33738.32,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-06-26"
+  },
+  {
+    "id": 42462,
+    "name": "INV/2026/00005/FAC000095",
+    "invoice_date": "2026-07-31",
+    "partner_id": [
+      55787,
+      "RAMON BENITO VALBUENA RONDON"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-05-28"
+  },
+  {
+    "id": 42582,
+    "name": "INV/2026/00005/FAC000106",
+    "invoice_date": "2026-07-30",
+    "partner_id": [
+      56323,
+      "YOANA SORIMAR LACRUZ QUINTERO"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-01"
+  },
+  {
+    "id": 42446,
+    "name": "INV/2026/00005/FAC000091",
+    "invoice_date": "2026-07-29",
+    "partner_id": [
+      10,
+      "GERARDO JOSE RAMIREZ FERNANDEZ"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 42938.28,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-01"
+  },
+  {
+    "id": 42435,
+    "name": "INV/2026/00005/FAC000089",
+    "invoice_date": "2026-07-29",
+    "partner_id": [
+      1200,
+      "JUHENDIS ESTHER VALLADARES LOPEZ F.P"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 33738.32,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-08-01"
+  },
+  {
+    "id": 42560,
+    "name": "INV/2026/00005/FAC000104",
+    "invoice_date": "2026-07-27",
+    "partner_id": [
+      56148,
+      "ROBERTO CRALOS DIAZ MORANTES"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-06-28"
+  },
+  {
+    "id": 42426,
+    "name": "INV/2026/00005/FAC000085",
+    "invoice_date": "2026-07-10",
+    "partner_id": [
+      56261,
+      "DARIO ALEJANDRO GARAY GONZALEZ"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 37100,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-07-31"
+  },
+  {
+    "id": 42391,
+    "name": "INV/2026/00005/FAC000078",
+    "invoice_date": "2026-07-10",
+    "partner_id": [
+      56207,
+      "FERNANDO JOSE VERA USECHE"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-06-26"
+  },
+  {
+    "id": 42477,
+    "name": "INV/2026/00005/FAC000100",
+    "invoice_date": "2026-07-08",
+    "partner_id": [
+      56234,
+      "DALIA MARIA SANCHEZ DE SULBARAN"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-06-29"
+  },
+  {
+    "id": 42561,
+    "name": "INV/2026/00005/FAC000105",
+    "invoice_date": "2026-07-06",
+    "partner_id": [
+      55957,
+      "YADIRA COROMOTO NAVA BRACHO"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 38200,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-07-18"
+  },
+  {
+    "id": 42403,
+    "name": "INV/2026/00005/FAC000082",
+    "invoice_date": "2026-07-06",
+    "partner_id": [
+      56236,
+      "OSCAR ALI QUINTERO QUINTERO"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-07-22"
+  },
+  {
+    "id": 42604,
+    "name": "INV/2026/00005/FAC000108",
+    "invoice_date": "2026-06-30",
+    "partner_id": [
+      56235,
+      "RAFAEL ANTONIO TREJO ROMERO"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-07-06"
+  },
+  {
+    "id": 42370,
+    "name": "INV/2026/00005/FAC000074",
+    "invoice_date": "2026-06-30",
+    "partner_id": [
+      56240,
+      "GUSTAVO BALZA RANGEL"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-06-29"
+  },
+  {
+    "id": 42219,
+    "name": "INV/2026/00005/FAC000018",
+    "invoice_date": "2026-06-29",
+    "partner_id": [
+      55785,
+      "NORELIS COLMENARES GALAVIZ"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 41265.56,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-05-28"
+  },
+  {
+    "id": 42340,
+    "name": "INV/2026/00005/FAC000055",
+    "invoice_date": "2026-06-23",
+    "partner_id": [
+      55789,
+      "MARIA ANDREINA MORENO SALAZAR"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 33738.32,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-06-29"
+  },
+  {
+    "id": 42371,
+    "name": "INV/2026/00005/FAC000075",
+    "invoice_date": "2026-06-19",
+    "partner_id": [
+      55784,
+      "CARLA ANDREINA PEÑALOZA QUEVEDO"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-06-29"
+  },
+  {
+    "id": 42363,
+    "name": "INV/2026/00005/FAC000072",
+    "invoice_date": "2026-06-11",
+    "partner_id": [
+      55822,
+      "LUIS MIGUEL ANGULO ARELLANO"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 41265.56,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-06-29"
+  },
+  {
+    "id": 42360,
+    "name": "INV/2026/00005/FAC000069",
+    "invoice_date": "2026-06-11",
+    "partner_id": [
+      55790,
+      "LUIS ALBERTO ANGARITA VERGARA"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 37322.72,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-05-25"
+  },
+  {
+    "id": 42342,
+    "name": "INV/2026/00005/FAC000057",
+    "invoice_date": "2026-06-11",
+    "partner_id": [
+      56208,
+      "MARYSBELIA CASAL PARRA"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 38517.52,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-06-29"
+  },
+  {
+    "id": 42309,
+    "name": "INV/2026/00005/FAC000039",
+    "invoice_date": "2026-06-08",
+    "partner_id": [
+      55788,
+      "ANA MARIA NIGRO CARRILLO"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 41265.56,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-05-25"
+  },
+  {
+    "id": 42307,
+    "name": "INV/2026/00005/FAC000037",
+    "invoice_date": "2026-05-26",
+    "partner_id": [
+      56199,
+      "FARMACIA FARMA JIRETH"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 41265.56,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-05-28"
+  },
+  {
+    "id": 42311,
+    "name": "INV/2026/00005/FAC000041",
+    "invoice_date": "2026-05-21",
+    "partner_id": [
+      55783,
+      "LUIS BERNARDINO GIOVANNONE CHACON"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 41265.56,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-05-28"
+  },
+  {
+    "id": 42345,
+    "name": "INV/2026/00005/FAC000060",
+    "invoice_date": "2026-05-08",
+    "partner_id": [
+      55884,
+      "EDIMAR KATHERINE QUINTERO GARCIA"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 37322.72,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-07-09"
+  },
+  {
+    "id": 42224,
+    "name": "INV/2026/00005/FAC000023",
+    "invoice_date": "2026-05-06",
+    "partner_id": [
+      55791,
+      "NEYDUTH SALOME HIGUERA MORALES"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 33738.32,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-05-25"
+  },
+  {
+    "id": 42359,
+    "name": "INV/2026/00005/FAC000068",
+    "invoice_date": "2026-04-28",
+    "partner_id": [
+      55792,
+      "JORGE LUIS ROJAS CHACON"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 41265.56,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-05-25"
+  },
+  {
+    "id": 42073,
+    "name": "INV/2026/00002",
+    "invoice_date": "2026-04-16",
+    "partner_id": [
+      55777,
+      "RAFAEL ANTONIO CONTRERAS LINDARTE"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 40548.68,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-05-25"
+  },
+  {
+    "id": 42358,
+    "name": "INV/2026/00005/FAC000067",
+    "invoice_date": "2026-04-13",
+    "partner_id": [
+      55835,
+      "JAIR DANIEL MARTINEZ VALERO"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 40548.68,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-05-25"
+  },
+  {
+    "id": 42138,
+    "name": "INV/2026/00005/FAC000015",
+    "invoice_date": "2026-03-31",
+    "partner_id": [
+      55840,
+      "AURA ELENA PEREZ"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 40548.68,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-05-25"
+  },
+  {
+    "id": 42357,
+    "name": "INV/2026/00005/FAC000066",
+    "invoice_date": "2026-03-25",
+    "partner_id": [
+      55782,
+      "ROSAURA MARQUEZ CARRERO"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 37083.76,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-05-25"
+  },
+  {
+    "id": 42133,
+    "name": "INV/2026/00005/FAC000011",
+    "invoice_date": "2026-03-25",
+    "partner_id": [
+      55786,
+      "LUCILA CASTILLO DE GONZALEZ"
+    ],
+    "invoice_origin": "Nuevo",
+    "amount_total": 40548.68,
+    "state": "posted",
+    "x_contado": false,
+    "first_installment_date": "2026-05-25"
+  }
+]

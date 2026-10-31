@@ -1,0 +1,64 @@
+PROMPTS LISTOS PARA CHATGPT (con Google Drive conectado)
+=========================================================
+
+
+PROMPT A · INVENTARIO Y ROTACIÓN
+--------------------------------
+Actúa como analista de inventario y compras. Usa EXCLUSIVAMENTE estos archivos
+CSV (separador coma) de mi carpeta de Google Drive "Inventario":
+
+- 01_existencias_por_almacen.csv: existencias por producto y almacén.
+- 02_inventario_total.csv: inventario completo valorizado a costo y a precio de lista.
+- 07_rotacion_ventas_12m.csv: ventas de 12 meses, stock, días de cobertura y clase ABC.
+
+Resumen ejecutivo en español (tablas markdown):
+1. Cinco bullets: valor del inventario a costo, número de SKU con stock,
+   concentración de ingresos por clase ABC, y las 3 alertas más importantes.
+2. Top 10 productos clase A con stock actual y días de cobertura: ¿riesgo de quiebre?
+3. Quiebres potenciales: clase A o B con stock 0 y ventas en los últimos 90 días.
+4. Excedentes: stock con 0 ventas en 12 meses o más de 90 días sin vender;
+   cuánto dinero está inmovilizado (a costo).
+5. Análisis por almacén con el archivo 01: ¿qué almacén concentra más valor?
+   ¿Hay existencias negativas y qué podrían significar?
+6. Plan de reposición: 10 productos a reponer con unidades sugeridas
+   (ritmo de venta 90 días × cobertura objetivo de 30 días − stock actual).
+7. Alertas de datos: productos sin código, precios de lista poco confiables
+   (precio_lista_confiable = NO), casos donde falta información.
+No inventes datos; si algo no está en los archivos, dilo explícitamente.
+
+
+PROMPT B · PRECIOS DE PROVEEDORES VS NUESTROS
+---------------------------------------------
+Actúa como analista de compras y pricing. Usa EXCLUSIVAMENTE estos archivos CSV
+(separador coma) de mi carpeta de Google Drive "Inventario":
+
+- 03_precios_actuales.csv: nuestros precios y costos. Cuando precio_lista_confiable
+  sea NO, usa precio_venta_prom_12m como nuestro precio de venta real.
+- 04_proveedores.csv: proveedores con contacto y actividad de compra.
+- 05_lista_precios_proveedor.csv: precios vigentes de cada proveedor por producto.
+- 06_cambios_precio_proveedor.csv: historial de compras de 24 meses con
+  precio_unitario, precio_anterior, cambio_pct y estado (SUBIO/BAJO/SIN CAMBIO).
+
+Entrega en español (tablas markdown):
+1. Precios que el proveedor SUBIÓ: productos con estado = SUBIO, mostrando
+   fecha, precio anterior → nuevo precio, % de cambio y unidades compradas 24m.
+   Ordena por impacto (mayores compras primero). Resumen: ¿cuántos subieron vs bajaron?
+2. Precios que BAJARON: oportunidad de reducir costo o mejorar margen.
+3. Urgente: productos donde precio_proveedor_vs_nuestro_precio_pct > 0
+   (nos cuesta más de lo que vendemos) → margen negativo. ¿Subir precio de venta,
+   renegociar o cambiar de proveedor?
+4. Diferencia entre precio_lista_proveedor_actual y lo que realmente pagamos en
+   la última compra: ¿el proveedor está pidiendo más caro que antes?
+5. Proveedores clave: top 10 por unidades compradas 24m con su contacto (archivo 04)
+   y qué % del abastecimiento representan.
+6. Recomendaciones concretas: ajustes de precio de venta sugeridos (con impacto en
+   margen %), y qué negociar con cada proveedor clave.
+No inventes datos; si falta algún dato, indícalo.
+
+
+PROMPT C · RESUMEN SEMANAL RÁPIDO
+----------------------------------
+Con los archivos de mi carpeta "Inventario" (01, 03, 06 y 07), dame un comité
+ejecutivo de 10 líneas: valor de inventario, movimientos de precio de proveedor
+de la semana (estado SUBIO/BAJO), 5 productos con mayor riesgo de quiebre,
+5 con stock estancado, y las 3 acciones recomendadas para la semana.

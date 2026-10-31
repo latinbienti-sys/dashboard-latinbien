@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consolidado · Balance Grupo de Empresas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --lb: #2a78d6; --gr: #eb6834; --jv: #1baf7a;
+            --activo: #6250d6; --pasivo: #e34948; --neto: #212529;
+            --grid: #e9ecef; --muted: #6c757d;
+        }
+        body { background-color: #f4f6f9; }
+        .card { box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075); border: none; }
+        .card-header { font-weight: 600; background: #fff; }
+        .kpi small { color: var(--muted); }
+        .kpi .valor { font-size: 1.45rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+        .kpi .delta { font-size: .85rem; }
+        .valor-num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+        .table td { vertical-align: middle; font-size: .9rem; }
+        .table th { font-size: .8rem; }
+        .fila-concepto { cursor: pointer; }
+        .fila-concepto:hover { background: #eef2f7; }
+        .fila-concepto.activa { background: #fff3cd; }
+        .chart-box { position: relative; height: 300px; }
+        .leyenda span { display: inline-flex; align-items: center; gap: .35rem; margin-right: 1rem; font-size: .85rem; }
+        .leyenda i.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+        .leyenda i.ln { width: 18px; height: 0; border-top: 2px dashed var(--neto); display: inline-block; }
+        .spark { display: block; }
+        .bueno { color: #146c43; } .malo { color: #b02a37; } .neutro { color: var(--muted); }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1"><i class="bi bi-calculator"></i> Balance Grupo de Empresas (LB · GR · JV)</span>
+        <!-- solo-local -->
+        <div class="d-flex gap-2 align-items-center">
+            <span class="text-white small"><i class="bi bi-person-circle"></i> {{ usuario }}</span>
+            <a class="btn btn-outline-light btn-sm" href="/logout" title="Salir"><i class="bi bi-box-arrow-right"></i></a>
+        </div>
+        <!-- /solo-local -->
+        <span class="text-white-50 small" id="infoGenerado"></span>
+    </div>
+</nav>
+<!-- solo-local -->
+<div class="container-fluid pt-2 bg-white border-bottom">
+    <ul class="nav nav-tabs border-0">
+        <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-table"></i> Balance</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/consolidado"><i class="bi bi-graph-up"></i> Consolidado</a></li>
+    </ul>
+</div>
+<!-- /solo-local -->
+
+<div class="container-fluid mt-3">
+    <!-- Filtros: una sola fila sobre los gráficos -->
+    <div class="card mb-3">
+        <div class="card-body py-2 d-flex flex-wrap align-items-center gap-2">
+            <label class="mb-0 small text-muted">Desde</label>
+            <input type="date" id="fDesde" class="form-control form-control-sm" style="width:auto">
+            <label class="mb-0 small text-muted">Hasta</label>
+            <input type="date" id="fHasta" class="form-control form-control-sm" style="width:auto">
+            <div class="btn-group btn-group-sm" role="group">
+                <button class="btn btn-outline-secondary" onclick="rango(7)">7 días</button>
+                <button class="btn btn-outline-secondary" onclick="rango(30)">30 días</button>
+                <button class="btn btn-outline-secondary" onclick="rango(90)">90 días</button>
+                <button class="btn btn-outline-secondary" onclick="rango(3650)">Todo</button>
+            </div>
+            <span class="ms-auto small text-muted" id="infoDias"></span>
+        </div>
+    </div>
+
+    <div id="sinDatos" class="alert alert-secondary d-none">
+        No hay días guardados en este rango. Guarde días desde la pestaña <strong>Balance</strong> (botón "Guardar día") para ver el comportamiento.
+    </div>
+
+    <div id="contenido">
+        <!-- KPIs -->
+        <div class="row g-2 mb-3" id="kpis"></div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-xl-6">
+                <div class="card h-100">
+                    <div class="card-header">Inventario general consolidado por día</div>
+                    <div class="card-body">
+                        <div class="leyenda mb-2">
+                            <span><i class="sw" style="background:var(--lb)"></i>LB</span>
+                            <span><i class="sw" style="background:var(--gr)"></i>GR</span>
+                            <span><i class="sw" style="background:var(--jv)"></i>JV</span>
+                        </div>
+                        <div class="chart-box"><canvas id="chInventario"></canvas></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card h-100">
+                    <div class="card-header">Activo, pasivo y neto consolidados</div>
+                    <div class="card-body">
+                        <div class="leyenda mb-2">
+                            <span><i class="sw" style="background:var(--activo)"></i>Total activo</span>
+                            <span><i class="sw" style="background:var(--pasivo)"></i>Total pasivo</span>
+                            <span><i class="ln"></i>Neto (activo − pasivo)</span>
+                        </div>
+                        <div class="chart-box"><canvas id="chTotales"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-xl-7">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <span>Detalle por concepto (consolidado LB + GR + JV)</span>
+                        <small class="text-muted fw-normal">Clic en un concepto para ver su gráfica</small>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Concepto</th><th class="text-center">Origen</th>
+                                    <th class="text-end">Consolidado</th><th class="text-end">Var. día ant.</th>
+                                    <th class="text-end">Var. %</th><th class="text-center">Tendencia</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyConceptos"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-5">
+                <div class="card position-sticky" style="top: 1rem">
+                    <div class="card-header" id="tituloDetalle">Concepto</div>
+                    <div class="card-body">
+                        <div class="leyenda mb-2">
+                            <span><i class="sw" style="background:var(--lb)"></i>LB</span>
+                            <span><i class="sw" style="background:var(--gr)"></i>GR</span>
+                            <span><i class="sw" style="background:var(--jv)"></i>JV</span>
+                            <span><i class="ln"></i>Consolidado</span>
+                        </div>
+                        <div class="chart-box"><canvas id="chDetalle"></canvas></div>
+                        <div class="small text-muted mt-2" id="notaDetalle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="/static/consolidado.js"></script>
+</body>
+</html>

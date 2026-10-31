@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_razon_pagos_dashboard" model="ir.actions.client">
+        <field name="name">Pagos y Egresos por Razón</field>
+        <field name="tag">razon_pagos.dashboard</field>
+    </record>
+
+    <menuitem id="menu_razon_pagos_dashboard_root"
+              name="Reportes para Socios"
+              sequence="90"/>
+
+    <menuitem id="menu_razon_pagos_dashboard"
+              name="¿En qué se gastó el dinero?"
+              parent="menu_razon_pagos_dashboard_root"
+              action="action_razon_pagos_dashboard"
+              sequence="10"/>
+
+</odoo>

@@ -1,0 +1,624 @@
+[
+  {
+    "id": 4480,
+    "name": "LBM-ORDEN-00113",
+    "partner_id": [
+      56608,
+      "KEILA PATRICIA MENDOZA DE VELAZCO"
+    ],
+    "x_status_operativos": "9",
+    "commitment_date": "2026-09-30 19:10:25",
+    "invoice_ids": [
+      43462
+    ]
+  },
+  {
+    "id": 4478,
+    "name": "LBM-ORDEN-00111",
+    "partner_id": [
+      56570,
+      "ARDICSON ZAMBRANO"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-09-30 13:01:22",
+    "invoice_ids": [
+      43388
+    ]
+  },
+  {
+    "id": 4462,
+    "name": "LBM-ORDEN-00095",
+    "partner_id": [
+      56516,
+      "NUMA POMPILIO PAREDES PARRA"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-09-11 18:01:01",
+    "invoice_ids": [
+      43189
+    ]
+  },
+  {
+    "id": 4461,
+    "name": "LBM-ORDEN-00094",
+    "partner_id": [
+      56461,
+      "DANIEL MOLINA"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-09-08 13:25:12",
+    "invoice_ids": [
+      43188
+    ]
+  },
+  {
+    "id": 4457,
+    "name": "LBM-ORDEN-00090",
+    "partner_id": [
+      56347,
+      "MARLY CECILIA VIELMA DE PAREDES"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-31 12:05:29",
+    "invoice_ids": [
+      43048
+    ]
+  },
+  {
+    "id": 4456,
+    "name": "LBM-ORDEN-00089",
+    "partner_id": [
+      56383,
+      "ELADIO GARCÍA"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-31 21:44:51",
+    "invoice_ids": [
+      43096
+    ]
+  },
+  {
+    "id": 4449,
+    "name": "LBM-ORDEN-00082",
+    "partner_id": [
+      56365,
+      "JESUS ALFONSO UGUETO LEAL"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-31 19:44:29",
+    "invoice_ids": [
+      43011
+    ]
+  },
+  {
+    "id": 4448,
+    "name": "LBM-ORDEN-00081",
+    "partner_id": [
+      56426,
+      "KARLA ISAMAR PAREDES MOLINA"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-31 19:38:12",
+    "invoice_ids": [
+      43009
+    ]
+  },
+  {
+    "id": 4447,
+    "name": "LBM-ORDEN-00080",
+    "partner_id": [
+      56307,
+      "ORLANDO JOSE ALBORNOZ RODRIGUEZ"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-31 16:16:51",
+    "invoice_ids": []
+  },
+  {
+    "id": 4437,
+    "name": "LBM-ORDEN-00074",
+    "partner_id": [
+      56322,
+      "ALEJANDRO RAFAEL LEZAMA SÁNCHEZ"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-31 12:53:47",
+    "invoice_ids": [
+      43052
+    ]
+  },
+  {
+    "id": 4439,
+    "name": "LBM-ORDEN-00076",
+    "partner_id": [
+      56379,
+      "GERALDINE CAROLINA RINCON AÑEZ"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-31 19:47:57",
+    "invoice_ids": [
+      42976
+    ]
+  },
+  {
+    "id": 4431,
+    "name": "LBM-ORDEN-00069",
+    "partner_id": [
+      56380,
+      "JOSE HERNAN ROA RAD"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-31 18:55:23",
+    "invoice_ids": [
+      43295
+    ]
+  },
+  {
+    "id": 4429,
+    "name": "LBM-ORDEN-00068",
+    "partner_id": [
+      56400,
+      "CHRISTAVEL CONTRERAS ZERPA"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-31 17:42:50",
+    "invoice_ids": [
+      43050
+    ]
+  },
+  {
+    "id": 4435,
+    "name": "LBM-ORDEN-00072",
+    "partner_id": [
+      56412,
+      "LABORATORIOS BIOFARCO C.A."
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-31 19:08:45",
+    "invoice_ids": [
+      43104
+    ]
+  },
+  {
+    "id": 4433,
+    "name": "LBM-ORDEN-00071",
+    "partner_id": [
+      56259,
+      "HEBERTT JOSE SIRA RAMIREZ"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-31 15:33:11",
+    "invoice_ids": [
+      43001
+    ]
+  },
+  {
+    "id": 4424,
+    "name": "LBM-ORDEN-00064",
+    "partner_id": [
+      56260,
+      "YADIRA COROMOTO ARIZA"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-04 15:31:12",
+    "invoice_ids": [
+      42849
+    ]
+  },
+  {
+    "id": 4425,
+    "name": "LBM-ORDEN-00065",
+    "partner_id": [
+      56288,
+      "ROMINA BARBACANE"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-12 18:57:53",
+    "invoice_ids": [
+      43005
+    ]
+  },
+  {
+    "id": 4426,
+    "name": "LBM-ORDEN-00066",
+    "partner_id": [
+      56316,
+      "MARIA SOLEDAD GONZALEZ REYES"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-08-15 18:57:14",
+    "invoice_ids": [
+      43159
+    ]
+  },
+  {
+    "id": 4399,
+    "name": "LBM-ORDEN-00040",
+    "partner_id": [
+      56235,
+      "RAFAEL ANTONIO TREJO ROMERO"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-06-30 04:00:00",
+    "invoice_ids": [
+      42604
+    ]
+  },
+  {
+    "id": 4416,
+    "name": "LBM-ORDEN-00057",
+    "partner_id": [
+      56323,
+      "YOANA SORIMAR LACRUZ QUINTERO"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-07-30 18:52:03",
+    "invoice_ids": [
+      42582
+    ]
+  },
+  {
+    "id": 4405,
+    "name": "LBM-ORDEN-00046",
+    "partner_id": [
+      55957,
+      "YADIRA COROMOTO NAVA BRACHO"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-07-06 19:58:22",
+    "invoice_ids": [
+      42561
+    ]
+  },
+  {
+    "id": 4262,
+    "name": "LBM-ORDEN-00009",
+    "partner_id": [
+      55791,
+      "NEYDUTH SALOME HIGUERA MORALES"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-05-06 15:13:05",
+    "invoice_ids": [
+      42224
+    ]
+  },
+  {
+    "id": 4384,
+    "name": "LBM-ORDEN-00027",
+    "partner_id": [
+      56148,
+      "ROBERTO CRALOS DIAZ MORANTES"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-07-27 20:42:07",
+    "invoice_ids": [
+      42560
+    ]
+  },
+  {
+    "id": 4392,
+    "name": "LBM-ORDEN-00034",
+    "partner_id": [
+      56234,
+      "DALIA MARIA SANCHEZ DE SULBARAN"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-07-08 14:44:32",
+    "invoice_ids": [
+      42477
+    ]
+  },
+  {
+    "id": 4382,
+    "name": "LBM-ORDEN-00026",
+    "partner_id": [
+      56242,
+      "GREGORY ARCANGEL ARAQUE LOPEZ"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-07-31 20:27:21",
+    "invoice_ids": [
+      42464
+    ]
+  },
+  {
+    "id": 4270,
+    "name": "LBM-ORDEN-00013",
+    "partner_id": [
+      55787,
+      "RAMON BENITO VALBUENA RONDON"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-07-31 20:50:56",
+    "invoice_ids": [
+      42462
+    ]
+  },
+  {
+    "id": 4414,
+    "name": "LBM-ORDEN-00055",
+    "partner_id": [
+      1368,
+      "GERARDO JOSE RAMIREZ FERNANDEZ..."
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-07-29 15:35:49",
+    "invoice_ids": [
+      42446
+    ]
+  },
+  {
+    "id": 4412,
+    "name": "LBM-ORDEN-00053",
+    "partner_id": [
+      1200,
+      "JUHENDIS ESTHER VALLADARES LOPEZ F.P"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-07-29 15:00:29",
+    "invoice_ids": [
+      42435
+    ]
+  },
+  {
+    "id": 4409,
+    "name": "LBM-ORDEN-00050",
+    "partner_id": [
+      56261,
+      "DARIO ALEJANDRO GARAY GONZALEZ"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-07-10 13:57:27",
+    "invoice_ids": [
+      42426
+    ]
+  },
+  {
+    "id": 4407,
+    "name": "LBM-ORDEN-00048",
+    "partner_id": [
+      56236,
+      "OSCAR ALI QUINTERO QUINTERO"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-07-06 16:14:15",
+    "invoice_ids": [
+      42403
+    ]
+  },
+  {
+    "id": 4388,
+    "name": "LBM-ORDEN-00030",
+    "partner_id": [
+      56207,
+      "FERNANDO JOSE VERA USECHE"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-07-10 12:28:48",
+    "invoice_ids": [
+      42391
+    ]
+  },
+  {
+    "id": 4390,
+    "name": "LBM-ORDEN-00032",
+    "partner_id": [
+      56240,
+      "GUSTAVO BALZA RANGEL"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-06-30 14:44:32",
+    "invoice_ids": [
+      42370
+    ]
+  },
+  {
+    "id": 4403,
+    "name": "LBM-ORDEN-00044",
+    "partner_id": [
+      55784,
+      "CARLA ANDREINA PEÑALOZA QUEVEDO"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-06-19 15:11:13",
+    "invoice_ids": [
+      42371
+    ]
+  },
+  {
+    "id": 4395,
+    "name": "LBM-ORDEN-00036",
+    "partner_id": [
+      55822,
+      "LUIS MIGUEL ANGULO ARELLANO"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-06-11 18:55:05",
+    "invoice_ids": [
+      42363
+    ]
+  },
+  {
+    "id": 4261,
+    "name": "LBM-ORDEN-00008",
+    "partner_id": [
+      55790,
+      "LUIS ALBERTO ANGARITA VERGARA"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-06-11 15:11:08",
+    "invoice_ids": [
+      42360
+    ]
+  },
+  {
+    "id": 4257,
+    "name": "LBM-ORDEN-00004",
+    "partner_id": [
+      55835,
+      "JAIR DANIEL MARTINEZ VALERO"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-04-14 03:48:25",
+    "invoice_ids": [
+      42358
+    ]
+  },
+  {
+    "id": 4254,
+    "name": "LBM-ORDEN-00002",
+    "partner_id": [
+      55782,
+      "ROSAURA MARQUEZ CARRERO"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-03-26 03:43:04",
+    "invoice_ids": [
+      42357
+    ]
+  },
+  {
+    "id": 4400,
+    "name": "LBM-ORDEN-00041",
+    "partner_id": [
+      55884,
+      "EDIMAR KATHERINE QUINTERO GARCIA"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-05-21 20:04:53",
+    "invoice_ids": [
+      42345
+    ]
+  },
+  {
+    "id": 4386,
+    "name": "LBM-ORDEN-00028",
+    "partner_id": [
+      56208,
+      "MARYSBELIA CASAL PARRA"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-06-11 12:26:31",
+    "invoice_ids": [
+      42342
+    ]
+  },
+  {
+    "id": 4397,
+    "name": "LBM-ORDEN-00038",
+    "partner_id": [
+      55789,
+      "MARIA ANDREINA MORENO SALAZAR"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-06-23 19:10:01",
+    "invoice_ids": [
+      42340
+    ]
+  },
+  {
+    "id": 4253,
+    "name": "LBM-ORDEN-00001",
+    "partner_id": [
+      55777,
+      "RAFAEL ANTONIO CONTRERAS LINDARTE"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-04-16 14:57:17",
+    "invoice_ids": [
+      42073
+    ]
+  },
+  {
+    "id": 4256,
+    "name": "LBM-ORDEN-00003",
+    "partner_id": [
+      55786,
+      "LUCILA CASTILLO DE GONZALEZ"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-03-26 03:46:10",
+    "invoice_ids": [
+      42133
+    ]
+  },
+  {
+    "id": 4258,
+    "name": "LBM-ORDEN-00005",
+    "partner_id": [
+      55792,
+      "JORGE LUIS ROJAS CHACON"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-04-26 13:52:46",
+    "invoice_ids": [
+      42359
+    ]
+  },
+  {
+    "id": 4259,
+    "name": "LBM-ORDEN-00006",
+    "partner_id": [
+      55840,
+      "AURA ELENA PEREZ"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-03-31 14:42:02",
+    "invoice_ids": [
+      42138
+    ]
+  },
+  {
+    "id": 4269,
+    "name": "LBM-ORDEN-00012",
+    "partner_id": [
+      55785,
+      "NORELIS COLMENARES GALAVIZ"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-06-29 20:38:34",
+    "invoice_ids": [
+      42219
+    ]
+  },
+  {
+    "id": 4265,
+    "name": "LBM-ORDEN-00011",
+    "partner_id": [
+      55783,
+      "LUIS BERNARDINO GIOVANNONE CHACON"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-05-21 19:52:18",
+    "invoice_ids": [
+      42311
+    ]
+  },
+  {
+    "id": 4260,
+    "name": "LBM-ORDEN-00007",
+    "partner_id": [
+      55788,
+      "ANA MARIA NIGRO CARRILLO"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-06-08 15:03:31",
+    "invoice_ids": [
+      42309
+    ]
+  },
+  {
+    "id": 4264,
+    "name": "LBM-ORDEN-00010",
+    "partner_id": [
+      56199,
+      "FARMACIA FARMA JIRETH"
+    ],
+    "x_status_operativos": "6",
+    "commitment_date": "2026-05-28 18:54:02",
+    "invoice_ids": [
+      42307
+    ]
+  }
+]

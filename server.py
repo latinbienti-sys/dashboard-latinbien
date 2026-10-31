@@ -1968,11 +1968,12 @@ def fetch_payment_plan(sess):
         prox_comp_act = min(comps_con_monto, default=None, key=lambda x: x[0])
         prox_compromiso_monto = round(prox_comp_act[1], 2) if prox_comp_act else 0.0
         prox_compromiso_deadline = prox_comp_act[0] if prox_comp_act else ''
-        # Montos por recibir / recibidos según estado de la actividad (done = hecho)
-        monto_por_recibir = round(sum(a['monto'] for a in acts
-                                      if a.get('monto', 0) > 0 and a.get('state') != 'done'), 2)
-        monto_recibido = round(sum(a['monto'] for a in acts
-                                   if a.get('monto', 0) > 0 and a.get('state') == 'done'), 2)
+        # Montos por recibir / recibidos según estado de la actividad (done o today = hecho)
+        # Odoo usa 'today' cuando se marca actividad como hecha, no 'done'
+        monto_por_recibir = round(sum((a['monto'] for a in acts
+                                      if a.get('monto', 0) > 0 and a.get('state') not in ['done', 'today']), 2))
+        monto_recibido = round(sum((a['monto'] for a in acts
+                                    if a.get('monto', 0) > 0 and a.get('state') in ['done', 'today']), 2))
         facturas_con_compromiso.append({
             'invoice_id': inv_id,
             'factura': inv_name,

@@ -1,0 +1,2726 @@
+{
+  "generado": "2026-10-30T23:45:08.748Z",
+  "fuente": "latinbienmotors.com (BD latinbien), solo lectura",
+  "anio": 2026,
+  "total": {
+    "unidades": "47.00",
+    "monto": 1513943.01,
+    "pedidos": 47
+  },
+  "porMes": [
+    {
+      "llave": "2026-03",
+      "unidades": 3,
+      "monto": 97900,
+      "pedidos": 3,
+      "clientes": 3
+    },
+    {
+      "llave": "2026-04",
+      "unidades": 3,
+      "monto": 101400,
+      "pedidos": 3,
+      "clientes": 3
+    },
+    {
+      "llave": "2026-05",
+      "unidades": 4,
+      "monto": 127200,
+      "pedidos": 4,
+      "clientes": 4
+    },
+    {
+      "llave": "2026-06",
+      "unidades": 9,
+      "monto": 294472,
+      "pedidos": 9,
+      "clientes": 9
+    },
+    {
+      "llave": "2026-07",
+      "unidades": 11,
+      "monto": 346600,
+      "pedidos": 11,
+      "clientes": 11
+    },
+    {
+      "llave": "2026-08",
+      "unidades": 14,
+      "monto": 453062,
+      "pedidos": 14,
+      "clientes": 14
+    },
+    {
+      "llave": "2026-09",
+      "unidades": 3,
+      "monto": 93309.01,
+      "pedidos": 3,
+      "clientes": 3
+    }
+  ],
+  "porForma": [
+    {
+      "llave": "Crédito (SAV)",
+      "unidades": 30,
+      "monto": 964372,
+      "pedidos": 30,
+      "clientes": 30
+    },
+    {
+      "llave": "Contado",
+      "unidades": 16,
+      "monto": 513971.01,
+      "pedidos": 16,
+      "clientes": 16
+    },
+    {
+      "llave": "Crédito (sin factura)",
+      "unidades": 1,
+      "monto": 35600,
+      "pedidos": 1,
+      "clientes": 1
+    }
+  ],
+  "facturacionClientes": {
+    "origen": "account.move con etiqueta VENTAVEHICULOCONSIG (favorito \"FacturacionVehiculo\") - indiferente de entrega",
+    "alCorte": "2026-10-30",
+    "total": {
+      "unidades": 59,
+      "monto": 1891076.96,
+      "facturas": 59
+    },
+    "porMes": [
+      {
+        "llave": "2026-03",
+        "unidades": 3,
+        "monto": 97900,
+        "entregadas": 3,
+        "mEnt": 97900,
+        "factNoEntregadas": 0,
+        "mNoEnt": 0,
+        "sinStatus": 0,
+        "mSin": 0
+      },
+      {
+        "llave": "2026-04",
+        "unidades": 3,
+        "monto": 101400,
+        "entregadas": 3,
+        "mEnt": 101400,
+        "factNoEntregadas": 0,
+        "mNoEnt": 0,
+        "sinStatus": 0,
+        "mSin": 0
+      },
+      {
+        "llave": "2026-05",
+        "unidades": 4,
+        "monto": 127200,
+        "entregadas": 4,
+        "mEnt": 127200,
+        "factNoEntregadas": 0,
+        "mNoEnt": 0,
+        "sinStatus": 0,
+        "mSin": 0
+      },
+      {
+        "llave": "2026-06",
+        "unidades": 9,
+        "monto": 294472,
+        "entregadas": 9,
+        "mEnt": 294472,
+        "factNoEntregadas": 0,
+        "mNoEnt": 0,
+        "sinStatus": 0,
+        "mSin": 0
+      },
+      {
+        "llave": "2026-07",
+        "unidades": 11,
+        "monto": 345249.67,
+        "entregadas": 11,
+        "mEnt": 345249.67,
+        "factNoEntregadas": 0,
+        "mNoEnt": 0,
+        "sinStatus": 0,
+        "mSin": 0
+      },
+      {
+        "llave": "2026-08",
+        "unidades": 12,
+        "monto": 385018.2,
+        "entregadas": 4,
+        "mEnt": 127056.2,
+        "factNoEntregadas": 8,
+        "mNoEnt": 257962,
+        "sinStatus": 0,
+        "mSin": 0
+      },
+      {
+        "llave": "2026-09",
+        "unidades": 10,
+        "monto": 314991.49,
+        "entregadas": 1,
+        "mEnt": 30704.3,
+        "factNoEntregadas": 2,
+        "mNoEnt": 62604.71,
+        "sinStatus": 7,
+        "mSin": 221682.48
+      },
+      {
+        "llave": "2026-10",
+        "unidades": 7,
+        "monto": 224845.6,
+        "entregadas": 0,
+        "mEnt": 0,
+        "factNoEntregadas": 0,
+        "mNoEnt": 0,
+        "sinStatus": 7,
+        "mSin": 224845.6
+      }
+    ],
+    "porStatus": [
+      {
+        "llave": "6. CVG - ENTREGADO",
+        "unidades": 35,
+        "monto": 1123982.17
+      },
+      {
+        "llave": "False",
+        "unidades": 14,
+        "monto": 446528.08
+      },
+      {
+        "llave": "5. FACTURADO- NO ENTREGADO",
+        "unidades": 10,
+        "monto": 320566.71
+      }
+    ],
+    "faltantes": {
+      "definicion": "Facturas con etiqueta VENTAVEHICULOCONSIG cuyo cliente no aparece entre los pedidos entregados (status 6), por ID o nombre",
+      "unidades": 12,
+      "monto": 382728.08,
+      "detalle": [
+        {
+          "factura": "INV/2026/00005/FAC000180",
+          "fecha": "2026-09-25",
+          "mes": "2026-09",
+          "cliente": "ALBA SALAS",
+          "ejecutivo": "ROSMILA VALLADARES",
+          "status": "False",
+          "unidades": 1,
+          "montoSinIva": 31900,
+          "modelos": [
+            "[WR-VEXL26-G553P] HONDA WR-V 1.5L A/T EXL 2026 (Azul Nórdico)"
+          ],
+          "genero": "Dama",
+          "edad": 53,
+          "edadRango": "45-54",
+          "estado": "MERIDA",
+          "profesion": "MEDICO ENDOCRINO",
+          "actividad": "Bajo dependencia"
+        },
+        {
+          "factura": "INV/2026/00005/FAC000181",
+          "fecha": "2026-09-25",
+          "mes": "2026-09",
+          "cliente": "KEILA PATRICIA MENDOZA DE VELAZCO",
+          "ejecutivo": "ANGEL DAVID PUENTES",
+          "status": "False",
+          "unidades": 1,
+          "montoSinIva": 30600,
+          "modelos": [
+            "[HR-VLX26-NH830M] HONDA HR-V 1.5L A/T LX 2026 (Plata Metalico)"
+          ],
+          "genero": "Dama",
+          "edad": 44,
+          "edadRango": "35-44",
+          "estado": "MERIDA",
+          "profesion": "(sin registrar)",
+          "actividad": "Bajo dependencia"
+        },
+        {
+          "factura": "INV/2026/00005/FAC000183",
+          "fecha": "2026-09-25",
+          "mes": "2026-09",
+          "cliente": "FRANK ADNER NIÑO LABRADOR",
+          "ejecutivo": "KAREN DANIELA NAVA",
+          "status": "False",
+          "unidades": 1,
+          "montoSinIva": 31582.48,
+          "modelos": [
+            "[WR-VEXL26-NH-904M] HONDA WR-V 1.5L A/T EXL 2026 (Gris Metalico)"
+          ],
+          "genero": "Caballero",
+          "edad": null,
+          "edadRango": "Sin dato",
+          "estado": "TACHIRA",
+          "profesion": "MEDICO FISIATRA",
+          "actividad": "Bajo dependencia"
+        },
+        {
+          "factura": "INV/2026/00005/FAC000184",
+          "fecha": "2026-09-28",
+          "mes": "2026-09",
+          "cliente": "MICHAEL ANYER GALLARDO MENDEZ",
+          "ejecutivo": "DIEGO ARMANDO FERNANDEZ",
+          "status": "False",
+          "unidades": 1,
+          "montoSinIva": 31900,
+          "modelos": [
+            "[WR-VEXL26-NH-904M] HONDA WR-V 1.5L A/T EXL 2026 (Gris Metalico)"
+          ],
+          "genero": "Caballero",
+          "edad": 45,
+          "edadRango": "45-54",
+          "estado": "MONAGAS",
+          "profesion": "(sin registrar)",
+          "actividad": "Bajo dependencia"
+        },
+        {
+          "factura": "INV/2026/00005/FAC000189",
+          "fecha": "2026-09-30",
+          "mes": "2026-09",
+          "cliente": "YC COSMETICS GROUP, C.A",
+          "ejecutivo": "KAREN DANIELA NAVA",
+          "status": "False",
+          "unidades": 1,
+          "montoSinIva": 31900,
+          "modelos": [
+            "[WR-VEXL26-NH-883P] HONDA WR-V 1.5L A/T EXL 2026 (Blanco)"
+          ],
+          "genero": "Caballero",
+          "edad": null,
+          "edadRango": "Sin dato",
+          "estado": "(sin registrar)",
+          "profesion": "(sin registrar)",
+          "actividad": "Bajo dependencia"
+        },
+        {
+          "factura": "INV/2026/00005/FAC000193",
+          "fecha": "2026-10-21",
+          "mes": "2026-10",
+          "cliente": "JOSE ALEJANDRO GUILLEN CAÑIZARES",
+          "ejecutivo": "ROSMILA VALLADARES",
+          "status": "False",
+          "unidades": 1,
+          "montoSinIva": 26900,
+          "modelos": [
+            "[CITYEXL26-NH830M] HONDA CITY 1.5L A/T EXL 2026 (Plata Metalico)"
+          ],
+          "genero": "Caballero",
+          "edad": 50,
+          "edadRango": "45-54",
+          "estado": "MERIDA",
+          "profesion": "(sin registrar)",
+          "actividad": "Bajo dependencia"
+        },
+        {
+          "factura": "INV/2026/00005/FAC000194",
+          "fecha": "2026-10-23",
+          "mes": "2026-10",
+          "cliente": "JEAN PIERRE OMAÑA ARAQUE",
+          "ejecutivo": "ROSMILA VALLADARES",
+          "status": "False",
+          "unidades": 1,
+          "montoSinIva": 32500,
+          "modelos": [
+            "HONDA WR-V 1.5L A/T EXL 2027 (Plata Metalico)"
+          ],
+          "genero": "Caballero",
+          "edad": 40,
+          "edadRango": "35-44",
+          "estado": "MERIDA",
+          "profesion": "(sin registrar)",
+          "actividad": "Independiente"
+        },
+        {
+          "factura": "INV/2026/00005/FAC000196",
+          "fecha": "2026-10-23",
+          "mes": "2026-10",
+          "cliente": "MIRTHA COROMOTO OSORIO PAREDES",
+          "ejecutivo": "ROSMILA VALLADARES",
+          "status": "False",
+          "unidades": 1,
+          "montoSinIva": 32500,
+          "modelos": [
+            "HONDA WR-V 1.5L A/T EXL 2027 (Azul Cosmico)"
+          ],
+          "genero": "Caballero",
+          "edad": 59,
+          "edadRango": "55-64",
+          "estado": "MERIDA",
+          "profesion": "(sin registrar)",
+          "actividad": "Bajo dependencia"
+        },
+        {
+          "factura": "INV/2026/00005/FAC000207",
+          "fecha": "2026-10-26",
+          "mes": "2026-10",
+          "cliente": "SOLEIMA COROMOTO SANCHEZ ARAQUE",
+          "ejecutivo": "ROSMILA VALLADARES",
+          "status": "False",
+          "unidades": 1,
+          "montoSinIva": 32500,
+          "modelos": [
+            "HONDA WR-V 1.5L A/T EXL 2027 (Blanco)"
+          ],
+          "genero": "Dama",
+          "edad": 57,
+          "edadRango": "55-64",
+          "estado": "(sin registrar)",
+          "profesion": "MEDICO",
+          "actividad": "Bajo dependencia"
+        },
+        {
+          "factura": "INV/2026/00005/FAC000209",
+          "fecha": "2026-10-28",
+          "mes": "2026-10",
+          "cliente": "DANNY CAROLINA INFANTE",
+          "ejecutivo": "ROSMILA VALLADARES",
+          "status": "False",
+          "unidades": 1,
+          "montoSinIva": 32500,
+          "modelos": [
+            "HONDA WR-V 1.5L A/T EXL 2027 (Blanco)"
+          ],
+          "genero": "Dama",
+          "edad": 53,
+          "edadRango": "45-54",
+          "estado": "ZULIA",
+          "profesion": "GANADERA",
+          "actividad": "Bajo dependencia"
+        },
+        {
+          "factura": "INV/2026/00005/FAC000211",
+          "fecha": "2026-10-28",
+          "mes": "2026-10",
+          "cliente": "WISAM KASSIEH",
+          "ejecutivo": "ANGEL DAVID PUENTES",
+          "status": "False",
+          "unidades": 1,
+          "montoSinIva": 35600,
+          "modelos": [
+            "HONDA HR-V 1.5L A/T EXL 2027 (Rojo Metalico)"
+          ],
+          "genero": "Caballero",
+          "edad": 50,
+          "edadRango": "45-54",
+          "estado": "MERIDA",
+          "profesion": "COMERCIANTE",
+          "actividad": "Bajo dependencia"
+        },
+        {
+          "factura": "INV/2026/00005/FAC000213",
+          "fecha": "2026-10-30",
+          "mes": "2026-10",
+          "cliente": "REINALDO JOSÉ GUTIÉRREZ GRIMALDOS",
+          "ejecutivo": "DIEGO ARMANDO FERNANDEZ",
+          "status": "False",
+          "unidades": 1,
+          "montoSinIva": 32345.6,
+          "modelos": [
+            "HONDA WR-V 1.5L A/T EXL 2027 (Blanco)"
+          ],
+          "genero": "Caballero",
+          "edad": 60,
+          "edadRango": "55-64",
+          "estado": "ZULIA",
+          "profesion": "COMERCIANTE",
+          "actividad": "Bajo dependencia"
+        }
+      ],
+      "porGenero": [
+        {
+          "llave": "Caballero",
+          "unidades": 8
+        },
+        {
+          "llave": "Dama",
+          "unidades": 4
+        }
+      ],
+      "porEdad": [
+        {
+          "llave": "45-54",
+          "unidades": 5
+        },
+        {
+          "llave": "55-64",
+          "unidades": 3
+        },
+        {
+          "llave": "35-44",
+          "unidades": 2
+        },
+        {
+          "llave": "Sin dato",
+          "unidades": 2
+        }
+      ],
+      "porEstado": [
+        {
+          "llave": "MERIDA",
+          "unidades": 6
+        },
+        {
+          "llave": "(sin registrar)",
+          "unidades": 2
+        },
+        {
+          "llave": "ZULIA",
+          "unidades": 2
+        },
+        {
+          "llave": "TACHIRA",
+          "unidades": 1
+        },
+        {
+          "llave": "MONAGAS",
+          "unidades": 1
+        }
+      ],
+      "porActividad": [
+        {
+          "llave": "Bajo dependencia",
+          "unidades": 11
+        },
+        {
+          "llave": "Independiente",
+          "unidades": 1
+        }
+      ]
+    },
+    "detalle": [
+      {
+        "factura": "INV/2026/00005/FAC000066",
+        "id": 42357,
+        "partnerId": 55782,
+        "fecha": "2026-03-25",
+        "mes": "2026-03",
+        "cliente": "ROSAURA MARQUEZ CARRERO",
+        "ejecutivo": "EDGARDO REINOZO",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 30700,
+        "modelos": [
+          "[HR-VEXL26-NH830M] HONDA HR-V 1.5L A/T EXL 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000011",
+        "id": 42133,
+        "partnerId": 55786,
+        "fecha": "2026-03-25",
+        "mes": "2026-03",
+        "cliente": "LUCILA CASTILLO DE GONZALEZ",
+        "ejecutivo": "M  GIBSON",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 33600,
+        "modelos": [
+          "[HR-VEXL26-NH731P] HONDA HR-V 1.5L A/T EXL 2026 (Negro Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000015",
+        "id": 42138,
+        "partnerId": 55840,
+        "fecha": "2026-03-31",
+        "mes": "2026-03",
+        "cliente": "AURA ELENA PEREZ",
+        "ejecutivo": "M  GIBSON",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 33600,
+        "modelos": [
+          "[HR-VEXL26-B607M] HONDA HR-V 1.5L A/T EXL 2026 (Azul Cosmico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000067",
+        "id": 42358,
+        "partnerId": 55835,
+        "fecha": "2026-04-13",
+        "mes": "2026-04",
+        "cliente": "JAIR DANIEL MARTINEZ VALERO",
+        "ejecutivo": "M  GIBSON",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 33600,
+        "modelos": [
+          "[HR-VLX26-NH830M] HONDA HR-V 1.5L A/T LX 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00002",
+        "id": 42073,
+        "partnerId": 55777,
+        "fecha": "2026-04-16",
+        "mes": "2026-04",
+        "cliente": "RAFAEL ANTONIO CONTRERAS LINDARTE",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 33600,
+        "modelos": [
+          "HONDA HR-V 1.5L A/T EXL 2026"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000068",
+        "id": 42359,
+        "partnerId": 55792,
+        "fecha": "2026-04-28",
+        "mes": "2026-04",
+        "cliente": "JORGE LUIS ROJAS CHACON",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 34200,
+        "modelos": [
+          "[HR-VEXL26-NH912P] HONDA HR-V 1.5L A/T EXL 2026 (Gris Urbano)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000023",
+        "id": 42224,
+        "partnerId": 55791,
+        "fecha": "2026-05-06",
+        "mes": "2026-05",
+        "cliente": "NEYDUTH SALOME HIGUERA MORALES",
+        "ejecutivo": "GERARDO JOSE RAMIREZ FERNANDEZ",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 27900,
+        "modelos": [
+          "[CITYEXL26-NH830M] HONDA CITY 1.5L A/T EXL 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000060",
+        "id": 42345,
+        "partnerId": 55884,
+        "fecha": "2026-05-08",
+        "mes": "2026-05",
+        "cliente": "EDIMAR KATHERINE QUINTERO GARCIA",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 30900,
+        "modelos": [
+          "[HR-VLX26-NH883P] HONDA HR-V 1.5L A/T LX 2026 (Blanco Perlado)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000041",
+        "id": 42311,
+        "partnerId": 55783,
+        "fecha": "2026-05-21",
+        "mes": "2026-05",
+        "cliente": "LUIS BERNARDINO GIOVANNONE CHACON",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 34200,
+        "modelos": [
+          "[HR-VEXL26-NH830M] HONDA HR-V 1.5L A/T EXL 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000037",
+        "id": 42307,
+        "partnerId": 56199,
+        "fecha": "2026-05-26",
+        "mes": "2026-05",
+        "cliente": "FARMACIA FARMA JIRETH",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 34200,
+        "modelos": [
+          "[HR-VEXL26-NH904M] HONDA HR-V 1.5L A/T EXL 2026 (Gris Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000039",
+        "id": 42309,
+        "partnerId": 55788,
+        "fecha": "2026-06-08",
+        "mes": "2026-06",
+        "cliente": "ANA MARIA NIGRO CARRILLO",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 34200,
+        "modelos": [
+          "[HR-VEXL26-NH883P] HONDA HR-V 1.5L A/T EXL 2026 (Blanco Perlado)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000057",
+        "id": 42342,
+        "partnerId": 56208,
+        "fecha": "2026-06-11",
+        "mes": "2026-06",
+        "cliente": "MARYSBELIA CASAL PARRA",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-B607M] HONDA WR-V 1.5L A/T EXL 2026 (Azul Cosmico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000069",
+        "id": 42360,
+        "partnerId": 55790,
+        "fecha": "2026-06-11",
+        "mes": "2026-06",
+        "cliente": "LUIS ALBERTO ANGARITA VERGARA",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 30900,
+        "modelos": [
+          "[HR-VLX26-B607M] HONDA HR-V 1.5L A/T LX 2026 (Azul Cosmico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000072",
+        "id": 42363,
+        "partnerId": 55822,
+        "fecha": "2026-06-11",
+        "mes": "2026-06",
+        "cliente": "LUIS MIGUEL ANGULO ARELLANO",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 39672,
+        "modelos": [
+          "[HR-VEXL26-NH883P] HONDA HR-V 1.5L A/T EXL 2026 (Blanco Perlado)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000075",
+        "id": 42371,
+        "partnerId": 55784,
+        "fecha": "2026-06-19",
+        "mes": "2026-06",
+        "cliente": "CARLA ANDREINA PEÑALOZA QUEVEDO",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-NH-883P] HONDA WR-V 1.5L A/T EXL 2026 (Blanco)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000055",
+        "id": 42340,
+        "partnerId": 55789,
+        "fecha": "2026-06-23",
+        "mes": "2026-06",
+        "cliente": "MARIA ANDREINA MORENO SALAZAR",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 27900,
+        "modelos": [
+          "[CITYEXL26-B607M] HONDA CITY 1.5L A/T EXL 2026 (Azul Cosmico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000018",
+        "id": 42219,
+        "partnerId": 55785,
+        "fecha": "2026-06-29",
+        "mes": "2026-06",
+        "cliente": "NORELIS COLMENARES GALAVIZ",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 34200,
+        "modelos": [
+          "[HR-VEXL26-B607M] HONDA HR-V 1.5L A/T EXL 2026 (Azul Cosmico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000074",
+        "id": 42370,
+        "partnerId": 56240,
+        "fecha": "2026-06-30",
+        "mes": "2026-06",
+        "cliente": "GUSTAVO BALZA RANGEL",
+        "ejecutivo": "EDGARDO REINOZO",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-NH-830M] HONDA WR-V 1.5L A/T EXL 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000108",
+        "id": 42604,
+        "partnerId": 56235,
+        "fecha": "2026-06-30",
+        "mes": "2026-06",
+        "cliente": "RAFAEL ANTONIO TREJO ROMERO",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-B607M] HONDA WR-V 1.5L A/T EXL 2026 (Azul Cosmico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000105",
+        "id": 42561,
+        "partnerId": 55957,
+        "fecha": "2026-07-06",
+        "mes": "2026-07",
+        "cliente": "YADIRA COROMOTO NAVA BRACHO",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31763.72,
+        "modelos": [
+          "[WR-VEXL26-G553P] HONDA WR-V 1.5L A/T EXL 2026 (Azul Nórdico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000082",
+        "id": 42403,
+        "partnerId": 56236,
+        "fecha": "2026-07-06",
+        "mes": "2026-07",
+        "cliente": "OSCAR ALI QUINTERO QUINTERO",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[HR-VLX26-NH-904M] HONDA HR-V 1.5L A/T LX 2026 (Gris Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000100",
+        "id": 42477,
+        "partnerId": 56234,
+        "fecha": "2026-07-08",
+        "mes": "2026-07",
+        "cliente": "DALIA MARIA SANCHEZ DE SULBARAN",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-NH-904M] HONDA WR-V 1.5L A/T EXL 2026 (Gris Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000085",
+        "id": 42426,
+        "partnerId": 56261,
+        "fecha": "2026-07-10",
+        "mes": "2026-07",
+        "cliente": "DARIO ALEJANDRO GARAY GONZALEZ",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 30685.95,
+        "modelos": [
+          "[HR-VLX26-NH830M] HONDA HR-V 1.5L A/T LX 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000078",
+        "id": 42391,
+        "partnerId": 56207,
+        "fecha": "2026-07-10",
+        "mes": "2026-07",
+        "cliente": "FERNANDO JOSE VERA USECHE",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[HR-VLX26-B607M] HONDA HR-V 1.5L A/T LX 2026 (Azul Cosmico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000104",
+        "id": 42560,
+        "partnerId": 56148,
+        "fecha": "2026-07-27",
+        "mes": "2026-07",
+        "cliente": "ROBERTO CRALOS DIAZ MORANTES",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-G553P] HONDA WR-V 1.5L A/T EXL 2026 (Azul Nórdico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000091",
+        "id": 42446,
+        "partnerId": 10,
+        "fecha": "2026-07-29",
+        "mes": "2026-07",
+        "cliente": "GERARDO JOSE RAMIREZ FERNANDEZ",
+        "ejecutivo": "GERARDO JOSE RAMIREZ FERNANDEZ",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 35600,
+        "modelos": [
+          "[HR-VEXL26-NH904M] HONDA HR-V 1.5L A/T EXL 2026 (Gris Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000089",
+        "id": 42435,
+        "partnerId": 1200,
+        "fecha": "2026-07-29",
+        "mes": "2026-07",
+        "cliente": "JUHENDIS ESTHER VALLADARES LOPEZ F.P",
+        "ejecutivo": "JUHENDIS VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 27900,
+        "modelos": [
+          "[CITYEXL26-NH883P] HONDA CITY 1.5L A/T EXL 2026 (Blanco Perlado)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000106",
+        "id": 42582,
+        "partnerId": 56323,
+        "fecha": "2026-07-30",
+        "mes": "2026-07",
+        "cliente": "YOANA SORIMAR LACRUZ QUINTERO",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-G553P] HONDA WR-V 1.5L A/T EXL 2026 (Azul Nórdico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000097",
+        "id": 42464,
+        "partnerId": 56242,
+        "fecha": "2026-07-31",
+        "mes": "2026-07",
+        "cliente": "GREGORY ARCANGEL ARAQUE LOPEZ",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 27900,
+        "modelos": [
+          "[CITYEXL26-NH830M] HONDA CITY 1.5L A/T EXL 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000095",
+        "id": 42462,
+        "partnerId": 55787,
+        "fecha": "2026-07-31",
+        "mes": "2026-07",
+        "cliente": "RAMON BENITO VALBUENA RONDON",
+        "ejecutivo": "GERARDO JOSE RAMIREZ FERNANDEZ",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-NH-904M] HONDA WR-V 1.5L A/T EXL 2026 (Gris Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000115",
+        "id": 42849,
+        "partnerId": 56260,
+        "fecha": "2026-08-15",
+        "mes": "2026-08",
+        "cliente": "YADIRA COROMOTO ARIZA",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-NH-830M] HONDA WR-V 1.5L A/T EXL 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000117",
+        "id": 42976,
+        "partnerId": 56379,
+        "fecha": "2026-08-21",
+        "mes": "2026-08",
+        "cliente": "GERALDINE CAROLINA RINCON AÑEZ",
+        "ejecutivo": "DIEGO ARMANDO FERNANDEZ",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31549.72,
+        "modelos": [
+          "[HR-VEXL26-NH883P] HONDA HR-V 1.5L A/T EXL 2026 (Blanco Perlado)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000118",
+        "id": 43001,
+        "partnerId": 56259,
+        "fecha": "2026-08-22",
+        "mes": "2026-08",
+        "cliente": "HEBERTT JOSE SIRA RAMIREZ",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[HR-VLX26-NH-904M] HONDA HR-V 1.5L A/T LX 2026 (Gris Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000120",
+        "id": 43003,
+        "partnerId": 56307,
+        "fecha": "2026-08-22",
+        "mes": "2026-08",
+        "cliente": "ORLANDO JOSE ALBORNOZ RODRIGUEZ",
+        "ejecutivo": "GERARDO JOSE RAMIREZ FERNANDEZ",
+        "status": "5. FACTURADO- NO ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 35600,
+        "modelos": [
+          "[HR-VEXL26-NH830M] HONDA HR-V 1.5L A/T EXL 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000122",
+        "id": 43005,
+        "partnerId": 56288,
+        "fecha": "2026-08-22",
+        "mes": "2026-08",
+        "cliente": "ROMINA BARBACANE",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31706.48,
+        "modelos": [
+          "[WR-VEXL26-G553P] HONDA WR-V 1.5L A/T EXL 2026 (Azul Nórdico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000125",
+        "id": 43009,
+        "partnerId": 56426,
+        "fecha": "2026-08-24",
+        "mes": "2026-08",
+        "cliente": "KARLA ISAMAR PAREDES MOLINA",
+        "ejecutivo": "GERARDO JOSE RAMIREZ FERNANDEZ",
+        "status": "5. FACTURADO- NO ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-NH-904M] HONDA WR-V 1.5L A/T EXL 2026 (Gris Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000127",
+        "id": 43011,
+        "partnerId": 56365,
+        "fecha": "2026-08-24",
+        "mes": "2026-08",
+        "cliente": "JESUS ALFONSO UGUETO LEAL",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "5. FACTURADO- NO ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 35600,
+        "modelos": [
+          "[HR-VEXL26-NH830M] HONDA HR-V 1.5L A/T EXL 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000136",
+        "id": 43048,
+        "partnerId": 56347,
+        "fecha": "2026-08-28",
+        "mes": "2026-08",
+        "cliente": "MARLY CECILIA VIELMA DE PAREDES",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "5. FACTURADO- NO ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 27900,
+        "modelos": [
+          "[CITYEXL26-NH904M] HONDA CITY 1.5L A/T EXL 2026 (Gris Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000138",
+        "id": 43050,
+        "partnerId": 56400,
+        "fecha": "2026-08-28",
+        "mes": "2026-08",
+        "cliente": "CHRISTAVEL CONTRERAS ZERPA",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "5. FACTURADO- NO ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-NH-830M] HONDA WR-V 1.5L A/T EXL 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000140",
+        "id": 43052,
+        "partnerId": 56322,
+        "fecha": "2026-08-28",
+        "mes": "2026-08",
+        "cliente": "ALEJANDRO RAFAEL LEZAMA SÁNCHEZ",
+        "ejecutivo": "DIEGO ARMANDO FERNANDEZ",
+        "status": "5. FACTURADO- NO ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-NH-830M] HONDA WR-V 1.5L A/T EXL 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000146",
+        "id": 43096,
+        "partnerId": 56383,
+        "fecha": "2026-08-31",
+        "mes": "2026-08",
+        "cliente": "ELADIO GARCÍA",
+        "ejecutivo": "DIEGO ARMANDO FERNANDEZ",
+        "status": "5. FACTURADO- NO ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31262,
+        "modelos": [
+          "[HR-VLX26-NH883P] HONDA HR-V 1.5L A/T LX 2026 (Blanco Perlado)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000148",
+        "id": 43104,
+        "partnerId": 56412,
+        "fecha": "2026-08-31",
+        "mes": "2026-08",
+        "cliente": "LABORATORIOS BIOFARCO C.A.",
+        "ejecutivo": "DIEGO ARMANDO FERNANDEZ",
+        "status": "5. FACTURADO- NO ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-B607M] HONDA WR-V 1.5L A/T EXL 2026 (Azul Cosmico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000149",
+        "id": 43159,
+        "partnerId": 56316,
+        "fecha": "2026-09-02",
+        "mes": "2026-09",
+        "cliente": "MARIA SOLEDAD GONZALEZ REYES",
+        "ejecutivo": "ANGEL DAVID PUENTES",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[HR-VLX26-NH883P] HONDA HR-V 1.5L A/T LX 2026 (Blanco Perlado)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000152",
+        "id": 43188,
+        "partnerId": 56461,
+        "fecha": "2026-09-07",
+        "mes": "2026-09",
+        "cliente": "DANIEL MOLINA",
+        "ejecutivo": "ANGEL DAVID PUENTES",
+        "status": "6. CVG - ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 30704.3,
+        "modelos": [
+          "[WR-VEXL26-B607M] HONDA WR-V 1.5L A/T EXL 2026 (Azul Cosmico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000153",
+        "id": 43189,
+        "partnerId": 56516,
+        "fecha": "2026-09-07",
+        "mes": "2026-09",
+        "cliente": "NUMA POMPILIO PAREDES PARRA",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "5. FACTURADO- NO ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 30704.71,
+        "modelos": [
+          "[WR-VEXL26-NH-830M] HONDA WR-V 1.5L A/T EXL 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000170",
+        "id": 43295,
+        "partnerId": 56380,
+        "fecha": "2026-09-11",
+        "mes": "2026-09",
+        "cliente": "JOSE HERNAN ROA RAD",
+        "ejecutivo": "GERARDO JOSE RAMIREZ FERNANDEZ",
+        "status": "5. FACTURADO- NO ENTREGADO",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-B607M] HONDA WR-V 1.5L A/T EXL 2026 (Azul Cosmico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000179",
+        "id": 43388,
+        "partnerId": 56570,
+        "fecha": "2026-09-23",
+        "mes": "2026-09",
+        "cliente": "ARDICSON ZAMBRANO",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-NH-904M] HONDA WR-V 1.5L A/T EXL 2026 (Gris Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000180",
+        "id": 43442,
+        "partnerId": 56043,
+        "fecha": "2026-09-25",
+        "mes": "2026-09",
+        "cliente": "ALBA SALAS",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-G553P] HONDA WR-V 1.5L A/T EXL 2026 (Azul Nórdico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000181",
+        "id": 43462,
+        "partnerId": 56608,
+        "fecha": "2026-09-25",
+        "mes": "2026-09",
+        "cliente": "KEILA PATRICIA MENDOZA DE VELAZCO",
+        "ejecutivo": "ANGEL DAVID PUENTES",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 30600,
+        "modelos": [
+          "[HR-VLX26-NH830M] HONDA HR-V 1.5L A/T LX 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000183",
+        "id": 43464,
+        "partnerId": 56606,
+        "fecha": "2026-09-25",
+        "mes": "2026-09",
+        "cliente": "FRANK ADNER NIÑO LABRADOR",
+        "ejecutivo": "KAREN DANIELA NAVA",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 31582.48,
+        "modelos": [
+          "[WR-VEXL26-NH-904M] HONDA WR-V 1.5L A/T EXL 2026 (Gris Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000184",
+        "id": 43465,
+        "partnerId": 56551,
+        "fecha": "2026-09-28",
+        "mes": "2026-09",
+        "cliente": "MICHAEL ANYER GALLARDO MENDEZ",
+        "ejecutivo": "DIEGO ARMANDO FERNANDEZ",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-NH-904M] HONDA WR-V 1.5L A/T EXL 2026 (Gris Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000189",
+        "id": 43509,
+        "partnerId": 56646,
+        "fecha": "2026-09-30",
+        "mes": "2026-09",
+        "cliente": "YC COSMETICS GROUP, C.A",
+        "ejecutivo": "KAREN DANIELA NAVA",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 31900,
+        "modelos": [
+          "[WR-VEXL26-NH-883P] HONDA WR-V 1.5L A/T EXL 2026 (Blanco)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000193",
+        "id": 43690,
+        "partnerId": 56717,
+        "fecha": "2026-10-21",
+        "mes": "2026-10",
+        "cliente": "JOSE ALEJANDRO GUILLEN CAÑIZARES",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 26900,
+        "modelos": [
+          "[CITYEXL26-NH830M] HONDA CITY 1.5L A/T EXL 2026 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000194",
+        "id": 43709,
+        "partnerId": 56603,
+        "fecha": "2026-10-23",
+        "mes": "2026-10",
+        "cliente": "JEAN PIERRE OMAÑA ARAQUE",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 32500,
+        "modelos": [
+          "HONDA WR-V 1.5L A/T EXL 2027 (Plata Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000196",
+        "id": 43711,
+        "partnerId": 56644,
+        "fecha": "2026-10-23",
+        "mes": "2026-10",
+        "cliente": "MIRTHA COROMOTO OSORIO PAREDES",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 32500,
+        "modelos": [
+          "HONDA WR-V 1.5L A/T EXL 2027 (Azul Cosmico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000207",
+        "id": 43749,
+        "partnerId": 56643,
+        "fecha": "2026-10-26",
+        "mes": "2026-10",
+        "cliente": "SOLEIMA COROMOTO SANCHEZ ARAQUE",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 32500,
+        "modelos": [
+          "HONDA WR-V 1.5L A/T EXL 2027 (Blanco)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000209",
+        "id": 43754,
+        "partnerId": 56597,
+        "fecha": "2026-10-28",
+        "mes": "2026-10",
+        "cliente": "DANNY CAROLINA INFANTE",
+        "ejecutivo": "ROSMILA VALLADARES",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 32500,
+        "modelos": [
+          "HONDA WR-V 1.5L A/T EXL 2027 (Blanco)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000211",
+        "id": 43756,
+        "partnerId": 56734,
+        "fecha": "2026-10-28",
+        "mes": "2026-10",
+        "cliente": "WISAM KASSIEH",
+        "ejecutivo": "ANGEL DAVID PUENTES",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 35600,
+        "modelos": [
+          "HONDA HR-V 1.5L A/T EXL 2027 (Rojo Metalico)"
+        ]
+      },
+      {
+        "factura": "INV/2026/00005/FAC000213",
+        "id": 43767,
+        "partnerId": 56599,
+        "fecha": "2026-10-30",
+        "mes": "2026-10",
+        "cliente": "REINALDO JOSÉ GUTIÉRREZ GRIMALDOS",
+        "ejecutivo": "DIEGO ARMANDO FERNANDEZ",
+        "status": "False",
+        "unidades": 1,
+        "montoSinIva": 32345.6,
+        "modelos": [
+          "HONDA WR-V 1.5L A/T EXL 2027 (Blanco)"
+        ]
+      }
+    ]
+  },
+  "contadoCRM": {
+    "origen": "crm.lead etapa 12 \"Facturado Contado\" - latinbienmotors.com",
+    "leads": 20,
+    "clientes": [
+      "FRANK ADNER NIÑO LABRADOR",
+      "ELADIO GARCÍA WR-V EXL",
+      "MARIA SOLEDAD GONZALEZ REYES WR-V EXL",
+      "JOSE ALEJANDRO GUILLEN CAÑIZARES",
+      "MIRTHA COROMOTO OSORIO PAREDES",
+      "DECSY CAROLINA ESQUIVEL DE ZAMBRANO",
+      "ARDICSON ZAMBRANO WR-V EXL",
+      "NUMA POMPILIO PAREDES PARRA",
+      "DANIEL MOLINA WR-V EXL",
+      "KARLA ISAMAR PAREDES MOLINA",
+      "GERALDINE CAROLINA RINCÓN AÑEZ HRV EXL",
+      "DARIO ALEJANDRO GARAY GONZALEZ",
+      "HEBERTT JOSE SIRA RAMIREZ",
+      "MARYSBELIA CASAL PARRA",
+      "YADIRA NAVA BRACHO",
+      "AURA ELENA PEREZ",
+      "JAIR DANIEL MARTINEZ VALERO",
+      "EDIMAR KATERINE QUINTERO GARCIA",
+      "001000000",
+      "LUCILA CASTILLO DE GONZALEZ"
+    ],
+    "unidadesContadoEntregadas": 16
+  },
+  "porEstado": [
+    {
+      "llave": "MERIDA (VE)",
+      "unidades": 33,
+      "monto": 1057843.01,
+      "pedidos": 33,
+      "clientes": 33
+    },
+    {
+      "llave": "(sin registrar)",
+      "unidades": 6,
+      "monto": 192400,
+      "pedidos": 6,
+      "clientes": 6
+    },
+    {
+      "llave": "TACHIRA (VE)",
+      "unidades": 3,
+      "monto": 99400,
+      "pedidos": 3,
+      "clientes": 3
+    },
+    {
+      "llave": "ZULIA (VE)",
+      "unidades": 2,
+      "monto": 67500,
+      "pedidos": 2,
+      "clientes": 2
+    },
+    {
+      "llave": "BARINAS (VE)",
+      "unidades": 1,
+      "monto": 34200,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "TRUJILLO (VE)",
+      "unidades": 1,
+      "monto": 31900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "MIRANDA (VE)",
+      "unidades": 1,
+      "monto": 30700,
+      "pedidos": 1,
+      "clientes": 1
+    }
+  ],
+  "porGenero": [
+    {
+      "llave": "Caballero",
+      "unidades": 27,
+      "monto": 882443.01,
+      "pedidos": 27,
+      "clientes": 27
+    },
+    {
+      "llave": "Dama",
+      "unidades": 20,
+      "monto": 631500,
+      "pedidos": 20,
+      "clientes": 20
+    }
+  ],
+  "porEdad": [
+    {
+      "llave": "35-44",
+      "unidades": 12,
+      "monto": 383600,
+      "pedidos": 12,
+      "clientes": 12
+    },
+    {
+      "llave": "45-54",
+      "unidades": 9,
+      "monto": 280400,
+      "pedidos": 9,
+      "clientes": 9
+    },
+    {
+      "llave": "25-34",
+      "unidades": 8,
+      "monto": 266876.3,
+      "pedidos": 8,
+      "clientes": 8
+    },
+    {
+      "llave": "55-64",
+      "unidades": 7,
+      "monto": 225600,
+      "pedidos": 7,
+      "clientes": 7
+    },
+    {
+      "llave": "65+",
+      "unidades": 7,
+      "monto": 224866.71,
+      "pedidos": 7,
+      "clientes": 7
+    },
+    {
+      "llave": "Sin dato",
+      "unidades": 4,
+      "monto": 132600,
+      "pedidos": 4,
+      "clientes": 4
+    }
+  ],
+  "porActividad": [
+    {
+      "llave": "Bajo dependencia",
+      "unidades": 35,
+      "monto": 1117771.01,
+      "pedidos": 35,
+      "clientes": 35
+    },
+    {
+      "llave": "Independiente formal",
+      "unidades": 10,
+      "monto": 328672,
+      "pedidos": 10,
+      "clientes": 10
+    },
+    {
+      "llave": "Independiente",
+      "unidades": 1,
+      "monto": 35600,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "Dependiente sector privado",
+      "unidades": 1,
+      "monto": 31900,
+      "pedidos": 1,
+      "clientes": 1
+    }
+  ],
+  "porProfesion": [
+    {
+      "llave": "(sin registrar)",
+      "unidades": 25,
+      "monto": 808266.3,
+      "pedidos": 25,
+      "clientes": 25
+    },
+    {
+      "llave": "COMERCIANTE",
+      "unidades": 7,
+      "monto": 226600,
+      "pedidos": 7,
+      "clientes": 7
+    },
+    {
+      "llave": "CONTADOR",
+      "unidades": 2,
+      "monto": 73872,
+      "pedidos": 2,
+      "clientes": 2
+    },
+    {
+      "llave": "TRANSPORTISTA Y COMERCIANTE",
+      "unidades": 1,
+      "monto": 35600,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "INGENIERO",
+      "unidades": 1,
+      "monto": 34200,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "ADMINISTRADOR",
+      "unidades": 1,
+      "monto": 33600,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "ADMINITRADOR",
+      "unidades": 1,
+      "monto": 31900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "INGENIERO MECANICO",
+      "unidades": 1,
+      "monto": 31900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "LCDO EN TECNOLOGIA",
+      "unidades": 1,
+      "monto": 31900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "ABOGADO/ CONTADOR",
+      "unidades": 1,
+      "monto": 31900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "MEDICO CARDIOLOGO",
+      "unidades": 1,
+      "monto": 31900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "MEDICO",
+      "unidades": 1,
+      "monto": 30704.71,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "LOCUTORA",
+      "unidades": 1,
+      "monto": 27900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "T S U ADMINISTRACION DE EMPRESA",
+      "unidades": 1,
+      "monto": 27900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "GERENTE ADMINISTRATIVO",
+      "unidades": 1,
+      "monto": 27900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "MEDICINA EN GENERAL",
+      "unidades": 1,
+      "monto": 27900,
+      "pedidos": 1,
+      "clientes": 1
+    }
+  ],
+  "porRamo": [
+    {
+      "llave": "(sin registrar)",
+      "unidades": 34,
+      "monto": 1095871.01,
+      "pedidos": 34,
+      "clientes": 34
+    },
+    {
+      "llave": "VENTA DE VIVERES",
+      "unidades": 1,
+      "monto": 39672,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "FABRICA DE CARTERAS",
+      "unidades": 1,
+      "monto": 34200,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "ACTIVIDAD DE SERVICIOS CONTABLES",
+      "unidades": 1,
+      "monto": 34200,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "CEMENTERIO",
+      "unidades": 1,
+      "monto": 34200,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "INMOBILIARIO",
+      "unidades": 1,
+      "monto": 33600,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "VENTA DE INSUMOS AGRICOLAS",
+      "unidades": 1,
+      "monto": 31900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "VENTA DE SEGUROS DE VIDA Y DE VEHICULOS",
+      "unidades": 1,
+      "monto": 31900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "INSTALACION Y MANTENIMIENTO PARA MOTORES DE PORTONES ELCTRICOS",
+      "unidades": 1,
+      "monto": 31900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "VENTA DE ACEITE Y FRUTA DE PALMA",
+      "unidades": 1,
+      "monto": 31900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "COMPRA Y VENTA DE CARNES PARA CONSUMO HUMANO",
+      "unidades": 1,
+      "monto": 30900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "EMISORA DE RADIO",
+      "unidades": 1,
+      "monto": 27900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "VENTA DE ART DE PIÑATERIA Y ARREGLOS",
+      "unidades": 1,
+      "monto": 27900,
+      "pedidos": 1,
+      "clientes": 1
+    },
+    {
+      "llave": "MEDICINA",
+      "unidades": 1,
+      "monto": 27900,
+      "pedidos": 1,
+      "clientes": 1
+    }
+  ],
+  "detalle": [
+    {
+      "pedido": "LBM-ORDEN-00002",
+      "fechaStr": "2026-03-26 03:43:04",
+      "mes": "2026-03",
+      "unidades": 1,
+      "montoSinIva": 30700,
+      "modelo": "[HR-VEXL26-NH830M] HONDA HR-V 1.5L A/T EXL 2026 (Plata Metalico)",
+      "clienteId": 55782,
+      "cliente": "ROSAURA MARQUEZ CARRERO",
+      "forma": "Contado",
+      "ejecutivo": "EDGARDO REINOZO",
+      "genero": "Dama",
+      "edad": 39,
+      "edadRango": "35-44",
+      "estado": "MIRANDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00003",
+      "fechaStr": "2026-03-26 03:46:10",
+      "mes": "2026-03",
+      "unidades": 1,
+      "montoSinIva": 33600,
+      "modelo": "[HR-VEXL26-NH731P] HONDA HR-V 1.5L A/T EXL 2026 (Negro Metalico)",
+      "clienteId": 55786,
+      "cliente": "LUCILA CASTILLO DE GONZALEZ",
+      "forma": "Contado",
+      "ejecutivo": "M  GIBSON",
+      "genero": "Dama",
+      "edad": 75,
+      "edadRango": "65+",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00006",
+      "fechaStr": "2026-03-31 14:42:02",
+      "mes": "2026-03",
+      "unidades": 1,
+      "montoSinIva": 33600,
+      "modelo": "[HR-VEXL26-B607M] HONDA HR-V 1.5L A/T EXL 2026 (Azul Cosmico)",
+      "clienteId": 55840,
+      "cliente": "AURA ELENA PEREZ",
+      "forma": "Contado",
+      "ejecutivo": "M  GIBSON",
+      "genero": "Dama",
+      "edad": 65,
+      "edadRango": "65+",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00004",
+      "fechaStr": "2026-04-14 03:48:25",
+      "mes": "2026-04",
+      "unidades": 1,
+      "montoSinIva": 33600,
+      "modelo": "[HR-VLX26-NH830M] HONDA HR-V 1.5L A/T LX 2026 (Plata Metalico)",
+      "clienteId": 55835,
+      "cliente": "JAIR DANIEL MARTINEZ VALERO",
+      "forma": "Contado",
+      "ejecutivo": "M  GIBSON",
+      "genero": "Caballero",
+      "edad": 26,
+      "edadRango": "25-34",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00001",
+      "fechaStr": "2026-04-16 14:57:17",
+      "mes": "2026-04",
+      "unidades": 1,
+      "montoSinIva": 33600,
+      "modelo": "HONDA HR-V 1.5L A/T EXL 2026",
+      "clienteId": 55777,
+      "cliente": "RAFAEL ANTONIO CONTRERAS LINDARTE",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 44,
+      "edadRango": "35-44",
+      "estado": "MERIDA (VE)",
+      "profesion": "ADMINISTRADOR",
+      "actividad": "Independiente formal",
+      "ramo": "INMOBILIARIO"
+    },
+    {
+      "pedido": "LBM-ORDEN-00005",
+      "fechaStr": "2026-04-26 13:52:46",
+      "mes": "2026-04",
+      "unidades": 1,
+      "montoSinIva": 34200,
+      "modelo": "[HR-VEXL26-NH912P] HONDA HR-V 1.5L A/T EXL 2026 (Gris Urbano)",
+      "clienteId": 55792,
+      "cliente": "JORGE LUIS ROJAS CHACON",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 37,
+      "edadRango": "35-44",
+      "estado": "BARINAS (VE)",
+      "profesion": "COMERCIANTE",
+      "actividad": "Independiente formal",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00009",
+      "fechaStr": "2026-05-06 15:13:05",
+      "mes": "2026-05",
+      "unidades": 1,
+      "montoSinIva": 27900,
+      "modelo": "[CITYEXL26-NH830M] HONDA CITY 1.5L A/T EXL 2026 (Plata Metalico)",
+      "clienteId": 55791,
+      "cliente": "NEYDUTH SALOME HIGUERA MORALES",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "GERARDO JOSE RAMIREZ FERNANDEZ",
+      "genero": "Dama",
+      "edad": 51,
+      "edadRango": "45-54",
+      "estado": "MERIDA (VE)",
+      "profesion": "LOCUTORA",
+      "actividad": "Bajo dependencia",
+      "ramo": "EMISORA DE RADIO"
+    },
+    {
+      "pedido": "LBM-ORDEN-00011",
+      "fechaStr": "2026-05-21 19:52:18",
+      "mes": "2026-05",
+      "unidades": 1,
+      "montoSinIva": 34200,
+      "modelo": "[HR-VEXL26-NH830M] HONDA HR-V 1.5L A/T EXL 2026 (Plata Metalico)",
+      "clienteId": 55783,
+      "cliente": "LUIS BERNARDINO GIOVANNONE CHACON",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 64,
+      "edadRango": "55-64",
+      "estado": "MERIDA (VE)",
+      "profesion": "INGENIERO",
+      "actividad": "Independiente formal",
+      "ramo": "FABRICA DE CARTERAS"
+    },
+    {
+      "pedido": "LBM-ORDEN-00041",
+      "fechaStr": "2026-05-21 20:04:53",
+      "mes": "2026-05",
+      "unidades": 1,
+      "montoSinIva": 30900,
+      "modelo": "[HR-VLX26-NH883P] HONDA HR-V 1.5L A/T LX 2026 (Blanco Perlado)",
+      "clienteId": 55884,
+      "cliente": "EDIMAR KATHERINE QUINTERO GARCIA",
+      "forma": "Contado",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Dama",
+      "edad": null,
+      "edadRango": "Sin dato",
+      "estado": "(sin registrar)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00010",
+      "fechaStr": "2026-05-28 18:54:02",
+      "mes": "2026-05",
+      "unidades": 1,
+      "montoSinIva": 34200,
+      "modelo": "[HR-VEXL26-NH904M] HONDA HR-V 1.5L A/T EXL 2026 (Gris Metalico)",
+      "clienteId": 56199,
+      "cliente": "FARMACIA FARMA JIRETH",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": null,
+      "edadRango": "Sin dato",
+      "estado": "(sin registrar)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00007",
+      "fechaStr": "2026-06-08 15:03:31",
+      "mes": "2026-06",
+      "unidades": 1,
+      "montoSinIva": 34200,
+      "modelo": "[HR-VEXL26-NH883P] HONDA HR-V 1.5L A/T EXL 2026 (Blanco Perlado)",
+      "clienteId": 55788,
+      "cliente": "ANA MARIA NIGRO CARRILLO",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Dama",
+      "edad": 42,
+      "edadRango": "35-44",
+      "estado": "MERIDA (VE)",
+      "profesion": "CONTADOR",
+      "actividad": "Independiente formal",
+      "ramo": "ACTIVIDAD DE SERVICIOS CONTABLES"
+    },
+    {
+      "pedido": "LBM-ORDEN-00028",
+      "fechaStr": "2026-06-11 12:26:31",
+      "mes": "2026-06",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-B607M] HONDA WR-V 1.5L A/T EXL 2026 (Azul Cosmico)",
+      "clienteId": 56208,
+      "cliente": "MARYSBELIA CASAL PARRA",
+      "forma": "Contado",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Dama",
+      "edad": 60,
+      "edadRango": "55-64",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00008",
+      "fechaStr": "2026-06-11 15:11:08",
+      "mes": "2026-06",
+      "unidades": 1,
+      "montoSinIva": 30900,
+      "modelo": "[HR-VLX26-B607M] HONDA HR-V 1.5L A/T LX 2026 (Azul Cosmico)",
+      "clienteId": 55790,
+      "cliente": "LUIS ALBERTO ANGARITA VERGARA",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 49,
+      "edadRango": "45-54",
+      "estado": "MERIDA (VE)",
+      "profesion": "COMERCIANTE",
+      "actividad": "Independiente formal",
+      "ramo": "COMPRA Y VENTA DE CARNES PARA CONSUMO HUMANO"
+    },
+    {
+      "pedido": "LBM-ORDEN-00036",
+      "fechaStr": "2026-06-11 18:55:05",
+      "mes": "2026-06",
+      "unidades": 1,
+      "montoSinIva": 39672,
+      "modelo": "[HR-VEXL26-NH883P] HONDA HR-V 1.5L A/T EXL 2026 (Blanco Perlado)",
+      "clienteId": 55822,
+      "cliente": "LUIS MIGUEL ANGULO ARELLANO",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 32,
+      "edadRango": "25-34",
+      "estado": "MERIDA (VE)",
+      "profesion": "CONTADOR",
+      "actividad": "Independiente formal",
+      "ramo": "VENTA DE VIVERES"
+    },
+    {
+      "pedido": "LBM-ORDEN-00044",
+      "fechaStr": "2026-06-19 15:11:13",
+      "mes": "2026-06",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-NH-883P] HONDA WR-V 1.5L A/T EXL 2026 (Blanco)",
+      "clienteId": 55784,
+      "cliente": "CARLA ANDREINA PEÑALOZA QUEVEDO",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Dama",
+      "edad": 34,
+      "edadRango": "25-34",
+      "estado": "TRUJILLO (VE)",
+      "profesion": "ADMINITRADOR",
+      "actividad": "Bajo dependencia",
+      "ramo": "VENTA DE INSUMOS AGRICOLAS"
+    },
+    {
+      "pedido": "LBM-ORDEN-00038",
+      "fechaStr": "2026-06-23 19:10:01",
+      "mes": "2026-06",
+      "unidades": 1,
+      "montoSinIva": 27900,
+      "modelo": "[CITYEXL26-B607M] HONDA CITY 1.5L A/T EXL 2026 (Azul Cosmico)",
+      "clienteId": 55789,
+      "cliente": "MARIA ANDREINA MORENO SALAZAR",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Dama",
+      "edad": 44,
+      "edadRango": "35-44",
+      "estado": "MERIDA (VE)",
+      "profesion": "T S U ADMINISTRACION DE EMPRESA",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00012",
+      "fechaStr": "2026-06-29 20:38:34",
+      "mes": "2026-06",
+      "unidades": 1,
+      "montoSinIva": 34200,
+      "modelo": "[HR-VEXL26-B607M] HONDA HR-V 1.5L A/T EXL 2026 (Azul Cosmico)",
+      "clienteId": 55785,
+      "cliente": "NORELIS COLMENARES GALAVIZ",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Dama",
+      "edad": 51,
+      "edadRango": "45-54",
+      "estado": "MERIDA (VE)",
+      "profesion": "COMERCIANTE",
+      "actividad": "Independiente formal",
+      "ramo": "CEMENTERIO"
+    },
+    {
+      "pedido": "LBM-ORDEN-00040",
+      "fechaStr": "2026-06-30 04:00:00",
+      "mes": "2026-06",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-B607M] HONDA WR-V 1.5L A/T EXL 2026 (Azul Cosmico)",
+      "clienteId": 56235,
+      "cliente": "RAFAEL ANTONIO TREJO ROMERO",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 38,
+      "edadRango": "35-44",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00032",
+      "fechaStr": "2026-06-30 14:44:32",
+      "mes": "2026-06",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-NH-830M] HONDA WR-V 1.5L A/T EXL 2026 (Plata Metalico)",
+      "clienteId": 56240,
+      "cliente": "GUSTAVO BALZA RANGEL",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "EDGARDO REINOZO",
+      "genero": "Caballero",
+      "edad": 62,
+      "edadRango": "55-64",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00048",
+      "fechaStr": "2026-07-06 16:14:15",
+      "mes": "2026-07",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[HR-VLX26-NH-904M] HONDA HR-V 1.5L A/T LX 2026 (Gris Metalico)",
+      "clienteId": 56236,
+      "cliente": "OSCAR ALI QUINTERO QUINTERO",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 73,
+      "edadRango": "65+",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00046",
+      "fechaStr": "2026-07-06 19:58:22",
+      "mes": "2026-07",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-G553P] HONDA WR-V 1.5L A/T EXL 2026 (Azul Nórdico)",
+      "clienteId": 55957,
+      "cliente": "YADIRA COROMOTO NAVA BRACHO",
+      "forma": "Contado",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Dama",
+      "edad": 55,
+      "edadRango": "55-64",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00034",
+      "fechaStr": "2026-07-08 14:44:32",
+      "mes": "2026-07",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-NH-904M] HONDA WR-V 1.5L A/T EXL 2026 (Gris Metalico)",
+      "clienteId": 56234,
+      "cliente": "DALIA MARIA SANCHEZ DE SULBARAN",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Dama",
+      "edad": 62,
+      "edadRango": "55-64",
+      "estado": "(sin registrar)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00030",
+      "fechaStr": "2026-07-10 12:28:48",
+      "mes": "2026-07",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[HR-VLX26-B607M] HONDA HR-V 1.5L A/T LX 2026 (Azul Cosmico)",
+      "clienteId": 56207,
+      "cliente": "FERNANDO JOSE VERA USECHE",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 48,
+      "edadRango": "45-54",
+      "estado": "MERIDA (VE)",
+      "profesion": "INGENIERO MECANICO",
+      "actividad": "Bajo dependencia",
+      "ramo": "VENTA DE SEGUROS DE VIDA Y DE VEHICULOS"
+    },
+    {
+      "pedido": "LBM-ORDEN-00050",
+      "fechaStr": "2026-07-10 13:57:27",
+      "mes": "2026-07",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[HR-VLX26-NH830M] HONDA HR-V 1.5L A/T LX 2026 (Plata Metalico)",
+      "clienteId": 56261,
+      "cliente": "DARIO ALEJANDRO GARAY GONZALEZ",
+      "forma": "Contado",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 41,
+      "edadRango": "35-44",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00027",
+      "fechaStr": "2026-07-27 20:42:07",
+      "mes": "2026-07",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-G553P] HONDA WR-V 1.5L A/T EXL 2026 (Azul Nórdico)",
+      "clienteId": 56148,
+      "cliente": "ROBERTO CRALOS DIAZ MORANTES",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 39,
+      "edadRango": "35-44",
+      "estado": "MERIDA (VE)",
+      "profesion": "LCDO EN TECNOLOGIA",
+      "actividad": "Independiente formal",
+      "ramo": "INSTALACION Y MANTENIMIENTO PARA MOTORES DE PORTONES ELCTRICOS"
+    },
+    {
+      "pedido": "LBM-ORDEN-00053",
+      "fechaStr": "2026-07-29 15:00:29",
+      "mes": "2026-07",
+      "unidades": 1,
+      "montoSinIva": 27900,
+      "modelo": "[CITYEXL26-NH883P] HONDA CITY 1.5L A/T EXL 2026 (Blanco Perlado)",
+      "clienteId": 1200,
+      "cliente": "JUHENDIS ESTHER VALLADARES LOPEZ F.P",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "JUHENDIS VALLADARES",
+      "genero": "Dama",
+      "edad": 43,
+      "edadRango": "35-44",
+      "estado": "MERIDA (VE)",
+      "profesion": "GERENTE ADMINISTRATIVO",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00055",
+      "fechaStr": "2026-07-29 15:35:49",
+      "mes": "2026-07",
+      "unidades": 1,
+      "montoSinIva": 35600,
+      "modelo": "[HR-VEXL26-NH904M] HONDA HR-V 1.5L A/T EXL 2026 (Gris Metalico)",
+      "clienteId": 1368,
+      "cliente": "GERARDO JOSE RAMIREZ FERNANDEZ...",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "GERARDO JOSE RAMIREZ FERNANDEZ",
+      "genero": "Caballero",
+      "edad": null,
+      "edadRango": "Sin dato",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00057",
+      "fechaStr": "2026-07-30 18:52:03",
+      "mes": "2026-07",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-G553P] HONDA WR-V 1.5L A/T EXL 2026 (Azul Nórdico)",
+      "clienteId": 56323,
+      "cliente": "YOANA SORIMAR LACRUZ QUINTERO",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Dama",
+      "edad": 48,
+      "edadRango": "45-54",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00026",
+      "fechaStr": "2026-07-31 20:27:21",
+      "mes": "2026-07",
+      "unidades": 1,
+      "montoSinIva": 27900,
+      "modelo": "[CITYEXL26-NH830M] HONDA CITY 1.5L A/T EXL 2026 (Plata Metalico)",
+      "clienteId": 56242,
+      "cliente": "GREGORY ARCANGEL ARAQUE LOPEZ",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 28,
+      "edadRango": "25-34",
+      "estado": "(sin registrar)",
+      "profesion": "COMERCIANTE",
+      "actividad": "Independiente formal",
+      "ramo": "VENTA DE ART DE PIÑATERIA Y ARREGLOS"
+    },
+    {
+      "pedido": "LBM-ORDEN-00013",
+      "fechaStr": "2026-07-31 20:50:56",
+      "mes": "2026-07",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-NH-904M] HONDA WR-V 1.5L A/T EXL 2026 (Gris Metalico)",
+      "clienteId": 55787,
+      "cliente": "RAMON BENITO VALBUENA RONDON",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "GERARDO JOSE RAMIREZ FERNANDEZ",
+      "genero": "Caballero",
+      "edad": 34,
+      "edadRango": "25-34",
+      "estado": "ZULIA (VE)",
+      "profesion": "ABOGADO/ CONTADOR",
+      "actividad": "Bajo dependencia",
+      "ramo": "VENTA DE ACEITE Y FRUTA DE PALMA"
+    },
+    {
+      "pedido": "LBM-ORDEN-00064",
+      "fechaStr": "2026-08-04 15:31:12",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-NH-830M] HONDA WR-V 1.5L A/T EXL 2026 (Plata Metalico)",
+      "clienteId": 56260,
+      "cliente": "YADIRA COROMOTO ARIZA",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Dama",
+      "edad": 58,
+      "edadRango": "55-64",
+      "estado": "(sin registrar)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00065",
+      "fechaStr": "2026-08-12 18:57:53",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-G553P] HONDA WR-V 1.5L A/T EXL 2026 (Azul Nórdico)",
+      "clienteId": 56288,
+      "cliente": "ROMINA BARBACANE",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 56,
+      "edadRango": "55-64",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00066",
+      "fechaStr": "2026-08-15 18:57:14",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-NH-883P] HONDA WR-V 1.5L A/T EXL 2026 (Blanco)",
+      "clienteId": 56316,
+      "cliente": "MARIA SOLEDAD GONZALEZ REYES",
+      "forma": "Contado",
+      "ejecutivo": "ANGEL DAVID PUENTES",
+      "genero": "Dama",
+      "edad": 66,
+      "edadRango": "65+",
+      "estado": "MERIDA (VE)",
+      "profesion": "COMERCIANTE",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00090",
+      "fechaStr": "2026-08-31 12:05:29",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 27900,
+      "modelo": "[CITYEXL26-NH904M] HONDA CITY 1.5L A/T EXL 2026 (Gris Metalico)",
+      "clienteId": 56347,
+      "cliente": "MARLY CECILIA VIELMA DE PAREDES",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Dama",
+      "edad": 52,
+      "edadRango": "45-54",
+      "estado": "MERIDA (VE)",
+      "profesion": "MEDICINA EN GENERAL",
+      "actividad": "Independiente formal",
+      "ramo": "MEDICINA"
+    },
+    {
+      "pedido": "LBM-ORDEN-00074",
+      "fechaStr": "2026-08-31 12:53:47",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-NH-830M] HONDA WR-V 1.5L A/T EXL 2026 (Plata Metalico)",
+      "clienteId": 56322,
+      "cliente": "ALEJANDRO RAFAEL LEZAMA SÁNCHEZ",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "DIEGO ARMANDO FERNANDEZ",
+      "genero": "Caballero",
+      "edad": 43,
+      "edadRango": "35-44",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00071",
+      "fechaStr": "2026-08-31 15:33:11",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[HR-VLX26-NH-904M] HONDA HR-V 1.5L A/T LX 2026 (Gris Metalico)",
+      "clienteId": 56259,
+      "cliente": "HEBERTT JOSE SIRA RAMIREZ",
+      "forma": "Contado",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 77,
+      "edadRango": "65+",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00080",
+      "fechaStr": "2026-08-31 16:16:51",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 35600,
+      "modelo": "[HR-VEXL26-NH830M] HONDA HR-V 1.5L A/T EXL 2026 (Plata Metalico)",
+      "clienteId": 56307,
+      "cliente": "ORLANDO JOSE ALBORNOZ RODRIGUEZ",
+      "forma": "Crédito (sin factura)",
+      "ejecutivo": "GERARDO JOSE RAMIREZ FERNANDEZ",
+      "genero": "Caballero",
+      "edad": 41,
+      "edadRango": "35-44",
+      "estado": "(sin registrar)",
+      "profesion": "COMERCIANTE",
+      "actividad": "Independiente",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00068",
+      "fechaStr": "2026-08-31 17:42:50",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-NH-830M] HONDA WR-V 1.5L A/T EXL 2026 (Plata Metalico)",
+      "clienteId": 56400,
+      "cliente": "CHRISTAVEL CONTRERAS ZERPA",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Dama",
+      "edad": 45,
+      "edadRango": "45-54",
+      "estado": "MERIDA (VE)",
+      "profesion": "COMERCIANTE",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00069",
+      "fechaStr": "2026-08-31 18:55:23",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-B607M] HONDA WR-V 1.5L A/T EXL 2026 (Azul Cosmico)",
+      "clienteId": 56380,
+      "cliente": "JOSE HERNAN ROA RAD",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "GERARDO JOSE RAMIREZ FERNANDEZ",
+      "genero": "Caballero",
+      "edad": 50,
+      "edadRango": "45-54",
+      "estado": "TACHIRA (VE)",
+      "profesion": "MEDICO CARDIOLOGO",
+      "actividad": "Dependiente sector privado",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00072",
+      "fechaStr": "2026-08-31 19:08:45",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-B607M] HONDA WR-V 1.5L A/T EXL 2026 (Azul Cosmico)",
+      "clienteId": 56412,
+      "cliente": "LABORATORIOS BIOFARCO C.A.",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "DIEGO ARMANDO FERNANDEZ",
+      "genero": "Caballero",
+      "edad": null,
+      "edadRango": "Sin dato",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00081",
+      "fechaStr": "2026-08-31 19:38:12",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-NH-904M] HONDA WR-V 1.5L A/T EXL 2026 (Gris Metalico)",
+      "clienteId": 56426,
+      "cliente": "KARLA ISAMAR PAREDES MOLINA",
+      "forma": "Contado",
+      "ejecutivo": "KAREN DANIELA NAVA",
+      "genero": "Dama",
+      "edad": 36,
+      "edadRango": "35-44",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00082",
+      "fechaStr": "2026-08-31 19:44:29",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 35600,
+      "modelo": "[HR-VEXL26-NH830M] HONDA HR-V 1.5L A/T EXL 2026 (Plata Metalico)",
+      "clienteId": 56365,
+      "cliente": "JESUS ALFONSO UGUETO LEAL",
+      "forma": "Crédito (SAV)",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 33,
+      "edadRango": "25-34",
+      "estado": "TACHIRA (VE)",
+      "profesion": "TRANSPORTISTA Y COMERCIANTE",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00076",
+      "fechaStr": "2026-08-31 19:47:57",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 35600,
+      "modelo": "[HR-VEXL26-NH883P] HONDA HR-V 1.5L A/T EXL 2026 (Blanco Perlado)",
+      "clienteId": 56379,
+      "cliente": "GERALDINE CAROLINA RINCON AÑEZ",
+      "forma": "Contado",
+      "ejecutivo": "DIEGO ARMANDO FERNANDEZ",
+      "genero": "Dama",
+      "edad": 34,
+      "edadRango": "25-34",
+      "estado": "ZULIA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00089",
+      "fechaStr": "2026-08-31 21:44:51",
+      "mes": "2026-08",
+      "unidades": 1,
+      "montoSinIva": 31262,
+      "modelo": "[HR-VLX26-NH883P] HONDA HR-V 1.5L A/T LX 2026 (Blanco Perlado)",
+      "clienteId": 56383,
+      "cliente": "ELADIO GARCÍA",
+      "forma": "Contado",
+      "ejecutivo": "DIEGO ARMANDO FERNANDEZ",
+      "genero": "Caballero",
+      "edad": 72,
+      "edadRango": "65+",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00094",
+      "fechaStr": "2026-09-08 13:25:12",
+      "mes": "2026-09",
+      "unidades": 1,
+      "montoSinIva": 30704.3,
+      "modelo": "[WR-VEXL26-B607M] HONDA WR-V 1.5L A/T EXL 2026 (Azul Cosmico)",
+      "clienteId": 56461,
+      "cliente": "DANIEL MOLINA",
+      "forma": "Contado",
+      "ejecutivo": "ANGEL DAVID PUENTES",
+      "genero": "Caballero",
+      "edad": 33,
+      "edadRango": "25-34",
+      "estado": "MERIDA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00095",
+      "fechaStr": "2026-09-11 18:01:01",
+      "mes": "2026-09",
+      "unidades": 1,
+      "montoSinIva": 30704.71,
+      "modelo": "[WR-VEXL26-NH-830M] HONDA WR-V 1.5L A/T EXL 2026 (Plata Metalico)",
+      "clienteId": 56516,
+      "cliente": "NUMA POMPILIO PAREDES PARRA",
+      "forma": "Contado",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 73,
+      "edadRango": "65+",
+      "estado": "MERIDA (VE)",
+      "profesion": "MEDICO",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    },
+    {
+      "pedido": "LBM-ORDEN-00111",
+      "fechaStr": "2026-09-30 13:01:22",
+      "mes": "2026-09",
+      "unidades": 1,
+      "montoSinIva": 31900,
+      "modelo": "[WR-VEXL26-NH-904M] HONDA WR-V 1.5L A/T EXL 2026 (Gris Metalico)",
+      "clienteId": 56570,
+      "cliente": "ARDICSON ZAMBRANO",
+      "forma": "Contado",
+      "ejecutivo": "ROSMILA VALLADARES",
+      "genero": "Caballero",
+      "edad": 52,
+      "edadRango": "45-54",
+      "estado": "TACHIRA (VE)",
+      "profesion": "(sin registrar)",
+      "actividad": "Bajo dependencia",
+      "ramo": ""
+    }
+  ],
+  "reservado": {
+    "alCorte": "2026-10-30",
+    "unidades": 3,
+    "detalle": [
+      {
+        "vin": "93HDG584XVK601297",
+        "modelo": "HONDA WR-V 1.5L A/T EXL 2027 (Azul Cosmico)",
+        "cliente": "SAMUEL ANTONIO TORRES BRICEÑO",
+        "genero": "Caballero",
+        "edad": null,
+        "edadRango": "Sin dato",
+        "estado": "(sin registrar)",
+        "profesion": "(sin registrar)",
+        "actividad": "Bajo dependencia",
+        "ramo": ""
+      },
+      {
+        "vin": "93HRV3860VK400171",
+        "modelo": "HONDA HR-V 1.5L A/T EXL 2027 (gris titan)",
+        "cliente": "OSWALDO CARRILLO",
+        "genero": "Caballero",
+        "edad": null,
+        "edadRango": "Sin dato",
+        "estado": "(sin registrar)",
+        "profesion": "(sin registrar)",
+        "actividad": "Bajo dependencia",
+        "ramo": ""
+      },
+      {
+        "vin": "93HRV3820TK303183",
+        "modelo": "HONDA HR-V 1.5L A/T LX 2027",
+        "cliente": "GINA ANTONIETTA NEGRO PIELANTONIO",
+        "genero": "Caballero",
+        "edad": null,
+        "edadRango": "Sin dato",
+        "estado": "(sin registrar)",
+        "profesion": "(sin registrar)",
+        "actividad": "Bajo dependencia",
+        "ramo": ""
+      }
+    ]
+  },
+  "facturadoNoEntregado": {
+    "unidades": 4,
+    "detalle": [
+      {
+        "modelo": "HONDA HR-V 1.5L A/T EXL 2027 (Rojo Metalico)",
+        "vin": "93HRV3860VK401224",
+        "unidades": 1
+      },
+      {
+        "modelo": "HONDA WR-V 1.5L A/T EXL 2027 (Blanco)",
+        "vin": "93HDG5841VK601320",
+        "unidades": 1
+      },
+      {
+        "modelo": "HONDA WR-V 1.5L A/T EXL 2027 (Blanco)",
+        "vin": "93HDG5842VK601309",
+        "unidades": 1
+      },
+      {
+        "modelo": "HONDA WR-V 1.5L A/T EXL 2027 (Blanco)",
+        "vin": "93HDG5840VK601311",
+        "unidades": 1
+      }
+    ]
+  }
+}

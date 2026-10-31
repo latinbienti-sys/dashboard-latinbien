@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Hub - LATINBIEN & HONDA</title>
+  <style>
+    :root {
+      --primary: #2d3748;
+      --secondary: #4a5568;
+      --accent-latinbien: #e53935;
+      --accent-honda: #e65100;
+      --background: #f7fafc;
+      --card: #ffffff;
+      --text: #2d3748;
+      --border: #cbd5e0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 5px;
+      background: linear-gradient(135deg, var(--primary), #4a5568);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header p {
+      color: var(--secondary);
+      font-size: 1.1rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .tab-btn.latinbien {
+      color: var(--accent-latinbien);
+      border-color: var(--accent-latinbien);
+    }
+
+    .tab-btn.latinbien.active {
+      background: var(--accent-latinbien);
+      color: white;
+    }
+
+    .tab-btn.honda {
+      color: var(--accent-honda);
+      border-color: var(--accent-honda);
+    }
+
+    .tab-btn.honda.active {
+      background: var(--accent-honda);
+      color: white;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .dashboard-card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      border: 1px solid var(--border);
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .dashboard-card.honda {
+      border-left: 4px solid var(--accent-honda);
+    }
+
+    .dashboard-card.latinbien {
+      border-left: 4px solid var(--accent-latinbien);
+    }
+
+    .dashboard-card .icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 20px;
+      background: var(--card);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .dashboard-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .dashboard-card p {
+      color: var(--secondary);
+      font-size: 0.85rem;
+      margin: 0;
+    }
+
+    .dashboard-card.latinbien .icon {
+      background: linear-gradient(135deg, #ffebeb, #ffffff);
+    }
+
+    .dashboard-card.honda .icon {
+      background: linear-gradient(135deg, #fff3e0, #ffffff);
+    }
+
+    .main-dashboard {
+      background: linear-gradient(135deg, var(--primary), #4a5568);
+      color: white;
+      border: none;
+    }
+
+    .main-dashboard .icon {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .main-dashboard h3 {
+      color: white;
+    }
+
+    .main-dashboard p {
+      color: rgba(255,255,255,0.8);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Dashboard Hub</h1>
+    <p>Central de accesos a tableros LATINBIEN y HONDA</p>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Seleccionar categoría">
+    <button class="tab-btn active latinbien" data-category="all">Todos</button>
+    <button class="tab-btn latinbien" data-category="latinbien">LATINBIEN</button>
+    <button class="tab-btn honda" data-category="honda">HONDA</button>
+  </div>
+
+  <div class="dashboard-grid" id="dashboardGrid">
+    <!-- Tarjetas se insertarán con JavaScript -->
+  </div>
+
+  <script>
+    const dashboards = {
+      latinbien: [
+        { name: 'Ventas', icon: '📈', category: 'latinbien' },
+        { name: 'Finanzas', icon: '💰', category: 'latinbien' },
+        { name: 'Soporte', icon: '🎫', category: 'latinbien' },
+        { name: 'Inventario', icon: '📦', category: 'latinbien' },
+        { name: 'CRM', icon: '👥', category: 'latinbien' },
+        { name: 'Clientes', icon: '👨‍👩‍👧‍👦', category: 'latinbien' },
+        { name: 'Cobranza', icon: '💳', category: 'latinbien' }
+      ],
+      honda: [
+        { name: 'Inventario', icon: '📦', category: 'honda' },
+        { name: 'CRM', icon: '👥', category: 'honda' }
+      ]
+    };
+
+    function renderGrid(category) {
+      const grid = document.getElementById('dashboardGrid');
+      grid.innerHTML = '';
+
+      const allCards = [...dashboards.latinbien, ...dashboards.honda];
+
+      allCards.filter(dash => category === 'all' || dash.category === category).forEach(dash => {
+        const card = document.createElement('div');
+        card.className = `dashboard-card ${dash.category}`;
+        
+        card.innerHTML = `
+          <div class="icon">${dash.icon}</div>
+          <h3>${dash.name}</h3>
+          <p>${dash.category === 'latinbien' ? 'Acceso al panel general' : 'Acceso de ejemplo'}</p>
+        `;
+
+        card.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (dash.category === 'latinbien') {
+            window.open('https://latinbienti-sys.github.io/dashboard-latinbien/', '_blank');
+          } else if (dash.name === 'Inventario' && dash.category === 'honda') {
+            window.open('https://latinbienti-sys.github.io/inventariohonda/', '_blank');
+          } else {
+            alert('Acceso de ejemplo - URLs por definir para HONDA');
+          }
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    // Event listeners para pestañas
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+          b.classList.remove('active');
+          b.classList.remove('latinbien');
+          b.classList.remove('honda');
+        });
+        btn.classList.add('active');
+        if (btn.classList.contains('latinbien')) {
+          btn.classList.add('latinbien');
+        } else if (btn.classList.contains('honda')) {
+          btn.classList.add('honda');
+        }
+        renderGrid(btn.dataset.category);
+      });
+    });
+
+    // Inicializar
+    renderGrid('all');
+  </script>
+</body>
+</html>

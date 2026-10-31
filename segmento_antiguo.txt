@@ -1,0 +1,20 @@
+<!-- Facturacion Clientes (cuadra con inventariohonda / pestaña Facturación) -->
+<div class="tab-panel active" id="pFactu">
+  <div class="kpis">
+    <div class="kpi"><div class="v">${fmtU(D.facturacionClientes.total.unidades)}</div><div class="l">Unidades facturadas (vehículo)</div></div>
+    <div class="kpi green"><div class="v">$ ${fmtM(D.facturacionClientes.total.monto)}</div><div class="l">Monto facturado sin IVA</div></div>
+    <div class="kpi"><div class="v">${fmtU(D.facturacionClientes.detalle.length)}</div><div class="l">Facturas emitidas (1 vehículo cada una)</div></div>
+  </div>
+  <div class="card">
+    <h3>Facturado por mes (fecha de factura) — unidades y monto sin IVA, indiferente de entrega</h3>
+    <div class="bars" id="bMesesFact"></div>
+  </div>
+  <div class="card"><h3>Facturado por mes (fecha de factura)</h3>
+    <table><thead><tr><th>Mes</th><th>Vehículos</th><th>Monto sin IVA</th></tr></thead>
+    <tbody id="tMesFact"></tbody></table>
+    <div class="mini" style="margin-top:8px">Fuente: Facturación Clientes con etiqueta VENTAVEHICULOCONSIG = favorito "FacturacionVehiculo" en Odoo. Indiferente de entrega.</div>
+  </div>
+  <div class="card"><h3>Forma de venta (de las 47 entregadas)</h3><div id="hForma"></div>
+      <div class="mini">Contado (CRM): 20 clientes en etapa "Facturado Contado" → 16 ya entre las 47 entregadas. Los 4 faltantes (pendientes): F. Niño, M. Osorio y J. Guillen (facturados, sin entregar) y D. Esquivel (sin factura en Odoo). Crédito = el resto (plan de plazos SAV).
+  </div>
+</div>

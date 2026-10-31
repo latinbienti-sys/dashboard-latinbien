@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LATINBIEN MOTORS | HONDA MÉRIDA - Prueba Local</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: #f7f8fa; color: #111; padding: 24px; }
+  header { max-width: 960px; margin: 0 auto 32px; border-bottom: 2px solid #CC0000; padding-bottom: 16px; }
+  header h1 { font-size: 26px; letter-spacing: -.02em; }
+  header p { color: #666; font-size: 14px; margin-top: 4px; }
+  .badge { display:inline-block; background:#CC0000; color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; padding:2px 8px; border-radius:10px; margin-left:8px; }
+  .grid { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+  .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+  .card img { width: 100%; height: 200px; object-fit: cover; background: #eef1f5; display: block; }
+  .card-body { padding: 18px 20px 22px; display: flex; flex-direction: column; flex: 1; }
+  .card .year { font-size: 12px; font-weight: 700; color: #CC0000; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+  .card h3 { font-size: 17px; font-weight: 700; margin-bottom: 4px; line-height: 1.25; }
+  .card .fullname { font-size: 12.5px; color: #666; margin-bottom: 10px; }
+  .card .price { font-size: 20px; font-weight: 800; color: #111; margin-top: auto; }
+  .note { max-width: 960px; margin: 24px auto; padding: 14px 18px; background: #fff3cd; border: 1px solid #e0c96b; border-radius: 10px; font-size: 13px; color: #7a6a10; }
+  .note b { color: #7a6a10; }
+  .footer { max-width: 960px; margin: 40px auto 20px; color: #666; font-size: 12px; text-align: center; }
+  .kept { border-left: 4px solid #15803d; padding-left: 12px; margin-bottom: 10px; }
+  .removed { color: #b91c1c; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>LATINBIEN MOTORS | HONDA MÉRIDA <span class="badge">PRUEBA LOCAL</span></h1>
+  <p>Concesionario Honda en Mérida - Inventario de modelos (copia de prueba)</p>
+</header>
+
+<div class="note">
+  <b>Cambios aplicados en esta copia de prueba (no afectan al sitio en vivo):</b>
+  Se eliminaron <b>HONDA HR-V LX 2026</b> y <b>HONDA HR-V EXL 2026</b>.
+  Se mantuvieron sin tocar precios ni datos: <b>WR-V 2027</b>, <b>City 2026</b> y <b>HONDA HR-V EXL 2027</b>.
+</div>
+
+<div class="grid" id="modelos"></div>
+
+<div class="footer">
+  Respaldo original: backups/hondamerida_original/  |  Detalle de cambios: CAMBIOS.txt  |  Sitio origen: https://hondamerida.com/
+</div>
+
+<script>
+(function () {
+  /* Modelo de datos del inventario (extraido de static/js/bundle.v2.js, modulo ./src/data/mock.js).
+     Esta copia de prueba EXCLUYE los dos modelos solicitados y conserva precios sin modificacion. */
+  const vehicleModels = [
+    {
+      id: 4,
+      name: "HONDA WR-V EXL",
+      fullName: "HONDA WR-V L A/T EXL",
+      year: 2027,
+      price: 32500,
+      image: "/img/wrv_frontal.png",
+      features: ["Motor 1.5L i-VTEC", "Transmisión Automática CVT", "Honda SENSING", "Asientos en Cuero", "Pantalla Táctil 8\"", "Cámara de Reversa", "Sensores de Estacionamiento"],
+      specs: { engine: "1.5L i-VTEC", transmission: "CVT Automática", fuel: "Gasolina", seats: "5 Pasajeros" },
+      colors: [
+        { name: "Blanco Tafeta", hex: "#FAFAFA" },
+        { name: "Azul Cósmico", hex: "#001E46" },
+        { name: "Azul Aurora", hex: "#6280A2" },
+        { name: "Plata", hex: "#BCBCBC" }
+      ]
+    },
+    {
+      id: 1,
+      name: "HONDA CITY EXL",
+      fullName: "HONDA CITY L A/T EXL",
+      year: 2026,
+      price: 26900,
+      image: "https://hondavenezuela.com/wp-content/uploads/2026/08/frontal-blanco-tafeta.webp",
+      features: ["Motor 1.5L i-VTEC", "Transmisión Automática CVT", "Sistema Honda SENSING", "Asientos en Cuero", "Pantalla Táctil 8\""],
+      specs: { engine: "1.5L i-VTEC", transmission: "CVT Automática", fuel: "Gasolina", seats: "5 Pasajeros" },
+      colors: [
+        { name: "Azul", hex: "#002A5A" },
+        { name: "Blanco Tafeta", hex: "#FFFFFF" },
+        { name: "Gris Basalto", hex: "#9E9E9E" },
+        { name: "Blanco Perlado", hex: "#DADADA" }
+      ]
+    },
+    {
+      id: 5,
+      name: "HONDA HR-V EXL",
+      fullName: "HONDA HR-V L A/T EXL",
+      year: 2027,
+      price: 35600,
+      image: "https://hondavenezuela.com/wp-content/uploads/2026/08/frontal-gris-titanio_70-scaled.webp",
+      features: ["Motor 1.5L i-VTEC", "Transmisión Automática CVT", "Honda SENSING Elite", "Asientos en Cuero Premium", "Sistema de Audio Premium", "Llantas de Aleación 18\"", "Sensores de Estacionamiento"],
+      specs: { engine: "1.5L i-VTEC", transmission: "CVT Automática", fuel: "Gasolina", seats: "5 Pasajeros" },
+      colors: [{ name: "Azul Cósmico", hex: "#1E3A8A" }]
+    }
+  ];
+
+  const formatPrice = (price) => new Intl.NumberFormat('es-VE', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(price);
+
+  const grid = document.getElementById('modelos');
+  vehicleModels.forEach(function (model) {
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.innerHTML = '' +
+      '<img src="' + (model.image) + '" alt="' + model.name + ' ' + model.year + '">' +
+      '<div class="card-body">' +
+      '<span class="year">' + model.year + '</span>' +
+      '<h3>' + model.name + '</h3>' +
+      '<div class="fullname">' + model.fullName + '</div>' +
+      '<div class="price">' + formatPrice(model.price) + '</div>' +
+      '</div>';
+    grid.appendChild(card);
+  });
+})();
+</script>
+
+</body>
+</html>

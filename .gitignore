@@ -3,3 +3,15 @@ __pycache__/
 .env
 *.env
 name.env
+
+usuarios_balance.json
+.balance_secret
+CLAVES_INICIALES.txt
+
+.venv/
+logs/
+ENLACE_ACTUAL.txt
+CLAVE_VERCEL.txt
+
+.python/
+.venv_roto_*/
